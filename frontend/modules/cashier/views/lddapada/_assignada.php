@@ -13,23 +13,23 @@ use common\models\cashier\Checknumber;
     <?php
         $form = ActiveForm::begin([
                     'options' => [
-                        'id' => 'assign-check'
+                        'id' => 'assign-ada'
                     ]
         ]);
         $year = date("Y");
         $month = date("m");
     ?>
     
-    <?= $form->field($model, 'check_number')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'ada_number')->hiddenInput()->label(false) ?>
     <?= $form->field($model, 'selected_keys')->hiddenInput()->label(false) ?>
     <div class="container">
-        <p class="md-info">Assign Check Number <span class="label label-success" style="font-size: medium;"><?php echo $model->check_number; ?></span> to the selected items?<br/>
+        <p class="md-info">Assign ADA Number <span class="label label-success" style="font-size: medium;"><?php echo $model->ada_number; ?></span> to the selected items?<br/>
         <p id="keys"></p>
     </div>
     
     <div class="form-group">
         <center>
-               <?= Html::Button('Cancel', ['class' => 'btn btn-warning', 'onclick' => '(function ( $event ) { $("#modalPreview").modal("hide"); })();']) ?>
+               <?= Html::Button('Cancel', ['class' => 'btn btn-warning', 'onclick' => '(function ( $event ) { $("#modalAda").modal("hide"); })();']) ?>
                <?= Html::submitButton('OK', ['class' => 'btn btn-success', 'id'=>'btnOK']) ?>
         </center>
     </div>
@@ -40,7 +40,7 @@ use common\models\cashier\Checknumber;
 <script>
 $(document).ready(function(){
     var keys = $("#lddap-ada-items").yiiGridView("getSelectedRows");
-    $("#checknumber-selected_keys").val(keys);
+    $("#adanumber-selected_keys").val(keys);
     
     if(keys.length == 0){
         $('#btnOK').prop("disabled",true);

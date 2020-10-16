@@ -55,6 +55,18 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 
+Modal::begin([
+    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalAda',
+    'size' => 'modal-md',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
+
 ?>
 <div class="lddapada-view">
 
@@ -297,6 +309,10 @@ Modal::end();
                                             /*Html::button('Add Items  <i class="glyphicon glyphicon-list"></i>', ['value' => Url::to(['lddapadaitem/additems', 'id'=>$model->lddapada_id]), 'title' => 'Items', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddItems']) . */
                                             Html::button('Assign Check No.  <i class="glyphicon glyphicon-check"></i>', ['value' => Url::to(['lddapada/assigncheck', 'id'=>$model->lddapada_id, 'typeId'=>$model->type_id]), 
                                                 'title' => 'Check Number', 'class' => 'btn btn-warning', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAssignCheckNo'
+                                            ]) .
+                                        
+                                            Html::button('Assign ADA No.  <i class="glyphicon glyphicon-check"></i>', ['value' => Url::to(['lddapada/assignada', 'id'=>$model->lddapada_id, 'typeId'=>$model->type_id]), 
+                                                'title' => 'ADA Number', 'class' => 'btn btn-warning', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAssignAdaNo'
                                             ]) .
                                         
                                             Html::button('Add Creditors  <i class="glyphicon glyphicon-plus"></i>', ['value' => Url::to(['lddapadaitem/addcreditors', 'id'=>$model->lddapada_id, 'typeId'=>$model->type_id]), 'title' => 'Creditor', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddCreditors']) .

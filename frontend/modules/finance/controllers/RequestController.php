@@ -139,7 +139,7 @@ class RequestController extends Controller
             $searchModel->division_id = [4];
             $searchModel->user_id = 20;
         }*/
-        //$searchModel->user_id = 2;
+        $searchModel->user_id = 2;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('validateindex', [

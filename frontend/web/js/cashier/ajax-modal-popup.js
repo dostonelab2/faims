@@ -46,6 +46,17 @@ $("body").on("click","#buttonAddCreditors",function () {
 
 $("body").on("click","#buttonAssignCheckNo",function () {
     
+    $('#modalAda').modal('show')
+        .find('#modalContent')
+        .load($(this).attr('value'));
+    $('#modalHeader').html($(this).attr('title'));
+    setTimeout(function () {
+        $("#btnrefresh").click();
+    },1500);
+});
+
+$("body").on("click","#buttonAssignAdaNo",function () {
+    
     $('#modalPreview').modal('show')
         .find('#modalContent')
         .load($(this).attr('value'));

@@ -3,6 +3,7 @@
 namespace frontend\modules\cashier\controllers;
 
 use Yii;
+use common\models\cashier\Adanumber;
 use common\models\cashier\Checknumber;
 use common\models\cashier\Creditor;
 use common\models\cashier\Lddapada;
@@ -328,6 +329,76 @@ class LddapadaController extends Controller
                     return $this->renderAjax('_assigncheck', ['model'=>$model]);   
             }else {
                 return $this->render('_assigncheck', [
+                            'model' => $model,
+                ]);
+            }
+        }else{
+            if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('_notallowed', ['model'=>$model]);   
+            }
+        }
+    }
+    
+    public function actionAssignada($id){
+        $model = new Adanumber;
+        
+        $year = date("Y");
+        $month = date("m");
+        $model->ada_number = Adanumber::getAdaNumber($_GET['typeId'],$year, $month);
+        
+        if(Yii::$app->user->can('access-cashiering')){
+            if (Yii::$app->request->post()) {
+                //$model->saved = Lddapada::SAVED ; //20
+                
+                $ada = Adanumber::find()->where(['type_id' => $_GET['typeId'], 'year' => $year, 'month' => $month])->orderBy(['ada_number_id' => SORT_DESC])->one();
+
+                $counter = (int)$ada->counter + 1;
+                
+                $model->type_id = $_GET['typeId'];	
+                $model->prefix = $ada->prefix;
+                $model->year = $year;
+                $model->month = $month;
+                $model->counter = $counter;
+                
+                if($model->save(false)){
+                    
+                    $keys = explode(',', $_POST['Adanumber']['selected_keys']);
+                    $items = Lddapadaitem::find()
+                        //->where(['IN', 'lddapada_item_id', [1,2]])
+                        ->where(['IN', 'lddapada_item_id', $keys])
+                        ->all();
+                    foreach($items as $item){
+                        $item->check_number = $_POST['Adanumber']['ada_number'];
+                        $item->save(false);
+                    }
+                    
+                    /*$index = $model->lddapada_id;
+                    $scope = 'Lddapada';
+                    $data = $model->batch_number.':'.$model-> 	batch_date .':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
+                    Blockchain::createBlock($index, $scope, $data);
+                    
+                    $content = 'Request Number: '.$model->request_number.PHP_EOL;
+                    $content .= 'Payee: '.$model->creditor->name.PHP_EOL;
+                    $content .= 'Amount: '.$model->amount.PHP_EOL.PHP_EOL;
+                    $content .= 'Particulars: '.PHP_EOL.$model->particulars;
+                    $recipient = Notificationrecipient::find()->where(['status_id' => $model->status_id])->one();
+                    
+                    Yii::$app->Notification->sendSMS('', 2, $recipient->primary->sms, 'Request for Obligation', $content, 'FAIMS', $this->module->id, $this->action->id);
+                    
+                    Yii::$app->Notification->sendEmail('', 2, $recipient->primary->email, 'Request for Verification', $content, 'FAIMS', $this->module->id, $this->action->id);*/
+                    
+                    Yii::$app->session->setFlash('success', 'Successfully Saved!');
+                }else{
+                    Yii::$app->session->setFlash('success', $model->getErrors());                 
+                }
+                return $this->redirect(['view', 'id' => $_GET['id']]);
+                    
+            }
+
+            if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('_assignada', ['model'=>$model]);   
+            }else {
+                return $this->render('_assignada', [
                             'model' => $model,
                 ]);
             }
