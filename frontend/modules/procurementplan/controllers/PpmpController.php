@@ -13,6 +13,7 @@ use common\models\procurementplan\Item;
 use common\models\procurementplan\Ppmp;
 use common\models\procurementplan\Ppmpitem;
 use common\models\procurementplan\PpmpSearch;
+use common\models\budget\Budgetallocation;
 
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -57,18 +58,19 @@ class PpmpController extends Controller
         if(isset($_GET['year']))
             $selected_year = $_GET['year'];
         else 
-            $selected_year = '2019';
+            $selected_year =  date('Y');
         //$selected_year = isset($_POST['year']) ? $_POST['year'] : '';
         
         $searchModel = new PpmpSearch();
         $searchProjectModel = new ProjectSearch();
+        $searchSectionModel = new Section();
         
         //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $divisions = Division::find()->orderBy('name')->asArray()->all();
         $listDivisions = ArrayHelper::map($divisions, 'division_id', 'name');
         
-        $sections = Section::find()->orderBy('division_id, section_id');
+        $sections = Section::find()->orderBy('division_id, section_id')->joinWith('budgetallocation');
         $dataProvider = Ppmp::find();
         
         $ppmpDataProvider = new ActiveDataProvider([
@@ -77,9 +79,13 @@ class PpmpController extends Controller
                 'pageSize' => 20,
             ],
         ]);
+
+       
+        $projectQuery = Project::find()->joinWith('budgetallocation');
+
         
         $projectDataProvider = new ActiveDataProvider([
-            'query' => Project::find(),
+            'query' => $projectQuery,
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -95,7 +101,7 @@ class PpmpController extends Controller
             'ppmpDataProvider' => $ppmpDataProvider,
             'projectDataProvider' => $projectDataProvider,
             'listDivisions' => $listDivisions,
-        
+            'searchSectionModel' => $searchSectionModel,
             'listUnits' => $listUnits,
             'selected_year' => $selected_year,
         ]);

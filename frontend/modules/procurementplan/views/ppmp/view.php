@@ -113,7 +113,9 @@ Modal::end();
                         'label'=>'Status',
                         'format'=>'raw', 
                         'value'=>$model->getStatus(),
-                        'valueColOptions'=>['style'=> $status], 
+                        /*
+                        'valueColOptions'=>['style'=> $model->status_id == 1 ? 'width:30%; background-color:#e3b434; color:white;' : $model->status_id == 2 ? 'width:30%; background-color:#46a6a3; color:white;' : $model->status_id == 3 ? 'width:30%; background-color:#148703; color:white;' : ''], */
+                        'valueColOptions'=>['style'=> $status],
                         'displayOnly'=>true
                     ],
                     
@@ -193,7 +195,7 @@ Modal::end();
 
         <?php
         //error handling for editable column
-          if(Yii::$app->user->can('ppmp-update-quantity')){
+          if(Yii::$app->user->can('approved-ppmp')){
                 if($isMember && $model->status_id != Ppmp::STATUS_APPROVED){
                     $readonly = false;
                 }else{
@@ -609,7 +611,7 @@ Modal::end();
                                                                         'method' => 'post',],]);
     
     //error handling for visible supplemental items button
-    if(Yii::$app->user->can('access-supplemental')){
+    if(Yii::$app->user->can('approved-ppmp')){
         if($model->status_id == 3){
             $supplementalButton = $button;
         }else{;

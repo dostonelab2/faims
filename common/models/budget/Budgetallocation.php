@@ -23,7 +23,7 @@ class Budgetallocation extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_budget_allocation';
+        return 'fais-procurement.tbl_budget_allocation';
     }
 
     /**

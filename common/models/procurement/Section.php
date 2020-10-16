@@ -23,6 +23,7 @@ class Section extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $selectyear;
     public static function tableName()
     {
         return 'tbl_section';
@@ -141,8 +142,14 @@ class Section extends \yii\db\ActiveRecord
             
     public function getPpmps()
     {
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+
         $ppmps = Ppmp::find()
-            ->where(['unit_id' => $this->section_id, 'year' => 2020])
+            ->where(['unit_id' => $this->section_id, 'year' => $year])
             ->all();
         $status = [
                 '0' => 'btn-default',   
@@ -162,7 +169,12 @@ class Section extends \yii\db\ActiveRecord
     
     public function getBudgetallocation()
     {
-        return $this->hasOne(Budgetallocation::className(), ['section_id' => 'section_id'])->andWhere(['year' => 2020]);
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+        return $this->hasOne(Budgetallocation::className(), ['section_id' => 'section_id'])->where(['year' => $year]);
     }
     
     /*public function getBudgetallocation()

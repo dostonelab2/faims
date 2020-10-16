@@ -230,16 +230,16 @@ $gridColumns = [
                     'refreshGrid'=>true,
                     //'readonly' => !$isApproval AND !$isMember,
                     
-                    'readonly' => function($model) use ($isMember,$isApproval){
+                    'readonly' => function($model){
                         if($model->status_id == 2){
                             return true;
                         }
                     },
-                    'editableOptions'=> function ($model , $key , $index) use ($isApproval){
+                    'editableOptions'=> function ($model , $key , $index){
                         return [
                             'options' => ['id' => $index . '_' . $model->ppmp_item_id . '-q'],
                             'placement'=>'left',
-                            'disabled'=> $model->status_id != 0 AND !$isApproval,
+                            'disabled'=> $model->status_id != 0 AND !Yii::$app->user->can('approved-ppmp'),
                             'name'=>'quantity',
                             'asPopover' => true,
                             'value' => $model->quantity,
@@ -352,7 +352,7 @@ echo GridView::widget([
         'toolbar' => 
                                 [
                                     [
-                                        'content' => Html::button('Approved All ('. $countapprovalDataProvider->totalCount .')  <i class="glyphicon glyphicon-thumbs-up"></i>', [
+                                        'content' => Html::button('Approve All ('. $countapprovalDataProvider->totalCount .')  <i class="glyphicon glyphicon-thumbs-up"></i>', [
                                                         'value' => Url::to(['supplemental/approveall', 'id'=>$model->ppmp_id]),
                                                         'disabled' => !Yii::$app->user->can('approved-ppmp') ? true : $countapprovalDataProvider->totalCount == 0 ? true : false,
                                                         'title' => 'Supplemental Items',
@@ -367,6 +367,7 @@ echo GridView::widget([
                                                         'style' =>'margin-right: 6px; display: ""; height: 35px;', 
                                                         'id' => 'btnSubmitAll']).
                                                     Html::button('Add Item  <i class="glyphicon glyphicon-list"></i>', [
+                                                        //'value' => Url::to(['supplemental/additems', 'id'=>$model->ppmp_id, 'selectMonth' => 0]),
                                                         'value' => Url::to(['supplemental/addsupplementalitems', 'id'=>$model->ppmp_id, 'year'=>$model->year]),
                                                         'disabled' => $model->status_id != 3 ? true : !$isMember ? true : false,
                                                         'title' => 'Supplemental Items',

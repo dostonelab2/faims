@@ -7,6 +7,7 @@ use kartik\datecontrol\DateControl;
 use kartik\detail\DetailView;
 use kartik\editable\Editable; 
 use kartik\grid\GridView;
+use yii\widgets\ActiveForm;
 
 use yii\bootstrap\Modal;
 
@@ -47,11 +48,36 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 ?>    
-    <div class="ppmp-index">
-    <h3 style="text-align: center"><?= Html::encode('PROJECT PROCUREMENT MANAGEMENT PLAN (PPMP)') ?></h3>
-    <br>
-        
-        <?php
+<div class="ppmp-index">
+
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="text-align: center">
+        <h3><?= Html::encode('PROJECT PROCUREMENT MANAGEMENT PLAN (PPMP - '.$selected_year.')') ?></h3>
+      </div>
+      <div class="panel-body">
+
+    <?php
+    $form = ActiveForm::begin([
+        'action' => ['index'],
+        'method' => 'get',
+    ]);
+
+    echo $form->field($searchSectionModel, 'selectyear')->dropDownList(
+        ArrayHelper::map(Ppmp::find()->all(),'year', 'year'),
+    [
+        'class' => 'form-control',
+        'prompt' => 'Select Year...',
+        'name' => 'year',
+        //'onchange' => 'selectMonth(this.value)',
+        'id' => 'dropdown',
+        'onchange' => 'this.form.submit()',
+        'style'=>'width:250px; font-weight:bold;'
+    ]
+    )->label(false);
+
+
+    ActiveForm::end();
+
         echo GridView::widget([
             'id' => 'ppmp',
             'dataProvider' => $ppmpDataProvider,
@@ -60,7 +86,8 @@ Modal::end();
                             //'section_id',
                             //'division_id',
                             [
-                                'attribute'=>'division', 
+                                'attribute'=>'division',
+                                'visible' => $ppmpDataProvider->totalCount > 0 ? true : false,
                                 'width'=>'250px',
                                 'contentOptions' => ['style' => 'max-width:25px;white-space:normal;word-wrap:break-word;font-weight:bold'],
                                 'value'=>function ($model, $key, $index, $widget) use ($selected_year) { 
@@ -156,6 +183,7 @@ Modal::end();
                     'type' => GridView::TYPE_PRIMARY,
                     //'before'=>Html::button('New PPMP', ['value' => Url::to(['ppmp/create']), 'title' => 'PPMP', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddPpmp']),
                     'after'=>false,
+                    //'before' => $dropDownList,
                 ],
             // set your toolbar
             'toolbar' => 
@@ -213,7 +241,7 @@ Modal::end();
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->budgetallocation->getTotal();
-                                    //return '10,000,000,000,000';
+                                    //return '0.00';
                                 },
                             ],
                             [
@@ -256,4 +284,13 @@ Modal::end();
             'itemLabelPlural' => 'items'
         ]);
         ?>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript">
+  document.getElementById('dropdown').value = "<?php if(isset($_GET['year'])){
+    echo $_GET['year'];
+  }?>";
+
+</script>

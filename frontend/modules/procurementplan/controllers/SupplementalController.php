@@ -48,7 +48,7 @@ class SupplementalController extends Controller
         $searchModel = new SupplementalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $isMember = $model->isMember();
-        $isApproval = Yii::$app->user->can('approved-supplemental-ppmp');
+        //$isApproval = Yii::$app->user->can('approved-supplemental-ppmp');
       
         $countapproval = Ppmpitem::find()->Where([
                                     'ppmp_id' => $id, 
@@ -72,7 +72,7 @@ class SupplementalController extends Controller
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'isMember' => $isMember,
-                'isApproval' => $isApproval,
+                //'isApproval' => $isApproval,
                 'countapprovalDataProvider' => $countapprovalDataProvider,
                 'countsubmitDataProvider' => $countsubmitDataProvider,
                 //'attribute' => $attribute,
@@ -384,6 +384,18 @@ class SupplementalController extends Controller
         }else{
             throw new HttpException(403, 'You are not allowed to perform this action.');
         }
+    
+    }
+    public function actionAdditems($id){
+
+        $searchModel = new ItemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$MonthDataProvider = $searchModel->searchMonth(Yii::$app->request->queryParams);
+
+        return $this->renderAjax('__additem', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     
     }
     /*
