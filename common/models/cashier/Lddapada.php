@@ -120,7 +120,7 @@ class Lddapada extends \yii\db\ActiveRecord
         $batch = explode('-', $number->batch_number);
         $count = (int)$batch[2] + 1;
     
-        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
+        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year.(($typeId == 4) ? 'TF' : '');
     }
     
     public function getTotal()
