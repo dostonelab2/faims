@@ -66,9 +66,10 @@ class Checknumber extends \yii\db\ActiveRecord
     
     static function getCheckNumber($typeId, $year, $month)
     {
-        $counter = Checknumber::find()->where(['type_id' => $typeId, 'year' => $year, 'month' => $month])->count();
-        $counter += 1;
-    
-        return self::PREP.$year.$month.str_pad($counter, 3, '0', STR_PAD_LEFT);
+        $counter = Checknumber::find()->where(['type_id' => $typeId, 'year' => $year, 'month' => $month])->orderBy(['check_number_id' => SORT_DESC])->one();
+        $counter = (int)$counter->counter + 1;
+        return $counter;
+        //return self::PREP.$year.$month.str_pad($counter, 3, '0', STR_PAD_LEFT);
+        //return .str_pad($counter, 3, '0', STR_PAD_LEFT);
     }
 }

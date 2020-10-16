@@ -88,7 +88,7 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->os->os_id) ? $model->os->os_number.'<br/>'.$model->os->os_date : '';
+                                    return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b><br/>'.$model->os->os_date : '';
                                 },
                             ],
                             [
@@ -97,8 +97,9 @@ Modal::end();
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'150px',
+                                'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->dv->dv_id) ? $model->dv->dv_number : '';
+                                    return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b><br/>'.$model->dv->dv_date : '';
                                 },
                             ],
                             [
@@ -106,9 +107,10 @@ Modal::end();
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                                 'width'=>'150px',
+                                'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    $fmt = Yii::$app->formatter;
-                                    return $fmt->asDecimal($model->request->amount);
+                                    //return $model->accounttransactions->taxable ? '0.00' : '<b>'.$model->request->amount.'</b>';
+                                    return $model->getNetamount();
                                 },
                             ],
                             [
@@ -116,9 +118,22 @@ Modal::end();
                                 'header'=>'Tax',
                                 'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                                 'width'=>'250px',
+                                'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    $fmt = Yii::$app->formatter;
-                                    return $fmt->asDecimal($model->request->amount);
+                                    return $model->getTax();
+                                    //return '<b>'.$model->request->amount.'</b>';
+                                },
+                            ],
+                            [
+                                'attribute'=>'amount',
+                                'header'=>'Gross Amount',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+                                'width'=>'150px',
+                                'format'=>['decimal',2],
+                                'value'=>function ($model, $key, $index, $widget) {
+                                    return $model->getGrossamount();
+                                    //return '<b>'.$model->request->amount.'</b>';
                                 },
                             ],
                     ],

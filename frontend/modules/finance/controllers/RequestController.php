@@ -120,12 +120,12 @@ class RequestController extends Controller
         $searchModel->status_id = Request::STATUS_VERIFIED;
         
         if(Yii::$app->user->identity->user_id == 2){
-            $searchModel->payee_id = [129,117];
+            $searchModel->payee_id = [129,120];
             //$searchModel->user_id = 2;
         }elseif(Yii::$app->user->identity->user_id == 4){
             $searchModel->division_id = [1,2,3];
             //$searchModel->payee_id = [129,117];
-        }if(Yii::$app->user->identity->user_id == 20){
+        }if(Yii::$app->user->identity->user_id == 3){
             $searchModel->division_id = [4];
         }
         /*if(Yii::$app->user->identity->user_id == 2){
@@ -139,7 +139,7 @@ class RequestController extends Controller
             $searchModel->division_id = [4];
             $searchModel->user_id = 20;
         }*/
-        $searchModel->user_id = 2;
+        //$searchModel->user_id = 2;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('validateindex', [

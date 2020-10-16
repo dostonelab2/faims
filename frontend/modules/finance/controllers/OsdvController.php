@@ -10,6 +10,7 @@ use common\models\finance\Osdv;
 use common\models\finance\OsdvSearch;
 use common\models\finance\Request;
 use common\models\procurement\Expenditureclass;
+use common\models\sec\Blockchain;
 
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -340,8 +341,13 @@ class OsdvController extends Controller
                     $model->request->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT; //70;
                     $model->request->save(false);
                     
+                    $index = $model->osdv_id;
+                    $scope = 'Osdv';
+                    $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
+                    Blockchain::createBlock($index, $scope, $data);
+                    
                     Yii::$app->session->setFlash('success', 'Request Successfully Approved!');
-                    return $this->redirect(['view', 'id' => $model->osdv_id]);
+                    return $this->redirect(['approvalindex']);
                 }else{
                     Yii::$app->session->setFlash('warning', $model->getErrors());                 
                 }
@@ -372,6 +378,11 @@ class OsdvController extends Controller
                     
                     $model->request->status_id = Request::STATUS_ALLOTTED; //55;
                     $model->request->save(false);
+                    
+                    $index = $model->osdv_id;
+                    $scope = 'Osdv';
+                    $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
+                    Blockchain::createBlock($index, $scope, $data);
                     
                     Yii::$app->session->setFlash('success', 'Request Successfully Obligated!');
                     return $this->redirect(['view', 'id' => $model->osdv_id]);
@@ -415,6 +426,11 @@ class OsdvController extends Controller
                     $model->request->status_id = Request::STATUS_CHARGED; //60;
                     $model->request->save(false);
                     
+                    $index = $model->osdv_id;
+                    $scope = 'Osdv';
+                    $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
+                    Blockchain::createBlock($index, $scope, $data);
+                    
                     Yii::$app->session->setFlash('success', 'Request Successfully Certified Cash Available!');
                     return $this->redirect(['view', 'id' => $model->osdv_id]);
                 }else{
@@ -457,6 +473,11 @@ class OsdvController extends Controller
                             $os->os_date = date("Y-m-d", strtotime($model->create_date));
                             $os->save(false);
                         }
+                        
+                        $index = $model->osdv_id;
+                        $scope = 'Osdv';
+                        $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$os->os_number.':'.$model->osdv_attributes.':'.$model->status_id;
+                        Blockchain::createBlock($index, $scope, $data);
                         
                         Yii::$app->session->setFlash('success', 'OS Number Successfully Generated!');
                         return $this->redirect(['view', 'id' => $model->osdv_id]);
@@ -507,6 +528,11 @@ class OsdvController extends Controller
                             $dv->dv_date = date("Y-m-d", strtotime($model->create_date));
                             $dv->save(false);
                         }
+                        
+                        $index = $model->osdv_id;
+                        $scope = 'Osdv';
+                        $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$dv->dv_number.':'.$model->osdv_attributes.':'.$model->status_id;
+                        Blockchain::createBlock($index, $scope, $data);
 
                         Yii::$app->session->setFlash('success', 'DV Number Successfully Generated!');
                         return $this->redirect(['view', 'id' => $model->osdv_id]);

@@ -119,15 +119,25 @@ Modal::end();
                                 },
                             ],
                             [
+                                'attribute'=>'division_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: right; vertical-align:middle; padding-right: 25px; font-weight: bold;'],
+                                'width'=>'100px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->division->name.'<br/>'.$model->profile->fullname;
+                                },
+                            ],
+                            /*[
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
-                                'width'=>'250px',
+                                'width'=>'80px',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     //return Profile::find($model->created_by)->one()->fullname;
                                     return $model->profile->fullname;
                                 },
-                            ],
+                            ],*/
                             [
                                 'class'=>'kartik\grid\EditableColumn',
                                 'attribute'=>'district_id',

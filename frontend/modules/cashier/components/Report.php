@@ -65,6 +65,9 @@ class Report {
     
     function template($id)
     {
+        $skip = 180;
+        $skipRow = "<tr><td colspan='8'></td></tr>";
+        
         $model = Lddapada::findOne($id);
         //$template = '<table border="0" style="border-collapse: collapse;font-size: 11px;table-layout:fixed" width="100%">';
         // REPORT HEADER
@@ -134,9 +137,10 @@ class Report {
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->gross_amount."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$fmt->asDecimal($item->gross_amount)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
-            //$template .= "<td>".$item->expenditureObject->object_code."</td>";
-            //$template .= "<td colspan='8'>".$item->osdv->request->creditor->account_number."</td>";
+
             $template .= "</tr>";
+            
+            $skip -= 1;
         }
         
         $template .= "<tr>";
@@ -151,6 +155,10 @@ class Report {
         $template .= "<tr>";
         $template .= "<td colspan='8'>&nbsp;</td>";
         $template .= "</tr>";
+        
+        for($i=0; $i<=$skip; $i++){
+            $template .= $skipRow;
+        }
         
         // ITEMS FOOTER
         $template .= "<tr>";

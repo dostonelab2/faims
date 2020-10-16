@@ -123,11 +123,10 @@ if(Yii::$app->user->isGuest){
                                 //'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'For Approval' , 
-                                'icon' => 'thumbs-up text-aqua', 
-                                'url' => ['/finance/osdv/approvalindex'], 
-                                'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
-                                'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'Disbursement Report', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/report'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
                                 'label' => 'Obligation and Disbursement', 
@@ -136,10 +135,11 @@ if(Yii::$app->user->isGuest){
                                 'visible'=> Yii::$app->user->can('access-finance-processing') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Disbursement Report', 
-                                'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/report'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'For Approval' , 
+                                'icon' => 'thumbs-up text-aqua', 
+                                'url' => ['/finance/osdv/approvalindex'], 
+                                'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
+                                'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
                                 'label' => 'Validate Requests', 

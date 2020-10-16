@@ -295,11 +295,11 @@ Modal::end();
                                     [
                                         'content'=>
                                             /*Html::button('Add Items  <i class="glyphicon glyphicon-list"></i>', ['value' => Url::to(['lddapadaitem/additems', 'id'=>$model->lddapada_id]), 'title' => 'Items', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddItems']) . */
-                                            Html::button('Assign Check No.  <i class="glyphicon glyphicon-check"></i>', ['value' => Url::to(['lddapada/assigncheck', 'id'=>$model->lddapada_id]), 
-                                                'title' => 'Check Number', 'class' => 'btn btn-warning', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAssignCheckNo', 'onclick'=>'checkKeys()'
+                                            Html::button('Assign Check No.  <i class="glyphicon glyphicon-check"></i>', ['value' => Url::to(['lddapada/assigncheck', 'id'=>$model->lddapada_id, 'typeId'=>$model->type_id]), 
+                                                'title' => 'Check Number', 'class' => 'btn btn-warning', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAssignCheckNo'
                                             ]) .
                                         
-                                            Html::button('Add Creditors  <i class="glyphicon glyphicon-plus"></i>', ['value' => Url::to(['lddapadaitem/addcreditors', 'id'=>$model->lddapada_id]), 'title' => 'Creditor', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddCreditors']) .
+                                            Html::button('Add Creditors  <i class="glyphicon glyphicon-plus"></i>', ['value' => Url::to(['lddapadaitem/addcreditors', 'id'=>$model->lddapada_id, 'typeId'=>$model->type_id]), 'title' => 'Creditor', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddCreditors']) .
                                         
                                             Html::button('Save  <i class="glyphicon glyphicon-floppy-save"></i>', ['value' => Url::to(['lddapada/save', 'id'=>$model->lddapada_id]), 'title' => 'LDDAPADA', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;'.(($model->saved === Lddapada::CHANGED) ? '' : 'display: none;'), 'id'=>'buttonSave']) .
                                         

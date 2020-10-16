@@ -157,6 +157,7 @@ Modal::end();
                 'label'=>'OS Number',
                 'inputContainer' => ['class'=>'col-sm-2'],
                 'format' => 'raw',
+                'visible' => ($model->type_id == 1) ? true : false,
                 'displayOnly'=>true, //$model->os 
                 'value' =>  
                     ($model->os ? '<h4><span class="label label-success">'.$model->os->os_number.'</span></h4>' : 
@@ -179,7 +180,7 @@ Modal::end();
                     '<h4><span class="label label-warning">'.Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s")).'</span></h4>'.Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generatedvnumber') ? Url::to(['osdv/generatedvnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),
                                                                         'title' => 'Generate DV', 'class' => 'btn btn-md btn-success '
                                                                         .(Yii::$app->user->can('access-finance-generatedvnumber') ? '' : 'disabled'),
-                                                                   'id'=>'buttonGenerateDVNumber'])) .
+                                                                   'id'=>'buttonGenerateDVNumber'])).
                     
                     Html::button('Certify Funds Available', ['value' => Url::to(['osdv/certifycashavailable', 'id'=>$model->osdv_id]),     
                                                                 'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_CHARGED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id >= Request::STATUS_CHARGED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonCertifyfundsavailable']),

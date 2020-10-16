@@ -48,6 +48,7 @@ class RequestSearch extends Request
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -76,7 +77,7 @@ class RequestSearch extends Request
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
                 //->andFilterWhere(['', 'payee_id', 129]);
-        }elseif((Yii::$app->user->identity->user_id == 20)){
+        }elseif((Yii::$app->user->identity->user_id == 3)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }

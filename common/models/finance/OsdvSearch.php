@@ -47,6 +47,7 @@ class OsdvSearch extends Osdv
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['osdv_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);

@@ -110,6 +110,19 @@ class Lddapada extends \yii\db\ActiveRecord
         return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
     }
     
+    public function Batchnumber($typeId)
+    {
+        $year = date("Y", strtotime("now"));
+        $month = date("m", strtotime("now"));
+        
+        $number = Lddapada::find()->where(['type_id' => $typeId, 'year(batch_date)' => date("Y", strtotime($year))])->orderBy(['lddapada_id' => SORT_DESC])->one();
+        
+        $batch = explode('-', $number->batch_number);
+        $count = (int)$batch[2] + 1;
+    
+        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
+    }
+    
     public function getTotal()
     {
         $items = Lddapadaitem::find()->where(['lddapada_id' => $this->lddapada_id, 'active' => 1])->all();

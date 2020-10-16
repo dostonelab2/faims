@@ -106,10 +106,11 @@ class LddapadaController extends Controller
         $listUnits = ArrayHelper::map($units, 'unit_id', 'name');*/
         
         if ($model->load(Yii::$app->request->post())) {
-            $model->batch_number = Lddapada::generateBatchNumber();
+            $model->batch_number = Lddapada::Batchnumber($_POST['Lddapada']['type_id']);
             
             date_default_timezone_set('Asia/Manila');
             $model->batch_date = date("Y-m-d H:i:s", strtotime("now"));
+            $model->type_id = $_POST['Lddapada']['type_id'];
             if($model->save())
                 return $this->redirect(['view', 'id' => (string) $model->lddapada_id]);
         }
@@ -272,17 +273,18 @@ class LddapadaController extends Controller
         
         $year = date("Y");
         $month = date("m");
-        $model->check_number = Checknumber::getCheckNumber(1,$year, $month);
+        $model->check_number = Checknumber::getCheckNumber($_GET['typeId'],$year, $month);
         
         if(Yii::$app->user->can('access-cashiering')){
             if (Yii::$app->request->post()) {
                 //$model->saved = Lddapada::SAVED ; //20
                 
-                $counter = Checknumber::find()->where(['type_id' => 1, 'year' => $year, 'month' => $month])->count();
-                $counter += 1;
+                $counter = Checknumber::find()->where(['type_id' => $_GET['typeId'], 'year' => $year, 'month' => $month])->orderBy(['check_number_id' => SORT_DESC])->one();
+
+                $counter = (int)$counter->counter + 1;
                 
-                $model->type_id = 1;	
-                $model->prefix = Checknumber::PREP;
+                $model->type_id = $_GET['typeId'];	
+                //$model->prefix = Checknumber::PREP;
                 $model->year = $year;
                 $model->month = $month;
                 $model->counter = $counter;
@@ -408,5 +410,21 @@ class LddapadaController extends Controller
         return Json::encode([
                     'message' => 'success'
         ]);
+    }
+    
+    public function actionBatchnumber()
+    {
+        $year = date("Y", strtotime("now"));
+        $month = date("m", strtotime("now"));
+        
+        //$start_date = date("Y-m-d", strtotime($year.'-'.$month.'-1'));
+        //$end_date = date("Y-m-t", strtotime($start_date));
+        $number = Lddapada::find()->where(['type_id' => $_POST['typeId'], 'year(batch_date)' => date("Y", strtotime($year))])->orderBy(['lddapada_id' => SORT_DESC])->one();
+        
+        $batch = explode('-', $number->batch_number);
+        //$count = Lddapada::find()->where(['between', 'batch_date', $start_date, $end_date])->count();
+        $count = (int)$batch[2] + 1;
+    
+        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
     }
 }

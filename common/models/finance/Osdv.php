@@ -99,4 +99,19 @@ class Osdv extends \yii\db\ActiveRecord
     {  
       return $this->hasOne(Expenditureclass::className(), ['expenditure_class_id' => 'expenditure_class_id']);  
     }
+    
+    public function getNetamount()
+    {
+        return $this->request->amount;
+    }
+    
+    public function getTax()
+    {
+        return $this->request->amount;
+    }
+    
+    public function getGrossamount()
+    {
+        return $this->request->amount;
+    }
 }

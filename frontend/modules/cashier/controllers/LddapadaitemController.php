@@ -162,6 +162,7 @@ class LddapadaitemController extends Controller
     public function actionAddcreditors()
     {
         $id = $_GET['id'];
+        $typeId = $_GET['typeId'];
         /*$year = $_GET['year'];
         if (Yii::$app->request->isAjax) {
             $ppmp = Ppmp::findOne($id); 
@@ -176,6 +177,7 @@ class LddapadaitemController extends Controller
         $searchModel = new OsdvSearch();
         $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         $searchModel->status_id = $status_id;
+        $searchModel->type_id = $typeId;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         if (Yii::$app->request->isAjax) {

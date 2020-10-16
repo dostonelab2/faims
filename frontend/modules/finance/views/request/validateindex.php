@@ -90,6 +90,16 @@ Modal::end();
                                 },
                             ],
                             [
+                                'attribute'=>'division_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: right; vertical-align:middle; padding-right: 25px; font-weight: bold;'],
+                                'width'=>'250px',
+                                //'format'=>['decimal', 2],
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->division->name;
+                                },
+                            ],
+                            [
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
