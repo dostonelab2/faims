@@ -20,6 +20,8 @@ class Section extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $selectyear;
+    
     public static function tableName()
     {
         return 'tbl_section';

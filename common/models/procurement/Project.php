@@ -55,8 +55,13 @@ class Project extends \yii\db\ActiveRecord
     
     public function getPpmps()
     {
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
         $ppmps = Ppmp::find()
-            ->where(['project_id' => $this->project_id, 'year' => 2020])
+            ->where(['project_id' => $this->project_id, 'year' => $year])
             ->all();
         $status = [
                 '0' => 'btn-default',   
@@ -76,6 +81,11 @@ class Project extends \yii\db\ActiveRecord
     
     public function getBudgetallocation()
     {
-        return $this->hasOne(Budgetallocation::className(), ['project_id' => 'project_id'])->andWhere(['year' => 2020]);
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+        return $this->hasOne(Budgetallocation::className(), ['project_id' => 'project_id'])->where(['year' => $year]);
     }
 }
