@@ -102,16 +102,51 @@ class Osdv extends \yii\db\ActiveRecord
     
     public function getNetamount()
     {
-        return $this->request->amount;
+        //return $this->request->amount;
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        
+        if($taxable){
+            $tax = $this->computeTax($taxable);
+            return $taxable->amount - $tax;
+        }else{
+            return $this->request->amount;
+        }
     }
     
     public function getTax()
     {
-        return $this->request->amount;
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        
+        if($taxable){
+            $tax = $this->computeTax($taxable);
+            return $tax;
+        }else{
+            return 0.00;
+        }
     }
     
     public function getGrossamount()
     {
         return $this->request->amount;
+    }
+    
+    private function computeTax($model)
+    {
+        $tax_amount = 0.00;
+        
+        if($model->tax_registered)
+            $taxable_amount = round($model->amount / 1.12, 2);
+        else
+            $taxable_amount = $model->amount;
+
+        if($model->amount < 10000.00){
+            $tax_amount = round($taxable_amount * $model->rate1, 2);
+        }else{
+            $tax1 = round($taxable_amount * $model->rate1, 2);
+            $tax2 = round($taxable_amount * $model->rate2, 2);
+            $tax_amount = $tax1 + $tax2;
+        }
+        //return $taxable_amount;
+        return $tax_amount;
     }
 }

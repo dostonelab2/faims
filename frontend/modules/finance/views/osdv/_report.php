@@ -116,6 +116,7 @@ Modal::end();
                             [
                                 'attribute'=>'amount',
                                 'header'=>'Tax',
+                                'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                                 'width'=>'250px',
                                 'format'=>['decimal',2],
