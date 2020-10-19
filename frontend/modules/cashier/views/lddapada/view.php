@@ -231,24 +231,22 @@ Modal::end();
                     'attribute'=>'gross_amount',
                     'header' => 'GROSS<br/>AMOUNT',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'format' => 'raw',
+                    'contentOptions' => ['style' => 'text-align: right; padding-right: 25px; vertical-align: middle;'],
+                    'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        $fmt = Yii::$app->formatter;
-                        return $fmt->asDecimal($model->gross_amount);
+                        return $model->osdv->getNetamount();
                     },
                 ],
                 [   
                     'attribute'=>'gross_amount',
                     'header' => 'WITHHOLDING<br/>TAX',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'format' => 'raw',
+                    'contentOptions' => ['style' => 'text-align: right; padding-right: 25px; vertical-align: middle;'],
+                    'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        $fmt = Yii::$app->formatter;
-                        return $fmt->asDecimal($model->gross_amount);
+                        return $model->osdv->getTax();
                     },
                     'pageSummary' => true
                 ],
@@ -256,12 +254,11 @@ Modal::end();
                     'attribute'=>'gross_amount',
                     'header' => 'NET<br/>AMOUNT',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'format' => 'raw',
+                    'contentOptions' => ['style' => 'text-align: right; padding-right: 25px; vertical-align: middle;'],
+                    'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        $fmt = Yii::$app->formatter;
-                        return $fmt->asDecimal($model->gross_amount);
+                        return $model->osdv->getNetamount();
                     },
                     'pageSummary' => true
                 ],
