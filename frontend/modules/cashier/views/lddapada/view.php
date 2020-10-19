@@ -223,9 +223,9 @@ Modal::end();
                     'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     'format' => 'raw',
                     'width'=>'150px',
-                    /*'value'=>function ($model, $key, $index, $widget) { 
-                        return Requestattachment::generateCode($model->request_attachment_id);
-                    },*/
+                    'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->expenditureObject->object_code;
+                    },
                 ],
                 [   
                     'attribute'=>'gross_amount',
@@ -237,6 +237,9 @@ Modal::end();
                     'value'=>function ($model, $key, $index, $widget) {
                         return $model->osdv->getGrossamount();
                     },
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_AVG,
+                    'footer' => true
                 ],
                 [   
                     'attribute'=>'gross_amount',
@@ -248,7 +251,9 @@ Modal::end();
                     'value'=>function ($model, $key, $index, $widget) {
                         return $model->osdv->getTax();
                     },
-                    'pageSummary' => true
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_AVG,
+                    'footer' => true
                 ],
                 [   
                     'attribute'=>'gross_amount',
@@ -260,7 +265,9 @@ Modal::end();
                     'value'=>function ($model, $key, $index, $widget) {
                         return $model->osdv->getNetamount();
                     },
-                    'pageSummary' => true
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_AVG,
+                    'footer' => true
                 ],
                 [   
                     'attribute'=>'check_number',
@@ -272,7 +279,8 @@ Modal::end();
                     /*'value'=>function ($model, $key, $index, $widget) { 
                         return Requestattachment::generateCode($model->request_attachment_id);
                     },*/
-                    'pageSummary' => true
+                    'pageSummary' => true,
+                    'footer' => true
                 ],
                 [
                     'class' => 'kartik\grid\CheckboxColumn',
@@ -280,7 +288,8 @@ Modal::end();
                     'contentOptions' => ['style' => 'disabled'],
                     //'pageSummary' => '<small>(amounts in $)</small>',
                     //'pageSummaryOptions' => ['colspan' => 3, 'data-colspan-dir' => 'rtl']
-                    'pageSummary' => false
+                    'pageSummary' => false,
+                    'footer' => true
                 ],
             ];
     ?>

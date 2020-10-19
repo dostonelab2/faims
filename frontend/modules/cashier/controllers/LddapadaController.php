@@ -226,6 +226,7 @@ class LddapadaController extends Controller
             $model->bank_name = $osdv->request->creditor->bank_name;
             $model->account_number = $osdv->request->creditor->account_number;
             $model->gross_amount = $osdv->request->amount;
+            $model->expenditure_object_id = $osdv->getAccountID();
             $model->active = 1;
             $model->save(false);
         }

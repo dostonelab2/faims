@@ -87,7 +87,7 @@ class Report {
         $template .= "<td colspan='1'>Entity Name :</td>";
         $template .= "<td colspan='4'>&nbsp;</td>";
         $template .= "<td>Date:</td>";
-        $template .= "<td colspan='2'>08/06/2020</td>";
+        $template .= "<td colspan='2'>".date('m-d-Y',strtotime($model->batch_date))."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
@@ -129,10 +129,10 @@ class Report {
         $fmt = Yii::$app->formatter;
         foreach($model->lddapadaItems as $item){
             $template .= "<tr>";
-            $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->name."</td>";
+            $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000; padding-left:  5px;'>".$item->name."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->creditor->account_number."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000; font-size: x-small;'>".$item->osdv->os->os_number."</td>";
-            $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
+            $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->expenditureObject->object_code."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getGrossamount(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getTax(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getNetamount(),2)."</td>";
@@ -162,11 +162,11 @@ class Report {
         
         // ITEMS FOOTER
         $template .= "<tr>";
-        $template .= "<td style='border-top: 1px solid #000;' colspan='4'>TOTAL</td>";
-        $template .= "<td style='text-align: right; padding-right: 10px; border-top: 1px solid #000;'>".$fmt->asDecimal($item->lddapada->total)."</td>";
-        $template .= "<td style='border-top: 1px solid #000;'>-</td>";
-        $template .= "<td style='border-top: 1px solid #000;'>12,000.00</td>";
-        $template .= "<td style='border-top: 1px solid #000;'>-</td>";
+        $template .= "<td style='border-top: 1px solid #000; text-align: center;font-weight: bold;' colspan='4'>TOTAL</td>";
+        $template .= "<td style='text-align: right; padding-right: 10px; border-top: 1px solid #000;font-weight: bold;'>".number_format($item->lddapada->total,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->taxtotal,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->nettotal,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;'></td>";
         $template .= "</tr>";
         
         // PARAGRAPH

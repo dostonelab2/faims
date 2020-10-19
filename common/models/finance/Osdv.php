@@ -100,6 +100,12 @@ class Osdv extends \yii\db\ActiveRecord
       return $this->hasOne(Expenditureclass::className(), ['expenditure_class_id' => 'expenditure_class_id']);  
     }
     
+    public function getAccountID()  
+    {  
+      $account = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'debitcreditflag' => 1])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+      return $account->account_id;  
+    }
+    
     public function getNetamount()
     {
         //return $this->request->amount;

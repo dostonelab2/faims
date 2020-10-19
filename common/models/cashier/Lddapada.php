@@ -129,7 +129,29 @@ class Lddapada extends \yii\db\ActiveRecord
         $runningtotal = 0;
         foreach($items as $item)
         {
-            $runningtotal += $item->gross_amount;
+            $runningtotal += $item->osdv->getGrossamount();
+        }
+        return $runningtotal;
+    }
+    
+    public function getTaxtotal()
+    {
+        $items = Lddapadaitem::find()->where(['lddapada_id' => $this->lddapada_id, 'active' => 1])->all();
+        $runningtotal = 0;
+        foreach($items as $item)
+        {
+            $runningtotal += $item->osdv->getTax();
+        }
+        return $runningtotal;
+    }
+    
+    public function getNettotal()
+    {
+        $items = Lddapadaitem::find()->where(['lddapada_id' => $this->lddapada_id, 'active' => 1])->all();
+        $runningtotal = 0;
+        foreach($items as $item)
+        {
+            $runningtotal += $item->osdv->getNetamount();
         }
         return $runningtotal;
     }
