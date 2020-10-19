@@ -235,7 +235,7 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        return $model->osdv->getNetamount();
+                        return $model->osdv->getGrossamount();
                     },
                 ],
                 [   
