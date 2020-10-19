@@ -135,7 +135,7 @@ class Report {
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$fmt->asDecimal($item->osdv->getGrossamount())."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->osdv->getTax()."</td>";
-            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$fmt->asDecimal($item->osdv->getNetamount)."</td>";
+            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$fmt->asDecimal($item->osdv->getNetamount())."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
 
             $template .= "</tr>";
