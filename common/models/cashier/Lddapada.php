@@ -22,7 +22,7 @@ class Lddapada extends \yii\db\ActiveRecord
 {
     const CHANGED = 10;   
     const SAVED = 20;   
-    const FUND_CLUSTER = '01101101';
+    const FUND_CLUSTER = '011011';
     const FUND_CODE = '101';
     const ACCOUNT = 'LBP Centro 2195-9000-54';
     
@@ -107,7 +107,7 @@ class Lddapada extends \yii\db\ActiveRecord
         $count = Lddapada::find()->where(['between', 'batch_date', $start_date, $end_date])->count();
         $count += 1;
     
-        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
+        return Lddapada::FUND_CLUSTER.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year;
     }
     
     public function Batchnumber($typeId)
@@ -120,7 +120,7 @@ class Lddapada extends \yii\db\ActiveRecord
         $batch = explode('-', $number->batch_number);
         $count = (int)$batch[2] + 1;
     
-        return Lddapada::FUND_CODE.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year.(($typeId == 4) ? 'TF' : '');
+        return Lddapada::FUND_CLUSTER.'-'.$month.'-'.str_pad($count, 3, '0', STR_PAD_LEFT).'-'.$year.(($typeId == 4) ? 'TF' : '');
     }
     
     public function getTotal()

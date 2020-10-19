@@ -168,11 +168,11 @@ Modal::end();
                             [
                                 'attribute'=>'amount',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                                 'width'=>'150px',
+                                'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    $fmt = Yii::$app->formatter;
-                                    return $fmt->asDecimal($model->request->amount);
+                                    return $model->request->amount;
                                 },
                             ],
                             [

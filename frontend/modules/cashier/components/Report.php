@@ -131,12 +131,12 @@ class Report {
             $template .= "<tr>";
             $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->name."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->creditor->account_number."</td>";
-            $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->osdv_id."</td>";
+            $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->osdv->os->os_number."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getGrossamount(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getTax(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getNetamount(),2)."</td>";
-            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>000</td>";
+            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->check_number."</td>";
 
             $template .= "</tr>";
             
