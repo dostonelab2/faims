@@ -252,7 +252,8 @@ class Report {
                 $OSboxAPosition = 'ARD-FOS';  
                 break;
               default:
-                $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
+                $OSboxASignatory = '';
+                $OSboxAPosition = ''; 
             }
        
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
@@ -356,6 +357,31 @@ class Report {
         $model = Request::findOne($id);
         $fmt = Yii::$app->formatter;
         
+        $DVboxCSignatory = 'ROBERTO B. ABELLA';
+        $DVboxCPosition = 'Accountant III';
+        $DVboxDSignatory = 'MARTIN A. WEE';
+        $DVboxDPosition = 'Regional Director';
+        switch ($model->division_id) {
+          case 1:
+            $DVboxASignatory = 'MARTIN A. WEE';
+            $DVboxAPosition = 'Regional Director';
+            break;
+          case 2:
+            $DVboxASignatory = 'ROSEMARIE S. SALAZAR';
+            $DVboxAPosition = 'ARD-FASTS';
+            break;
+          case 3:
+            $DVboxASignatory = 'ROSEMARIE S. SALAZAR';
+            $DVboxAPosition = 'ARD-FASTS';             
+            break;
+          case 4:
+            $DVboxASignatory = 'MAHMUD L. KINGKING';
+            $DVboxAPosition = 'ARD-FOS';  
+            break;
+          default:
+            $DVboxASignatory = '';
+            $DVboxAPosition = ''; 
+        }
         
         //$boxBsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
         
@@ -410,13 +436,13 @@ class Report {
 <td style="width: 10%; height: 4px;">
 <p>Payee</p>
 </td>
-<td style="width: 50%; height: 25px;" colspan="3"> '.$model->creditor->name.'</td>
+<td style="width: 50%; height: 25px; padding-left: 5px; font-weight: bold;" colspan="3"> '.$model->creditor->name.'</td>
 <td style="width: 20%; height: 25px;">TIN/Employee No.:</td>
 <td style="width: 20%; height: 25px;" colspan="2">ORS/BURS No.:</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 10%; height: 25px;">Address</td>
-<td style="width: 90%; height: 25px;" colspan="6">'.$model->creditor->address.'</td>
+<td style="width: 90%; height: 25px; padding-left: 5px; font-weight: bold;" colspan="6">'.$model->creditor->address.'</td>
 </tr> 
 <tr style="height: 14px;">
 <td style="width: 40%; height: 14px; text-align: center;padding:10px;" colspan="3">Particulars</td>
@@ -425,7 +451,7 @@ class Report {
 <td style="width: 20%; height: 14px; text-align: center;padding:10px;" colspan="2">Amount</td>
 </tr>
 <tr style="height: 14px;">
-<td style="width: 50%; height: 175px; text-align: left;padding:5px;vertical-align:top;" colspan="3">'.$model->particulars.'</td>
+<td style="width: 50%; height: 175px; text-align: left;padding:5px;vertical-align:top; padding-left: 5px; font-weight: bold;" colspan="3">'.$model->particulars.'</td>
 <td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top;"></td>
 <td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
@@ -445,8 +471,12 @@ class Report {
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
 </tr>
 <tr style="height: 14px;">
-<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> ';
+<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
+<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxPosition.'</td>
+';
         
+        /*$DVboxASignatory
+        $DVboxPosition    
         switch ($model->division_id) {
           case 1:
             $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
@@ -462,7 +492,7 @@ class Report {
             break;
           default:
             $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
-        }
+        }*/
         
         /*if($model=='') { 
             $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
@@ -470,7 +500,7 @@ class Report {
             $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
         }*/
         
-$content .= '</span></td>
+$content .= '
 </tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">B.</span> Accounting Entry</span></td>
@@ -482,7 +512,7 @@ $content .= '</span></td>
 <td style="width: 16.67%;  text-align: center;padding:5px;vertical-align:top;" colspan="2">Credit</td>
 </tr>
 <tr style="height: 14px;">
-<td style="width: 50%; height: 50px; text-align: left;padding:5px;vertical-align:top;" colspan="3">';
+<td style="width: 50%; height: 50px; text-align: left;padding:5px;vertical-align:top; font-weight: bold;" colspan="3">';
         
         foreach($model->osdv->accounttransactions as $transaction){
                 $content .= $transaction->account->title.'<br/>';
@@ -499,7 +529,7 @@ $content .= '</span></td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->amount,2) : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->amount,2).'<br/>' : '-'.'<br/>';
             }
         
         $content .= '</td>
@@ -512,8 +542,8 @@ $content .= '</span></td>
         $content .= '</td>
 </tr>
 <tr style="height: 10px;">
-<td style="width:50%; height: 0px; text-align: left;" colspan="3"><b><span style="border:1px solid black;">C.</span>Certified</b></td>
-<td style="width:50%; height: 0px; text-align: left;" colspan="4"><b><span style="border:1px solid black;">D.</span>Approved for Payment</b></td>
+<td style="width:50%; height: 0px; text-align: left;" colspan="3"><b><span style="border:1px solid black;">C.</span> Certified</b></td>
+<td style="width:50%; height: 0px; text-align: left;" colspan="4"><b><span style="border:1px solid black;">D.</span> Approved for Payment</b></td>
     </tr>
     <tr style="height: 14px;">
     <td style="width:50%; height: 60px; text-align: left;padding:20px;" colspan="3">
