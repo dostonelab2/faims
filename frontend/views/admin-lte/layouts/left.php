@@ -71,6 +71,12 @@ if(Yii::$app->user->isGuest){
                         'items' => [
                             ['label' => 'LDDAP-ADA', 'icon' => 'money', 'url' => ['/cashier/lddapada/index']],
                             ['label' => 'Creditors', 'icon' => 'clipboard', 'url' => ['/cashier/creditor/index']],
+                            [
+                                'label' => 'Disbursement Report', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/report'], 
+                                'visible'=> Yii::$app->user->can('access-cashiering')
+                            ],
                         ]
                     ],
                     [

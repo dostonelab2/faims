@@ -94,7 +94,7 @@ class Report {
         $template .= "<td colspan='1'>Operating Unit :</td>";
         $template .= "<td colspan='4'>&nbsp;</td>";
         $template .= "<td>Fund Cluster :</td>";
-        $template .= "<td colspan='2'>".Lddapada::FUND_CLUSTER."</td>";
+        $template .= "<td colspan='2'>".Lddapada::FUND_CLUSTER2."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
@@ -227,7 +227,7 @@ class Report {
         
         $template .= "<tr>";
         $template .= "<td>TOTAL AMOUNT:</td>";
-        $template .= "<td colspan='7'>Twelve Thousand Only</td>";
+        $template .= "<td colspan='7'>".Yii::$app->NumbersToWords->convert($item->lddapada->nettotal)."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
