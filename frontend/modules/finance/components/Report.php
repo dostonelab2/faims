@@ -232,7 +232,7 @@ class Report {
                 $fundsposition = $ob["FundsAvailablePosition"];
             }*/
         
-            $OSboxBSignatory = 'INGRID I, ABELLA-COLCOL';
+            $OSboxBSignatory = 'INGRID I. ABELLA-COLCOL';
             $OSboxBPosition = 'Budget Officer';
             switch ($model->division_id) {
               case 1:
