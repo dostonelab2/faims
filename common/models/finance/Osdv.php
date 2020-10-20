@@ -155,4 +155,9 @@ class Osdv extends \yii\db\ActiveRecord
         //return $taxable_amount;
         return $tax_amount;
     }
+    
+    public function getUacs()  
+    {  
+      return $this->hasOne(Osallotment::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);  
+    }
 }

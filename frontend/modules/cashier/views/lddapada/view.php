@@ -224,7 +224,8 @@ Modal::end();
                     'format' => 'raw',
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->expenditureObject->object_code;
+                        //return $model->expenditureObject->object_code;
+                        return $model->osdv->uacs->expenditureobject->object_code;
                     },
                 ],
                 [   
