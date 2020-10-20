@@ -231,6 +231,29 @@ class Report {
                 $fundsavailable = $ob["FundsAvailable"];
                 $fundsposition = $ob["FundsAvailablePosition"];
             }*/
+        
+            $OSboxBSignatory = 'INGRID I, ABELLA-COLCOL';
+            $OSboxBPosition = 'Budget Officer';
+            switch ($model->division_id) {
+              case 1:
+                $OSboxASignatory = 'MARTIN A. WEE';
+                $OSboxAPosition = 'Regional Director';
+                break;
+              case 2:
+                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
+                $OSboxAPosition = 'ARD-FASTS';
+                break;
+              case 3:
+                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
+                $OSboxAPosition = 'ARD-FASTS';             
+                break;
+              case 4:
+                $OSboxASignatory = 'MAHMUD L. KINGKING';
+                $OSboxAPosition = 'ARD-FOS';  
+                break;
+              default:
+                $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
+            }
        
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
@@ -248,12 +271,12 @@ class Report {
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>MARTIN A. WEE</b></span></td>
-                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>INGRID T. ABELLA-COLCOL</b></span><td>
+                                <td style="border-right:1px solid black;width:50%;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$OSboxASignatory.'</b></span></td>
+                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>'.$OSboxBSignatory.'</b></span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">Regional Director</span></td>
-                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">Budget Officer</span></td>
+                                <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
+                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxAPosition.'</span></td>
                             </tr>
                             <tr>
                                <td style="border-right:1px solid black;width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
