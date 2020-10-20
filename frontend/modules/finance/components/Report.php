@@ -409,7 +409,6 @@ class Report {
         foreach($model->osdv->allotments as $allotment){
                 $content .= $allotment->name.'<br/>';
             }
-        
         $content .= '</td>
 
 <td style="width: 20%; height: 175px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->amount,2).'</td>
@@ -430,10 +429,10 @@ class Report {
             $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
             break;
           case 2:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD FASS';
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
             break;
           case 3:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD TS';
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
             break;
           case 4:
             $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
@@ -489,7 +488,7 @@ $content .= '</span></td>
         
         $content .= '</td>
 </tr>
-<tr style="height: 14px;">
+<tr style="height: 10px;">
 <td style="width:50%; height: 0px; text-align: left;" colspan="3"><b><span style="border:1px solid black;">C.</span>Certified</b></td>
 <td style="width:50%; height: 0px; text-align: left;" colspan="4"><b><span style="border:1px solid black;">D.</span>Approved for Payment</b></td>
     </tr>
