@@ -170,7 +170,7 @@ class Report {
                         <tbody>
                         <tr style="height: 13px;">
                             <td style="width: 14%; text-align: center; height: 13px;">&nbsp;Payee</td>
-                            <td style="width: 84%; height: 13px;">&nbsp;'.$model->creditor->name.'</td>
+                            <td style="width: 84%; height: 13px; font-weight: bold;">&nbsp;'.$model->creditor->name.'</td>
                         </tr>
                         <tr style="height: 13px;">
                             <td style="width: 14%; text-align: center; height: 13px;">&nbsp;Office</td>
@@ -178,7 +178,7 @@ class Report {
                         </tr>
                         <tr style="height: 13px;">
                             <td style="width: 14%; text-align: center; height: 13px;">&nbsp;Address</td>
-                            <td style="width: 84%; height: 13px;">&nbsp;'.$model->creditor->address.'</td>
+                            <td style="width: 84%; height: 13px; font-weight: bold;">&nbsp;'.$model->creditor->address.'</td>
                         </tr>
                         </tbody>
                         </table>';
