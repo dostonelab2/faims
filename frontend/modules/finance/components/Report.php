@@ -472,7 +472,7 @@ class Report {
 </tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
-<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxPosition.'</td>
+<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
 ';
         
         /*$DVboxASignatory
