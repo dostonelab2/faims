@@ -365,7 +365,7 @@ class Report {
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
 <tr style="height: 5px;">
-<td style="width: 80%; height: 5px; text-align: center;border-bottom:none;" colspan="5"><br /><b><?= $assig->CompanyTitle; ?></p></td>
+<td style="width: 80%; height: 5px; text-align: center;border-bottom:none;" colspan="5"><br /><b>DEPARTMENT OF SCIENCE AND TECHNOLOGY IX</p></td>
 <td style="width: 20%; height: 5px;" colspan="2">Fund Cluster :<br /><br /></td>
 </tr>
 <tr style="height: 13px;">
@@ -549,7 +549,7 @@ $content .= '</span></td>
         <td style="width:9%;verticalign:middle;padding-top:8px;"> <center>Signature : </center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td style="width:22%;"></td>
         <td style="width:21%;vertical-align:top;padding-top:0px;">Date :</td>
-        <td style="width:24%;vertical-align:top;padding-top:0px;">Printed Name : <br> <?= $payee; ?></td>
+        <td style="width:24%;vertical-align:top;padding-top:0px;">Printed Name : <br> '.$model->creditor->name.'</td>
         <td style="width:24%;vertical-align:top;padding-top:0px;">Date</td>
     </tr>
     <tr>
