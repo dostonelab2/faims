@@ -107,7 +107,7 @@ class Report {
             'defaultfooterline'=> 0];*/
         
         $mPDF->orientation = Pdf::ORIENT_PORTRAIT;
-        $mPDF->defaultFontSize = 11;
+        $mPDF->defaultFontSize = 10;
         $mPDF->defaultFont = 'Arial';
         $mPDF->format =Pdf::FORMAT_A4;
         $mPDF->destination = Pdf::DEST_BROWSER;
