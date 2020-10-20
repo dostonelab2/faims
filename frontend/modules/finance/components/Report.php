@@ -425,11 +425,28 @@ class Report {
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> ';
         
-        if($assig1=='') { 
+        switch ($model->division_id) {
+          case 1:
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
+            break;
+          case 2:
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD FASS';
+            break;
+          case 3:
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD TS';
+            break;
+          case 4:
+            $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
+            break;
+          default:
+            $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
+        }
+        
+        /*if($model=='') { 
             $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
         }else{
             $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
-        } 
+        }*/
         
 $content .= '</span></td>
 </tr>
@@ -495,16 +512,16 @@ $content .= '</span></td>
     </tr>
     <tr style="height: 25px;">
     <td style="width: 1%; height: 25px; text-align: center;padding:10px;">Printed<br />Name</td>
-    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;"><?= $assig2 ?></td>
+    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;">ROBERTO B. ABELLA</td>
                                                                                                                          >
-    <td style="width: 10%; text-align: center; height: 25px;">Printed<br />Name</td>
-    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;"><?= $assig3; ?></td>
+    <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name</td>
+    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;">MARTIN A. WEE</td>
     </tr>
     <tr style="height: 16px;">
     <td style="width: 1%; height: 32px; text-align: center;padding:10px;">Position</td>
-    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;"><?= $Assig2Position ?></td>
-    <td style="width: 10%; text-align: center; height: 32px;padding:10px;"><br />Position<br /><br /></td>
-    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;"><?= $Assig3Position ?> </td>
+    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">Accountant III</td>
+    <td style="width: 10%; text-align: center; height: 32px;padding:10px;"><br/>Position<br /><br /></td>
+    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">Regional Director</td>
     </tr>
 
 <tr style="height: 12.4546px;">
