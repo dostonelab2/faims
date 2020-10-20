@@ -68,5 +68,8 @@ return [
     'Notification' => [
         'class' => 'common\components\Notification'
     ],
+    'NumbersToWords' => [
+        'class' => 'common\components\NumbersToWords'
+    ],
 ];
  
