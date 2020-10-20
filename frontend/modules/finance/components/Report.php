@@ -277,7 +277,7 @@ class Report {
                             </tr>
                             <tr>
                                 <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
-                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxAPosition.'</span></td>
+                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxBPosition.'</span></td>
                             </tr>
                             <tr>
                                <td style="border-right:1px solid black;width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
@@ -536,7 +536,7 @@ $content .= '
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 2) ? number_format($transaction->amount,2) : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 2) ? number_format($transaction->amount,2).'<br/>' : '-'.'<br/>';
             }
         
         $content .= '</td>
