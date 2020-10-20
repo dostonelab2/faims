@@ -227,7 +227,7 @@ class Report {
         
         $template .= "<tr>";
         $template .= "<td>TOTAL AMOUNT:</td>";
-        $template .= "<td colspan='7'>".Yii::$app->NumbersToWords->convert($item->lddapada->nettotal)."</td>";
+        $template .= "<td colspan='7'>".Yii::$app->NumbersToWords->convert($item->lddapada->nettotal)." ONLY</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
