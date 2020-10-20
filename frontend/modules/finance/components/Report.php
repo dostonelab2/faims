@@ -417,7 +417,7 @@ class Report {
 <tr style="height: 14px;">
 <td style="width: 50%; height: 14px; text-align: center;" colspan="3">Amount Due&nbsp;&nbsp;&nbsp;</td>
 <td style="width: 25%; height: 14px;" colspan="2">&nbsp;&nbsp;</td>
-<td style="width: 25%; height: 14px;text-align:right;padding:5px;" colspan="2">'.$fmt->asDecimal($model->amount).'</td>
+<td style="width: 25%; height: 14px;text-align:right;padding:5px;" colspan="2">'.number_format($model->amount,2).'</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
@@ -460,14 +460,14 @@ $content .= '</span></td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top;">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 1) ? $fmt->asDecimal($transaction->amount) : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->amount,2) : '-'.'<br/>';
             }
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top;" colspan="2">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 2) ? $fmt->asDecimal($transaction->amount) : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 2) ? number_format($transaction->amount,2) : '-'.'<br/>';
             }
         
         $content .= '</td>
