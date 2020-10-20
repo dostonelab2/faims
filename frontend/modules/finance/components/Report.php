@@ -210,14 +210,14 @@ class Report {
             }
         
             $content .= '</td>
-                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px;">'.$fmt->asDecimal($model->amount).'</td>
+                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px;">'.number_format($model->amount,2).'</td>
                                 </tr>
                                 <tr style="height: 3px;">
                                 <td style="width: 0%;border-top:none;">&nbsp;</td>
                                 <td style="width: 43%;text-align:right;padding-right:50px;border-top:none;">Total</td>
                                 <td style="width: 12%;border-top:none;"></td>
                                 <td style="width: 10%;border-top:none;"></td>
-                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px;"><b>'.$fmt->asDecimal($model->amount).'<b/></td>
+                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px;"><b>'.number_format($model->amount,2).'<b/></td>
                                 </tr>
                                 </tbody>
                             </table>';
@@ -412,7 +412,7 @@ class Report {
         
         $content .= '</td>
 
-<td style="width: 20%; height: 175px; text-align: right;padding:5px;vertical-align:top;" colspan="2">'.$fmt->asDecimal($model->amount).'</td>
+<td style="width: 20%; height: 175px; text-align: right;padding:5px;vertical-align:top;" colspan="2">'.number_format($model->amount,2).'</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 50%; height: 14px; text-align: center;" colspan="3">Amount Due&nbsp;&nbsp;&nbsp;</td>
