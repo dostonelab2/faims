@@ -549,7 +549,7 @@ $content .= '</span></td>
         <td style="width:9%;verticalign:middle;padding-top:8px;"> <center>Signature : </center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td style="width:22%;"></td>
         <td style="width:21%;vertical-align:top;padding-top:0px;">Date :</td>
-        <td style="width:24%;vertical-align:top;padding-top:0px;">Printed Name : <br> '.$model->creditor->name.'</td>
+        <td style="width:24%;vertical-align:top;padding-top:0px; font-weight: bold;">Printed Name : <br> '.$model->creditor->name.'</td>
         <td style="width:24%;vertical-align:top;padding-top:0px;">Date</td>
     </tr>
     <tr>
