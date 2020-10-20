@@ -249,10 +249,10 @@ class Report {
                             </tr>
                             <tr>
                                 <td style="border-right:1px solid black;width:50%;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$boxAsignatory->user->profile->fullname.$model->division_id.'</b></span></td>
-                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b><?=$fundsavailable?></b></span><td>
+                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>INGRID T. ABELLA-COLCOL</b></span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$boxAsignatory->profile->designation.'</span></td>
+                                <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">Budget Officer</span></td>
                                 <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;"><?=$fundsposition;?></span></td>
                             </tr>
                             <tr>
