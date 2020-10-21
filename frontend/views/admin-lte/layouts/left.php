@@ -185,19 +185,24 @@ if(Yii::$app->user->isGuest){
                                 'visible'=> Yii::$app->user->can('access-finance-verification')//  || (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
+                                'label' => 'Expenditure Objects', 
+                                'icon' => 'object-ungroup text-aqua', 
+                                'url' => ['/procurement/expenditureobject/index'], 
+                                //'visible'=> (Yii::$app->user->identity->username == 'Admin')
+                                'visible'=> Yii::$app->user->can('access-finance-verification')//  || (Yii::$app->user->identity->username == 'Admin')
+                            ],
+                            [
                                 'label' => 'Creditors', 
                                 'icon' => 'clipboard text-aqua', 
                                 'url' => ['/cashier/creditor/index'], 
                                 'visible'=> Yii::$app->user->can('access-finance-processing')
                             ],
-                            
                             [
                                 'label' => 'Payee and Creditor Requests', 
                                 'icon' => 'clipboard text-aqua', 
                                 'url' => ['/cashier/creditortmp/validateindex'], 
                                 'visible'=> Yii::$app->user->can('access-finance-validatecreditor')
                             ],
-                            
                             [
                                 'label' => 'Attachment Uploader' , 
                                 'icon' => 'upload text-aqua', 
