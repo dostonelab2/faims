@@ -451,7 +451,7 @@ class Report {
 <td style="width: 20%; height: 14px; text-align: center;padding:10px;" colspan="2">Amount</td>
 </tr>
 <tr style="height: 14px;">
-<td style="width: 50%; height: 175px; text-align: left;padding:5px;vertical-align:top; padding-left: 5px; font-weight: bold;" colspan="3">'.$model->particulars.'</td>
+<td style="width: 50%; height: 125px; text-align: left;padding:5px;vertical-align:top; padding-left: 5px; font-weight: bold;" colspan="3">'.$model->particulars.'</td>
 <td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top;"></td>
 <td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
