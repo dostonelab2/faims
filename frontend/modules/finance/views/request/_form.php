@@ -23,10 +23,6 @@ use common\models\procurement\Division;
 <div class="request-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <!--?= $form->field($model, 'request_number')->textInput() ?-->
-
-    <!--?= $form->field($model, 'request_date')->textInput() ?-->
     
     <div class="row">
         
@@ -86,22 +82,6 @@ use common\models\procurement\Division;
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
-                    /*'pluginEvents'=>[
-                        "change" => 'function() { 
-                            var requestTypeId=this.value;
-                            $.post("/finance/request/updateparticulars/", 
-                                {
-                                    requestTypeId: requestTypeId
-                                }, 
-                                function(response){
-                                    if(response){
-                                       $("#request-particulars").val(response.default_text);
-                                       //alert(response.default_text);
-                                    }
-                                }
-                            );
-                        }
-                    ',]*/
                 ])->label('Fund Source'); ?>
                 
                 </h5>
@@ -145,29 +125,6 @@ use common\models\procurement\Division;
         </h5>
     </div>
     </div>
-    
-    
-    <?php 
-        /*$editable = Editable::begin([
-            //'model'=>$newcreditor_model,
-            //'attribute'=>'name',
-            'name'=>'payee',
-            'value'=>'New Payee',
-            'format'=>'button',
-            'asPopover' => false,
-            'size'=>'sm',
-            //'displayValue' => 'Add New Payee / Creditor',
-            'options'=>['placeholder'=>'Creditor Name'],
-            //'formOptions'=>['action' => ['/finance/request/addcreditor']], // point to the new action
-        ]);
-        $form2 = $editable->getForm();
-        //echo Html::hiddenInput('kv-complex', '1');
-        //echo Html::hiddenInput('kv-complex', '1');
-        $editable->afterInput = 
-            '&nbsp;&nbsp;' .$form2->field($newcreditor_model, 'address')->textInput(['placeholder'=>'Address'])->label(false) . '&nbsp;&nbsp;&nbsp;' .
-            $form2->field($newcreditor_model, 'tin_number')->textInput(['placeholder'=>'Tin Number'])->label(false);
-        Editable::end();*/
-    ?>
         
     <h5 data-step="6" data-intro="Indicate the details of this financial request.">
     <?= $form->field($model, 'particulars')->textarea(['rows' => 6]) ?>
@@ -180,7 +137,7 @@ use common\models\procurement\Division;
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </h5>
         
-        <h5 data-step="9" data-intro="You are Golden! Thank you for using this guide! Take a screenshot and post it in the DOST IX Official Communication Portal. Tag ADM to claim your P100 load card! 1 winner only :-)">
+        <h5 data-step="9" data-intro="Claimed by JLAP <a href='https://tinyurl.com/y647jz3f' target='_blank'>See Post...</a><br/><br/>You are Golden! Thank you for using this guide! Take a screenshot and post it in the DOST IX Official Communication Portal. Tag ADM to claim your P100 load card! 1 winner only :-)">
             <a id="startButton"  href="javascript:void(0);">Show guide</a>
         </h5>
     </div>
