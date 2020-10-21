@@ -601,7 +601,7 @@ $content .= '
         <td style="width:9%;verticalign:middle;padding-top:8px;"> <center>Signature : </center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td style="width:22%;"></td>
         <td style="width:21%;vertical-align:top;padding-top:0px;">Date :</td>
-        <td style="width:24%;vertical-align:top;padding-top:0px;">Printed Name : <br><b> '.$model->creditor->name.'</b></td>
+        <td style="width:24%;vertical-align:top;padding-top:0px;font-size: xx-small;">Printed Name : <br><b> '.$model->creditor->name.'</b></td>
         <td style="width:24%;vertical-align:top;padding-top:0px;">Date</td>
     </tr>
     <tr>
