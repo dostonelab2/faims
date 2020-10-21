@@ -125,7 +125,8 @@ Modal::end();
                                 'width'=>'100px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->division ? $model->division->name : '-'.'<br/>'.$model->profile ? $model->profile->fullname : '-';
+                                    return $model->division ? $model->division->name : '-'.'<br/>';
+                                        //.$model->profile ? $model->profile->fullname : '-';
                                 },
                             ],
                             /*[
