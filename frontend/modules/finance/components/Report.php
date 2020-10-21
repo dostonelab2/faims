@@ -259,7 +259,7 @@ class Report {
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;"><span style="border:1px solid black; padding:25px;">A. </span>&nbsp;&nbsp;Certified : Charges to appropriation/allotment necessary, lawful and under my direct 
+                                <td style="border-right:1px solid black;width:75%;padding:5px;"><span style="border:1px solid black; padding:25px;">A. </span>&nbsp;&nbsp;Certified : Charges to appropriation/allotment necessary, lawful and under my direct 
                                 supervision; and supporting documents valid, proper and legal</td>
                                 <td style="width:50%;padding-left:5px;padding-top:-16px;"><span style="border:1px solid black; padding:25px;">B. </span>&nbsp;&nbsp;Certified: Allotment available and obligated for the purpose/adjustment necessary as indicated above</td>
                             </tr>
