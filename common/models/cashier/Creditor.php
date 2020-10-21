@@ -39,10 +39,10 @@ class Creditor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['creditor_type_id', 'name', 'bank_name', 'account_number'], 'required'],
+            [['creditor_type_id', 'name', 'bank_name'], 'required'],
             [['creditor_type_id'], 'integer'],
             [['name'], 'string', 'max' => 150],
-            [['bank_name', 'account_number'], 'string', 'max' => 20],
+            [['bank_name', 'account_number', 'tin_number'], 'string', 'max' => 20],
         ];
     }
 
@@ -57,6 +57,7 @@ class Creditor extends \yii\db\ActiveRecord
             'name' => 'Name',
             'bank_name' => 'Bank Name',
             'account_number' => 'Account Number',
+            'tin_number' => 'TINE Number',
         ];
     }
 

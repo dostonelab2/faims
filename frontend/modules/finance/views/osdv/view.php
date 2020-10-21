@@ -469,6 +469,7 @@ Modal::end();
                     //'vAlign'=>'middle',
                     'width'=>'250px',
                 ],
+                
                 /*[
                     'class' => 'kartik\grid\CheckboxColumn',
                     'headerOptions' => ['class' => 'kartik-sheet-style'],

@@ -137,7 +137,7 @@ class CreditorController extends Controller
                return false;
        }
     }
-    
+    /*
     public function actionUpdateaccount() {
        if (Yii::$app->request->post('hasEditable')) {
            $ids = Yii::$app->request->post('editableKey');
@@ -153,4 +153,5 @@ class CreditorController extends Controller
                return false;
        }
     }
+    */
 }
