@@ -259,7 +259,7 @@ class Report {
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
                             <tr>
-                                <td style="border-right:1px solid black;width:75%;padding:5px;"><span style="border:1px solid black; padding:25px;">A. </span>&nbsp;&nbsp;Certified : Charges to appropriation/allotment necessary, lawful and under my direct 
+                                <td style="border-right:1px solid black;width:50%;padding:5px;"><span style="border:1px solid black; padding:25px;">A. </span>&nbsp;&nbsp;Certified : Charges to appropriation/allotment necessary, lawful and under my direct 
                                 supervision; and supporting documents valid, proper and legal</td>
                                 <td style="width:50%;padding-left:5px;padding-top:-16px;"><span style="border:1px solid black; padding:25px;">B. </span>&nbsp;&nbsp;Certified: Allotment available and obligated for the purpose/adjustment necessary as indicated above</td>
                             </tr>
@@ -268,19 +268,19 @@ class Report {
                                <td style="height:15x;"></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;width:75%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$OSboxASignatory.'</b></span></td>
+                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$OSboxASignatory.'</b></span></td>
                                 <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>'.$OSboxBSignatory.'</b></span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
+                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
                                 <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxBPosition.'</span></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;width:75%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
