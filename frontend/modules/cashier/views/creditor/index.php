@@ -92,8 +92,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],*/
                             [
                                 'class'=>'kartik\grid\EditableColumn',
-                                'attribute'=>'tin_number',
-                                'header'=>'TIN',
+                                'attribute'=>'account_number',
+                                'header'=>'Account Number',
                                 //'width'=>'350px',
                                 'refreshGrid'=>true,
                                 //'readonly' => !$isMember,
