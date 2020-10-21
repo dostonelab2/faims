@@ -452,15 +452,15 @@ class Report {
 </tr>
 <tr style="height: 14px;">
 <td style="width: 50%; height: 125px; text-align: left;padding:5px;vertical-align:top; padding-left: 5px; font-weight: bold;" colspan="3">'.$model->particulars.'</td>
-<td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top;"></td>
-<td style="width: 15%; height: 175px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
+<td style="width: 15%; height: 125px; text-align: center;padding:5px;vertical-align:top;"></td>
+<td style="width: 15%; height: 125px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
         foreach($model->osdv->allotments as $allotment){
                 $content .= $allotment->name.'<br/>';
             }
         $content .= '</td>
 
-<td style="width: 20%; height: 175px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->amount,2).'</td>
+<td style="width: 20%; height: 125px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->amount,2).'</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 50%; height: 14px; text-align: center;" colspan="3">Amount Due&nbsp;&nbsp;&nbsp;</td>
