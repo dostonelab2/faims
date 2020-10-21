@@ -268,7 +268,7 @@ class Report {
                                <td style="height:15x;"></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;width:75%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
@@ -601,7 +601,7 @@ $content .= '
         <td style="width:9%;verticalign:middle;padding-top:8px;"> <center>Signature : </center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td style="width:22%;"></td>
         <td style="width:21%;vertical-align:top;padding-top:0px;">Date :</td>
-        <td style="width:24%;vertical-align:top;padding-top:0px;font-size: 20%;">Printed Name : <br><b> '.$model->creditor->name.'</b></td>
+        <td style="width:24%;vertical-align:top;padding-top:0px;font-size: xx-small;">Printed Name : <br><b> '.$model->creditor->name.'</b></td>
         <td style="width:24%;vertical-align:top;padding-top:0px;">Date</td>
     </tr>
     <tr>
