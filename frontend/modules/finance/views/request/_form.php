@@ -109,7 +109,11 @@ use common\models\procurement\Division;
         <h5 data-step="5" data-intro="Search Or request to add new Payee / Creditor.">
         <div class="input-group">
                        <?= $form->field($model, 'payee_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
+                        'data' => ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id',
+                                                    function($model) {
+                                                                    return $model['name'].' | '.$model['address'];
+                                                                }
+                                                  ),
                         'language' => 'en',
                         'options' => ['placeholder' => 'Select Payee','readonly'=>'readonly'],
                         'pluginOptions' => [
@@ -118,7 +122,6 @@ use common\models\procurement\Division;
                         ])->label('Payee / Creditor'); ?>
                         
                         <span class="input-group-btn" style="padding-top: 20px; padding-left: 5px;">
-                            <!--button onclick="LoadModal('Create New Payee', '/finance/info/addcreditor');" id="buttonAddCreditor" class="btn btn-default" type="button"><i class="fa fa-address-card-o"></i></button-->
                             <?= Html::button('<i class="fa fa-address-card-o"></i>', ['value' => Url::to(['/cashier/creditortmp/create']), 'title' => 'Create Payee / Creditor', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddCreditor']) ?>
                         </span>
         </div>
