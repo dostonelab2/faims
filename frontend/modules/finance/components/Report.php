@@ -195,7 +195,7 @@ class Report {
                                 </tr>
                                 <tr style="height: 10.6px;">
                                     <td style="width: 0%; height: 290px;vertical-align:top;border-bottom:none;">&nbsp;</td>
-                                    <td style="width: 43%; height: 290px;vertical-align:top;padding:3px;border-bottom:none;">'.$model->particulars.'</td>
+                                    <td style="width: 43%; height: 200px;vertical-align:top;padding:3px;border-bottom:none;">'.$model->particulars.'</td>
                                     <td style="font-size: 10px; width: 12%; height: 290px;vertical-align:top;padding-top:7px;text-align:center; border-bottom:none;">';
             
             foreach($model->osdv->allotments as $allotment){
