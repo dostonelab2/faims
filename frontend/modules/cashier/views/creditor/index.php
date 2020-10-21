@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'filterInputOptions' => ['placeholder' => 'Select Type','id' => 'grid-search-request_type_id'],
                                 'format' => 'raw'
                             ],
-                            [
+                            /*[
                                 'attribute'=>'account_number',
                                 'header'=>'Account Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -89,6 +89,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                     //return isset($model->dv->dv_id) ? $model->dv->dv_number : '';
                                     return Yii::$app->user->can('access-cashiering') ? $model->account_number : '-';
                                 },
+                            ],*/
+                            [
+                                'class'=>'kartik\grid\EditableColumn',
+                                'attribute'=>'tin_number',
+                                'header'=>'TIN',
+                                //'width'=>'350px',
+                                'refreshGrid'=>true,
+                                //'readonly' => !$isMember,
+                                'value' => function($model , $key , $index){
+                                            return $model->account_number;
+                                        },
+                                'editableOptions'=> function ($model , $key , $index) {
+                                    return [
+                                        'options' => ['id' => $index . '_20_' . $model->account_number],
+                                        'placement'=>'left',
+                                        //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                                        //'disabled'=>true,
+                                        'name'=>'tin_number',
+                                        'asPopover' => true,
+                                        'value' => function($model , $key , $index){
+                                            return $model->account_number;
+                                        },
+                                        //'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                                        /*'options' => [
+                                            'pluginOptions' => ['min' => 0, 'max' => 5000000]
+                                        ],*/
+                                        'formOptions'=>['action' => ['/cashier/creditor/updateaccount']], // point to the new action
+                                    ];
+                                },
+                                'headerOptions' => ['style' => 'text-align: center'],
+                                'contentOptions' => ['style' => 'text-align: center'],
+                                'hAlign'=>'right',
+                                //'vAlign'=>'middle',
+                                'width'=>'250px',
+                                'pageSummary' => true
                             ],
                             [
                                 'class'=>'kartik\grid\EditableColumn',
