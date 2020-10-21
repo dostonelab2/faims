@@ -268,7 +268,7 @@ class Report {
                                <td style="height:15x;"></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px; width: 200px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
