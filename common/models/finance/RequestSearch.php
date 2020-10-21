@@ -62,9 +62,10 @@ class RequestSearch extends Request
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            'request_number' => $this->request_number,
+            //'request_number' => $this->request_number,
             'request_date' => $this->request_date,
             'request_type_id' => $this->request_type_id,
+            'payee_id' => $this->payee_id,
             'amount' => $this->amount,
             'status_id' => $this->status_id,
             'created_by' => $this->created_by,
@@ -96,7 +97,7 @@ class RequestSearch extends Request
                 ->andFilterWhere(['>=', 'status_id', $this->status_id])
                 ->andFilterWhere(['like', 'particulars', $this->particulars]);    
         }*/
-        
+        $query->andFilterWhere(['like', 'request_number', $this->request_number]);
         
         return $dataProvider;
     }

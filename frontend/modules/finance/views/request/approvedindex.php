@@ -14,6 +14,7 @@ use yii\bootstrap\Modal;
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
+use common\models\finance\Requeststatus;
 use common\models\system\Profile;
 use common\models\system\Usersection;
 use common\models\sec\Blockchain;
@@ -46,25 +47,21 @@ Modal::end();
         echo GridView::widget([
             'id' => 'request',
             'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'columns' => [
                             [
                                 'attribute'=>'request_number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center; font-weight: bold;'],
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
                                 'width'=>'120px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->request_number;
-                                }
-                            ],
-                            [
-                                'attribute'=>'request_date',
-                                'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
-                                'width'=>'120px',
-                                'value'=>function ($model, $key, $index, $widget) { 
-                                    return date('Y-m-d', strtotime($model->request_date));
+                                    return '<b>'.$model->request_number.'</b><br/>'.date('Y-m-d', strtotime($model->request_date));
                                 },
+                                
                             ],
                             [
                                 'attribute'=>'payee_id',
@@ -84,6 +81,30 @@ Modal::end();
                                         'style'=>'text-decoration: underline; cursor:pointer;'
                                     ]).'<br>' .$model->particulars;
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
+                                                                function($model) {
+                                                                    //return [ $model->name.'<br/>'.$model->address];
+                                                                    return $model['name'].' | '.$model['address'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true,
+                                                       /*'templateResult' => function ($model) {
+                                                            //$r = data.text.split('|');
+                                                            $result = 
+                                                                '<div class="row"> 
+                                                                    <div class="col-md-3">test1</div>
+                                                                    <div class="col-md-9">test2</div>
+                                                                </div>'
+                                                            ;
+                                                            return $result;
+                                                        },*/
+                                                       ],
+                                    
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Payee'],
+                                
                             ],
                             [
                                 'attribute'=>'amount',
@@ -104,6 +125,12 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return '<span class="label label-info">'.$model->status->name.'</span>';
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
                             [
                                 'attribute'=>'created_by',
@@ -114,44 +141,16 @@ Modal::end();
                                     //return Profile::find($model->created_by)->one()->fullname;
                                     return $model->profile->fullname;
                                 },
-                            ],
-                            [
-                                'class'=>'kartik\grid\EditableColumn',
-                                'attribute'=>'district_id',
-                                'header'=>'District',
-                                //'width'=>'350px',
-                                'refreshGrid'=>true,
-                                //'readonly' => !$isMember,
-                                'value'=>function ($model, $key, $index, $widget) {
-                                        if($model->district_id)
-                                            return $model->district->name;
-                                        else
-                                            return '-';
-                                    },
-                                'editableOptions'=> function ($model , $key , $index) {
-                                    return [
-                                        'options' => ['id' => $index . '_10_' . $model->district_id],
-                                        'contentOptions' => ['style' => 'text-align: center;  vertical-align:middle;'],
-                                        'placement'=>'left',
-                                        //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
-                                        'name'=>'district',
-                                        'asPopover' => true,
-                                        'value'=>function ($model, $key, $index, $widget) {
-                                            if($model->district_id)
-                                                return $model->district->name;
-                                            else
-                                                return '-';
-                                        },
-                                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                                        'data'=>ArrayHelper::map(Requestdistrict::find()->all(),'request_district_id','name'),
-                                        'formOptions'=>['action' => ['/finance/request/updatedistrict']], // point to the new action
-                                    ];
-                                },
-                                'headerOptions' => ['style' => 'text-align: center'],
-                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
-                                'hAlign'=>'right',
-                                //'vAlign'=>'middle',
-                                'width'=>'250px',
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Profile::find()->asArray()->all(), 'profile_id', 
+                                                                function($model) {
+                                                                    return $model['firstname'].' '.$model['lastname'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Created by'],
                             ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
@@ -164,9 +163,7 @@ Modal::end();
                                 ],
                             ],
                     ],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
-            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
-            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            
             'pjax' => true, // pjax is set to always true for this demo
             'panel' => [
                     'heading' => '',
