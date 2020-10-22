@@ -128,7 +128,7 @@ class Osdv extends \yii\db\ActiveRecord
             $accountId = 0;
         }
         
-        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 4])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3])->orderBy(['account_transaction_id' => SORT_DESC])->one();
         
         if($taxable){
             $tax = $this->computeTax($taxable);
@@ -156,7 +156,7 @@ class Osdv extends \yii\db\ActiveRecord
           default:
             $accountId = 0;
         }
-        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 4, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
         
         if($taxable){
             $tax = $this->computeTax($taxable);
