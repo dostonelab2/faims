@@ -116,7 +116,12 @@ class Lddapada extends \yii\db\ActiveRecord
         $year = date("Y", strtotime("now"));
         $month = date("m", strtotime("now"));
         
-        $number = Lddapada::find()->where(['type_id' => $typeId, 'year(batch_date)' => date("Y", strtotime($year))])->orderBy(['lddapada_id' => SORT_DESC])->one();
+        if($typeId == 4)
+            $id = 4;
+        else
+            $id = 1;
+        
+        $number = Lddapada::find()->where(['type_id' => $id, 'year(batch_date)' => date("Y", strtotime($year))])->orderBy(['lddapada_id' => SORT_DESC])->one();
         
         $batch = explode('-', $number->batch_number);
         $count = (int)$batch[2] + 1;
