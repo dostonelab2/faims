@@ -105,7 +105,7 @@ if(Yii::$app->user->isGuest){
                             /*['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],*/
                         ]
                     ],
-                    /*[
+                    [
                         'label' => 'Finance', 
                         'icon' => 'line-chart', 
                         'visible'=> Yii::$app->user->can('access-procurement'),
@@ -113,7 +113,7 @@ if(Yii::$app->user->isGuest){
                             ['label' => 'Obligation Request', 'icon' => 'object-ungroup', 'url' => ['/procurement/obligationrequest/index']],
                             ['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],
                         ]
-                    ],*/
+                    ],
                     [
                         'label' => 'Financial Request', 
                         'icon' => 'folder-open text-aqua', 
