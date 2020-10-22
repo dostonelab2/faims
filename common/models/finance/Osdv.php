@@ -18,6 +18,9 @@ use common\models\procurement\Expenditureclass;
  */
 class Osdv extends \yii\db\ActiveRecord
 {
+    public $dv_id;
+    public $os_id;
+    public $payee_id;
     public $cashAvailable;
     public $subjectToAda;
     public $supportingDocumentsComplete;
@@ -108,8 +111,24 @@ class Osdv extends \yii\db\ActiveRecord
     
     public function getNetamount()
     {
-        //return $this->request->amount;
-        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        switch ($this->type_id) {
+          case 1:
+            $accountId = 3;
+            break;
+          case 2:
+            $accountId = 0;
+            break;
+          case 3:
+            $accountId = 0;            
+            break;
+          case 4:
+            $accountId = 4; 
+            break;
+          default:
+            $accountId = 0;
+        }
+        
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 4])->orderBy(['account_transaction_id' => SORT_DESC])->one();
         
         if($taxable){
             $tax = $this->computeTax($taxable);
@@ -121,7 +140,23 @@ class Osdv extends \yii\db\ActiveRecord
     
     public function getTax()
     {
-        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 3, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+        switch ($this->type_id) {
+          case 1:
+            $accountId = 3;
+            break;
+          case 2:
+            $accountId = 0;
+            break;
+          case 3:
+            $accountId = 0;            
+            break;
+          case 4:
+            $accountId = 4; 
+            break;
+          default:
+            $accountId = 0;
+        }
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 4, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
         
         if($taxable){
             $tax = $this->computeTax($taxable);
