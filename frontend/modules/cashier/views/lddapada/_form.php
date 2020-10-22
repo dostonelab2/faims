@@ -23,11 +23,11 @@ use common\models\finance\Obligationtype;
                     'options' => [
                         'placeholder' => 'Select Request Type',
                         'readonly'=>'readonly',
-                        'options' => [
+                        /*'options' => [
                             2 => ['disabled' => true],
                             3 => ['disabled' => true],
                         ],
-                    ],
+                    ],*/
                     'pluginOptions' => [
                         'allowClear' => true,
                         /*'options' => [
