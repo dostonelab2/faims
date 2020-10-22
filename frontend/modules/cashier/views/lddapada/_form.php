@@ -30,10 +30,10 @@ use common\models\finance\Obligationtype;
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'options' => [
+                        /*'options' => [
                             2 => ['disabled' => true],
                             3 => ['disabled' => true],
-                        ],
+                        ],*/
                     ],
 //                    'options' => [
 //                        2 => ['disabled' => true],
