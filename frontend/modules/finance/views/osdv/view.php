@@ -548,7 +548,7 @@ Modal::end();
                     'refreshGrid'=>true,
                     //'readonly' => !$isMember,
                     'value'=>function ($model, $key, $index, $widget) { 
-                            if($model->taxable && $model->tax_registered){
+                            if($model->taxable){
                                 $tax_amount = 0.00;
                                 if($model->tax_registered)
                                     $taxable_amount = round($model->amount / 1.12, 2);
