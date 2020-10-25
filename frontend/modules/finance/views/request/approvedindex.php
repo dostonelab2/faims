@@ -84,26 +84,13 @@ Modal::end();
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
                                                                 function($model) {
-                                                                    //return [ $model->name.'<br/>'.$model->address];
                                                                     return $model['name'].' | '.$model['address'];
                                                                 }
                                                             ), 
                                 'filterWidgetOptions' => [
-                                    'pluginOptions' => ['allowClear' => true,
-                                                       /*'templateResult' => function ($model) {
-                                                            //$r = data.text.split('|');
-                                                            $result = 
-                                                                '<div class="row"> 
-                                                                    <div class="col-md-3">test1</div>
-                                                                    <div class="col-md-9">test2</div>
-                                                                </div>'
-                                                            ;
-                                                            return $result;
-                                                        },*/
-                                                       ],
-                                    
+                                    'pluginOptions' => ['allowClear' => true],
                                 ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Payee'],
+                                'filterInputOptions' => ['placeholder' => 'Select Payee']
                                 
                             ],
                             [

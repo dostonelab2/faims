@@ -194,8 +194,6 @@ Modal::end();
 
                     return $model->attachment->name. ' ' . 
                         
-                    //Html::button('', ['value' => Url::to(['request/comments', 'id'=>$model->request_id]), 'title' => 'comments', 'class' => 'glyphicon glyphicon-comment', 'id'=>'buttonComment']) .
-                        
                     Html::a('<i class="fa fa-lg fa-comment"></i> '.$comments.' comments',[''], ['class' => 'btn btn-black', 'title' => 'Comments', 'onClick'=>               "{
                             //alert($(this).attr('title'));
                             //loadModal('comments?record_id=$record_id&component=$component_id'); 
@@ -246,6 +244,17 @@ Modal::end();
             ],
             [
                 'class' => 'kartik\grid\BooleanColumn',
+                'attribute'=>'require_signed',
+                'header' => 'Require Signed',
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'width'=>'60px',
+                'visible' => !Yii::$app->user->can('access-finance-verification'),
+                //'value'=>function ($model, $key, $index, $widget) { 
+                    //return $model->status_id;
+                //},
+            ],
+            [
+                'class' => 'kartik\grid\BooleanColumn',
                 'attribute'=>'status_id',
                 'header' => 'Verified',
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
@@ -254,6 +263,41 @@ Modal::end();
                 //'value'=>function ($model, $key, $index, $widget) { 
                     //return $model->status_id;
                 //},
+            ],
+            
+            [
+                'class' => 'kartik\grid\EditableColumn',
+                'attribute' => 'require_signed',
+                'header' => 'Required Signed?',
+                'format' => 'raw',
+                'refreshGrid'=>true,
+                'visible' => Yii::$app->user->can('access-finance-verification'),
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'value'=>function ($model, $key, $index, $widget) { 
+                    return $model->require_signed ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove text-red"></i>';
+                },
+                'editableOptions'=> function ($model , $key , $index) {
+                                    return [
+                                        'options' => ['id' => $index . '_10_' . $model->require_signed],
+                                        'contentOptions' => ['style' => 'text-align: center;  vertical-align:middle;'],
+                                        'placement'=>'left',
+                                        //'disabled'=>!$model->status_id,
+                                        'name'=>'district',
+                                        'asPopover' => true,
+                                        'value'=>function ($model, $key, $index, $widget) {
+                                            return $model->require_signed ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove text-red"></i>';
+                                        },
+                                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                                        'data'=>['0'=>'No', '1'=>'Yes'],
+                                        'formOptions'=>['action' => ['/finance/request/togglestatus']], // point to the new action
+                                    ];
+                                },
+                'hAlign' => 'right', 
+                'vAlign' => 'middle',
+                'width' => '7%',
+                //'format' => ['decimal', 2],
+                'pageSummary' => true
             ],
             [
                 'class' => 'kartik\grid\EditableColumn',
@@ -361,14 +405,51 @@ Modal::end();
             'itemLabelSingle' => 'item',
             'itemLabelPlural' => 'items'
         ]);
+
+    
     ?>
 
 <a id="startButton"  href="javascript:void(0);">Show guide</a>
 
 <script type="text/javascript">
-    document.getElementById('startButton').onclick = function() {
+    /*document.getElementById('startButton').onclick = function() {
         introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
             window.location.href = 'index?multipage=true';
         });
-    };
-</script>
+    };*/
+function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                intro: "Hello world!"
+              },
+              {
+                element: document.querySelector('#step1'),
+                intro: "This is a tooltip."
+              },
+              {
+                element: document.querySelectorAll('#step2')[0],
+                intro: "Ok, wasn't that fun?",
+                position: 'right'
+              },
+              {
+                element: '#step3',
+                intro: 'More features, more fun.',
+                position: 'left'
+              },
+              {
+                element: '#step4',
+                intro: "Another step.",
+                position: 'bottom'
+              },
+              {
+                element: '#step5',
+                intro: 'Get it, use it.'
+              }
+            ]
+          });
+
+          intro.start();
+      }
+    </script>

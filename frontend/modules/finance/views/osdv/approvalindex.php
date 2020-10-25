@@ -99,6 +99,12 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return '<b>' . Creditor::findOne($model->request->payee_id)->name. '</b><br>' .$model->request->particulars;
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],
+                                'filterInputOptions' => ['placeholder' => 'Select Payee'],
                             ],
                             [
                                 'attribute'=>'amount',
@@ -129,16 +135,16 @@ Modal::end();
                                 ],
                             ],
                     ],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            //'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
-            'panel' => [
+            /*'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
                     'before'=>'',//Html::button('Validated Requests  &nbsp;&nbsp;<span class="badge badge-light">'.$numberOfRequests.'</span>', ['value' => Url::to(['osdv/create']), 'title' => 'Request', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateOsdv']),
                     'after'=>false,
-                ],
+                ],*/
             // set your toolbar
             'toolbar' => 
                         [

@@ -10,6 +10,7 @@ use common\models\cashier\Creditortmp;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requestattachment;
+use common\models\finance\Requestattachmentsigned;
 use common\models\finance\Requesttype;
 use common\models\finance\RequestSearch;
 use common\models\procurement\Disbursement;
@@ -762,4 +763,99 @@ class RequestController extends Controller
         return $this->render('view', ['model'=>$model]);
     }
     
+    /*public function actionSigneduploadindex()
+    {
+        $model = new Requestattachmentsigned;
+        
+        return $this->render('signeduploadindex', ['model'=>$model]);
+    }*/
+    
+    public function actionSigneduploadindex()
+    {
+        $model = new Requestattachmentsigned;
+        date_default_timezone_set('Asia/Manila');
+        //$path = 'D:/xampp/htdocs/faims/frontend/web/uploads'; 
+        $path = 'D:/cashier'; 
+        //$path = Yii::getAlias('@uploads');
+        
+        if (Yii::$app->request->post()) {
+            $random = Yii::$app->security->generateRandomString(40);
+            $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+            //
+            $requestattachment = Requestattachment::find()->where(
+                ['filecode' => '68GKJO1X1PY']
+                //['filecode' => $model->pdfFile->baseName]
+            )->one();
+            
+            //$path = Yii::getAlias('@uploads') . "/finance/request/" . $requestattachment->request->request_number;
+            //$path = Yii::getAlias('@uploads');
+            /*if(!file_exists($path)){
+                mkdir($path, 0755, true);
+                $indexFile = fopen($path.'/index.php', 'w') or die("Unable to open file!");
+            }*/
+            
+            //request_attachment_signed_id 	request_attachment_id 	filename 	status_id 	last_update
+            //$model->pdfFile->saveAs( $path ."/". $model->request_attachment_id . $random . '_signed.' . $model->pdfFile->extension);
+            $model->pdfFile->saveAs( $path ."/_signed.pdf");
+
+            $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
+            $model->request_attachment_id = $requestattachment->request_attachment_id;
+            $model->last_update = date("Y-m-d H:i:s");
+            $model->filecode = Requestattachment::generateCode($model->request_attachment_id);
+            $model->save(false);
+            
+            Yii::$app->session->setFlash('success', 'Document Successfully Uploaded!');
+            
+            //return $this->redirect(['signeduploadindex?id='.$model->request_id]);
+        }
+        
+        return $this->render('signeduploadindex', ['model' => $model, 'path' => $path]);
+
+    }
+    
+    public function actionUploadsigned()
+    {
+        //Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/uploads/';
+        
+        $model = new Requestattachmentsigned;
+        date_default_timezone_set('Asia/Manila');
+        
+        if (Yii::$app->request->post()) {
+            $random = Yii::$app->security->generateRandomString(40);
+            $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+            
+            $requestattachment = Requestattachment::find()->where(
+                //['filecode' => '68GKJO1X1PY']
+                ['filecode' => $model->pdfFile->baseName]
+            )->one();
+            
+            $path = Yii::getAlias('@uploads') . "/finance/request/". $requestattachment->request->request_number;
+            if(!file_exists($path)){
+                mkdir($path, 0755, true);
+                $indexFile = fopen($path.'/index.php', 'w') or die("Unable to open file!");
+            }
+            
+            //request_attachment_signed_id 	request_attachment_id 	filename 	status_id 	last_update
+            $model->pdfFile->saveAs( $path ."/". $model->request_attachment_id . $random . $model->pdfFile->extension);
+            //$model->pdfFile->saveAs( $path ."/_signed.pdf");
+
+            $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
+            $model->request_attachment_id = $requestattachment->request_attachment_id;
+            $model->last_update = date("Y-m-d H:i:s");
+            $model->filecode = $requestattachment->filecode;
+            $model->save(false);
+            
+            Yii::$app->session->setFlash('success', 'Document Successfully Uploaded!');
+            
+            return $this->render('signeduploadindex', ['model' => $model]);
+        }
+        
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_uploadsigned', ['model'=>$model]);   
+        }else {
+            return $this->render('_uploadsigned', [
+                        'model' => $model,
+            ]);
+        }
+    }
 }

@@ -166,6 +166,12 @@ if(Yii::$app->user->isGuest){
                                 'visible'=> Yii::$app->user->can('access-finance-documentcollation') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
+                                'label' => 'Signed Documents Uploader', 
+                                'icon' => 'check text-aqua', 
+                                'url' => ['/finance/request/signeduploadindex'], 
+                                'visible'=> Yii::$app->user->can('access-finance-documentcollation') //|| (Yii::$app->user->identity->username == 'Admin')
+                            ],
+                            [
                                 'label' => 'Requests', 
                                 'icon' => 'paperclip text-aqua', 
                                 'url' => ['/finance/request/index']
