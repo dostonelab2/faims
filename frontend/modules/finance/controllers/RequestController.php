@@ -836,7 +836,7 @@ class RequestController extends Controller
             }
             
             //request_attachment_signed_id 	request_attachment_id 	filename 	status_id 	last_update
-            $model->pdfFile->saveAs( $path ."/". $model->request_attachment_id . $random . $model->pdfFile->extension);
+            $model->pdfFile->saveAs( $path ."/". $requestattachment->request_attachment_id . $random . '.' . $model->pdfFile->extension);
             //$model->pdfFile->saveAs( $path ."/_signed.pdf");
 
             $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
