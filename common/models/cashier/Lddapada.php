@@ -25,7 +25,8 @@ class Lddapada extends \yii\db\ActiveRecord
     const FUND_CLUSTER = '011011';
     const FUND_CLUSTER2 = '01101101';
     const FUND_CODE = '101';
-    const ACCOUNT = 'LBP Centro 2195-9000-54';
+    const ACCOUNT_MDS = 'LBP Centro 2195-9000-54';
+    const ACCOUNT_MDS_TRUST = 'LBP Centro 2195-9001-00';
     
 
     /**

@@ -69,6 +69,23 @@ class Report {
         $skipRow = "<tr><td colspan='8'></td></tr>";
         
         $model = Lddapada::findOne($id);
+        
+        switch ($model->type_id) {
+          case 1:
+            $account = Lddapada::ACCOUNT_MDS;
+            break;
+          case 2:
+            $account = '';
+            break;
+          case 3:
+            $account = '';
+            break;
+          case 4:
+            $account = Lddapada::ACCOUNT_MDS_TRUST;
+            break;
+          default:
+            $account = '';
+        }
         //$template = '<table border="0" style="border-collapse: collapse;font-size: 11px;table-layout:fixed" width="100%">';
         // REPORT HEADER
         $template = "<table style='border-collapse: collapse; font-size: 10px; cell-spacing: 0px; border: 1px solid #000;' width=100%>";
@@ -98,7 +115,7 @@ class Report {
         $template .= "</tr>";
         
         $template .= "<tr>";
-        $template .= "<td style='text-align: center; border-bottom: 1px solid #000;' colspan='8'>MDS-GSB BRANCH / MDS SUB ACCOUNT NO.: ".Lddapada::ACCOUNT."</td>";
+        $template .= "<td style='text-align: center; border-bottom: 1px solid #000;' colspan='8'>MDS-GSB BRANCH / MDS SUB ACCOUNT NO.: ".$account."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
