@@ -48,18 +48,49 @@ Modal::end();
             'columns' => [
                             [
                                 'attribute'=>'batch_number',
-                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
-                                'width'=>'250px',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center;'],
+                                'width'=>'20%',
+                                'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->batch_number;
+                                    //return Html::a(Yii::t('app','label'), ['lddapada/view', 'id'=>$model->lddapada_id], ['class'=>'pull-right', 'style' => 'padding-right:10px;']);
+                                    return '<b>'.Html::a($model->batch_number, ['lddapada/view', 'id'=>$model->lddapada_id], ['style' => 'font-size: medium;', 'target' => '_blank', 'data-pjax'=>0]).'</b><br/>'.date('Y-m-d',strtotime($model->batch_date));
+                                },
+                            ],
+                            [
+                                'attribute'=>'type_id',
+                                'header'=>'Fund Source',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center;'],
+                                'width'=>'20%',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->type_id ? $model->fundsource->name : '-';
                                 },
                             ],
                             [
                                 'attribute'=>'batch_date',
+                                'header'=>'Creditors (amount)',
                                 'contentOptions' => ['style' => 'padding-left: 25px;'],
                                 'width'=>'250px',
+                                'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->batch_date;
+                                    $html = "";
+                                    foreach($model->lddapadaItems as $item){
+                                        $html .= $item->name.' (<b>'.number_format($item->osdv->getNetamount(),2).'</b>)<br/>';
+                                    }
+                                    return $html;
+                                }
+                            ],
+                            [
+                                'attribute'=>'type_id',
+                                'header'=>'Total',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: right; padding-right: 10px; font-weight: bold;'],
+                                'width'=>'20%',
+                                'format'=>['decimal',2],
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->getTotal();
                                 },
                             ],
                             [

@@ -3,7 +3,7 @@
 namespace common\models\cashier;
 
 use Yii;
-
+use common\models\finance\Obligationtype;
 /**
  * This is the model class for table "tbl_lddapada".
  *
@@ -83,6 +83,10 @@ class Lddapada extends \yii\db\ActiveRecord
         return $this->hasMany(Lddapadaitem::className(), ['lddapada_id' => 'lddapada_id'])->andOnCondition(['active' => 1]);
     }
    
+    public function getFundsource()
+    {
+        return $this->hasOne(Obligationtype::className(), ['type_id' => 'type_id']);
+    }
     
     static function generateBatchNumber1()
     {
