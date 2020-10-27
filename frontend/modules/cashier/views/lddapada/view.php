@@ -280,10 +280,10 @@ Modal::end();
                     'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     //'format' => 'raw',
                     'width'=>'150px',
-                    //'value'=>function ($model, $key, $index, $widget) { 
+                    'value'=>function ($model, $key, $index, $widget) { 
                         //return $model->check_number;
-                        //return $model->check_number;
-                    //},
+                        return 'TESTING';
+                    },
                     //'pageSummary' => true,
                     //'footer' => true
                     
