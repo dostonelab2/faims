@@ -273,7 +273,7 @@ Modal::end();
                     'pageSummaryFunc' => GridView::F_AVG,
                     'footer' => true
                 ],
-                [   
+                /*[   
                     'attribute'=>'check_number',
                     'header' => 'REMARKS',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
@@ -286,8 +286,8 @@ Modal::end();
                     //},
                     //'pageSummary' => true,
                     //'footer' => true
-                    //Html::a('Disbursement Voucher  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printdv', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary'])
-                ],
+                    
+                ],*/
                 
                 [
                     'class' => 'kartik\grid\CheckboxColumn',
