@@ -170,7 +170,7 @@ Modal::end();
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
-                    'before'=>Html::button('New LDDAP-ADA', ['value' => Url::to(['lddapada/create']), 'title' => 'LDDAP-ADA', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateLddapada']),
+                    'before'=>Html::button('New LDDAP-ADA ( <b>'.$count.' items</b> )', ['value' => Url::to(['lddapada/create']), 'title' => 'LDDAP-ADA', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateLddapada']),
                     'after'=>false,
                 ],
             // set your toolbar

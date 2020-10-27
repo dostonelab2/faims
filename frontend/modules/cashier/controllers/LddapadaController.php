@@ -10,6 +10,7 @@ use common\models\cashier\Lddapada;
 use common\models\cashier\Lddapadaitem;
 use common\models\cashier\LddapadaSearch;
 use common\models\finance\Osdv;
+use common\models\finance\Request;
 use common\models\procurement\Assignatory;
 use frontend\modules\cashier\components\Report;
 
@@ -52,10 +53,17 @@ class LddapadaController extends Controller
     {
         $searchModel = new LddapadaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        
+        $items = Lddapadaitem::find()->select('osdv_id')->asArray()->all();
+        $count = Osdv::find()
+            ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->count();
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'count' => $count,
         ]);
     }
 
