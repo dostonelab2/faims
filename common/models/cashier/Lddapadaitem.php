@@ -50,7 +50,7 @@ class Lddapadaitem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lddapada_id', 'creditor_id', 'creditor_type_id', 'name', 'bank_name', 'account_number', 'gross_amount', 'alobs_id', 'expenditure_object_id', 'check_number'], 'required'],
+            [['lddapada_id', 'creditor_id', 'creditor_type_id', 'name', 'bank_name', 'account_number', 'gross_amount', 'alobs_id', 'expenditure_object_id'], 'required'],
             [['lddapada_id', 'creditor_id', 'creditor_type_id', 'alobs_id', 'expenditure_object_id', 'active'], 'integer'],
             [['gross_amount'], 'number'],
             [['name'], 'string', 'max' => 150],
@@ -114,5 +114,10 @@ class Lddapadaitem extends \yii\db\ActiveRecord
     public function getCreditor()
     {
         return $this->hasOne(Creditor::className(), ['creditor_id' => 'creditor_id']);
+    }
+    
+    public function getCheckNumber()
+    {
+        return $this->check_number;
     }
 }
