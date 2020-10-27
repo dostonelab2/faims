@@ -295,9 +295,9 @@ Modal::end();
                     'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     'format' => 'raw',
                     'width'=>'80px',
-                    'value'=>function ($model, $key, $index, $widget) { 
+                    /*'value'=>function ($model, $key, $index, $widget) { 
                         return $model->getCheckNumber();
-                    },
+                    },*/
                 ],
                 [
                     'class' => 'kartik\grid\CheckboxColumn',
