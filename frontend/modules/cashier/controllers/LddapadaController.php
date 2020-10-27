@@ -60,13 +60,29 @@ class LddapadaController extends Controller
             ->andWhere(['=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
             ->count();
         
+        $new_items = Osdv::find()
+            //->select('osdv_id')
+            ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->all();
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'count' => $count,
+            'new_items' => $this->getNewItems($new_items),
         ]);
     }
 
+    public function getNewItems($new_items)
+    {
+        $items = '';
+        foreach($new_items as $item){
+            $items .= $item->request->creditor->name .' - '.number_format($item->request->amount, 2). ', ';
+        }
+        return $items;
+    }
+    
     /**
      * Displays a single Lddapada model.
      * @param integer $id
