@@ -236,8 +236,8 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        //return $model->osdv->getGrossamount();
-                        return $model->amount;
+                        return $model->osdv->getGrossamount();
+                        //return $model->amount;
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
