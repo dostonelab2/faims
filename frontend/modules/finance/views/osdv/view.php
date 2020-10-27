@@ -570,7 +570,6 @@ Modal::end();
                             }else{
                                 return $model->amount;
                             }
-                            //return $model->amount;
                         },
                     'editableOptions'=> function ($model , $key , $index) {
                         return [
