@@ -116,6 +116,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'kartik\grid\EditableColumn',
                                 'attribute'=>'tagged',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->tagged ? 'YES' : 'NO';
+                                },
                                 'editableOptions'=>[
                                     //'options' => ['id' => $index . '_10_' . $model->tin_number],
                                     'header'=>'Tagged',
@@ -125,10 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'formOptions'=>['action' => ['/cashier/creditor/updatetin']], // point to the new action
                                     //'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
                                 ],
-                                'hAlign'=>'right',
+                                'hAlign'=>'center',
                                 'vAlign'=>'middle',
                                 'width'=>'100px',
-                                //'format'=>['decimal', 2],
                                 'pageSummary'=>true
                             ],
                     ],
