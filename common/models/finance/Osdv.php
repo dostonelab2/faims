@@ -80,7 +80,7 @@ class Osdv extends \yii\db\ActiveRecord
     
     public function getAccounttransactions()  
     {  
-      return $this->hasMany(Accounttransaction::className(), ['request_id' => 'osdv_id']);  
+      return $this->hasMany(Accounttransaction::className(), ['request_id' => 'osdv_id'])->andOnCondition(['active' => 1]);  
     }
     
     public function getDv()  
