@@ -296,7 +296,7 @@ Modal::end();
                     'format' => 'raw',
                     'width'=>'80px',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->checkNumber();
+                        return $model->getCheckNumber();
                     },
                 ],
                 [
