@@ -42,7 +42,7 @@ class Accounttransaction extends \yii\db\ActiveRecord
         return [
             [['request_id', 'account_id', 'transaction_type', 'amount'], 'required'],
             [['request_id', 'account_id', 'transaction_type', 'tax_registered', 'debitcreditflag'], 'integer'],
-            [['amount','','rate1','rate2'], 'number'],
+            [['amount','rate1','rate2'], 'number'],
             [['check_number'], 'string', 'max' => 20],
         ];
     }
@@ -62,7 +62,7 @@ class Accounttransaction extends \yii\db\ActiveRecord
         ];
     }
     
-    public function afterFind()
+    /*public function afterFind()
     {
         if($this->taxable){
             $tax_amount = 0.00;
@@ -88,7 +88,7 @@ class Accounttransaction extends \yii\db\ActiveRecord
         }
         
         return parent::afterFind();
-    }
+    }*/
     
     public function getAccount()  
     {  
