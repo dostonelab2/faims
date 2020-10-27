@@ -554,14 +554,21 @@ Modal::end();
                                     $taxable_amount = round($model->amount / 1.12, 2);
                                 else
                                     $taxable_amount = $model->amount;
-
-                                if($model->amount < 10000.00){
+                                
+                                if($model->amount > 10000.00 || $model->osdv->request->creditor->tagged){
+                                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                                    $tax_amount = $tax1 + $tax2;
+                                }else{
+                                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                                }
+                                /*if($model->amount < 10000.00){
                                     $tax_amount = round($taxable_amount * $model->rate1, 2);
                                 }else{
                                     $tax1 = round(($taxable_amount * $model->rate1), 2);
                                     $tax2 = round(($taxable_amount * $model->rate2), 2);
                                     $tax_amount = $tax1 + $tax2;
-                                }
+                                }*/
                                 
                                 if($model->debitcreditflag == 2)
                                     return round($model->amount - $tax_amount, 2);
@@ -635,7 +642,7 @@ Modal::end();
                         return $fmt->asDecimal($tax_amount);
                     },
                 ],
-                */                                      
+                */
             ];
     ?>
         
