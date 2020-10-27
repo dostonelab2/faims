@@ -280,11 +280,12 @@ Modal::end();
                     'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     'format' => 'raw',
                     'width'=>'150px',
-                    'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->check_number;
-                    },
-                    'pageSummary' => true,
-                    'footer' => true
+                    //'value'=>function ($model, $key, $index, $widget) { 
+                        //return $model->check_number;
+                        //return $model->check_number;
+                    //},
+                    //'pageSummary' => true,
+                    //'footer' => true
                     //Html::a('Disbursement Voucher  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printdv', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary'])
                 ],
                 
