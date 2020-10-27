@@ -290,7 +290,7 @@ Modal::end();
                 ],*/
                 [   
                     'attribute'=>'check_number',
-                    'header' => 'NAME',
+                    'header' => 'REMARKS',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     'contentOptions' => ['style' => 'text-align: left; padding-left: 10px; vertical-align: middle;'],
                     'format' => 'raw',
