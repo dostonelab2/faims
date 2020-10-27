@@ -119,6 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->tagged ? 'YES' : 'NO';
                                 },
+                                'refreshGrid'=>true,
                                 'editableOptions'=>[
                                     //'options' => ['id' => $index . '_10_' . $model->tin_number],
                                     'header'=>'Tagged',
