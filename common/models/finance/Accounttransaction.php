@@ -61,7 +61,7 @@ class Accounttransaction extends \yii\db\ActiveRecord
         ];
     }
     
-     public function afterFind()
+    /*public function afterFind()
      {
         if($this->taxable){
             $tax_amount = 0.00;
@@ -87,7 +87,7 @@ class Accounttransaction extends \yii\db\ActiveRecord
         }
         
         return parent::afterFind();
-     }
+     }*/
     
     public function getAccount()  
     {  
