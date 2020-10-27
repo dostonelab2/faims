@@ -273,12 +273,12 @@ Modal::end();
                     'pageSummaryFunc' => GridView::F_AVG,
                     'footer' => true
                 ],
-                /*[   
+                [   
                     'attribute'=>'check_number',
                     'header' => 'REMARKS',
                     'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                     'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
-                    'format' => 'raw',
+                    //'format' => 'raw',
                     'width'=>'150px',
                     //'value'=>function ($model, $key, $index, $widget) { 
                         //return $model->check_number;
@@ -287,7 +287,7 @@ Modal::end();
                     //'pageSummary' => true,
                     //'footer' => true
                     
-                ],*/
+                ],
                 
                 [
                     'class' => 'kartik\grid\CheckboxColumn',
