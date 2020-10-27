@@ -209,10 +209,12 @@ Modal::end();
                     'format' => 'raw',
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        if($model->osdv->os)
+                        /*if($model->osdv->os)
                             return $model->osdv->os->os_number;
                         else
-                            return '-';
+                            return '-';*/
+                        
+                        return $model->osdv->os ? $model->osdv->os->os_number : $model->osdv->dv->dv_number;
                     },
                 ],
                 //'expenditure_object_id',
@@ -237,7 +239,6 @@ Modal::end();
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
                         return $model->osdv->getGrossamount();
-                        //return $model->amount;
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,

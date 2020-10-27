@@ -23,10 +23,10 @@ use common\models\finance\Request;
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'name'=>'lddap-ada-items', //additional
                     'checkboxOptions' => function($model, $key, $index, $column) use ($id){
-                                             $bool = Lddapadaitem::find()->where(['lddapada_id' => $id, 'creditor_id' => $model->request->payee_id, 'active'=>1])->count();
+                                             //$bool = Lddapadaitem::find()->where(['lddapada_id' => $id, 'creditor_id' => $model->request->payee_id, 'active'=>1])->count();
+                                             $bool = Lddapadaitem::find()->where(['osdv_id' => $model->osdv_id, 'active'=>1])->count();
                                              return ['checked' => $bool,
                                                     'onclick'=>'onCreditor(this.value,this.checked)' //additional
-                                                    //'onclick'=>'alert(this.value)' //additional
                                                     ];
                                          }
                 ],
@@ -37,13 +37,13 @@ use common\models\finance\Request;
                                 return $model->request->creditor->name;
                             },
                 ],
-                /*[   
+                [   
                     'attribute' => 'request_id',
-                    'label' => 'OS Number',
+                    'label' => 'Fund Source',
                     'value'=>function ($model, $key, $index, $widget){ 
-                                return $model->dv->dv_number;
+                                return $model->type->name;
                             },
-                ],*/
+                ],
                 [
                     'attribute' => 'request_id',
                     'label' => 'DV Number',
@@ -52,8 +52,11 @@ use common\models\finance\Request;
                             },
                 ],
                 [
-                    'attribute' => 'type_id',
+                    'attribute' => 'amount',
                     'label' => 'Amount',
+                    'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                    'contentOptions' => ['style' => 'text-align: right; padding-right: 25px; vertical-align: middle;'],
+                    'format' => ['decimal',2],
                     'value'=>function ($model, $key, $index, $widget){ 
                                 return $model->request->amount;
                             },

@@ -67,7 +67,7 @@ class LddapadaController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $items = Lddapadaitem::find()->where(['lddapada_id' => $id])->all();
+        //$items = Lddapadaitem::find()->where(['lddapada_id' => $id])->all();
         $lddapadaItemsDataProvider = new ActiveDataProvider([
             'query' => $model->getLddapadaItems(),
             'pagination' => false,
@@ -82,7 +82,7 @@ class LddapadaController extends Controller
         
         return $this->render('view', [
             'model' => $model,
-            'items' => $items,
+            //'items' => $items,
             'lddapadaItemsDataProvider' => $lddapadaItemsDataProvider,
             'id' => $id,
         ]);
@@ -440,7 +440,6 @@ class LddapadaController extends Controller
                     Yii::$app->session->setFlash('success', $model->getErrors());                 
                 }
                 return $this->redirect(['view', 'id' => $model->lddapada_id]);
-                    
             }
 
             if (Yii::$app->request->isAjax) {

@@ -1,11 +1,12 @@
 <?php
 
-namespace common\models\finance;
+namespace common\models\cashier;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\finance\Osdv;
+use common\models\cashier\Lddapadaitem;
 
 
 /**
@@ -13,6 +14,7 @@ use common\models\finance\Osdv;
  */
 class OsdvSearch extends Osdv
 {
+    public $lddapadaId;
     /**
      * @inheritdoc
      */
@@ -60,22 +62,16 @@ class OsdvSearch extends Osdv
 
         // grid filtering conditions
         $query->andFilterWhere([
-            //'osdv_id' => $this->osdv_id,
             'request_id' => $this->request_id,
-            //'os_id' => $this->os_id,
-            //'dv_id' => $this->dv_id,
-            //'request.payee_id' => $this->payee_id,
-            //'request.payee_id' => $this->request->payee_id,
             'type_id' => $this->type_id,
             'expenditure_class_id' => $this->expenditure_class_id,
             'status_id' => $this->status_id,
             'created_by' => $this->created_by,
-            //$model->request->payee_id
         ]);
         
+        $items = Lddapadaitem::find()->select('osdv_id')->where(['<>', 'lddapada_id', $this->lddapadaId])->all();
         $query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
-        $query->andFilterWhere(['=','tbl_os.osdv_id', $this->os_id]);
-        //$query->andFilterWhere(['tbl_os.osdv_id' => $this->os_id]);
+        $query->andFilterWhere(['not in','osdv_id', $items]);
 
         return $dataProvider;
     }

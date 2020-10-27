@@ -116,8 +116,8 @@ class Lddapadaitem extends \yii\db\ActiveRecord
         return $this->hasOne(Creditor::className(), ['creditor_id' => 'creditor_id']);
     }
     
-    public function getCheckNumber()
+    /*public function getCheckNumber()
     {
         return $this->check_number;
-    }
+    }*/
 }
