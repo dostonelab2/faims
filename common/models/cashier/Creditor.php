@@ -57,7 +57,7 @@ class Creditor extends \yii\db\ActiveRecord
             'name' => 'Name',
             'bank_name' => 'Bank Name',
             'account_number' => 'Account Number',
-            'tin_number' => 'TINE Number',
+            'tin_number' => 'TIN Number',
         ];
     }
 

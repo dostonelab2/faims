@@ -113,6 +113,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'format'=>['decimal', 2],
                                 'pageSummary'=>true
                             ],
+                            [
+                                'class'=>'kartik\grid\EditableColumn',
+                                'attribute'=>'tagged',
+                                'editableOptions'=>[
+                                    //'options' => ['id' => $index . '_10_' . $model->tin_number],
+                                    'header'=>'Tagged',
+                                    'placement'=>'left',
+                                    'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                                    'data'=>['0'=>'No', '1'=>'Yes'],
+                                    'formOptions'=>['action' => ['/cashier/creditor/updatetin']], // point to the new action
+                                    //'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
+                                ],
+                                'hAlign'=>'right',
+                                'vAlign'=>'middle',
+                                'width'=>'100px',
+                                //'format'=>['decimal', 2],
+                                'pageSummary'=>true
+                            ],
                     ],
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
