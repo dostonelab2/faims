@@ -90,6 +90,32 @@ class Accounttransaction extends \yii\db\ActiveRecord
         return parent::afterFind();
     }*/
     
+    public function getNetAmount()
+    {
+        if($this->taxable){
+            $tax_amount = 0.00;
+            if($this->tax_registered)
+                $taxable_amount = round($this->amount / 1.12, 2);
+            else
+                $taxable_amount = $this->amount;
+
+            if($this->amount < 10000.00){
+                $tax_amount = round($taxable_amount * $this->rate1, 2);
+            }else{
+                $tax1 = round(($taxable_amount * $this->rate1), 2);
+                $tax2 = round(($taxable_amount * $this->rate2), 2);
+                $tax_amount = $tax1 + $tax2;
+            }
+
+            if($this->debitcreditflag == 2)
+                $this->amount = round($this->amount - $tax_amount, 2);
+            else
+                $this->amount = round($tax_amount, 2);
+        }else{
+            $this->amount = $this->amount;
+        }
+    }
+    
     public function getAccount()  
     {  
       return $this->hasOne(Account::className(), ['account_id' => 'account_id']);  

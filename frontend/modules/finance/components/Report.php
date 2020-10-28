@@ -460,7 +460,7 @@ class Report {
             }
         $content .= '</td>
 
-<td style="width: 20%; height: 125px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->amount,2).'</td>
+<td style="width: 20%; height: 125px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->osdv->getNetamount(),2).'</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 50%; height: 14px; text-align: center;" colspan="3">Amount Due&nbsp;&nbsp;&nbsp;</td>
@@ -529,14 +529,14 @@ $content .= '
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->amount,2).'<br/>' : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->getNetAmount(),2).'<br/>' : '-'.'<br/>';
             }
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">';
         
         foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 2) ? number_format($transaction->amount,2).'<br/>' : '-'.'<br/>';
+                $content .= ($transaction->debitcreditflag == 2) ? number_format($transaction->getNetAmount(),2).'<br/>' : '-'.'<br/>';
             }
         
         $content .= '</td>
