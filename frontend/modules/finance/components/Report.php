@@ -465,7 +465,7 @@ class Report {
 <tr style="height: 14px;">
 <td style="width: 50%; height: 14px; text-align: center;" colspan="3">Amount Due&nbsp;&nbsp;&nbsp;</td>
 <td style="width: 25%; height: 14px;" colspan="2">&nbsp;&nbsp;</td>
-<td style="width: 25%; height: 14px;text-align:right;padding:5px; font-weight: bold;" colspan="2">'.number_format($model->getNetamount(),2).'</td>
+<td style="width: 25%; height: 14px;text-align:right;padding:5px; font-weight: bold;" colspan="2">'.number_format($model->osdv->getNetamount(),2).'</td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
