@@ -114,6 +114,8 @@ class Accounttransaction extends \yii\db\ActiveRecord
         }else{
             $this->amount = $this->amount;
         }
+        
+        return $this->amount;
     }
     
     public function getAccount()  
