@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 /**
  * RequestattachmentController implements the CRUD actions for Requestattachment model.
  */
@@ -120,5 +123,30 @@ class RequestattachmentController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+//    const STATUS_ON_HAND = 10; 
+//    const STATUS_TURNED_OVER = 20;
+    public function actionMarkonhand()
+    {
+        $checked = $_POST['checked'];
+        $requestAttachmentId = $_POST['request_attachment_id'];
+
+        $requestattachment = Requestattachment::findOne($requestAttachmentId);
+        
+        if($requestattachment)
+        {
+            if($checked == 'true'){
+                $requestattachment->original_doc_status_id = Requestattachment::STATUS_ON_HAND;
+                $requestattachment->save(false);
+            }
+            else{
+                $requestattachment->original_doc_status_id = 0;
+                $requestattachment->save(false);
+            }
+            $out = 'Item Succefully Updated';
+        }
+    
+        echo Json::encode(['message'=>$out]);
     }
 }

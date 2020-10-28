@@ -38,9 +38,10 @@ echo "<div id='modalContent'><div style='text-align:center'><img src='/images/lo
 Modal::end();
 ?>
 
-    
-    <?php
-
-    echo Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadsigned']), 'title' => Yii::t('app', "Attachment"), 'class'=>'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']);
+<div style="margin: auto; width: 60%; text-align: center;">
+<?php
+    echo Html::button('<i class="glyphicon glyphicon-file"></i> Upload File', ['value' => Url::to(['request/uploadsigned']), 'title' => Yii::t('app', "Attachment"), 'class'=>'btn btn-primary btn-lg', 'style'=>'margin-right: 6px; margin-top: 200px; width: 200px; height: 100px; font-size: x-large;', 'id'=>'buttonUploadAttachments']);
     ?>
+</div>
+    
     

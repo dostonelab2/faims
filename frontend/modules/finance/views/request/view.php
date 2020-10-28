@@ -391,6 +391,7 @@ Modal::end();
                             [
                                 [
                                     'content'=>
+                                        Html::button('View Documents', ['value' => Url::to(['request/viewdocuments', 'id'=>$model->request_id]), 'title' => 'Documents', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonViewDocuments']) . 
                                         Html::a('Obligation Request  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printos', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) .'<a></a>'.
                                         Html::a('Disbursement Voucher  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printdv', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary'])
                                 ],

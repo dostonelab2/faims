@@ -255,6 +255,33 @@ class RequestController extends Controller
         }
         
     }
+    
+    public function actionViewdocuments()
+    {
+        $model = $this->findModel($_GET['id']);
+        date_default_timezone_set('Asia/Manila');
+        
+        $attachmentsDataProvider = new ActiveDataProvider([
+            'query' => $model->getAttachments(),
+            'pagination' => false,
+            /*'sort' => [
+                'defaultOrder' => [
+                    'availability' => SORT_ASC,
+                    'item_category_id' => SORT_ASC,
+                    //'title' => SORT_ASC, 
+                ]
+            ],*/
+        ]);
+        
+        if (Yii::$app->request->post()) {
+            
+            return $this->redirect(['view', 'id' => $model->request_id]);  
+        }
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_documents', ['model'=>$model, 'attachmentsDataProvider'=>$attachmentsDataProvider]);   
+        }
+        
+    }
 
     /**
      * Updates an existing Request model.

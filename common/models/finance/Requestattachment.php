@@ -15,6 +15,9 @@ use Yii;
 class Requestattachment extends \yii\db\ActiveRecord
 {
     public $pdfFile;
+    
+    const STATUS_ON_HAND = 10; 
+    const STATUS_TURNED_OVER = 20;
     /**
      * @inheritdoc
      */

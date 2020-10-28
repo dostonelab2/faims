@@ -39,6 +39,10 @@ $("body").on("click","#buttonViewAttachments",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonViewDocuments",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonUploadAttachments",function () {
     loadModal($(this).attr('value'));
 });
