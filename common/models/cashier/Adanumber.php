@@ -18,6 +18,9 @@ class Adanumber extends \yii\db\ActiveRecord
 {
     public $ada_number;
     public $selected_keys;
+    const PREP_1 = '99202';  
+    const PREP_4 = '992';  
+    
     /**
      * @inheritdoc
      */
@@ -70,6 +73,12 @@ class Adanumber extends \yii\db\ActiveRecord
             $counter = (int)$ada->counter + 1;
         else
             $counter = 1;
-        return $ada->prefix.$month.(($typeId == 4) ? $day : '').str_pad($counter, 3, '0', STR_PAD_LEFT);
+        
+        if($typeId == 1)
+            $prefix = self::PREP_1;
+        if($typeId == 4)
+            $prefix = self::PREP_4;
+        
+        return $prefix.$month.(($typeId == 4) ? $day : '').str_pad($counter, 3, '0', STR_PAD_LEFT);
     }
 }
