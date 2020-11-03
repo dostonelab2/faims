@@ -377,10 +377,22 @@ class LddapadaController extends Controller
                 
                 $ada = Adanumber::find()->where(['type_id' => $_GET['typeId'], 'year' => $year, 'month' => $month])->orderBy(['ada_number_id' => SORT_DESC])->one();
 
-                $counter = (int)$ada->counter + 1;
+                //$counter = (int)$ada->counter + 1;
+                
+                if($ada)
+                    $counter = (int)$ada->counter + 1;
+                else
+                    $counter = 1;
+
+                if($_GET['typeId'] == 1)
+                    $prefix = Adanumber::PREP_1;
+                if($_GET['typeId'] == 4)
+                    $prefix = Adanumber::PREP_4;
+
+                //return $prefix.$month.(($typeId == 4) ? $day : '').str_pad($counter, 3, '0', STR_PAD_LEFT);
                 
                 $model->type_id = $_GET['typeId'];	
-                $model->prefix = $ada->prefix;
+                $model->prefix = $prefix;
                 $model->year = $year;
                 $model->month = $month;
                 $model->counter = $counter;
