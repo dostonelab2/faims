@@ -66,7 +66,10 @@ class Adanumber extends \yii\db\ActiveRecord
         $month = date("m");
         
         $ada = Adanumber::find()->where(['type_id' => $typeId, 'year' => $year, 'month' => $month])->orderBy(['ada_number_id' => SORT_DESC])->one();
-        $counter = (int)$ada->counter + 1;
+        if($ada)
+            $counter = (int)$ada->counter + 1;
+        else
+            $counter = 1;
         return $ada->prefix.$month.(($typeId == 4) ? $day : '').str_pad($counter, 3, '0', STR_PAD_LEFT);
     }
 }
