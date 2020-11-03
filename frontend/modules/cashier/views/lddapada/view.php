@@ -12,6 +12,7 @@ use common\models\procurementplan\Ppmp;
 use common\models\cashier\Checknumber;
 use common\models\cashier\Lddapada;
 use common\models\cashier\Lddapadaitem;
+use common\models\finance\Accounttransaction;
 /* @var $this yii\web\View */
 /* @var $model common\models\cashier\Lddapada */
 
@@ -252,8 +253,13 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        return $model->osdv->getTax();
-                        //return $model->amount;
+                        if($model->creditor_id){
+                            $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                            
+                            return $tax->amount;
+                        }
+                        else
+                            return $model->osdv->getTax();
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
