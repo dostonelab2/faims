@@ -6,6 +6,7 @@ use Yii;
 use kartik\mpdf\Pdf;
 //use rmrevin\yii\fontawesome\FA;
 use common\models\cashier\Lddapada;
+use common\models\finance\Accounttransaction;
 
 class Report {
 
@@ -151,7 +152,11 @@ class Report {
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000; font-size: x-small;'>".($item->osdv->os ? $item->osdv->os->os_number : $item->osdv->dv->dv_number)."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".($item->osdv->uacs ? $item->osdv->uacs->expenditureobject->object_code : '-')."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getGrossamount(),2)."</td>";
-            $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getTax(),2)."</td>";
+            $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format(
+                 ($item->creditor_id == 245) ?
+                    Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one()->amount : $item->osdv->getTax()
+ 
+                ,2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getNetamount(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->check_number."</td>";
 
