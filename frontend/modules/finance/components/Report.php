@@ -438,7 +438,7 @@ class Report {
 </td>
 <td style="width: 50%; height: 25px; padding-left: 5px; font-weight: bold;" colspan="3"> '.$model->creditor->name.'</td>
 <td style="width: 20%; height: 25px;">TIN/Employee No.:</td>
-<td style="width: 20%; height: 25px;" colspan="2">ORS/BURS No.:</td>
+<td style="width: 20%; height: 25px;" colspan="2">ORS/BURS No.: <b>'.($model->osdv->os ? $model->osdv->os->os_number : "").'</b></td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 10%; height: 25px;">Address</td>
