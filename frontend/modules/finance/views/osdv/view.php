@@ -13,11 +13,13 @@ use yii\bootstrap\Modal;
 use common\models\cashier\Creditor;
 use common\models\finance\Accounttransaction;
 use common\models\finance\Dv;
+use common\models\finance\Obligationtype;
 use common\models\finance\Os;
 use common\models\finance\Request;
 use common\models\finance\Requestattachment;
 use common\models\finance\Requesttype;
 use common\models\finance\Taxcategory;
+use common\models\procurement\Expenditureclass;
 use common\models\system\Comment;
 
 /* @var $this yii\web\View */
@@ -143,14 +145,27 @@ Modal::end();
                 'attribute'=>'type_id',
                 'label'=>'Fund Source',
                 'labelColOptions'=>['style'=>'width:35%; text-align: right;'],
-                'inputContainer' => ['class'=>'col-sm-2'],
+                'inputContainer' => ['class'=>'col-md-12'],
                 'value' => $model->type->name,
+                'type'=>DetailView::INPUT_SELECT2, 
+                'widgetOptions'=>[
+                    'data' => ArrayHelper::map(Obligationtype::find()->orderBy(['type_id'=>SORT_ASC])->all(),'type_id','name'),
+                    'options' => ['placeholder' => 'Select Expenditure Class'],
+                    'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                ],
             ],
             [
                 'attribute'=>'expenditure_class_id',
                 'label'=>'Expenditure Class',
-                'inputContainer' => ['class'=>'col-sm-2'],
+                'inputContainer' => ['class'=>'col-md-12'],
                 'value' => $model->expenditure_class_id ? $model->expenditureClass->name : '-',
+                'type'=>DetailView::INPUT_SELECT2, 
+                'widgetOptions'=>[
+                    //'data'=>ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
+                    'data' => ArrayHelper::map(Expenditureclass::find()->orderBy(['expenditure_class_id'=>SORT_ASC])->all(),'expenditure_class_id','name'),
+                    'options' => ['placeholder' => 'Select Expenditure Class'],
+                    'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                ],
             ],    
             [
                 'attribute'=>'request_id',
@@ -191,20 +206,19 @@ Modal::end();
     <?= DetailView::widget([
             'model' => $model,
             'mode'=>DetailView::MODE_VIEW,
-            'container' => ['id'=>'kv-demo'],
+            'container' => ['id'=>'os-details'],
             //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
             
-            //'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() ) ? '{update}' : '', //hides buttons on detail view
-            'buttons1' => '',
+            //'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || (Yii::$app->user->can('access-finance-generateosnumber') ) ) ? '{update}' : '', //hides buttons on detail view
+            'buttons1' => '{update}',
             'attributes' => $attributes,
             'condensed' => true,
             'responsive' => true,
             'hover' => true,
-            'formOptions' => ['action' => ['request/view', 'id' => $model->request_id]],
+            'formOptions' => ['action' => ['osdv/view', 'id' => $model->osdv_id]],
             'panel' => [
                 //'type' => 'Primary', 
                 'heading'=>'OBLIGATION / DISBURSEMENT DETAILS',
-                //'heading'=>'OBLIGATION REQUEST - <span >'.$model->os->os_number,
                 'type'=>DetailView::TYPE_PRIMARY,
                 //'footer' => '<div class="text-center text-muted">This is a sample footer message for the detail view.</div>'
             ],
@@ -550,12 +564,12 @@ Modal::end();
                     'value'=>function ($model, $key, $index, $widget) { 
                             if($model->taxable){
                                 $tax_amount = 0.00;
-                                if($model->tax_registered)
+                                if($model->tax_registered || $model->osdv->request->creditor->tagged)
                                     $taxable_amount = round($model->amount / 1.12, 2);
                                 else
                                     $taxable_amount = $model->amount;
                                 
-                                if($model->amount > 10000.00 || $model->osdv->request->creditor->tagged){
+                                if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
                                     $tax1 = round($taxable_amount * $model->rate1, 2);
                                     $tax2 = round($taxable_amount * $model->rate2, 2);
                                     $tax_amount = $tax1 + $tax2;

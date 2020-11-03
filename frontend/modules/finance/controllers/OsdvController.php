@@ -159,7 +159,7 @@ class OsdvController extends Controller
         ]);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
+            Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
         }
         
         return $this->render('view', [
