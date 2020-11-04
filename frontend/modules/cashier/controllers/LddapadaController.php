@@ -305,7 +305,7 @@ class LddapadaController extends Controller
             if (Yii::$app->request->post()) {
                 //$model->saved = Lddapada::SAVED ; //20
                 
-                $counter = Checknumber::find()->where(['type_id' => $_GET['typeId'], 'year' => $year, 'month' => $month])->orderBy(['check_number_id' => SORT_DESC])->one();
+                $counter = Checknumber::find()->where(['type_id' => $_GET['typeId']])->orderBy(['check_number_id' => SORT_DESC])->one();
 
                 $counter = (int)$counter->counter + 1;
                 
