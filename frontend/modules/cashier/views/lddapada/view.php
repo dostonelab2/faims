@@ -253,7 +253,7 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        if($model->creditor_id){
+                        if($model->creditor_id == 245){
                             $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
                             
                             return $tax->amount;
