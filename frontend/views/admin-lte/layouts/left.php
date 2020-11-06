@@ -77,6 +77,7 @@ if(Yii::$app->user->isGuest){
                                 'url' => ['/finance/osdv/report'], 
                                 'visible'=> Yii::$app->user->can('access-cashiering')
                             ],
+                            ['label' => 'Update Counters', 'icon' => 'gear', 'url' => ['/cashier/creditor/index']],
                         ]
                     ],
                     [
@@ -88,6 +89,7 @@ if(Yii::$app->user->isGuest){
                             ['label' => 'Budget Estimate per NEP', 'icon' => 'money', 'url' => ['/budget/expenditure/index']],
                             ['label' => 'Budget Allocation', 'icon' => 'money', 'url' => ['/budget/budgetallocation/index']],
                             ['label' => 'PPMP', 'icon' => 'clipboard', 'url' => ['/budget/ppmp/index'], 'visible'=> Yii::$app->user->can('access-budget-management')],
+                            ['label' => 'Expenditure Objects (UACS)', 'icon' => 'gear', 'url' => ['/procurement/expenditureobject/index'], 'visible'=> Yii::$app->user->can('access-budget')],
                             //['label' => 'Obligation', 'icon' => 'clipboard', 'url' => ['/budget/obligation/index']],
                         ]
                     ],
