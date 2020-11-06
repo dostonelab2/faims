@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-//use common\models\cashier\Creditortype;
+use common\models\procurement\Expenditureobject;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\cashier\CreditorSearch */
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
 
                             [
-                                'attribute'=>'object_code',
+                                'attribute'=>'expenditure_object_id',
                                 'header'=>'Name',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: left; padding-left: 10px;'],
@@ -50,15 +50,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->name;
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Expenditureobject::find()->asArray()->all(), 'expenditure_object_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Expenditure Object']
                             ],
+                            
                             [
                                 'class'=>'kartik\grid\EditableColumn',
                                 'attribute'=>'object_code',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'editableOptions'=>[
-                                    //'options' => ['id' => $index . '_50_' . $model->account_number],
+                                    //'options' => ['id' =>'_10_' . $model->object_code],
                                     'header'=>'Object Code',
+                                    'placement'=>'left',
+                                    'inputType'=>\kartik\editable\Editable::INPUT_TEXT,
+                                    'formOptions'=>['action' => ['/procurement/expenditureobject/updateobjectcode']], // point to the new action
+                                    //'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
+                                ],
+                                'hAlign'=>'right',
+                                'vAlign'=>'middle',
+                                'width'=>'100px',
+                                //'format'=>['decimal', 2],
+                                'pageSummary'=>true
+                            ],
+                
+                            [
+                                'class'=>'kartik\grid\EditableColumn',
+                                'attribute'=>'account_code',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center;'],
+                                'editableOptions'=>[
+                                    //'options' => ['id' => '_20_' . $model->account_code],
+                                    'header'=>'Account Code',
                                     'placement'=>'left',
                                     'inputType'=>\kartik\editable\Editable::INPUT_TEXT,
                                     'formOptions'=>['action' => ['/procurement/expenditureobject/updateobjectcode']], // point to the new action

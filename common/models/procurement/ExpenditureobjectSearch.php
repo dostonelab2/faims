@@ -61,10 +61,12 @@ class ExpenditureobjectSearch extends Expenditureobject
         $query->andFilterWhere([
             'expenditure_object_id' => $this->expenditure_object_id,
             'expenditure_sub_class_id' => $this->expenditure_sub_class_id,
-            'object_code' => $this->object_code,
+            //'object_code' => $this->object_code,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'object_code', $this->object_code]);
+        $query->andFilterWhere(['like', 'account_code', $this->account_code]);
 
         return $dataProvider;
     }
