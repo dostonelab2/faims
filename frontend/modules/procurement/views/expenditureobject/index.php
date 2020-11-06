@@ -69,12 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'placement'=>'left',
                                     'inputType'=>\kartik\editable\Editable::INPUT_TEXT,
                                     'formOptions'=>['action' => ['/procurement/expenditureobject/updateobjectcode']], // point to the new action
-                                    //'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
                                 ],
                                 'hAlign'=>'right',
                                 'vAlign'=>'middle',
                                 'width'=>'100px',
-                                //'format'=>['decimal', 2],
                                 'pageSummary'=>true
                             ],
                 
@@ -89,12 +87,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'placement'=>'left',
                                     'inputType'=>\kartik\editable\Editable::INPUT_TEXT,
                                     'formOptions'=>['action' => ['/procurement/expenditureobject/updateobjectcode']], // point to the new action
-                                    //'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]]
                                 ],
                                 'hAlign'=>'right',
                                 'vAlign'=>'middle',
                                 'width'=>'100px',
-                                //'format'=>['decimal', 2],
                                 'pageSummary'=>true
                             ],
                     ],
@@ -104,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
-                    'before'=> '',/*Html::button('Validated Requests  &nbsp;&nbsp;<span class="badge badge-light">'.$numberOfRequests.'</span>', ['value' => Url::to(['osdv/create']), 'title' => 'Request', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateOsdv']),*/
+                    'before'=> '',
                     'after'=>false,
                 ],
             'pjax' => true, // pjax is set to always true for this demo
