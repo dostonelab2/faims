@@ -26,7 +26,7 @@ echo $form->field($model, 'pdfFile')->widget(FileInput::classname(), [
         'initialPreviewAsData'=>true,
         'initialPreviewConfig'=>[
             ['type' => "pdf", 
-            'size' => 20000, 
+            'size' => 100000, 
             'caption' => $model->attachment->name, 
             'url' => Url::to(['request/deleteattachment']), 
             'key' => $model->request_attachment_id]
