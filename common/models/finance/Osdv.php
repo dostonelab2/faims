@@ -235,8 +235,19 @@ class Osdv extends \yii\db\ActiveRecord
                 $tax_amount = round($model->amount * $model->rate1, 2);
             break;
 
-          //default:
-            //code to be executed if n is different from all labels;
+          default:
+            if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
         }
 
         return $model->amount - $tax_amount;
