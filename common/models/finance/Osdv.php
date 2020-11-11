@@ -253,7 +253,7 @@ class Osdv extends \yii\db\ActiveRecord
           
         }
 
-        return $model->amount - $tax_amount;
+        return $tax_amount;
     }
     
     public function getUacs()  
