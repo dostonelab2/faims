@@ -562,7 +562,69 @@ Modal::end();
                     'refreshGrid'=>true,
                     //'readonly' => !$isMember,
                     'value'=>function ($model, $key, $index, $widget) { 
-                            if($model->taxable){
+                            $tax_amount = 0.00;
+                        
+                            switch ($model->tax_category_id) {
+                              case 1: //Goods (5% + 1%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                                    if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                                        $taxable_amount = round($model->amount / 1.12, 2);
+                                    else
+                                        $taxable_amount = $model->amount;
+
+                                    if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                                        $tax1 = round($taxable_amount * $model->rate1, 2);
+                                        $tax2 = round($taxable_amount * $model->rate2, 2);
+                                        $tax_amount = $tax1 + $tax2;
+                                    }else{
+                                        $tax_amount = round($taxable_amount * $model->rate1, 2);
+                                    }
+                                break;
+
+                              case 2: // Services  (5% + 2%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                                    if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                                        $taxable_amount = round($model->amount / 1.12, 2);
+                                    else
+                                        $taxable_amount = $model->amount;
+
+                                    if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                                        $tax1 = round($taxable_amount * $model->rate1, 2);
+                                        $tax2 = round($taxable_amount * $model->rate2, 2);
+                                        $tax_amount = $tax1 + $tax2;
+                                    }else{
+                                        $tax_amount = round($taxable_amount * $model->rate1, 2);
+                                    }
+                                break;
+
+                              case 3: //Rental  (5%)
+                                    $tax_amount = round($model->amount * $model->rate1, 2);
+                                break;
+
+                              case 4: //Professional (10%)
+                                    $tax_amount = round($model->amount * $model->rate1, 2);
+                                break;
+
+                              //default:
+                                //code to be executed if n is different from all labels;
+                            }
+
+                            return $model->amount - $tax_amount;
+                        
+                            /*** BACKUP CODE : Start ***/
+                            /*if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                                $taxable_amount = round($model->amount / 1.12, 2);
+                            else
+                                $taxable_amount = $model->amount;
+
+                            if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                                $tax1 = round($taxable_amount * $model->rate1, 2);
+                                $tax2 = round($taxable_amount * $model->rate2, 2);
+                                $tax_amount = $tax1 + $tax2;
+                            }else{
+                                $tax_amount = round($taxable_amount * $model->rate1, 2);
+                            }*/
+                            /*** BACKUP CODE : End ***/
+                        
+                            /*if($model->taxable){
                                 $tax_amount = 0.00;
                                 if($model->tax_registered || $model->osdv->request->creditor->tagged)
                                     $taxable_amount = round($model->amount / 1.12, 2);
@@ -576,21 +638,15 @@ Modal::end();
                                 }else{
                                     $tax_amount = round($taxable_amount * $model->rate1, 2);
                                 }
-                                /*if($model->amount < 10000.00){
-                                    $tax_amount = round($taxable_amount * $model->rate1, 2);
-                                }else{
-                                    $tax1 = round(($taxable_amount * $model->rate1), 2);
-                                    $tax2 = round(($taxable_amount * $model->rate2), 2);
-                                    $tax_amount = $tax1 + $tax2;
-                                }*/
-                                
+                                                                
                                 if($model->debitcreditflag == 2)
                                     return round($model->amount - $tax_amount, 2);
                                 else
                                     return round($tax_amount, 2);
                             }else{
                                 return $model->amount;
-                            }
+                            }*/
+                        
                         },
                     'editableOptions'=> function ($model , $key , $index) {
                         return [
