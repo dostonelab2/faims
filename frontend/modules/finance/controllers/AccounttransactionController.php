@@ -227,6 +227,7 @@ class AccounttransactionController extends Controller
             $taxcat = Taxcategory::findOne($data['Accounttransaction']['tax_category_id']);
             $model->rate1 = $taxcat->rate1;
             $model->rate2 = $taxcat->rate2;
+            $model->tax_category_id = $data['Accounttransaction']['tax_category_id'];
             
             if($model->save(false)){
                 $hasTax = $this->hasTax($model);
@@ -240,6 +241,7 @@ class AccounttransactionController extends Controller
                     $accounttransaction->account_id = 31;
                     $accounttransaction->transaction_type = $model->transaction_type;
                     $accounttransaction->amount = $tax;
+                    $accounttransaction->tax_category_id = $data['Accounttransaction']['tax_category_id'];
                     $accounttransaction->tax_registered = $model->tax_registered;
                     $accounttransaction->debitcreditflag = $model->debitcreditflag;
                     $accounttransaction->active = 1;
@@ -328,28 +330,63 @@ class AccounttransactionController extends Controller
     private function computeTax($model){
         $tax_amount = 0.00;
         
-        if($model->tax_registered)
+        switch ($model->tax_category_id) {
+          case 1: //Goods (5% + 1%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+                
+          case 2: // Services  (5% + 2%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+                
+          case 3: //Rental  (5%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+                
+          case 4: //Professional (10%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+                
+          //default:
+            //code to be executed if n is different from all labels;
+        }
+        
+        /*** BACKUP CODE : Start ***/
+        /*if($model->osdv->request->creditor->tagged || $model->tax_registered)
             $taxable_amount = round($model->amount / 1.12, 2);
         else
             $taxable_amount = $model->amount;
-
-        /*if($model->amount < 10000.00){
-            $tax_amount = round($taxable_amount * $model->rate1, 2);
-        }else{
-            $tax1 = round($taxable_amount * $model->rate1, 2);
-            $tax2 = round($taxable_amount * $model->rate2, 2);
-            $tax_amount = $tax1 + $tax2;
-        }*/
         
-        if($model->amount > 10000.00 || $model->osdv->request->creditor->tagged){
+        if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
             $tax1 = round($taxable_amount * $model->rate1, 2);
             $tax2 = round($taxable_amount * $model->rate2, 2);
             $tax_amount = $tax1 + $tax2;
         }else{
             $tax_amount = round($taxable_amount * $model->rate1, 2);
-        }
-        //$model->osdv->request->creditor->tagged                
-
+        }*/
+        /*** BACKUP CODE : End ***/
         
         return $tax_amount;
     }
