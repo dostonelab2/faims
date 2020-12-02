@@ -210,14 +210,14 @@ class Report {
             }
         
             $content .= '</td>
-                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px; font-weight: bold;">'.number_format($model->amount,2).'</td>
+                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px; font-weight: bold;">'.number_format($model->osdv->getNetamount(),2).'</td>
                                 </tr>
                                 <tr style="height: 3px;">
                                 <td style="width: 0%;border-top:none;">&nbsp;</td>
                                 <td style="width: 43%;text-align:right;padding-right:50px;border-top:none;">Total</td>
                                 <td style="width: 12%;border-top:none;"></td>
                                 <td style="width: 10%;border-top:none;"></td>
-                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px; font-weight: bold;"><b>'.number_format($model->amount,2).'<b/></td>
+                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px; font-weight: bold;"><b>'.number_format($model->osdv->getNetamount(),2).'<b/></td>
                                 </tr>
                                 </tbody>
                             </table>';
@@ -236,18 +236,30 @@ class Report {
             $OSboxBPosition = 'Budget Officer';
             switch ($model->division_id) {
               case 1:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Martin Ausejo Wee<br/>Date: 2020.11.11</p>    
+                              </div>';
                 $OSboxASignatory = 'MARTIN A. WEE';
                 $OSboxAPosition = 'Regional Director';
                 break;
               case 2:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
+                              </div>';
                 $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
                 $OSboxAPosition = 'ARD-FASTS';
                 break;
               case 3:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
+                              </div>';
                 $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
                 $OSboxAPosition = 'ARD-FASTS';             
                 break;
               case 4:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
+                              </div>';
                 $OSboxASignatory = 'MAHMUD L. KINGKING';
                 $OSboxAPosition = 'ARD-FOS';  
                 break;
@@ -475,6 +487,7 @@ class Report {
 <span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
 ';
         
+
         /*$DVboxASignatory
         $DVboxPosition    
         switch ($model->division_id) {
@@ -547,9 +560,9 @@ $content .= '
     </tr>
     <tr style="height: 14px;">
     <td style="width:50%; height: 60px; text-align: left;padding:20px;" colspan="3">
-        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.(array_search(1,explode(',',$model->osdv->osdv_attributes)) ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Cash available <br><br>
-        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.(array_search(2,explode(',',$model->osdv->osdv_attributes)) ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Subject to Authority to Debit Account (when applicable) <br><br> 
-        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.(array_search(3,explode(',',$model->osdv->osdv_attributes)) ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Supporting documents complete and amount claimed proper.</td>
+        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.($this->getDVAttribute($model->osdv->osdv_attributes,'1') ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Cash available <br><br>
+        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.($this->getDVAttribute($model->osdv->osdv_attributes,'2') ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Subject to Authority to Debit Account (when applicable) <br><br> 
+        <span style="border:1px solid black;">&nbsp;&nbsp;&nbsp;'.($this->getDVAttribute($model->osdv->osdv_attributes,'3') ? '/' : '').'&nbsp;&nbsp;&nbsp;</span> Supporting documents complete and amount claimed proper.</td>
     <td style="width:50%; height: 60px; text-align: left;" colspan="4"><b><span style="border:1px solid black;"></span></b></td>
     </tr>
     </tbody>
@@ -612,4 +625,13 @@ $content .= '
 </table>';
         return $content;
     }
- }
+    
+    function getDVAttribute($attr,$index){
+        $pos = strpos($attr, $attr);
+        if ($pos === false) {
+            return false;
+        } else {
+            return true;
+        } 
+    }
+}

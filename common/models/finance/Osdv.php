@@ -143,6 +143,60 @@ class Osdv extends \yii\db\ActiveRecord
         }
     }
     
+    public function getTax2()
+    {
+        $tax_amount = 0.00;
+        
+        switch ($model->tax_category_id) {
+          case 1: //Goods (5% + 1%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+                
+          case 2: // Services  (5% + 2%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+                
+          case 3: //Rental  (5%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+                
+          case 4: //Professional (10%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+    
+          case 5: //Computed
+                $transaction = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2, ])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                $tax_amount = $transaction->amount;
+            break;
+          //default:
+            //code to be executed if n is different from all labels;
+        }
+        
+        return $tax_amount;
+    }
+    
     public function getTax()
     {
         switch ($this->type_id) {
@@ -161,8 +215,9 @@ class Osdv extends \yii\db\ActiveRecord
           default:
             $accountId = 0;
         }
-        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => $accountId, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
         
+        $taxable = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'account_id' => $accountId, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+
         if($taxable){
             $tax = $this->computeTax($taxable);
             return $tax;
@@ -195,7 +250,8 @@ class Osdv extends \yii\db\ActiveRecord
         //return $taxable_amount;
         return $tax_amount;*/
         $tax_amount = 0.00;
-                        
+
+        
         switch ($model->tax_category_id) {
           case 0:
             if($model->osdv->request->creditor->tagged || $model->tax_registered)
@@ -249,7 +305,11 @@ class Osdv extends \yii\db\ActiveRecord
           case 4: //Professional (10%)
                 $tax_amount = round($model->amount * $model->rate1, 2);
             break;
-
+        
+          case 5: //Computed
+                $transaction = Accounttransaction::find()->where(['request_id' => $model->request_id, 'account_id' => 31, 'debitcreditflag' => 2, ])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                $tax_amount = $transaction->amount;
+            break;
           
         }
 

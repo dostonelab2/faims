@@ -93,6 +93,16 @@ class Accounttransaction extends \yii\db\ActiveRecord
     public function getNetAmount()
     {
         if($this->taxable){
+            $tax = $this->computeTax($this);
+            return $this->amount - $tax;
+        }else{
+            return $this->amount;
+        }
+    }
+    
+    public function getNetAmount2()
+    {
+        if($this->taxable){
             $tax_amount = 0.00;
             if($this->tax_registered)
                 $taxable_amount = round($this->amount / 1.12, 2);
@@ -116,6 +126,74 @@ class Accounttransaction extends \yii\db\ActiveRecord
         }
         
         return $this->amount;
+    }
+    
+    private function computeTax($model)
+    {
+        $tax_amount = 0.00;
+        
+        switch ($model->tax_category_id) {
+          case 0:
+            if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;        
+            
+          case 1: //Goods (5% + 1%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+
+          case 2: // Services  (5% + 2%); check if 10k above; if below 10 check if supplier is tagged(amount divide by 1.12%)
+                if($model->osdv->request->creditor->tagged || $model->tax_registered)
+                    $taxable_amount = round($model->amount / 1.12, 2);
+                else
+                    $taxable_amount = $model->amount;
+
+                if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                    $tax1 = round($taxable_amount * $model->rate1, 2);
+                    $tax2 = round($taxable_amount * $model->rate2, 2);
+                    $tax_amount = $tax1 + $tax2;
+                }else{
+                    $tax_amount = round($taxable_amount * $model->rate1, 2);
+                }
+            break;
+
+          case 3: //Rental  (5%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+
+          case 4: //Professional (10%)
+                $tax_amount = round($model->amount * $model->rate1, 2);
+            break;
+        
+          case 5: //Computed
+                $transaction = Accounttransaction::find()->where(['request_id' => $model->request_id, 'account_id' => 31, 'debitcreditflag' => 2, ])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                $tax_amount = $transaction->amount;
+            break;
+          
+        }
+
+        return $tax_amount;
     }
     
     public function getAccount()  
