@@ -210,14 +210,14 @@ class Report {
             }
         
             $content .= '</td>
-                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px; font-weight: bold;">'.number_format($model->osdv->getNetamount(),2).'</td>
+                                    <td style="width: 20%; height: 290px;vertical-align:top;padding-left:15px;padding-top:25px;text-align:right;padding:5px; font-weight: bold;">'.number_format($model->amount,2).'</td>
                                 </tr>
                                 <tr style="height: 3px;">
                                 <td style="width: 0%;border-top:none;">&nbsp;</td>
                                 <td style="width: 43%;text-align:right;padding-right:50px;border-top:none;">Total</td>
                                 <td style="width: 12%;border-top:none;"></td>
                                 <td style="width: 10%;border-top:none;"></td>
-                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px; font-weight: bold;"><b>'.number_format($model->osdv->getNetamount(),2).'<b/></td>
+                                <td style="width: 20%;border-top:none;padding-left:15px;text-align:right;padding:5px; font-weight: bold;"><b>'.number_format($model->amount,2).'<b/></td>
                                 </tr>
                                 </tbody>
                             </table>';
