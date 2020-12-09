@@ -48,7 +48,7 @@ Modal::end();
 <?php Pjax::begin(); ?>
       <?php
         echo GridView::widget([
-            'id' => 'request',
+            'id' => 'os-dv',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'containerOptions' => ['style' => 'overflow-x: none!important','class'=>'kv-grid-container'], // only set when $responsive = false
@@ -161,7 +161,7 @@ Modal::end();
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 'name'), 
                                 'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
-                                ],
+                                ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Payee'],
                                 //'contentOptions' => ['style' => 'width: 50%;word-wrap: break-word;white-space:pre-line;'],
                             ],
@@ -175,7 +175,7 @@ Modal::end();
                                     return $model->request->amount;
                                 },
                             ],
-                            [
+                            /*[
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
@@ -184,15 +184,21 @@ Modal::end();
                                     //return Profile::find($model->created_by)->one()->fullname;
                                     return $model->request->profile->fullname;
                                 },
-                            ],
+                            ],*/
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 //'class' => kartik\grid\ActionColumn::className(),
-                                'template' => '{view}',
+                                'template' => '{view}{printos}{printdv}',
                                 'headerOptions' => ['style' => 'background-color: #fff;'],
                                 'buttons' => [
                                     'view' => function ($url, $model){
                                         return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
+                                    },
+                                    'printos' => function ($url, $model){
+                                        return Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printos?id=' . $model->request->request_id,'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print OS")]);
+                                    },
+                                    'printdv' => function ($url, $model){
+                                        return Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printdv?id=' . $model->request->request_id,  'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print DV"), 'target' => '_blank']);
                                     },
                                 ],
                             ],
