@@ -195,10 +195,10 @@ Modal::end();
                                         return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
                                     },
                                     'printos' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printos?id=' . $model->request->request_id,'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print OS")]);
+                                        return $model->isObligated() ? Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printos?id=' . $model->request->request_id,'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print OS")]) : '';
                                     },
                                     'printdv' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printdv?id=' . $model->request->request_id,  'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print DV"), 'target' => '_blank']);
+                                        return $model->isCharged() ? Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printdv?id=' . $model->request->request_id,  'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print DV"), 'target' => '_blank']) : '';
                                     },
                                 ],
                             ],

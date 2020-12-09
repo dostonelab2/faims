@@ -320,4 +320,14 @@ class Osdv extends \yii\db\ActiveRecord
     {  
       return $this->hasOne(Osallotment::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);  
     }
+    
+    public function isObligated()
+    {
+        return ($this->status_id >= Request::STATUS_ALLOTTED) ? true : false;
+    }
+    
+    public function isCharged()
+    {
+        return ($this->status_id >= Request::STATUS_CHARGED) ? true : false;
+    }
 }
