@@ -571,7 +571,7 @@ Modal::end();
                                     else
                                         $taxable_amount = $model->amount;
 
-                                    if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                                    if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
                                         $tax1 = round($taxable_amount * $model->rate1, 2);
                                         $tax2 = round($taxable_amount * $model->rate2, 2);
                                         $tax_amount = $tax1 + $tax2;
@@ -586,7 +586,7 @@ Modal::end();
                                     else
                                         $taxable_amount = $model->amount;
 
-                                    if($model->osdv->request->creditor->tagged || $model->amount > 10000.00){
+                                    if($model->osdv->request->creditor->tagged || $model->amount >= 10000.00){
                                         $tax1 = round($taxable_amount * $model->rate1, 2);
                                         $tax2 = round($taxable_amount * $model->rate2, 2);
                                         $tax_amount = $tax1 + $tax2;
