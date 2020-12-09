@@ -15,6 +15,7 @@ use yii\bootstrap\Modal;
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\system\Profile;
+use common\models\finance\Requeststatus;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\finance\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -185,6 +186,22 @@ Modal::end();
                                     return $model->request->profile->fullname;
                                 },
                             ],*/
+                            [
+                                'attribute'=>'status_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return '<span class="label label-info">'.$model->status->name.'</span>';
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Status'],
+                            ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 //'class' => kartik\grid\ActionColumn::className(),
