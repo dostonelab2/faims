@@ -437,7 +437,7 @@ Modal::end();
 <a id="startButton"  href="javascript:void(0);">Show guide</a>
 
 <?php
-if (!$cert_store = file_get_contents("../../common/database/PKI/MAW/MAW_Sign.p12")) {
+/*if (!$cert_store = file_get_contents("../../common/database/PKI/MAW/MAW_Sign.p12")) {
     echo "Error: Unable to read the cert file\n";
     exit;
 }
@@ -450,7 +450,7 @@ if (openssl_pkcs12_read($cert_store, $cert_info, "mawDostRegion9")) {
 } else {
     echo "Error: Unable to read the cert store.\n";
     exit;
-}
+}*/
 ?>
 
 
