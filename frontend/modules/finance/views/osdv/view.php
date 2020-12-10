@@ -106,16 +106,23 @@ Modal::end();
             ],
             [
                 'group'=>true,
-                'label'=>'Attachments',
+                'label'=>'Status',
                 'rowOptions'=>['class'=>'table-success']
             ],
             [
+                'attribute'=>'remarks',
+                'label'=>'Remarks',
+                //'format'=>['decimal', 2],
+                'inputContainer' => ['class'=>'col-sm-6'],
+                'value' => $model->remarks,
+            ],
+            /*[
                 'attribute'=>'request_id',
                 'label'=>'Amount (P)',
                 'format'=>['decimal', 2],
                 'inputContainer' => ['class'=>'col-sm-6'],
                 'value' => $model->request->amount,
-            ],
+            ],*/
         ];?>
     <?= DetailView::widget([
             'model' => $model,

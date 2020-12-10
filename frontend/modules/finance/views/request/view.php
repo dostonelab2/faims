@@ -137,7 +137,15 @@ Modal::end();
         [
             'group'=>true,
             'label'=>'Status',
-            'rowOptions'=>['class'=>'table-info']
+            'rowOptions'=>['class'=>'table-success']
+        ],
+        [
+            'attribute'=>'remarks',
+            'label'=>'Remarks',
+            'format'=>'raw',
+            'inputContainer' => ['class'=>'col-sm-6'],
+            //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
+            'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
         ],
     ];?>
 <?= DetailView::widget([
@@ -229,6 +237,22 @@ Modal::end();
                     }
                     
                     return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachment', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']);
+                },
+            ],
+            [   
+                'attribute'=>'filename',
+                'header' => 'Signed Attachments',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'80px',
+                'value'=>function ($model, $key, $index, $widget) { 
+                    $btnCss = 'btn btn-success';
+                    
+                    //return Requestattachment::hasSignedattachment($model->request_attachment_id);
+                    return Requestattachment::hasSignedattachment($model->request_attachment_id) ? 
+                    Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachment', 'id'=>$model->signedattachment->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']) 
+                    : '';
                 },
             ],
             [   
@@ -411,6 +435,24 @@ Modal::end();
     ?>
 
 <a id="startButton"  href="javascript:void(0);">Show guide</a>
+
+<?php
+if (!$cert_store = file_get_contents("../../common/database/PKI/MAW/MAW_Sign.p12")) {
+    echo "Error: Unable to read the cert file\n";
+    exit;
+}
+
+if (openssl_pkcs12_read($cert_store, $cert_info, "mawDostRegion9")) {
+    echo "Certificate Information\n";
+    echo '<pre>';
+    print_r($cert_info);
+    echo '</pre>';
+} else {
+    echo "Error: Unable to read the cert store.\n";
+    exit;
+}
+?>
+
 
 <script type="text/javascript">
     /*document.getElementById('startButton').onclick = function() {
