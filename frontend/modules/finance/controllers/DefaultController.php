@@ -1,12 +1,13 @@
 <?php
+namespace frontend\modules\finance\controllers;
 
-namespace frontend\modules\cashier\controllers;
-
+use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-/**
- * Default controller for the `Cashier` module
- */
+use common\models\finance\Request;
+
 class DefaultController extends Controller
 {
     /**
@@ -15,6 +16,24 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $forVerification = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_SUBMITTED])->count();
+        $forValidation = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_VERIFIED])->count();
+        
+        $forAllotment = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        $forObligation = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE])->count();
+        $forCharging = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_ALLOTTED])->count();
+        $forDisbursement = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CHARGED])->count();
+        $forApproval = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        
+        return $this->render('index',[
+            'forVerification' => $forVerification,
+            'forValidation' => $forValidation,
+            'forAllotment' => $forAllotment,
+            'forObligation' => $forObligation,
+            'forCharging' => $forCharging,
+            'forDisbursement' => $forDisbursement,
+            'forApproval' => $forApproval,
+            
+        ]);
     }
 }
