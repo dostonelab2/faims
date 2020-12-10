@@ -126,7 +126,7 @@ if(Yii::$app->user->isGuest){
                             [
                                 'label' => 'Dashboard' , 
                                 'icon' => 'dashboard text-aqua', 
-                                'url' => ['/finance/dashboard/index'], 
+                                'url' => ['/finance/default/index'], 
                                 //'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
                                 //'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
