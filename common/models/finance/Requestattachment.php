@@ -68,6 +68,11 @@ class Requestattachment extends \yii\db\ActiveRecord
       return $this->hasOne(Attachment::className(), ['attachment_id' => 'attachment_id']);  
     } 
     
+    public function getSignedattachment()  
+    {  
+      return $this->hasOne(Requestattachmentsigned::className(), ['request_attachment_id' => 'request_attachment_id']);  
+    } 
+    
     public function getRequest()  
     {  
       return $this->hasOne(Request::className(), ['request_id' => 'request_id']);  
@@ -96,6 +101,14 @@ class Requestattachment extends \yii\db\ActiveRecord
         } else {
             return 0;
         }
+    }
+    
+    public static function hasSignedattachment($id){
+        $signed = Requestattachmentsigned::find()->where(['request_attachment_id' => $id])->count();
+        if($signed)
+            return true;
+        else
+            return false;
     }
     
     public static function generateCode($id)
