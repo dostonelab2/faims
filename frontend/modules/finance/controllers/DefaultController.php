@@ -22,8 +22,9 @@ class DefaultController extends Controller
         $forAllotment = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_VALIDATED])->count();
         $forObligation = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE])->count();
         $forCharging = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_ALLOTTED])->count();
-        $forDisbursement = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CHARGED])->count();
-        $forApproval = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        $forDisbursement = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CERTIFIED_FUNDS_AVAILABLE])->count();
+        $forApproval = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_CHARGED])->count();
+        $forPayment = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_APPROVED_FOR_DISBURSEMENT])->count();
         
         return $this->render('index',[
             'forVerification' => $forVerification,
@@ -33,7 +34,7 @@ class DefaultController extends Controller
             'forCharging' => $forCharging,
             'forDisbursement' => $forDisbursement,
             'forApproval' => $forApproval,
-            
+            'forPayment' => $forPayment,
         ]);
     }
 }
