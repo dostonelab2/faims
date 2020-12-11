@@ -1,6 +1,10 @@
 <?php 
 use common\models\finance\Request;
 
+$this->title = 'Dashboard';
+$this->params['breadcrumbs'][] = ['label' => 'Finance', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
