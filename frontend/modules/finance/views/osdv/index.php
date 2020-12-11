@@ -14,6 +14,8 @@ use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
+use common\models\finance\Dv;
+use common\models\finance\Os;
 use common\models\system\Profile;
 use common\models\finance\Requeststatus;
 /* @var $this yii\web\View */
@@ -74,7 +76,7 @@ Modal::end();
                                 },
                             ],*/
                             [
-                                'attribute'=>'osdv_id',
+                                'attribute'=>'os_id',
                                 'header'=>'OS Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
@@ -93,13 +95,25 @@ Modal::end();
                                         break;
                                       default:
                                         $label = 'label-warning';
-                                            
                                     }
                                     return (isset($model->os->os_id) ? '<span class="label '.$label.'">'.$model->os->os_number.'</span><br/>'.$model->os->os_date : '');
                                 },
+                                'filter'=>DatePicker::widget([
+                                    //'model' => $searchModel,
+                                    'name' => 'request_date',
+                                    //'attribute' => 'request.request_date',
+                                    //'value' => date('Y-m-d', strtotime('+2 days')),
+                                    'value' => date('Y-m-d'),
+                                    'options' => ['placeholder' => 'Select date ...'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayHighlight' => true
+                                    ],
+                                    //'contentOptions' => ['style' => 'width: 20%;word-wrap: break-word;white-space:pre-line;'],
+                                ]),
                             ],
                             [
-                                'attribute'=>'osdv_id',
+                                'attribute'=>'dv_id',
                                 'header'=>'DV Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
@@ -122,6 +136,12 @@ Modal::end();
                                     }
                                     return (isset($model->dv->dv_id) ? '<span class="label '.$label.'">'.$model->dv->dv_number.'</span><br/>'.$model->dv->dv_date : '');
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
                             [
                                 'attribute'=>'request_date',
@@ -159,11 +179,23 @@ Modal::end();
                                     return '<b>' . Creditor::findOne($model->request->payee_id)->name. '</b><br>' .$model->request->particulars;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
+                                                                function($model) {
+                                                                    return $model['name'].' | '.$model['address'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Payee']
+                                
+                                
+                                /*'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 'name'), 
                                 'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Payee'],
+                                'filterInputOptions' => ['placeholder' => 'Select Payee'],*/
                                 //'contentOptions' => ['style' => 'width: 50%;word-wrap: break-word;white-space:pre-line;'],
                             ],
                             [
@@ -193,7 +225,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<span class="label label-info">'.$model->status->name.'</span>';
+                                    return $status_id ? '<span class="label label-info">'.$model->status->name.'</span>' : '';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
