@@ -225,7 +225,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $status_id ? '<span class="label label-info">'.$model->status->name.'</span>' : '';
+                                    return $model->status_id ? '<span class="label label-info">'.$model->status->name.'</span>' : '';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
