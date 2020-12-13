@@ -324,7 +324,14 @@ class LddapadaController extends Controller
                         ->all();
                     foreach($items as $item){
                         $item->check_number = $_POST['Checknumber']['check_number'];
-                        $item->save(false);
+                        if($item->save(false)){
+                            $item->osdv->status_id = 80;
+                            $item->osdv->save(false);
+                            
+                            $item->osdv->request->status_id = 80;
+                            $item->osdv->request->save(false);
+                        }
+                            
                     }
                     
                     /*$index = $model->lddapada_id;
@@ -406,7 +413,14 @@ class LddapadaController extends Controller
                         ->all();
                     foreach($items as $item){
                         $item->check_number = $_POST['Adanumber']['ada_number'];
-                        $item->save(false);
+                        //$item->save(false);
+                        if($item->save(false)){
+                            $item->osdv->status_id = 80;
+                            $item->osdv->save(false);
+                            
+                            $item->osdv->request->status_id = 80;
+                            $item->osdv->request->save(false);
+                        }
                     }
                     
                     /*$index = $model->lddapada_id;
