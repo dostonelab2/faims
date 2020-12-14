@@ -611,8 +611,14 @@ Modal::end();
                                 break;
                                 
                               case 5: //Computed
-                                    $transaction = Accounttransaction::find()->where(['request_id' => $model->request_id, 'account_id' => 31, 'debitcreditflag' => 2, ])->orderBy(['account_transaction_id' => SORT_DESC])->one();
-                                    $tax_amount = $transaction->amount;
+                                    if ($model->account_id == 31) {
+                                        $tax_amount = 0;
+                                    }else{
+                                        $transaction = Accounttransaction::find()->where(['request_id' => $model->request_id, 'account_id' => 31, 'debitcreditflag' => 2, ])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                                        
+                                        $tax_amount = $transaction->amount;
+                                    }
+                                    
                                 break;
                               //default:
                                 //code to be executed if n is different from all labels;
