@@ -54,11 +54,30 @@ class RequestController extends Controller
      * Lists all Request models.
      * @return mixed
      */
+    public function actionIndex2()
+    {
+        $searchModel = new RequestSearch();
+        if(Yii::$app->user->identity->username != 'Admin')
+            $searchModel->created_by =  Yii::$app->user->identity->user_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            
+        ]);
+    }
+    
+    /**
+     * Lists all Request models.
+     * @return mixed
+     */
     public function actionIndex()
     {
         $searchModel = new RequestSearch();
         if(Yii::$app->user->identity->username != 'Admin')
             $searchModel->created_by =  Yii::$app->user->identity->user_id;
+        //$searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('index', [
