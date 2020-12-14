@@ -96,9 +96,10 @@ Modal::end();
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: right; padding-right: 20px; font-weight: bold;'],
                                 'width'=>'200px',
+                                'format' => ['decimal', 2],
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    $fmt = Yii::$app->formatter;
-                                    return $fmt->asDecimal($model->amount);
+                                    //$fmt = Yii::$app->formatter;
+                                    return $model->amount;
                                 },
                             ],
                             [
