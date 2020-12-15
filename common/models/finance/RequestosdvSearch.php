@@ -65,31 +65,13 @@ class RequestosdvSearch extends Request
             //'request_number' => $this->request_number,
             'request_date' => $this->request_date,
             'request_type_id' => $this->request_type_id,
-            //'payee_id' => $this->payee_id,
+            'payee_id' => $this->payee_id,
             'amount' => $this->amount,
-            //'status_id' => $this->status_id,
+            'status_id' => $this->status_id,
             'created_by' => $this->created_by,
         ]);
+
         $query->andFilterWhere(['>=', 'status_id', 50]);
-        /*if(($this->user_id == 2)){
-            $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
-                  ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif(($this->user_id == 4)){
-            //$query->andFilterWhere(['<>', 'payee_id', 129])
-                //->andFilterWhere(['!=', 'payee_id', 129])
-            $query->andFilterWhere(['in', 'division_id', $this->division_id])
-                ->andFilterWhere(['>=', 'status_id', $this->status_id])
-                ->andFilterWhere(['!=', 'payee_id', 129]);
-            //->andFilterWhere(['<>', 'payee_id', $this->payee_id]);
-        }else{
-             $query->andFilterWhere(['like', 'payee_id', $this->payee_id])
-                ->andFilterWhere(['>=', 'status_id', $this->status_id])
-                ->andFilterWhere(['like', 'particulars', $this->particulars]);    
-        }*/
-        
-        /*if(isset($this->status_id)){
-            $query->andFilterWhere(['>=', 'status_id', 40]);
-        }*/
         
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);
         

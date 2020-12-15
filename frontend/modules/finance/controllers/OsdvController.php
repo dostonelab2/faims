@@ -79,7 +79,7 @@ class OsdvController extends Controller
     public function actionIndex()
     {
         $searchModel = new RequestosdvSearch();
-        $searchModel->status_id = Request::STATUS_VALIDATED;
+        //$searchModel->status_id = Request::STATUS_VALIDATED;
         
         if(Yii::$app->user->identity->username != 'Admin')
             $searchModel->created_by =  Yii::$app->user->identity->user_id;
