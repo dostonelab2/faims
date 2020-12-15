@@ -67,6 +67,7 @@ Modal::end();
             'columns' => [
                             [
                                 'attribute'=>'request_number',
+                                'header'=>'OS Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
                                 'width'=>'120px',
@@ -77,6 +78,7 @@ Modal::end();
                             ],
                             [
                                 'attribute'=>'request_number',
+                                'header'=>'DV Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
                                 'width'=>'120px',
