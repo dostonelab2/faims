@@ -9,6 +9,8 @@ use common\models\finance\Os;
 use common\models\finance\Osdv;
 use common\models\finance\OsdvSearch;
 use common\models\finance\Request;
+use common\models\finance\RequestSearch;
+use common\models\finance\RequestosdvSearch;
 use common\models\procurement\Expenditureclass;
 use common\models\sec\Blockchain;
 
@@ -42,7 +44,7 @@ class OsdvController extends Controller
      * Lists all Osdv models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex2()
     {
         $searchModel = new OsdvSearch();
         
@@ -59,6 +61,29 @@ class OsdvController extends Controller
         
         //$status_id = Request::STATUS_VALIDATED;
         //$searchModel->status_id = $status_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if(Yii::$app->user->can('access-finance-obligation'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        
+        if(Yii::$app->user->can('access-finance-disbursement'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'numberOfRequests' => $numberOfRequests,
+        ]);
+    }
+    
+    public function actionIndex()
+    {
+        $searchModel = new RequestosdvSearch();
+        $searchModel->status_id = Request::STATUS_VALIDATED;
+        
+        if(Yii::$app->user->identity->username != 'Admin')
+            $searchModel->created_by =  Yii::$app->user->identity->user_id;
+        //$searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         if(Yii::$app->user->can('access-finance-obligation'))

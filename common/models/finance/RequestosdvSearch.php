@@ -10,7 +10,7 @@ use common\models\finance\Request;
 /**
  * RequestSearch represents the model behind the search form about `common\models\finance\Request`.
  */
-class RequestSearch extends Request
+class RequestosdvSearch extends Request
 {
     /**
      * @inheritdoc
@@ -65,24 +65,12 @@ class RequestSearch extends Request
             //'request_number' => $this->request_number,
             'request_date' => $this->request_date,
             'request_type_id' => $this->request_type_id,
-            'payee_id' => $this->payee_id,
+            //'payee_id' => $this->payee_id,
             'amount' => $this->amount,
-            'status_id' => $this->status_id,
+            //'status_id' => $this->status_id,
             'created_by' => $this->created_by,
         ]);
-        //$query->andFilterWhere(['>', 'status_id', 40]);
-        
-        if((Yii::$app->user->identity->user_id == 2)){
-            $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
-                  ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->user_id == 4)){
-            $query->andFilterWhere(['in', 'division_id', $this->division_id])
-                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-                //->andFilterWhere(['', 'payee_id', 129]);
-        }elseif((Yii::$app->user->identity->user_id == 3)){
-            $query->andFilterWhere(['in', 'division_id', $this->division_id])
-                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }
+        $query->andFilterWhere(['>=', 'status_id', 50]);
         /*if(($this->user_id == 2)){
             $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
                   ->andFilterWhere(['>=', 'status_id', $this->status_id]);
@@ -100,7 +88,7 @@ class RequestSearch extends Request
         }*/
         
         /*if(isset($this->status_id)){
-            $query->andFilterWhere(['>', 'status_id', $this->status_id]);
+            $query->andFilterWhere(['>=', 'status_id', 40]);
         }*/
         
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);

@@ -22,6 +22,7 @@ class Osdv extends \yii\db\ActiveRecord
     public $os_id;
     public $payee_id;
     public $cashAvailable;
+    public $request_number;
     public $subjectToAda;
     public $supportingDocumentsComplete;
     /**
@@ -70,7 +71,7 @@ class Osdv extends \yii\db\ActiveRecord
     
     public function getOs()  
     {  
-      return $this->hasOne(Os::className(), ['osdv_id' => 'osdv_id']);  
+      return $this->hasOne(Os::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['deleted' => 0]);  
     }
     
     public function getAllotments()  

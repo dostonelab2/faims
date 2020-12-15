@@ -5,7 +5,6 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
 
 use kartik\datecontrol\DateControl;
-use kartik\widgets\DatePicker;
 use kartik\detail\DetailView;
 use kartik\editable\Editable; 
 use kartik\grid\GridView;
@@ -14,10 +13,11 @@ use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
-use common\models\finance\Dv;
-use common\models\finance\Os;
-use common\models\system\Profile;
+use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
+use common\models\system\Profile;
+use common\models\system\Usersection;
+use common\models\sec\Blockchain;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\finance\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -38,145 +38,80 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 
-///echo '<span class="badge btn-success">'.$numberOfRequests.'</span>';
+// Modal Create New Creditor
+Modal::begin([
+    'header' => '<h4 id="modalCreditorHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalCreditor',
+    'size' => 'modal-md',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
 ?>
+
 <div class="request-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <!--?= Html::a('Create', ['create'], ['class' => 'btn btn-success', 'id' => 'buttonCreateRequest']) ?-->
-    </p>
 <?php Pjax::begin(); ?>
       <?php
         echo GridView::widget([
-            'id' => 'os-dv',
+            'id' => 'request',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'containerOptions' => ['style' => 'overflow-x: none!important','class'=>'kv-grid-container'], // only set when $responsive = false
-            //'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'columns' => [
-                            /*[
-                                'attribute'=>'request_id',
-                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
-                                'width'=>'80px',
-                                'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->request->request_number;
-                                },
-                            ],*/
-                            /*[
-                                'attribute'=>'status_id',
-                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
-                                'width'=>'80px',
-                                'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->request->request_number;
-                                },
-                            ],*/
                             [
-                                'attribute'=>'os_id',
-                                'header'=>'OS Number',
+                                'attribute'=>'request_number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: center;'],
-                                'width'=>'150px',
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
+                                'width'=>'120px',
                                 'format'=>'raw',
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    switch ($model->status_id) {
-                                      case ($model->status_id==50):
-                                        $label = 'label-warning';
-                                        break;
-                                      case ($model->status_id==55):
-                                        $label = 'label-success';
-                                        break;
-                                      case ($model->status_id>55):
-                                        $label = 'label-info';
-                                        break;
-                                      default:
-                                        $label = 'label-warning';
-                                    }
-                                    return (isset($model->os->os_id) ? '<span class="label '.$label.'">'.$model->os->os_number.'</span><br/>'.$model->os->os_date : '');
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
                                 },
-                                'filter'=>DatePicker::widget([
-                                    //'model' => $searchModel,
-                                    'name' => 'request_date',
-                                    //'attribute' => 'request.request_date',
-                                    //'value' => date('Y-m-d', strtotime('+2 days')),
-                                    'value' => date('Y-m-d'),
-                                    'options' => ['placeholder' => 'Select date ...'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'todayHighlight' => true
-                                    ],
-                                    //'contentOptions' => ['style' => 'width: 20%;word-wrap: break-word;white-space:pre-line;'],
-                                ]),
                             ],
                             [
-                                'attribute'=>'dv_id',
-                                'header'=>'DV Number',
+                                'attribute'=>'request_number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: center;'],
-                                'width'=>'150px',
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
+                                'width'=>'120px',
                                 'format'=>'raw',
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    switch ($model->status_id) {
-                                      case ($model->status_id==60):
-                                        $label = 'label-warning';
-                                        break;
-                                      case ($model->status_id==65):
-                                        $label = 'label-success';
-                                        break;
-                                      case ($model->status_id>65):
-                                        $label = 'label-info';
-                                        break;
-                                      default:
-                                        $label = 'label-warning';
-                                            
-                                    }
-                                    return (isset($model->dv->dv_id) ? '<span class="label '.$label.'">'.$model->dv->dv_number.'</span><br/>'.$model->dv->dv_date : '');
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return isset($model->osdv->dv) ? '<b>'.$model->osdv->dv->dv_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->dv->dv_date)) : '';
                                 },
-                                'filterType' => GridView::FILTER_SELECT2,
-                                'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
-                                'filterWidgetOptions' => [
-                                    'pluginOptions' => ['allowClear' => true],
-                                ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
                             [
-                                'attribute'=>'request_date',
+                                'attribute'=>'request_number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: center;'],
-                                'width'=>'250px',
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
+                                'width'=>'120px',
+                                'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return date('Y-m-d', strtotime($model->request->request_date));
+                                    return '<b>'.$model->request_number.'</b><br/>'.date('Y-m-d', strtotime($model->request_date));
                                 },
-                                'filter'=>DatePicker::widget([
-                                    //'model' => $searchModel,
-                                    'name' => 'request_date',
-                                    //'attribute' => 'request.request_date',
-                                    //'value' => date('Y-m-d', strtotime('+2 days')),
-                                    'value' => date('Y-m-d'),
-                                    'options' => ['placeholder' => 'Select date ...'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'todayHighlight' => true
-                                    ],
-                                    //'contentOptions' => ['style' => 'width: 20%;word-wrap: break-word;white-space:pre-line;'],
-                                ]),
                             ],
                             [
                                 'attribute'=>'payee_id',
-                                'header'=>'Payee',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold; text-align: center;'],
-                                'width'=>'550px',
+                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
+                                'width'=>'800px',
                                 'contentOptions' => [
                                     'style'=>'max-width:300px; overflow: auto; white-space: normal; word-wrap: break-word;'
                                 ],
                                 'format' => 'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<b>' . Creditor::findOne($model->request->payee_id)->name. '</b><br>' .$model->request->particulars;
+                                    return Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
+                                        'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
+                                        //'data-toggle'=>'tooltip',
+                                        //'data-content'=>Profile::find($model->created_by)->one()->fullname,
+                                        //'data-toggle'=>'popover',
+                                        'style'=>'text-decoration: underline; cursor:pointer;'
+                                    ]).'<br>' .$model->particulars;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
@@ -188,36 +123,18 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Payee']
-                                
-                                
-                                /*'filterType' => GridView::FILTER_SELECT2,
-                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 'name'), 
-                                'filterWidgetOptions' => [
-                                    'pluginOptions' => ['allowClear' => true],
-                                ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Payee'],*/
-                                //'contentOptions' => ['style' => 'width: 50%;word-wrap: break-word;white-space:pre-line;'],
                             ],
                             [
                                 'attribute'=>'amount',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
-                                'width'=>'150px',
-                                'format'=>['decimal',2],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    return $model->request->amount;
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: right; padding-right: 20px; font-weight: bold;'],
+                                'width'=>'200px',
+                                'format' => ['decimal', 2],
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    //$fmt = Yii::$app->formatter;
+                                    return $model->amount;
                                 },
                             ],
-                            /*[
-                                'attribute'=>'created_by',
-                                'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
-                                'width'=>'250px',
-                                'value'=>function ($model, $key, $index, $widget) { 
-                                    //return Profile::find($model->created_by)->one()->fullname;
-                                    return $model->request->profile->fullname;
-                                },
-                            ],*/
                             [
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -225,7 +142,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->status_id ? '<span class="label label-info">'.$model->status->name.'</span>' : '';
+                                    return '<span class="label label-info">'.$model->status->name.'</span>';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
@@ -234,55 +151,39 @@ Modal::end();
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
+                            /*[
+                                'attribute'=>'created_by',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
+                                'width'=>'250px',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    //return Profile::find($model->created_by)->one()->fullname;
+                                    return $model->profile->fullname;
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Profile::find()->asArray()->all(), 'profile_id', 
+                                                                function($model) {
+                                                                    return $model['firstname'].' '.$model['lastname'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Created by'],
+                            ],*/
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
-                                //'class' => kartik\grid\ActionColumn::className(),
-                                'template' => '{view}{printos}{printdv}',
-                                'headerOptions' => ['style' => 'background-color: #fff;'],
+                                'template' => '{view}',
                                 'buttons' => [
+
                                     'view' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
-                                    },
-                                    'printos' => function ($url, $model){
-                                        return $model->isObligated() ? Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printos?id=' . $model->request->request_id,'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print OS")]) : '';
-                                    },
-                                    'printdv' => function ($url, $model){
-                                        return $model->isCharged() ? Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printdv?id=' . $model->request->request_id,  'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print DV"), 'target' => '_blank']) : '';
+                                        return $model->osdv ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]) : '';
                                     },
                                 ],
                             ],
-                            /*[
-                                'class' => 'kartik\grid\CheckboxColumn',
-                                'headerOptions' => ['class' => 'kartik-sheet-style'],
-                                'pageSummary' => '<small>(amounts in $)</small>',
-                                'pageSummaryOptions' => ['colspan' => 3, 'data-colspan-dir' => 'rtl']
-                            ],*/
                     ],
             
             'pjax' => true, // pjax is set to always true for this demo
-            'rowOptions' => function($model){
-                switch ($model->status_id) {
-                    case Request::STATUS_VALIDATED:
-                        return ['class'=>'warning'];
-                        break;
-                    case Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE:
-                        return ['class'=>'warning'];
-                        break;
-                    case Request::STATUS_ALLOTTED:
-                        return ['class'=>'warning'];
-                        break;
-                    case Request::STATUS_CERTIFIED_FUNDS_AVAILABLE:
-                        return ['class'=>'warning'];
-                        break;
-                    case Request::STATUS_CHARGED:
-                        return ['class'=>'warning'];
-                        break;
-                    case Request::STATUS_APPROVED_FOR_DISBURSEMENT:
-                        return ['class'=>'success'];
-                        break;
-                }
-                 
-            },
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
@@ -312,16 +213,3 @@ Modal::end();
         ?>
         <?php Pjax::end(); ?>
 </div>
-<script>
-/*$( document ).ready(function() {
-    setTimeout(function(){
-        window.location = 'verifyindex';
-    }, 5000);
-});)*/
-
-$( document ).ready(function() {
-    setTimeout(function(){
-       window.location.reload(1);
-    }, 40000);
-});
-</script>
