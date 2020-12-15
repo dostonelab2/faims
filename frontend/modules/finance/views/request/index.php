@@ -37,6 +37,19 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+
+// Modal Create New Creditor
+Modal::begin([
+    'header' => '<h4 id="modalCreditorHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalCreditor',
+    'size' => 'modal-md',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
 ?>
 
 <div class="request-index">
