@@ -83,7 +83,7 @@ class OsdvController extends Controller
         
         if(Yii::$app->user->identity->username != 'Admin')
             $searchModel->created_by =  Yii::$app->user->identity->user_id;
-        //$searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         if(Yii::$app->user->can('access-finance-obligation'))
