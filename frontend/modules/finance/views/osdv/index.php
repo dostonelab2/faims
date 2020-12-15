@@ -177,7 +177,7 @@ Modal::end();
                                     return '<span class="label label-info">'.$model->status->name.'</span>';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
-                                'filter' => ArrayHelper::map(Requeststatus::find(['id'])->asArray()->all(), 'request_status_id', 'name'), 
+                                'filter' => ArrayHelper::map(Requeststatus::find()->where(['>', 'request_status_id', 40])->asArray()->all(), 'request_status_id', 'name'), 
                                 'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
