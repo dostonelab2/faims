@@ -73,7 +73,22 @@ Modal::end();
                                 'width'=>'120px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
+                                    switch ($model->status_id) {
+                                      case ($model->status_id==50):
+                                        $label = 'label-warning';
+                                        break;
+                                      case ($model->status_id==55):
+                                        $label = 'label-success';
+                                        break;
+                                      case ($model->status_id>55):
+                                        $label = 'label-info';
+                                        break;
+                                      default:
+                                        $label = 'label-warning';
+                                    }
+                                    
+                                    //return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
+                                    return (isset($model->osdv->os) ? '<span class="label '.$label.'">'.$model->osdv->os->os_number.'</span><br/>'.$model->osdv->os->os_date : '');
                                 },
                             ],
                             [
@@ -84,7 +99,22 @@ Modal::end();
                                 'width'=>'120px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->osdv->dv) ? '<b>'.$model->osdv->dv->dv_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->dv->dv_date)) : '';
+                                    switch ($model->status_id) {
+                                      case ($model->status_id==60):
+                                        $label = 'label-warning';
+                                        break;
+                                      case ($model->status_id==65):
+                                        $label = 'label-success';
+                                        break;
+                                      case ($model->status_id>65):
+                                        $label = 'label-info';
+                                        break;
+                                      default:
+                                        $label = 'label-warning';
+                                            
+                                    }
+                                    return (isset($model->osdv->dv) ? '<span class="label '.$label.'">'.$model->osdv->dv->dv_number.'</span><br/>'.$model->osdv->dv->dv_date : '');
+                                    //return isset($model->osdv->dv) ? '<b>'.$model->osdv->dv->dv_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->dv->dv_date)) : '';
                                 },
                             ],
                             [
