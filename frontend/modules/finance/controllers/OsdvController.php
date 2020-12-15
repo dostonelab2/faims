@@ -81,8 +81,8 @@ class OsdvController extends Controller
         $searchModel = new RequestosdvSearch();
         //$searchModel->status_id = Request::STATUS_VALIDATED;
         
-        if(Yii::$app->user->identity->username != 'Admin')
-            $searchModel->created_by =  Yii::$app->user->identity->user_id;
+        //if(Yii::$app->user->identity->username != 'Admin')
+            //$searchModel->created_by =  Yii::$app->user->identity->user_id;
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
