@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
+          <div class="small-box bg-orange">
             <div class="inner">
               <h3><?= $forCharging ?></h3>
 
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
+          <div class="small-box bg-fuchsia">
             <div class="inner">
               <h3><?= $forDisbursement ?></h3>
 
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
+          <div class="small-box bg-teal">
             <div class="inner">
               <h3><?= $forApproval ?></h3>
 
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
+          <div class="small-box bg-maroon">
             <div class="inner">
               <h3><?= $forPayment ?></h3>
 
