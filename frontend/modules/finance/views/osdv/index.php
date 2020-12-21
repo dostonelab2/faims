@@ -13,7 +13,7 @@ use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Dv;
-use common\models\finance\OS;
+use common\models\finance\Os;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
