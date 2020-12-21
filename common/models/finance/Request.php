@@ -59,6 +59,8 @@ class Request extends \yii\db\ActiveRecord
     
     public $user_id;
     public $new_payee;
+    public $os_id;
+    public $dv_id;
     /**
      * @inheritdoc
      */
@@ -87,6 +89,7 @@ class Request extends \yii\db\ActiveRecord
             [['particulars'], 'string'],
             [['amount'], 'number'],
             [['request_number'], 'string', 'max' => 20],
+            [['os_id', 'dv_id'], 'safe']
         ];
     }
 

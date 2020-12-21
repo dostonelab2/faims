@@ -21,6 +21,7 @@ class RequestosdvSearch extends Request
             [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by'], 'integer'],
             [['request_date', 'payee_id', 'particulars'], 'safe'],
             [['amount'], 'number'],
+            [['os_id', 'dv_id'], 'safe']
         ];
     }
 
@@ -59,22 +60,31 @@ class RequestosdvSearch extends Request
             return $dataProvider;
         }
 
+        $query->joinWith(['osdv.os as os']);
+        $query->joinWith(['osdv.dv as dv']);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            //'request_number' => $this->request_number,
             'request_date' => $this->request_date,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
-            'status_id' => $this->status_id,
+            'tbl_request.status_id' => $this->status_id,
             'created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['>=', 'status_id', 50]);
+        
+
+        $query->andFilterWhere(['>=', 'tbl_request.status_id', 50]);
         
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);
-        
+
+        $query->andFilterWhere(['like', 'os.os_id', $this->os_id]);
+        $query->andFilterWhere(['like', 'dv.dv_id', $this->dv_id]);
+        //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
+
+        //$query->andWhere('request.osdv.os.os_number LIKE "%' . $this->os_id . '%" ');
         return $dataProvider;
     }
 }
