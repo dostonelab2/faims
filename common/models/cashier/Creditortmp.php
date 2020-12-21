@@ -3,6 +3,7 @@
 namespace common\models\cashier;
 
 use Yii;
+use common\models\system\Profile;
 
 /**
  * This is the model class for table "tbl_creditor_tmp".
@@ -76,5 +77,10 @@ class Creditortmp extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(Creditortype::className(), ['creditor_type_id' => 'creditor_type_id']);
+    }
+    
+    public function getProfile()  
+    {  
+      return $this->hasOne(Profile::className(), ['user_id' => 'requested_by']);  
     }
 }

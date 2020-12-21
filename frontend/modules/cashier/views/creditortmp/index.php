@@ -97,7 +97,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
                                 'width'=>'250px',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return Profile::findOne($model->requested_by)->fullname;
+                                    //return Profile::findOne($model->requested_by)->fullname;
+                                    return $model->profile->fullname;
                                 },
                             ],
                             [
