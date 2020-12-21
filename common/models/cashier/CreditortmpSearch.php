@@ -47,6 +47,7 @@ class CreditortmpSearch extends Creditortmp
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['creditor_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
