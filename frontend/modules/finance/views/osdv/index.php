@@ -12,6 +12,8 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
+use common\models\finance\Dv;
+use common\models\finance\OS;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
@@ -66,11 +68,11 @@ Modal::end();
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'columns' => [
                             [
-                                'attribute'=>'request_number',
+                                'attribute'=>'os_id',
                                 'header'=>'OS Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
-                                'width'=>'120px',
+                                'width'=>'220px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     switch ($model->status_id) {
@@ -90,13 +92,19 @@ Modal::end();
                                     //return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
                                     return (isset($model->osdv->os) ? '<span class="label '.$label.'">'.$model->osdv->os->os_number.'</span><br/>'.$model->osdv->os->os_date : '');
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Os::find()->orderBy(['os_id' => SORT_DESC])->asArray()->all(), 'os_id', 'os_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select OS'],
                             ],
                             [
-                                'attribute'=>'request_number',
+                                'attribute'=>'dv_id',
                                 'header'=>'DV Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
-                                'width'=>'120px',
+                                'width'=>'220px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     switch ($model->status_id) {
@@ -116,6 +124,12 @@ Modal::end();
                                     return (isset($model->osdv->dv) ? '<span class="label '.$label.'">'.$model->osdv->dv->dv_number.'</span><br/>'.$model->osdv->dv->dv_date : '');
                                     //return isset($model->osdv->dv) ? '<b>'.$model->osdv->dv->dv_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->dv->dv_date)) : '';
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Dv::find()->orderBy(['dv_id' => SORT_DESC])->asArray()->all(), 'dv_id', 'dv_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select DV'],
                             ],
                             [
                                 'attribute'=>'request_number',
@@ -126,6 +140,12 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return '<b>'.$model->request_number.'</b><br/>'.date('Y-m-d', strtotime($model->request_date));
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Request::find()->where(['>', 'status_id', 40])->orderBy(['request_id' => SORT_DESC])->asArray()->all(), 'request_id', 'request_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Request'],
                             ],
                             [
                                 'attribute'=>'payee_id',
