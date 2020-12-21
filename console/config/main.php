@@ -1,55 +1,31 @@
+
 <?php
-/*$params = array_merge(
-    //require __DIR__ . '/../../common/config/params.php',
-    //require __DIR__ . '/../../common/config/params-local.php',
-    //require __DIR__ . '/params.php',
-    //require __DIR__ . '/params-local.php'
+$components = array_merge(
+    require(__DIR__ . '/db.php'),
+    require(__DIR__ . '/components.php')
 );
-*/
 return [
     'id' => 'app-console',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
-    'controllerNamespace' => 'console\controllers',
+    //'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'controllerMap' => [
-        'fixture' => [
-            'class' => 'yii\console\controllers\FixtureController',
-            'namespace' => 'common\fixtures',
+    'basePath' => dirname(__DIR__),
+    'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'modules' => [
+        'gridview' => ['class' => 'kartik\grid\Module'],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            //'allowedIPs' => ['127.0.0.1', '::1', '192.168.1.*'] // adjust this to your needs
+            'allowedIPs' => ['*'] // adjust this to your needs
         ],
-        'migrate' => [
-            'class' => yii\console\controllers\MigrateController::class,
-            'templateFile' => '@jamband/schemadump/template.php',
-        ],
-        'schemadump' => [
-            'class' => jamband\schemadump\SchemaDumpController::class,
-            'db' => [
-                'class' => yii\db\Connection::class,
-                'dsn' => 'mysql:host=localhost;dbname=eulims',
-                'username' => 'eulims',
-                'password' => 'eulims',
-            ],
+        'message' => [
+            'class' => 'thyseus\message\Module',
+            'userModelClass' => '\common\models\system\User', // your User model. Needs to be ActiveRecord.
         ],
     ],
-    'components' => [
-        'log' => [
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        'user' => [
-            'class' => 'yii\web\User',
-            'identityClass' => 'common\models\User',
-            //'class' => 'common\models\User',
-            //'enableAutoLogin' => true,
-            //'loginUrl' => ['admin/user/login'],
-        ],
-    ],
-    //'params' => $params,
+    
+    'components' => $components,
+    'defaultRoute' => 'finance/request',
 ];
