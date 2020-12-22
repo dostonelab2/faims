@@ -112,9 +112,9 @@ Modal::end();
             [
                 'attribute'=>'remarks',
                 'label'=>'Remarks',
-                //'format'=>['decimal', 2],
+                'format'=>'raw',
                 'inputContainer' => ['class'=>'col-sm-6'],
-                'value' => $model->remarks,
+                'value' => $model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
             ],
             /*[
                 'attribute'=>'request_id',
@@ -124,6 +124,9 @@ Modal::end();
                 'value' => $model->request->amount,
             ],*/
         ];?>
+    
+    
+    
     <?= DetailView::widget([
             'model' => $model,
             'mode'=>DetailView::MODE_VIEW,
@@ -144,8 +147,11 @@ Modal::end();
                 //'footer' => '<div class="text-center text-muted">This is a sample footer message for the detail view.</div>'
             ],
         ]); ?>
+        
+    
     </div>
     
+    <?php if(!$model->cancelled){ ?>
     <div class="col-sm-4">
     <?php $attributes = [
             [
@@ -231,6 +237,7 @@ Modal::end();
             ],
         ]); ?>
     </div>
+    <?php } ?>
     
     <div class="col-sm-4" style="display: none; ">
         <div class="panel panel-info">
