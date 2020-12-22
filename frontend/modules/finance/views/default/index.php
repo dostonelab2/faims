@@ -58,7 +58,7 @@ Modal::end();
             <div class="inner">
               <h3><?= $forValidationFASS.' - '.$forValidationFOS ?></h3>
 
-              <p>FOR VALIDATION</p>
+              <p>FOR VALIDATION (FASS - FOS)</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
