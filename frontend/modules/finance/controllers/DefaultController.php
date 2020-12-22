@@ -17,8 +17,8 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $forVerification = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_SUBMITTED])->count();
-        $forValidation = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_VERIFIED])->count();
-        
+        $forValidationFASS = Request::find()->where('status_id =:status_id AND cancelled =0 AND (division_id = 2 OR division_id = 4)',[':status_id'=>Request::STATUS_VERIFIED])->count();
+        $forValidationFOS = Request::find()->where('status_id =:status_id AND cancelled =0 AND (division_id = 3)',[':status_id'=>Request::STATUS_VERIFIED])->count();
         $forAllotment = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_VALIDATED])->count();
         $forObligation = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE])->count();
         $forCharging = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_ALLOTTED])->count();
@@ -29,7 +29,8 @@ class DefaultController extends Controller
         
         return $this->render('index',[
             'forVerification' => $forVerification,
-            'forValidation' => $forValidation,
+            'forValidationFASS' => $forValidationFASS,
+            'forValidationFOS' => $forValidationFOS,
             'forAllotment' => $forAllotment,
             'forObligation' => $forObligation,
             'forCharging' => $forCharging,

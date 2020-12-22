@@ -1,11 +1,26 @@
 <?php 
 use common\models\finance\Request;
+use yii\bootstrap\Modal;
 
 $this->title = 'Dashboard';
 $this->params['breadcrumbs'][] = ['label' => 'Finance', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-?>
+Modal::begin([
+    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalContainer',
+    'size' => 'modal-md',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
+
+//echo $model->status_id.'<br/>';
+//echo Os::generateOsNumber($model->request->obligation_type_id,$model->request->request_date);
+?>   
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -41,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3><?= $forValidation ?></h3>
+              <h3><?= $forValidationFASS.' - '.$forValidationFOS ?></h3>
 
               <p>FOR VALIDATION</p>
             </div>
