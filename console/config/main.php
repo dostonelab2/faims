@@ -6,7 +6,7 @@ $components = array_merge(
 );
 return [
     'id' => 'app-console',
-    //'controllerNamespace' => 'console\controllers',
+    'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
