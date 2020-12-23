@@ -253,7 +253,7 @@ class OsdvController extends Controller
         $model = new Osdv();
 
         if(Yii::$app->user->can('access-finance-obligation'))
-            $requests = ArrayHelper::map(Request::find()->where('status_id =:status_id and AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->all(),'request_id','request_number');
+            $requests = ArrayHelper::map(Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->all(),'request_id','request_number');
         
         if(Yii::$app->user->can('access-finance-disbursement'))
             $requests = ArrayHelper::map(Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->all(),'request_id','request_number');
