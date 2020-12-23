@@ -69,6 +69,7 @@ class RequestSearch extends Request
             'amount' => $this->amount,
             'status_id' => $this->status_id,
             'created_by' => $this->created_by,
+            'cancelled' => 0,
         ]);
         //$query->andFilterWhere(['>', 'status_id', 40]);
         
