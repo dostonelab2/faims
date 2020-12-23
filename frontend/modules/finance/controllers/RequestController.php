@@ -137,7 +137,7 @@ class RequestController extends Controller
         $divisions = array_values($divisions);
         $searchModel = new RequestSearch();
         $searchModel->status_id = Request::STATUS_VERIFIED;
-        /$searchModel->cancelled = 0;
+        $searchModel->cancelled = 0;
         
         if(Yii::$app->user->identity->user_id == 2){
             $searchModel->payee_id = [129,120];
