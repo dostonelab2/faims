@@ -19,7 +19,7 @@ class DefaultController extends Controller
     {
         $approved = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>70])->all();
         
-        /*foreach($approved as $request){
+        foreach($approved as $request){
             $request->status_id = 80;
             if($request->save(false)){
                 $request->osdv->status_id = 80;
@@ -30,7 +30,7 @@ class DefaultController extends Controller
                     Blockchain::createBlock($index, $scope, $data);
                 }
             }
-        }*/
+        }
         
         
         $forVerification = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_SUBMITTED])->count();
