@@ -17,6 +17,7 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        /*** RUN ONCE START: FOR MARKING PREVIOUSLY COMPLETED REQUESTS
         $approved = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>70])->all();
         
         foreach($approved as $request){
@@ -31,7 +32,7 @@ class DefaultController extends Controller
                 }
             }
         }
-        
+        RUN ONCE END***/
         
         $forVerification = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_SUBMITTED])->count();
         $forValidationFASS = Request::find()->where('status_id =:status_id AND cancelled =0 AND (division_id = 2 OR division_id = 4)',[':status_id'=>Request::STATUS_VERIFIED])->count();
@@ -61,7 +62,7 @@ class DefaultController extends Controller
             'forDisbursement' => $forDisbursement,
             'forApproval' => $forApproval,
             'forPayment' => $forPayment,
-            'approved' => $approved,
+            //'approved' => $approved,
         ]);
     }
 }

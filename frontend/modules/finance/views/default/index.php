@@ -591,18 +591,3 @@ Modal::end();
 
     </section>
     <!-- /.content -->
-
-
-<pre>
-<?php print_r($approved); 
-/*foreach($approved as $request){
-    echo $request->status_id.' : '.$request->request_number.' ------ '.$request->osdv->status_id." \n ";
-            //$request->status_id = 80;
-            if($request->save(false)){
-                $request->osdv->status_id = 80;
-                $request->osdv->save(false);
-            }
-        }*/
-?>    
-
-</pre>
