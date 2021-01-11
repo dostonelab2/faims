@@ -635,7 +635,12 @@ Modal::end();
                 'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
                 'headerRowOptions' => ['class' => 'kartik-sheet-style'],
                 'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-                'pjax' => true, // pjax is set to always true for this demo
+                'pjax' => false, // pjax is set to always true for this demo
+                /*'pjaxSettings'=>[
+                    'neverTimeout'=>true,
+                    //'beforeGrid'=>'My fancy content before.',
+                    //'afterGrid'=>'My fancy content after.',
+                ],*/
                 // set left panel buttons
                 'panel' => [
                     'heading'=>'<h3 class="panel-title">Common Supplies and Equipment</h3>',
