@@ -85,13 +85,13 @@ Modal::end();
                                 ],
                                 'format' => 'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
+                                    return (isset($model->payroll) ? "" : Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
                                         'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
                                         //'data-toggle'=>'tooltip',
                                         //'data-content'=>Profile::find($model->created_by)->one()->fullname,
                                         //'data-toggle'=>'popover',
                                         'style'=>'text-decoration: underline; cursor:pointer;'
-                                    ]).'<br>' .$model->particulars;
+                                    ])).'<br>' .$model->particulars;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
@@ -131,7 +131,7 @@ Modal::end();
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
-                            /*[
+                            [
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
@@ -150,14 +150,14 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Created by'],
-                            ],*/
+                            ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 'template' => '{view}',
                                 'buttons' => [
 
                                     'view' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/request/view?id=' . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
+                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => (isset($model->payroll) ? '/finance/request/viewpayroll?id=' : '/finance/request/view?id=') . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
                                     },
                                 ],
                             ],
@@ -167,7 +167,9 @@ Modal::end();
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
-                    'before'=>Html::button('New Request', ['value' => Url::to(['request/create']), 'title' => 'Create Request', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']),
+                    'before'=>  Html::button('New Request', ['value' => Url::to(['request/create']), 'title' => 'Create Request', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']) 
+                                .' '. 
+                                Html::button('New Payroll', ['value' => Url::to(['request/createnew']), 'title' => 'Create Payroll', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']),
                     'after'=>false,
                 ],
             // set your toolbar

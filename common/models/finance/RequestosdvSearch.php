@@ -71,7 +71,7 @@ class RequestosdvSearch extends Request
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
             'tbl_request.status_id' => $this->status_id,
-            'created_by' => $this->created_by,
+            'tbl_request.created_by' => $this->created_by,
         ]);
 
         

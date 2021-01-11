@@ -203,7 +203,7 @@ Modal::end();
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Status'],
                             ],
-                            /*[
+                            [
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
@@ -222,7 +222,7 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Created by'],
-                            ],*/
+                            ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 //'class' => kartik\grid\ActionColumn::className(),
