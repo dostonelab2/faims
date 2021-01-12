@@ -85,7 +85,7 @@ Modal::end();
                                 ],
                                 'format' => 'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return (isset($model->payroll) ? "" : Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
+                                    return (($model->payroll != 0) ? "" : Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
                                         'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
                                         //'data-toggle'=>'tooltip',
                                         //'data-content'=>Profile::find($model->created_by)->one()->fullname,
