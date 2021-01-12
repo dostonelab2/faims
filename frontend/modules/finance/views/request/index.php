@@ -157,7 +157,7 @@ Modal::end();
                                 'buttons' => [
 
                                     'view' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => (isset($model->payroll) ? '/finance/request/viewpayroll?id=' : '/finance/request/view?id=') . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
+                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => (($model->payroll != 0) ? '/finance/request/viewpayroll?id=' : '/finance/request/view?id=') . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
                                     },
                                 ],
                             ],
