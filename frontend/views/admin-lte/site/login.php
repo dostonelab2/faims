@@ -56,7 +56,7 @@ $fieldOptions2 = [
         </div>
         <?php ActiveForm::end(); ?>
         <a href="/site/requestpasswordreset">Forgot Password</a><br>
-        <a href="/site/signup">Sign Up</a><br>
+        <!--a href="/site/signup">Sign Up</a><br-->
         <a id="startButton"  href="javascript:void(0);">Show me how</a>
     </div>
     <!-- /.login-box-body -->
