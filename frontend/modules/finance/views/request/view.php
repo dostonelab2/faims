@@ -249,7 +249,9 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
-                'value'=> Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->filename : '',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->filename : '',
+                },
                 /*'value'=>function ($model, $key, $index, $widget) { 
                     $btnCss = 'btn btn-success';
                     
