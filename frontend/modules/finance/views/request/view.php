@@ -250,7 +250,7 @@ Modal::end();
                 'format' => 'raw',
                 'width'=>'80px',
                 'value'=> function ($model, $key, $index, $widget) { 
-                    return Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->request_attachment_id : '';
+                    return Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->request_attachment_signed_id : '';
                 },
                 /*'value'=>function ($model, $key, $index, $widget) { 
                     $btnCss = 'btn btn-success';
