@@ -13,6 +13,7 @@ use yii\bootstrap\Modal;
 use common\models\procurementplan\Section;
 use common\models\procurementplan\Ppmp;
 use common\models\procurementplan\PpmpSearch;
+use yii\widgets\ActiveForm;
 
 //use common\models\procurement\Division;
 /* @var $this yii\web\View */
@@ -52,9 +53,40 @@ Modal::end();
     <?php //echo $selected_year; ?>
     <h3 style="text-align: center"><?= Html::encode('BUDGET ALLOCATION AND MONITORING') ?></h3>
 
+
    
    
         <?php
+        
+        $form = ActiveForm::begin([
+            'action' => ['index'],
+            'method' => 'get',
+        ]);
+    
+        echo $form->field($searchModel, 'selectyear')->dropDownList(
+            ArrayHelper::map(Ppmp::find()->all(),'year', 'year'),
+        [
+            'class' => 'form-control',
+            'prompt' => 'Select Year...',
+            'name' => 'year',
+            //'onchange' => 'selectMonth(this.value)',
+            'id' => 'dropdown',
+            'onchange' => 'this.form.submit()',
+            'style'=>'width:250px; font-weight:bold;'
+        ]
+        )->label(false);
+        
+    
+    
+        ActiveForm::end();
+
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+    
+
         echo GridView::widget([
             'id' => 'ppmp3',
             'dataProvider' => $sectionsDataProvider,
@@ -83,7 +115,7 @@ Modal::end();
                             ],
                             [
                                 'attribute'=>'name',
-                                'header'=>'2020',
+                                'header'=> $year,
                                 'headerOptions' => ['style' => 'text-align: center; font-weight: bold;'],
                                 'contentOptions' => ['style' => 'padding-right: 100px; text-align: right; font-weight: bold;'],
                                 'width'=>'200px',
@@ -136,3 +168,10 @@ Modal::end();
         ]);
         ?>
 </div>
+
+<script type="text/javascript">
+  document.getElementById('dropdown').value = "<?php if(isset($_GET['year'])){
+    echo $_GET['year'];
+  }?>";
+
+</script>

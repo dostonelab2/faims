@@ -15,6 +15,7 @@ class BudgetallocationSearch extends Budgetallocation
     /**
      * @inheritdoc
      */
+    public $selectyear;
     public function rules()
     {
         return [
