@@ -58,4 +58,9 @@ class Requestattachmentsigned extends \yii\db\ActiveRecord
             'last_update' => 'Last Update',
         ];
     }
+    
+    public function getRequestattachment()  
+    {  
+      return $this->hasOne(Requestattachment::className(), ['request_attachment_id' => 'request_attachment_id']);  
+    }
 }
