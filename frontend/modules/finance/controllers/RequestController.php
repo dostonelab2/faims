@@ -479,7 +479,7 @@ class RequestController extends Controller
         }*/
         
         if (Yii::$app->request->isAjax) {
-                return $this->renderAjax('_upload', ['model'=>$model]);   
+                return $this->renderAjax('_uploadsigned', ['model'=>$model]);   
         }else {
             return $this->render('_uploadsigned', [
                         'model' => $model,
