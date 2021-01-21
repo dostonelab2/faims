@@ -121,12 +121,15 @@ Modal::end();
             'attribute'=>'particulars',
             'label'=>'Particulars',
             'inputContainer' => ['class'=>'col-sm-6'],
+            'type'=>DetailView::INPUT_TEXTAREA, 
+            'options'=>['rows'=>4]
         ],
 
         [
             'attribute'=>'amount',
             'label'=>'Amount (P)',
             'format'=>['decimal', 2],
+            'displayOnly'=>($model->status_id >= Request::STATUS_VALIDATED) ? true : false,
             'inputContainer' => ['class'=>'col-sm-6'],
         ],
         /*[
@@ -246,12 +249,15 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
+                /*'value'=> function ($model, $key, $index, $widget) { 
+                    return Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->request_attachment_signed_id : '';
+                },*/
                 'value'=>function ($model, $key, $index, $widget) { 
                     $btnCss = 'btn btn-success';
                     
                     //return Requestattachment::hasSignedattachment($model->request_attachment_id);
                     return Requestattachment::hasSignedattachment($model->request_attachment_id) ? 
-                    Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachment', 'id'=>$model->signedattachment->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']) 
+                    Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/signedattachment', 'id'=>$model->signedattachment->request_attachment_signed_id]), 'title' => Yii::t('app', "Signed Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']) 
                     : '';
                 },
             ],

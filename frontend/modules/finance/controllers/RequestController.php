@@ -221,6 +221,32 @@ class RequestController extends Controller
             'user' => $CurrentUser,
         ]);
     }
+    
+    public function actionViewpayroll($id)
+    {
+        $model = $this->findModel($id); 
+        
+        $params = $this->checkAttachments($model);
+        
+        $request_status = $this->checkStatus($model->status_id);
+        
+        $attachmentsDataProvider = new ActiveDataProvider([
+            'query' => $model->getAttachments(),
+            'pagination' => false,
+        ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
+        }
+        
+        $CurrentUser= User::findOne(['user_id'=> Yii::$app->user->identity->user_id]);
+        return $this->render('view', [
+            'model' => $model,
+            'attachmentsDataProvider' => $attachmentsDataProvider,
+            'request_status' => $request_status,
+            'params' => $params,
+            'user' => $CurrentUser,
+        ]);
+    }
 
     /**
      * Creates a new Request model.
@@ -247,6 +273,32 @@ class RequestController extends Controller
             ]);
         } else {
             return $this->render('_form', [
+                        'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionCreatenew()
+    {
+        $model = new Request(['scenario' => 'payroll']);
+        
+        date_default_timezone_set('Asia/Manila');
+        $model->request_date=date("Y-m-d H:i:s");
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->request_number = Request::generateRequestNumber();
+            $model->created_by = Yii::$app->user->identity->user_id;
+            $model->payroll = true;
+            
+            if($model->save(false))
+                return $this->redirect(['viewpayroll', 'id' => $model->request_id]);
+            
+        }elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form_new', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('_form_new', [
                         'model' => $model,
             ]);
         }
@@ -392,6 +444,44 @@ class RequestController extends Controller
                 return $this->renderAjax('_upload', ['model'=>$model]);   
         }else {
             return $this->render('_upload', [
+                        'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionSignedattachment($id)
+    {
+        //Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/uploads/';
+        $model = Requestattachmentsigned::findOne($id);
+        date_default_timezone_set('Asia/Manila');
+        
+        /*if (Yii::$app->request->post()) {
+            $random = Yii::$app->security->generateRandomString(40);
+            $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+            
+            //$path = 'uploads/finance/request/' . $model->request->request_number.'/';
+            $path = Yii::getAlias('@uploads') . "/finance/request/" . $model->request->request_number;
+            if(!file_exists($path)){
+                mkdir($path, 0755, true);
+                $indexFile = fopen($path.'/index.php', 'w') or die("Unable to open file!");
+            }
+                
+            $model->pdfFile->saveAs( $path ."/". $model->request_attachment_signed_id . $random . '.' . $model->pdfFile->extension);
+            //$model->pdfFile->saveAs('uploads/finance/request/' . $model->request->request_number.'/'. $model->request_attachment_id . $random . '.' . $model->pdfFile->extension);
+            $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
+            $model->last_update = date("Y-m-d H:i:s");
+            $model->filecode = Requestattachment::generateCode($model->request_attachment_signed_id);
+            $model->save(false);
+            
+            Yii::$app->session->setFlash('success', 'Document Successfully Uploaded!');
+            
+            return $this->redirect(['view?id='.$model->request_id]);
+        }*/
+        
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_uploadsigned', ['model'=>$model]);   
+        }else {
+            return $this->render('_uploadsigned', [
                         'model' => $model,
             ]);
         }
