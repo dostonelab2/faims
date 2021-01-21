@@ -21,7 +21,8 @@ echo $form->field($model, 'pdfFile')->widget(FileInput::classname(), [
         //'initialPreview' =>[Requestattachment::checkFile($model->attachment_id)],
         'initialPreview' => [
             //Yii::getAlias('@uploads') . "finance/request/" . $model->request->request_number. "/" . $model->filename,
-            "/uploads/finance/request/" . $model->requestattachment->request->request_number. "/" .$model->request_attachment_id. $model->filename,
+            //"/uploads/finance/request/" . $model->requestattachment->request->request_number. "/" .$model->request_attachment_id. $model->filename,
+            "/uploads/finance/request/" . $model->requestattachment->request->request_number. "/" . $model->filename,
         ],
         'initialPreviewAsData'=>true,
         'initialPreviewConfig'=>[
