@@ -24,6 +24,7 @@ echo $form->field($model, 'pdfFile')->widget(FileInput::classname(), [
             isset($model->requestattachment) ? "/uploads/finance/request/" . $model->requestattachment->request->request_number. "/" 
                 .$model->request_attachment_id 
                 .$model->filename : '',
+            
         ],
         'initialPreviewAsData'=>true,
         'initialPreviewConfig'=>[
