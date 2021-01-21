@@ -11,8 +11,10 @@ use kartik\grid\GridView;
 use kartik\helpers\Html;
 
 use common\models\budget\Budgetallocationitem;
+use common\models\procurementplan\Ppmp;
 
 use yii\bootstrap\Modal;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\procurementplan\ExpenditureSearch */
@@ -39,6 +41,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
+            $form = ActiveForm::begin([
+                'action' => ['index'],
+                'method' => 'get',
+            ]);
+        
+            echo $form->field($searchModel, 'selectyear')->dropDownList(
+                ArrayHelper::map(Ppmp::find()->all(),'year', 'year'),
+            [
+                'class' => 'form-control',
+                'prompt' => 'Select Year...',
+                'name' => 'year',
+                //'onchange' => 'selectMonth(this.value)',
+                'id' => 'dropdown',
+                'onchange' => 'this.form.submit()',
+                'style'=>'width:250px; font-weight:bold;'
+            ]
+            )->label(false);
+            
+        
+        
+            ActiveForm::end();
+    
+            if(isset($_GET['year'])){
+                $year = $_GET['year'];
+            }else{
+                $year = date('Y');
+            }
             
             $gridColumns = [
                 [
@@ -198,7 +227,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'panel' => [
                     'heading'=>'<h3 class="panel-title">BUDGET ESTIMATE per NATIONAL EXPENDITURE PROGRAM</h3>',
                     'type' => GridView::TYPE_PRIMARY,
-                    'before'=>Html::button('Add Expenditure', ['value' => Url::to(['expenditure/addexpenditures']), 'title' => 'Expenditure', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddExpenditure']),
+                    'before'=>Html::button('Add Expenditure', ['value' => Url::to(['expenditure/addexpenditures','year'=>$year]), 'title' => 'Expenditure', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddExpenditure']),
                     'after'=>false,
                 ],
                 // set right toolbar buttons
@@ -224,3 +253,10 @@ $this->params['breadcrumbs'][] = $this->title;
     
         ?>
 </div>
+
+<script type="text/javascript">
+  document.getElementById('dropdown').value = "<?php if(isset($_GET['year'])){
+    echo $_GET['year'];
+  }?>";
+
+</script>
