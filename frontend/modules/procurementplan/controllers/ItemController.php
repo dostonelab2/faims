@@ -111,9 +111,15 @@ class ItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        try {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        } catch (yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('danger', "Database integrity exception, Process not allowed...");
+            return $this->redirect(['index']);
+        }
+    
     }
 
     /**
