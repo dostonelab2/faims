@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\procurementplan\ItemSearch */
@@ -22,16 +22,68 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                'class' => 'kartik\grid\SerialColumn',
+                'contentOptions' => ['class' => 'kartik-sheet-style'],
+            ],
+            [
+                'attribute'=>'availability',
+                'header'=>'Category',
+                //'visible' => $ppmpItemsDataProvider->totalCount > 0 ? true : false,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        if($model->availability == 1){
+                            return 'PART I. AVAILABLE AT PROCUREMENT SERVICE STORES';
+                        }elseif($model->availability == 2){
+                            return 'PART II. OTHER ITEMS NOT AVAILABLE AT PS BUT REGULARLY PURCHASED FROM OTHER SOURCES (Note: Please indicate price of items)';
+                        }
+                    },
+                'headerOptions' => ['style' => 'background-color: #fee082;'],
+                'contentOptions'=>['style'=>'background-color: #fee082; font-weight: bold;'],
+            
+                'group'=>true,  // enable grouping,
+                'groupedRow'=>true,                    // move grouped column to a single grouped row
+                //'contentOptions' => ['style' => 'text-align: left; background-color: #ffe699;'],
+                
+                'groupOddCssClass'=>'',  // configure odd group cell css class
+                'groupEvenCssClass'=>'', // configure even group cell css class
+            ],
+            [
+                'attribute'=>'item_category_id',
+                'header'=>'Category',
+                //'visible' => $ppmpItemsDataProvider->totalCount > 0 ? true : false,
+                'width'=>'100px',
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->itemcategory->category_name;
+                    },
+                'headerOptions' => ['style' => 'text-align: left; background-color: #7e9fda;'],
+                'contentOptions' => ['style' => 'text-align: left; background-color: #7e9fda;'],
+            
+                'group'=>true,  // enable grouping,
+                'groupedRow'=>true,                    // move grouped column to a single grouped row
+                'groupOddCssClass'=>'',  // configure odd group cell css class
+                'groupEvenCssClass'=>'', // configure even group cell css class
+            ],
+            
             'item_id',
-            'item_category_id',
+            //'item_category_id',
             'item_code',
-            'item_name',
-            'unit_of_measure_id',
-            // 'price_catalogue',
-            // 'last_update',
+            [
+                'attribute' => 'item_name',
+                'value' => function($model){
+                    if(strlen($model->item_name) > 50){
+                        return substr($model->item_name,0,50).'...';
+                    }else{
+                        return $model->item_name;
+                    }
+                }
 
+            ],
+            [
+                'attribute' => 'unit_of_measure_id',
+                'value'=>function ($model, $key, $index, $widget){ 
+                            return $model->getUnit();
+                        },
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

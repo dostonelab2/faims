@@ -8,6 +8,7 @@ use common\models\procurementplan\ItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\procurementplan\Itemprice;
 
 /**
  * ItemController implements the CRUD actions for Item model.
@@ -64,8 +65,12 @@ class ItemController extends Controller
     public function actionCreate()
     {
         $model = new Item();
-
+        $itemprice = new Itemprice();
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $itemprice->item_id = $model->item_id;
+            $itemprice->price_catalogue = $_POST['Item']['price_catalogue'];
+            $itemprice->save(false);
             return $this->redirect(['view', 'id' => $model->item_id]);
         } else {
             return $this->render('create', [
@@ -83,10 +88,15 @@ class ItemController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->item_id]);
-        } else {
+        $itemprice = new Itemprice();
+        if($model->load(Yii::$app->request->post())){
+            $itemprice->item_id = $model->item_id;
+            $itemprice->price_catalogue = $_POST['Item']['price_catalogue'];
+            if ($model->save() && $itemprice->save()) {
+                return $this->redirect(['view', 'id' => $model->item_id]);
+            }
+        }
+         else {
             return $this->render('update', [
                 'model' => $model,
             ]);
