@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -84,7 +85,42 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $model->getUnit();
                         },
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'price_catalogue',
+                'value' => function($model){
+                    $fmt = Yii::$app->formatter;
+                    return $fmt->asDecimal($model->price_catalogue);
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',    
+                'buttons' => [
+                    'view' => function ($url,$model)
+                    {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',['view','id' => $model->item_id],['class' => 'btn btn-success btn-sm','data-toggle' => 'tooltip', 'title' => 'view']);
+                            //return Html::a('<button type="button" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-eye-open"></span></button>',$url);  
+                            //return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['href' => Url::to($url),'class' => 'btn btn-success btn-sm']); 
+                    },
+                    'update' => function ($url,$model)
+                    {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>',['update','id' => $model->item_id],['class' => 'btn btn-info btn-sm','data-toggle' => 'tooltip', 'title' => 'update']);
+                    },
+                    'delete' => function ($url,$model)
+                    {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',['delete','id' => $model->item_id],
+                            [
+                                'class' => 'btn btn-danger btn-sm',
+                                'data-toggle' => 'tooltip',
+                                'title' => 'delete',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete dis item?',
+                                    'method' => 'post'
+                                ]
+                            ]);
+                    },
+                ], 
+            ],
         ],
     ]); ?>
 </div>
