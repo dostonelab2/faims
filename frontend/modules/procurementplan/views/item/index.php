@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => false,
         'columns' => [
             [
                 'class' => 'kartik\grid\SerialColumn',
@@ -86,11 +87,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
             ],
             [
+                'class'=>'kartik\grid\EditableColumn',
                 'attribute' => 'price_catalogue',
+                'refreshGrid'=>true,
+                'readonly' => false,
                 'value' => function($model){
                     $fmt = Yii::$app->formatter;
                     return $fmt->asDecimal($model->price_catalogue);
-                }
+                },
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        //'options' => ['id' => $key . '_' . $model->item_id . '-price'],
+                        'placement'=>'left',
+                        //'disabled'=>($model->ppmp->status_id != Ppmp::STATUS_PENDING),
+                        'name'=>'q1',
+                        'asPopover' => true,
+                        'value' => $model->price_catalogue,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                        'formOptions'=>['action' => ['/procurementplan/item/updateprice']], // point to the new action
+                    ];
+                },
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -114,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-toggle' => 'tooltip',
                                 'title' => 'delete',
                                 'data' => [
-                                    'confirm' => 'Are you sure you want to delete dis item?',
+                                    'confirm' => 'Are you sure you want to delete this item?',
                                     'method' => 'post'
                                 ]
                             ]);

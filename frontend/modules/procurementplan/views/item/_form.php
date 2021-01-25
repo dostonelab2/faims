@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use common\models\procurementplan\Itemcategory;
-use common\models\procurementplan\Unitofmeasure
+use common\models\procurementplan\Unitofmeasure;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\procurementplan\Item */

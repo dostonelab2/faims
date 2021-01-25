@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\procurementplan\Itemprice;
+use yii\helpers\Json;
 
 /**
  * ItemController implements the CRUD actions for Item model.
@@ -136,5 +137,21 @@ class ItemController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function actionUpdateprice(){
+        
+        if(Yii::$app->request->post('hasEditable')){
+            $itemid = Yii::$app->request->post('editableKey');
+            $index = Yii::$app->request->post('editableIndex');
+            $attr = Yii::$app->request->post('editableAttribute');
+            $model = Item::findOne($itemid);
+            $model->price_catalogue = $_POST['Item'][$index][$attr];
+            //$out = Json::encode(['message'=> $index]);
+            if($model->save()){
+                //echo $out;
+                return true;
+            }
+        }
+        
     }
 }
