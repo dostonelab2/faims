@@ -193,7 +193,7 @@ Modal::end();
                     'header'=>'Fund Allocation',
                     'width'=>'250px',
                     'refreshGrid'=>true,
-                    'readonly' => true,
+                    'readonly' => Yii::$app->user->can('update-fund-allocation') ? false : true,
                     'value'=>function ($model, $key, $index, $widget) { 
                             $fmt = Yii::$app->formatter;
                             return $fmt->asDecimal($model->itemdetails ? $model->getTotal() : $model->amount);
