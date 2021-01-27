@@ -12,6 +12,7 @@ use yii\bootstrap\Modal;
 use common\models\procurementplan\Ppmp;
 use common\models\procurement\Project;
 use yii\web\View;
+use yii\widgets\Pjax;
 //use kartik\dialog\Dialog;
 
 
@@ -626,7 +627,7 @@ Modal::end();
         }
     }
 
-
+     //Pjax::begin(['id' => 'ppmp-items-pjax', 'timeout' => 5000]);
             echo GridView::widget([
                 'id' => 'ppmp-items',
                 'dataProvider' => $ppmpItemsDataProvider,
@@ -635,11 +636,13 @@ Modal::end();
                 'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
                 'headerRowOptions' => ['class' => 'kartik-sheet-style'],
                 'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-                'pjax' => false, // pjax is set to always true for this demo
-                /*'pjaxSettings'=>[
+                'pjax' => true, // pjax is set to always true for this demo
+                /*'pjaxSettings' => [
                     'neverTimeout'=>true,
-                    //'beforeGrid'=>'My fancy content before.',
-                    //'afterGrid'=>'My fancy content after.',
+                    'options' => [
+                        'enablePushState' => true,
+                        'id' => 'ppmp-items-pjax'
+                    ],
                 ],*/
                 // set left panel buttons
                 'panel' => [
@@ -647,11 +650,7 @@ Modal::end();
                     'type'=>'primary',
                     /*'before'=>Html::button('Add Items', ['value' => Url::to(['ppmpitem/additems', 'id'=>$model->ppmp_id, 'year'=>$model->year]), 'title' => 'PPMP Item', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonAddPpmpItem']),
                     'after'=>false,*/
-                    'before'=> $supplementalButton,
-                            
-                                             
-    
-                    
+                    'before'=> $supplementalButton,                
                 ],
                 // set right toolbar buttons
                 'toolbar' => 
@@ -679,7 +678,7 @@ Modal::end();
                 'itemLabelSingle' => 'item',
                 'itemLabelPlural' => 'items'
             ]);
-
+    //Pjax::end();
 
 $js=<<<JS
 
@@ -718,6 +717,9 @@ $(document).ready(function() {
             }
         });
     });
+    //$("body").on("click",".kv-editable-submit", function(){
+       //$.pjax.reload({container:'#ppmp-items', async: false});
+   // });
 });
 
 JS;
