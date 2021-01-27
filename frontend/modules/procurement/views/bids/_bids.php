@@ -630,7 +630,7 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                     'id' => 'kv-grid-data2',
                                     'dataProvider'=> $bidsDetailProvider,
                                     //'filterModel' => $searchModel,
-                                    'pjax' => false,
+                                    'pjax' => true,
                                     'columns' => $gridColumns,
                                     'pjaxSettings' => [
                                         'neverTimeout'=>true,
