@@ -318,7 +318,6 @@ class PpmpController extends Controller
     public function actionUpdateqty() {
        if (Yii::$app->request->post('hasEditable')) {
            $ids = Yii::$app->request->post('editableKey');
-           
            $index = Yii::$app->request->post('editableIndex');
            $attr = Yii::$app->request->post('editableAttribute');
            $qty = $_POST['Ppmpitem'][$index][$attr];

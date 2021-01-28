@@ -144,6 +144,9 @@ class BudgetallocationController extends Controller
         
         //$queryBudgetAllocationItems = $model->getItems();
             //->groupBy('expenditure_class_id');
+       
+        
+      
         $budgetAllocationItemsDataProvider = new ActiveDataProvider([
             'query' => $model->getItems(),
             //'query' => $model->getItems(),
@@ -160,6 +163,7 @@ class BudgetallocationController extends Controller
             'model' => $model,
             'budgetAllocationItemsDataProvider' => $budgetAllocationItemsDataProvider,
             'year' => $model->year,
+
         ]);
     }
 

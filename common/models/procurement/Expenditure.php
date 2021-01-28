@@ -79,14 +79,29 @@ class Expenditure extends \yii\db\ActiveRecord
     
     public function getBudgetAllocationTotal()
     {
-        $sum = $this->hasMany(Budgetallocationitem::className(), ['category_id' => 'expenditure_object_id'])->sum('amount');
-        return $sum;
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+        /*
+        $budgetallocation = new Budgetallocationitem();
+        $budgetallocation->year = $year;
+        $sum = $this->hasMany($budgetallocation::className(), ['category_id' => 'expenditure_object_id'])->joinWith('expenditures')->andWhere(['year'=>$year])->sum('tbl_budget_allocation_item.amount');
+        return $sum;*/
+       $sum = Budgetallocationitem::find()->joinWith('budgetallocation')
+                ->where(['tbl_budget_allocation.year'=>$year,
+                         'tbl_budget_allocation_item.category_id'=>$this->expenditure_object_id
+                         ])
+                ->sum('tbl_budget_allocation_item.amount');
+       return $sum;
     }
     
     public function getBudgetAllocationPercent()
     {
         if($this->getBudgetAllocationTotal() != 0)
-            return ($this->getBudgetAllocationTotal() / $this->amount);
+            //return ($this->getBudgetAllocationTotal() / $this->amount);
+            return 0;
         else
             return 0;
     }

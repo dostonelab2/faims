@@ -12,7 +12,7 @@ use yii\base\Component;
 use yii2mod\alert\Alert;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
-
+use Yii;
 use kartik\grid\GridView;
 /**
  * Description of Functions

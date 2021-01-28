@@ -26,6 +26,7 @@ class Budgetallocationitem extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $year;
     public static function tableName()
     {
         return 'tbl_budget_allocation_item';
@@ -96,7 +97,7 @@ class Budgetallocationitem extends \yii\db\ActiveRecord
     
     public function getExpenditure()
     {
-        return $this->hasOne(Expenditure::className(), ['expenditure_object_id' => 'category_id']);
+        return $this->hasOne(Expenditure::className(), ['expenditure_object_id' => 'category_id'])->andWhere(['year'=>$this->year]);
     }
     
     public function getItemdetails()
@@ -118,5 +119,9 @@ class Budgetallocationitem extends \yii\db\ActiveRecord
     public function getTotalAdjustments()
     {
         return $this->hasMany(Allocationadjustment::className(), ['item_id' => 'budget_allocation_item_id'])->sum('amount');
+    }
+    public function getExpenditures()
+    {
+        return $this->hasOne(Expenditure::className(), ['expenditure_object_id' => 'category_id']);
     }
 }

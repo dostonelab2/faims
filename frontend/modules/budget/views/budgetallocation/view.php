@@ -11,6 +11,7 @@ use yii\data\ActiveDataProvider;
 use yii\bootstrap\Modal;
 
 use common\models\budget\Budgetallocationitemdetails;
+use common\models\budget\Budgetallocationitem;
 /* @var $this yii\web\View */
 /* @var $model common\models\budget\Budgetallocation */
 
@@ -41,6 +42,7 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+
 ?>
 <div class="budgetallocation-view">
 
@@ -191,7 +193,7 @@ Modal::end();
                     'header'=>'Fund Allocation',
                     'width'=>'250px',
                     'refreshGrid'=>true,
-                    'readonly' => true,
+                    'readonly' => Yii::$app->user->can('update-fund-allocation') ? false : true,
                     'value'=>function ($model, $key, $index, $widget) { 
                             $fmt = Yii::$app->formatter;
                             return $fmt->asDecimal($model->itemdetails ? $model->getTotal() : $model->amount);
@@ -257,9 +259,16 @@ Modal::end();
                     'attribute' => 'amount',
                     'header'=>'% from NEP',
                     'width'=>'100px',
-                    'value'=>function ($model, $key, $index, $widget){ 
+                    'value'=>function ($model, $key, $index, $widget) use ($year){ 
                                 $fmt = Yii::$app->formatter;
-                                return $fmt->asPercent( isset($model->expenditure->amount) ? ($model->amount / $model->expenditure->amount) : '' );
+                                if($model->amount == 0){
+                                    return 0;
+                                }else{
+                                    $model->year = $year;
+                                    //return $fmt->asPercent( isset($model->expenditure->amount) ? ($model->amount / $model->expenditure->amount) : '');
+                                   return 0;
+                                }
+                                
                             },
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
@@ -317,6 +326,8 @@ Modal::end();
                 'persistResize' => false,
                 'toggleDataOptions' => ['minCount' => 10],
             ]);
+
+            //echo $getyear;
     
         ?>
         

@@ -12,6 +12,7 @@ use common\models\procurement\Expenditure;
  */
 class ExpenditureSearch extends Expenditure
 {
+    public $selectyear;
     /**
      * @inheritdoc
      */
@@ -42,7 +43,12 @@ class ExpenditureSearch extends Expenditure
      */
     public function search($params)
     {
-        $query = Expenditure::find();
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
+        $query = Expenditure::find()->where(['year' => $year]);
 
         // add conditions that should always apply here
 

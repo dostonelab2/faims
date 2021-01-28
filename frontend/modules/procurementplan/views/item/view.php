@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\procurementplan\Item */
 
-$this->title = $model->item_id;
+$this->title = strlen($model->item_name) > 50 ? substr($model->item_name,0,50) . '...' : $model->item_name;
 $this->params['breadcrumbs'][] = ['label' => 'Items', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -24,17 +24,31 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
+    <?php
+    $fmt = Yii::$app->formatter;
+    ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'item_id',
-            'item_category_id',
+            //'item_category_id',
+            [
+                'attribute' => 'category_name',
+                'value' => $model->itemcategory->category_name
+            ],
             'item_code',
             'item_name',
-            'unit_of_measure_id',
-            'price_catalogue',
-            'last_update',
+            //'unit_of_measure_id',
+            [
+                'attribute' => 'unit_of_measure_id',
+                'value' => $model->getUnit()
+            ],
+            [
+                'attribute' => 'price_catalogue',
+                'value' => $fmt->asDecimal($model->price_catalogue)
+            ],
+            
+            //'last_update',
         ],
     ]) ?>
 

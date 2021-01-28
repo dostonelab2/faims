@@ -48,7 +48,7 @@ class ExpenditureController extends Controller
     public function actionIndex()
     {
         $searchModel = new ExpenditureSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $year = 2020);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -186,8 +186,12 @@ class ExpenditureController extends Controller
     
     public function actionAddexpenditures() //call for modal
     {
+        if(isset($_GET['year'])){
+            $year = $_GET['year'];
+        }else{
+            $year = date('Y');
+        }
         $id = 1;
-        $year = 2020;
         $searchModel = new ExpenditureobjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         

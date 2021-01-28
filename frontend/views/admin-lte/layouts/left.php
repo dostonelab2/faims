@@ -61,6 +61,7 @@ if(Yii::$app->user->isGuest){
                         'items' => [
                             //['label' => 'Line-Item Budget', 'icon' => 'money', 'url' => ['/procurementplan/lineitembudget/index']],
                             ['label' => 'PPMP', 'icon' => 'clipboard', 'url' => ['/procurementplan/ppmp/index']],
+                            ['label' => 'Non CSE PPMP', 'icon' => 'clipboard', 'url' => '#'],
                             ['label' => 'APP', 'icon' => 'file-text', 'url' => ['/procurementplan/app/index']],
                         ]
                     ],
@@ -238,6 +239,7 @@ if(Yii::$app->user->isGuest){
                         'visible'=> Yii::$app->user->can('access-book'),
                         'items' => [
                             ['label' => 'Suppliers', 'icon' => 'truck', 'url' => ['/procurement/supplier']],
+                            ['label' => 'Items', 'icon' => 'tag', 'url' => ['/procurementplan/item']],
                             ['label' => 'Unit Type', 'icon' => 'cog', 'url' => ['/procurement/unittype']],
                             ['label' => 'Position', 'icon' => 'fa fa-user-o', 'url' => ['/procurement/position']],
                             ['label' => 'Division', 'icon' => 'cog', 'url' => ['/procurement/division']],

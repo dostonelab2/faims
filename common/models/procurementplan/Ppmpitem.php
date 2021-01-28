@@ -3,7 +3,7 @@
 namespace common\models\procurementplan;
 
 use common\models\procurementplan\Itemcategory;
-use common\models\procurementplan\Ppmpitem;
+//use common\models\procurementplan\Ppmpitem;
 use common\models\procurementplan\Unitofmeasure;
 use common\models\procurementplan\Ppmp;
 
