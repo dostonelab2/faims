@@ -7,6 +7,9 @@ use kartik\editable\Editable;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
+use common\models\finance\Os;
+use common\models\finance\Dv;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\finance\ObligationtypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,6 +21,18 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
     'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
     'id' => 'modalObligationtype',
+    'size' => 'modal-md',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
+
+Modal::begin([
+    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalContainer',
     'size' => 'modal-md',
     'options'=> [
              'tabindex'=>false,
@@ -48,31 +63,49 @@ Modal::end();
                             ],
                             [
                                 'attribute'=>'project_id',
+                                'header'=>'OS Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
                                 'width'=>'120px',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->project_id ? $model->project_id : '-';
+                                    return ($model->type_id == 1) ? Os::find()->orderBy(['os_id'=>SORT_DESC])->one()->os_number : '-';
+                                },
+                            ],
+                            [   
+                                'attribute'=>'project_id',
+                                'header' => 'Skip OS',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                                'format' => 'raw',
+                                'width'=>'80px',
+
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return ($model->type_id == 1) ? 
+                                    Html::button('<i class="glyphicon glyphicon-forward"></i>', ['value' => Url::to(['obligationtype/skipos', 'id'=>$model->type_id]), 'title' => Yii::t('app', "Skip OS Number"), 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonSkipOS']) 
+                                    : '';
                                 },
                             ],
                             [
                                 'attribute'=>'fund_category_id',
+                                'header'=>'DV Number',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'vertical-align: middle; text-align: right; padding-right: 20px; font-weight: bold;'],
+                                'contentOptions' => ['style' => 'vertical-align: middle; text-align: center; padding-right: 20px; font-weight: bold;'],
                                 'width'=>'200px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->fund_category_id ? $model->fund_category_id : '-';
+                                    return Dv::find()->where(['obligation_type_id' => $model->type_id])->orderBy(['dv_id'=>SORT_DESC])->one()->dv_number;
                                 },
                             ],
-                            [
-                                'attribute'=>'active',
+                            [   
+                                'attribute'=>'project_id',
+                                'header' => 'Skip DV',
                                 'headerOptions' => ['style' => 'text-align: center;'],
-                                'contentOptions' => ['style' => 'vertical-align: middle; text-align: right; padding-right: 20px; font-weight: bold;'],
-                                'width'=>'200px',
-                                'format'=>'raw',
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                                'format' => 'raw',
+                                'width'=>'80px',
+
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->active ? $model->active : '-';
+                                    return Html::button('<i class="glyphicon glyphicon-fast-forward"></i>', ['value' => Url::to(['obligationtype/skipdv', 'type_id'=>$model->type_id]), 'title' => Yii::t('app', "Skip DV Number"), 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonSkipDV']);
                                 },
                             ],
                             [

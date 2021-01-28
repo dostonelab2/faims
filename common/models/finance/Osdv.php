@@ -112,7 +112,7 @@ class Osdv extends \yii\db\ActiveRecord
     public function getAccountID()  
     {  
       $account = Accounttransaction::find()->where(['request_id' => $this->osdv_id, 'debitcreditflag' => 1])->orderBy(['account_transaction_id' => SORT_DESC])->one();
-      return $account->account_id;  
+      return $account ? $account->account_id : 0;  
     }
     
     public function getNetamount()
