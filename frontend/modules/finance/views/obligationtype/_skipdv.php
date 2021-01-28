@@ -42,7 +42,7 @@ use common\models\procurement\Expenditureclass;
             <div class="col-md-4">
                 <div class="input-group">
                     <p>This action will reserve skip the DV Number: <span class="badge btn-info"><?= $last_DV ?></span> in the system</p>        
-                    <?= $form->field($model, 'obligation_type_id') ?>
+                    <?= $form->field($model, 'obligation_type_id')->hiddenInput() ?>
                 </div>
             </div>
         </div>
