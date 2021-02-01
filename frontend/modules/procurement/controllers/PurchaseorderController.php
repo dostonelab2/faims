@@ -507,7 +507,7 @@ class PurchaseorderController extends \yii\web\Controller
 </tbody>
 <tfoot>
     <tr>
-        <td style="width: 87%; text-align: left;border:none;border:1px solid black;background:white;" colspan="5">'.strtoupper(Yii::$app->formatter->asSpellout($summary))." PESOS ONLY".'</td>
+        <td style="width: 87%; text-align: left;border:none;border:1px solid black;background:white;" colspan="5">'.strtoupper(!is_float($summary) ? Yii::$app->formatter->asSpellout($summary) : Yii::$app->formatter->asSpellout(round($summary,0)). " AND " . substr(number_format($summary,2),strlen(number_format($summary,2))-2,strlen(number_format($summary,2))) ."/100"). " PESOS ONLY".'</td>
         <td style="width: 13%; text-align: center;border:1px solid black;">'.number_format($summary,2).'</td>      
     </tr>
     </tfoot>
