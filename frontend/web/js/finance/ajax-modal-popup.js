@@ -88,6 +88,14 @@ $("body").on("click","#buttonAddAccounttransaction",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonSkipOS",function () {
+    loadModal($(this).attr('value'));
+});
+
+$("body").on("click","#buttonSkipDV",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonCreateObligationtype",function () {
     $('#modalObligationtype').modal('show')
         .find('#modalContent')
@@ -108,6 +116,7 @@ $("body").on("click","#buttonAddCreditor",function () {
     },1500);
 });
 
+//code
 $("body").on("click","#buttonCreateOsdv",function () {
     $('#modalRequest').modal('show')
         .find('#modalContent')

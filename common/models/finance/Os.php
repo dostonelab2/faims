@@ -15,6 +15,7 @@ use common\models\procurement\Expenditureclass;
  */
 class Os extends \yii\db\ActiveRecord
 {
+    public $classId;
     /**
      * @inheritdoc
      */
@@ -55,17 +56,19 @@ class Os extends \yii\db\ActiveRecord
             'request_id' => 'Request ID',
             'os_number' => 'Os Number',
             'os_date' => 'Os Date',
+            'numberOfOs' => 'Enter Number of Obligations to SKIP',
         ];
     }
     
-    static function generateOsNumber($expenditurClassId, $createDate)
+    static function generateOsNumber($expenditureClassId, $createDate)
     {
         //OS-200-20-02-1516
         $year = date("y", strtotime($createDate));
         $month = date("m", strtotime($createDate));
         
-        $os_type = Expenditureclass::findOne($expenditurClassId)->account_code;
-
+        $os_type = Expenditureclass::findOne($expenditureClassId);
+        $os_type = $os_type->account_code;
+        
         $os = Os::find()->where(['year(os_date)' => date("Y", strtotime($createDate))])->orderBy(['os_id' => SORT_DESC])->one();
         if($os){
             $data = explode('-',$os->os_number);
@@ -73,7 +76,27 @@ class Os extends \yii\db\ActiveRecord
         }else{
             $count = 1;
         }
+        
+        return 'OS-'.$os_type.'-'.$year.'-'.$month.'-'.str_pad($count, 4, '0', STR_PAD_LEFT);
+    }
     
+    static function getLastOS()
+    {
+        //OS-200-20-02-1516
+        $year = date("y");
+        $month = date("m");
+        
+        $os_type = Expenditureclass::findOne(1);
+        $os_type = $os_type->account_code;
+        
+        $os = Os::find()->orderBy(['os_id' => SORT_DESC])->one();
+        if($os){
+            $data = explode('-',$os->os_number);
+            $count = (int)$data[4] + 1;
+        }else{
+            $count = 1;
+        }
+        
         return 'OS-'.$os_type.'-'.$year.'-'.$month.'-'.str_pad($count, 4, '0', STR_PAD_LEFT);
     }
 }
