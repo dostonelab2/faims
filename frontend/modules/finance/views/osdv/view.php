@@ -855,6 +855,21 @@ Modal::end();
                     return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachment', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']);
                 },
             ],
+            [   
+                'attribute'=>'filename',
+                'header' => 'Signed Attachments',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'80px',
+                'value'=>function ($model, $key, $index, $widget) { 
+                    $btnCss = 'btn btn-success';
+                    return Requestattachment::hasSignedattachment($model->request_attachment_id) ? 
+                    Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/signedattachment', 'id'=>$model->signedattachment->request_attachment_signed_id]), 'title' => Yii::t('app', "Signed Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']) 
+                    : '';
+                },
+            ],
+        
             [
                 'class' => 'kartik\grid\BooleanColumn',
                 'attribute'=>'status_id',
