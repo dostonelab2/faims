@@ -89,7 +89,7 @@ Modal::end();
 
         echo GridView::widget([
             'id' => 'ppmp3',
-            'dataProvider' => $sectionsDataProvider,
+            'dataProvider' => $sectionsDataProvider, //model section
             'columns' => [
                             [
                                 'attribute'=>'division', 
