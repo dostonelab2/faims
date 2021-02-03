@@ -112,11 +112,49 @@ class AppController extends Controller
     }
     public function actionExporttoexcel()
     {  
+        $query = Ppmpitem::find()->select([
+            'description' => 'tbl_ppmp_item.description',
+            'unit' => 'tbl_ppmp_item.unit',
+            'q1' => 'SUM(tbl_ppmp_item.q1)',
+            'q2' => 'SUM(tbl_ppmp_item.q2)',
+            'q3' => 'SUM(tbl_ppmp_item.q3)',
+            'q4' => 'SUM(tbl_ppmp_item.q4)',
+            'q5' => 'SUM(tbl_ppmp_item.q5)',
+            'q6' => 'SUM(tbl_ppmp_item.q6)',
+            'q7' => 'SUM(tbl_ppmp_item.q7)',
+            'q8' => 'SUM(tbl_ppmp_item.q8)',
+            'q9' => 'SUM(tbl_ppmp_item.q9)',
+            'q10' => 'SUM(tbl_ppmp_item.q10)',
+            'q11' => 'SUM(tbl_ppmp_item.q11)',
+            'q12' => 'SUM(tbl_ppmp_item.q12)',
+            'cost' => 'tbl_ppmp_item.cost'
+        ])
+        /*->where([
+            'tbl_ppmp_item.active' => 1,
+            //'tbl_ppmp_item.status_id' => 2,
+            'tbl_ppmp.year' => 2021,
+            //'tbl_ppmp_item.item_id'=>1
+            //'tbl_ppmp_item.item_id'=>1
+        ])*/
+        ->joinWith('ppmp')
+        ->groupBy('tbl_ppmp_item.item_id');              
+  
+
+        // grid filtering conditions
+       //$query->where([
+            //'tbl_ppmp_item.active' => 1,
+            //'tbl_ppmp_item.status_id' => 2,
+            //'tbl_ppmp.year' => 2021,
+            //'tbl_ppmp_item.item_id'=>1
+        //])->one();
         $exporter = new appreport([
-            'model' => Ppmpitem::findOne(2)
+            'model' => $query
         ]);
         $exporter->loaddoc();
-        return $exporter->send('itemsasdasd.xls',[]);
+        ob_end_clean();
+        return $exporter->send('APP-CES_2020_FORM.xls',[]);
+
+        //var_dump($query);
     }
 
     /**
