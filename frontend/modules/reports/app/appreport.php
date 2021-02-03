@@ -23,7 +23,7 @@ class appreport extends yii2techSpreadsheet
         $row = 33;
         foreach($appavailable as $app){
             $this->getDocument()->getActiveSheet()->setCellValue('D'.$row,$app->description);
-            $this->getDocument()->getActiveSheet()->setCellValue('E'.$row,$app->unit);
+            $this->getDocument()->getActiveSheet()->setCellValue('E'.$row,$app->unitofmeasure->name);
             $this->getDocument()->getActiveSheet()->setCellValue('F'.$row,$app->q1);
             $this->getDocument()->getActiveSheet()->setCellValue('G'.$row,$app->q2);
             $this->getDocument()->getActiveSheet()->setCellValue('H'.$row,$app->q3);
@@ -63,7 +63,7 @@ class appreport extends yii2techSpreadsheet
         $row = $row + 1;
         foreach($appnotavailable as $app){
             $this->getDocument()->getActiveSheet()->setCellValue('D'.$row,$app->description);
-            $this->getDocument()->getActiveSheet()->setCellValue('E'.$row,$app->unit);
+            $this->getDocument()->getActiveSheet()->setCellValue('E'.$row,$app->unitofmeasure->name);
             $this->getDocument()->getActiveSheet()->setCellValue('F'.$row,$app->q1);
             $this->getDocument()->getActiveSheet()->setCellValue('G'.$row,$app->q2);
             $this->getDocument()->getActiveSheet()->setCellValue('H'.$row,$app->q3);
