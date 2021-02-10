@@ -11,7 +11,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
                 'username' => 'mailer.dost@gmail.com',
-                'password' => 'DostRegion9',
+                'password' => 'bvnbypubdmumrrkb',
                 'port' => '587',
                 'encryption' => 'tls',
                 'streamOptions'=>[
