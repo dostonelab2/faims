@@ -7,6 +7,7 @@ use yii2tech\spreadsheet\Spreadsheet as yii2techSpreadsheet;
 class appreport extends yii2techSpreadsheet
 {
     public $model;
+    public $year;
     public $location="";
 	public function init(){
 		$this->location = \Yii::$app->basePath.'/modules/reports/app/';
@@ -16,7 +17,7 @@ class appreport extends yii2techSpreadsheet
         $this->setDocument(IOFactory::load($this->location."app.xlsx"));
         $appavailable = $this->model->where([
             'tbl_ppmp_item.availability' => 1,
-            'tbl_ppmp.year' => 2021,
+            'tbl_ppmp.year' => $this->year,
             'tbl_ppmp_item.active' => 1,
             'tbl_ppmp_item.status_id' => 2
         ])->all();
@@ -56,7 +57,7 @@ class appreport extends yii2techSpreadsheet
         
         $appnotavailable = $this->model->where([
             'tbl_ppmp_item.availability' => 2,
-            'tbl_ppmp.year' => 2021,
+            'tbl_ppmp.year' => $this->year,
             'tbl_ppmp_item.active' => 1,
             'tbl_ppmp_item.status_id' => 2
         ])->all();
@@ -98,7 +99,8 @@ class appreport extends yii2techSpreadsheet
         //$this->getDocument()->getSecurity()->setLockWindows(true);
         //$this->getDocument()->getSecurity()->setLockStructure(true);
         //$this->getDocument()->getSecurity()->setWorkbookPassword("babala");
-        
+
+        //return true; 
     }
     public function render()
     {

@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii2tech\spreadsheet\Spreadsheet;
 use yii\data\ActiveDataProvider;
 use frontend\modules\reports\app\appreport;
+use yii\helpers\Url;
 
 
 
@@ -46,7 +47,9 @@ class AppController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            'xls' => false,
+            //'exporter' => ''        
+            ]);
     }
 
     /**
@@ -112,6 +115,8 @@ class AppController extends Controller
     }
     public function actionExporttoexcel()
     {  
+       $year = $_GET['year'];
+        //$year = 2021;
         $query = Ppmpitem::find()->select([
             'description' => 'tbl_ppmp_item.description',
             'unit' => 'tbl_ppmp_item.unit',
@@ -148,13 +153,29 @@ class AppController extends Controller
             //'tbl_ppmp_item.item_id'=>1
         //])->one();
         $exporter = new appreport([
-            'model' => $query
+            'model' => $query,
+            'year' => $year
         ]);
+        //if(Yii::$app->request->isAjax){
         $exporter->loaddoc();
+        
+        
         ob_end_clean();
-        return $exporter->send('APP-CES_2020_FORM.xls',[]);
+        $exporter->save('APP-CES_2020_FORM.xls',[]);
+        
 
-        //var_dump($query);
+        $path = Yii::getAlias('@webroot').'/APP-CES_2020_FORM.xls';
+        if (file_exists($path)) {
+            //Yii::$app->session->setFlash('success', "Export successfull.");
+            return Yii::$app->response->sendFile($path, 'APP-CES_2020_FORM.xls');
+        }
+
+        
+
+        //}
+        
+        //var_dump($exporter);
+
     }
 
     /**
