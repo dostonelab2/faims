@@ -387,6 +387,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 
 <script>
+    //script for button clicl for export to excel
     $("body").on("click", "#btnExport", function() {
         year = $("#cboYear").val();
         url = $("#btnExport").val();
