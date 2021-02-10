@@ -161,21 +161,7 @@ class AppController extends Controller
         
         
         ob_end_clean();
-        $exporter->save('APP-CES_2020_FORM.xls',[]);
-        
-
-        $path = Yii::getAlias('@webroot').'/APP-CES_2020_FORM.xls';
-        if (file_exists($path)) {
-            //Yii::$app->session->setFlash('success', "Export successfull.");
-            return Yii::$app->response->sendFile($path, 'APP-CES_2020_FORM.xls');
-        }
-
-        
-
-        //}
-        
-        //var_dump($exporter);
-
+        $exporter->save('./templates/APP-CES_2020_FORM.xls');
     }
 
     /**
