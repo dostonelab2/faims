@@ -60,7 +60,16 @@ if(Yii::$app->user->isGuest){
                         'visible'=> Yii::$app->user->can('access-procurementplan'),
                         'items' => [
                             //['label' => 'Line-Item Budget', 'icon' => 'money', 'url' => ['/procurementplan/lineitembudget/index']],
-                            ['label' => 'PPMP', 'icon' => 'clipboard', 'url' => ['/procurementplan/ppmp/index']],
+                            ['label' => 'PPMP', 'icon' => 'clipboard', 'url' => ['/procurementplan/ppmp/index'],
+                            /*
+                            'template' => '<a href="{url}">
+                                                    {icon}
+                                                    {label}
+                                                    <span class="pull-right-container">
+                                                    <span class="label label-primary pull-right">4</span>
+                                                    </span>
+                                                </a>',*/
+                        ],
                             ['label' => 'Non CSE PPMP', 'icon' => 'clipboard', 'url' => '#'],
                             ['label' => 'APP', 'icon' => 'file-text', 'url' => ['/procurementplan/app/index']],
                         ]

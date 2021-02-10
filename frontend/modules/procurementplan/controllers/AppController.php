@@ -8,9 +8,11 @@ use common\models\procurementplan\AppSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use yii2tech\spreadsheet\Spreadsheet;
+use yii\data\ActiveDataProvider;
+use frontend\modules\reports\app\appreport;
+use yii\helpers\Url;
+
 
 
 /**
@@ -45,7 +47,9 @@ class AppController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            'xls' => false,
+            //'exporter' => ''        
+            ]);
     }
 
     /**
@@ -110,27 +114,54 @@ class AppController extends Controller
         return $this->redirect(['index']);
     }
     public function actionExporttoexcel()
-    {
+    {  
+       $year = $_GET['year'];
+        //$year = 2021;
+        $query = Ppmpitem::find()->select([
+            'description' => 'tbl_ppmp_item.description',
+            'unit' => 'tbl_ppmp_item.unit',
+            'q1' => 'SUM(tbl_ppmp_item.q1)',
+            'q2' => 'SUM(tbl_ppmp_item.q2)',
+            'q3' => 'SUM(tbl_ppmp_item.q3)',
+            'q4' => 'SUM(tbl_ppmp_item.q4)',
+            'q5' => 'SUM(tbl_ppmp_item.q5)',
+            'q6' => 'SUM(tbl_ppmp_item.q6)',
+            'q7' => 'SUM(tbl_ppmp_item.q7)',
+            'q8' => 'SUM(tbl_ppmp_item.q8)',
+            'q9' => 'SUM(tbl_ppmp_item.q9)',
+            'q10' => 'SUM(tbl_ppmp_item.q10)',
+            'q11' => 'SUM(tbl_ppmp_item.q11)',
+            'q12' => 'SUM(tbl_ppmp_item.q12)',
+            'cost' => 'tbl_ppmp_item.cost'
+        ])
+        /*->where([
+            'tbl_ppmp_item.active' => 1,
+            //'tbl_ppmp_item.status_id' => 2,
+            'tbl_ppmp.year' => 2021,
+            //'tbl_ppmp_item.item_id'=>1
+            //'tbl_ppmp_item.item_id'=>1
+        ])*/
+        ->joinWith('ppmp')
+        ->groupBy('tbl_ppmp_item.item_id');              
+  
+
+        // grid filtering conditions
+       //$query->where([
+            //'tbl_ppmp_item.active' => 1,
+            //'tbl_ppmp_item.status_id' => 2,
+            //'tbl_ppmp.year' => 2021,
+            //'tbl_ppmp_item.item_id'=>1
+        //])->one();
+        $exporter = new appreport([
+            'model' => $query,
+            'year' => $year
+        ]);
+        //if(Yii::$app->request->isAjax){
+        $exporter->loaddoc();
         
-        $spreadsheet = new Spreadsheet();
-        // Add some data
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hello');
-   
-        $filename = 'sample-'.time().'.xlsx';
-
-            // Redirect output to a client’s web browser (Xlsx)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$filename.'"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-
-        // Redirect output to a client’s web browser (Xlsx)
-
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save('php://output');
-
+        
+        ob_end_clean();
+        $exporter->save('./templates/APP-CES_2020_FORM.xls');
     }
 
     /**

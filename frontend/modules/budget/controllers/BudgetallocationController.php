@@ -48,13 +48,12 @@ class BudgetallocationController extends Controller
     }
     public function actionNep()
     {
-        
-        
+        /*
         return $this->render('nep', [
             'dataProvider' => $dataProvider,
             'listUnits' => $listUnits,
             'selected_year' => $selected_year,
-        ]);
+        ]);*/
     }
     /**
      * Lists all Budgetallocation models.
@@ -274,7 +273,7 @@ class BudgetallocationController extends Controller
     
     public function actionAdjustmenthistory($year, $section = NULL)
     {
-        $adjustments = AllocationadjustmentSearch::find();
+        //$adjustments = AllocationadjustmentSearch::find();
         
         //=  Allocationadjustment::find()->where(['YEAR(create_date)' => $year])->andWhere(['>','status_id',0])->with(['samples' => function($query){
         //        $query->andWhere(['active'=>'1']);

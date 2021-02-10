@@ -77,7 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         dataType: "json"
         
             });*/
-          $.pjax.reload({url: "<?php echo Url::to(['supplemental/additems', 'id' => $_GET['id'],'selectMonth' => $_GET['selectMonth']]); ?>", method: 'GET', container:'#additemgrid'});
+          $.pjax.reload({
+                url: "<?php echo Url::to(['supplemental/additems', 'id' => $_GET['id'],'selectMonth' => $_GET['selectMonth']]); ?>",
+                method: 'GET',
+                container:'#additemgrid'
+        });
         
         });
 

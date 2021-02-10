@@ -18,6 +18,7 @@ return array(
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\authclient\\' => array($vendorDir . '/yiisoft/yii2-authclient'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'yii2tech\\spreadsheet\\' => array($vendorDir . '/yii2tech/spreadsheet/src'),
     'yii2mod\\alert\\' => array($vendorDir . '/yii2mod/yii2-sweet-alert'),
     'yii2assets\\pdfjs\\' => array($vendorDir . '/yii2assets/yii2-pdfjs'),
     'yidas\\yii2BowerAsset\\' => array($vendorDir . '/yidas/yii2-bower-asset'),

@@ -91,6 +91,7 @@ class ComposerStaticInitb2e31f2d92d734baadeb2c74aa89265e
             'yii\\bootstrap\\' => 14,
             'yii\\authclient\\' => 15,
             'yii\\' => 4,
+            'yii2tech\\spreadsheet\\' => 21,
             'yii2mod\\alert\\' => 14,
             'yii2assets\\pdfjs\\' => 17,
             'yidas\\yii2BowerAsset\\' => 21,
@@ -288,6 +289,10 @@ class ComposerStaticInitb2e31f2d92d734baadeb2c74aa89265e
         'yii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
+        ),
+        'yii2tech\\spreadsheet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2tech/spreadsheet/src',
         ),
         'yii2mod\\alert\\' => 
         array (
