@@ -262,7 +262,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?php $selectyear = $this->render('_selectyear', ['model' => $searchModel]); ?>
     <?php
-    /*$exporbtn = Html::button(
+    $exporbtn = Html::button(
         'Export to Excel',
         [
             'title' => 'Export',
@@ -271,7 +271,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'style' => 'width: 110px; margin-right: 6px;',
             'id' => 'btnExport'
         ]
-    );*/
+    );
+    /*
     $exporbtn = Html::a(
         'Export to Excel',
         ['app/exporttoexcel', 'year' => isset($_GET['AppSearch']['selectyear']) ? $_GET['AppSearch']['selectyear'] : ''],
@@ -282,7 +283,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'style' => 'width: 110px; margin-right: 6px;',
             'id' => 'btnExport'
         ]
-    );
+    );*/
     ?>
 
     <div class="panel panel-primary">
@@ -342,11 +343,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-
-<!--
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
--->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--export modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false">
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">
@@ -357,6 +355,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
 <style>
     .modal {}
 
@@ -386,19 +385,20 @@ $this->params['breadcrumbs'][] = $this->title;
         width: 240px;
     }
 </style>
-<!--
+
 <script>
     $("body").on("click", "#btnExport", function() {
-        //year = $("#cboYear").val();
-        //url = $("#btnExport").val();
+        year = $("#cboYear").val();
+        url = $("#btnExport").val();
         $("#myModal").modal('show');
-    });
-    /*$(document).on('pjax:success', function() {
-    // Your code goes here ...
-        $("#myModal").modal('hide');
-  
-        //location.reload();
-    });*/
- 
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {year:year},
+            success: function(data){
+                $("#myModal").modal('hide');
+                window.location.href = '/templates/APP-CES_2020_FORM.xls';
+            }
+        });
+    }); 
 </script>
--->
