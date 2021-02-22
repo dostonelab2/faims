@@ -18,7 +18,7 @@ use dosamigos\google\places\Search;
 use common\models\auth\AuthAssignment;
 use common\models\system\Profile;
 use yii\db\Query;
-use common\models\inventory\Products;
+//use common\models\inventory\Products;
 use common\models\inventory\Categorytype;
 use common\models\inventory\Producttype;
 //use yii\swiftmailer\Message;
@@ -74,6 +74,7 @@ class SiteController extends Controller
             ],
         ];
     }
+    /*
     public function actionQuery(){
         $inventorydb= Yii::$app->get('inventorydb');
         /*$query=new Query();
@@ -86,6 +87,7 @@ class SiteController extends Controller
         $products=$command->queryAll();
          * 
          */
+        /*
         $products= Products::find()
                 ->innerJoin('`tbl_producttype`', '`tbl_producttype`.`producttype_id`=`tbl_products`.`producttype_id`')
                 ->innerJoin('`tbl_categorytype`', '`tbl_categorytype`.`categorytype_id`=`tbl_products`.`categorytype_id`')
@@ -94,7 +96,7 @@ class SiteController extends Controller
         echo "<pre>";
         print_r($products);
         echo "</pre>";
-    }
+    }*/
     /**
      * Displays homepage.
      *
