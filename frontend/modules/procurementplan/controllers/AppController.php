@@ -144,22 +144,12 @@ class AppController extends Controller
         ->joinWith('ppmp')
         ->groupBy('tbl_ppmp_item.item_id');              
   
-
-        // grid filtering conditions
-       //$query->where([
-            //'tbl_ppmp_item.active' => 1,
-            //'tbl_ppmp_item.status_id' => 2,
-            //'tbl_ppmp.year' => 2021,
-            //'tbl_ppmp_item.item_id'=>1
-        //])->one();
         $exporter = new appreport([
             'model' => $query,
             'year' => $year
         ]);
         //if(Yii::$app->request->isAjax){
         $exporter->loaddoc();
-        
-        
         ob_end_clean();
         $exporter->save('./templates/APP-CES_2020_FORM.xls');
     }
