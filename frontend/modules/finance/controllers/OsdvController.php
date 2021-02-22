@@ -263,6 +263,7 @@ class OsdvController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->identity->user_id;
             $model->status_id = Yii::$app->user->can('access-finance-disbursement') ? Request::STATUS_FOR_DISBURSEMENT : Request::STATUS_ALLOTTED;
+            $model->remarks = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
             if($model->save(false)){
                 if($model->type_id == 1){
                     /*$os = new Os();
