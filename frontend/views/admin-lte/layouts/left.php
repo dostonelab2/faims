@@ -1,5 +1,6 @@
 <?php
 use common\models\system\User;
+use common\models\procurementplan\Ppmp;
 
 $Request_URI=$_SERVER['REQUEST_URI'];
 if($Request_URI=='/'){
@@ -25,6 +26,16 @@ if(Yii::$app->user->isGuest){
        $UsernameDesignation=$CurrentUserName.'<br>'.$CurrentUserDesignation;
     }
 }
+//count ppmp status for badges
+$ppmp_pending = Ppmp::find()
+                    ->where(['year' => date('Y'), 'status_id' => 1])
+                    ->count();
+$ppmp_submitted = Ppmp::find()
+                    ->where(['year' => date('Y'), 'status_id' => 2])
+                    ->count();
+$ppmp_approved = Ppmp::find()
+                    ->where(['year' => date('Y'), 'status_id' => 3])
+                    ->count();                    
 ?>
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -60,18 +71,25 @@ if(Yii::$app->user->isGuest){
                         'visible'=> Yii::$app->user->can('access-procurementplan'),
                         'items' => [
                             //['label' => 'Line-Item Budget', 'icon' => 'money', 'url' => ['/procurementplan/lineitembudget/index']],
-                            ['label' => 'PPMP', 'icon' => 'clipboard', 'url' => ['/procurementplan/ppmp/index'],
-                            /*
+                            ['label' => 'CSE PPMP', 'icon' => 'clipboard', 'url' => ['/procurementplan/ppmp/index'],
+                                /**
+                                 * @var int|string $ppmp_approved
+                                 * @var int|string $ppmp_submitted
+                                 * @var int|string $ppmp_pending
+                                 */
                             'template' => '<a href="{url}">
                                                     {icon}
                                                     {label}
                                                     <span class="pull-right-container">
-                                                    <span class="label label-primary pull-right">4</span>
+                                                    <span class="label label-success pull-right">'.$ppmp_approved.'</span>
+                                                    <span class="label label-info pull-right">'.$ppmp_submitted.'</span>
+                                                    <span class="label label-warning pull-right">'.$ppmp_pending.'</span>
                                                     </span>
-                                                </a>',*/
+                                                </a>',
                         ],
                             ['label' => 'Non CSE PPMP', 'icon' => 'clipboard', 'url' => '#'],
-                            ['label' => 'APP', 'icon' => 'file-text', 'url' => ['/procurementplan/app/index']],
+                            ['label' => 'CSE APP', 'icon' => 'file-text', 'url' => ['/procurementplan/app/index']],
+                            ['label' => 'Non CSE APP', 'icon' => 'file-text', 'url' => '#'],
                         ]
                     ],
                     [
