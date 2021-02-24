@@ -9,6 +9,17 @@ function loadModal(url){
     },1500);
 }
 
+function loadModal2(url){
+    $('#modalContainerLg').modal('show')
+        .find('#modalContent')
+        .load(url);
+        //.load($(this).attr('value'));
+    $('#modalHeader').html($(this).attr('title'));
+    setTimeout(function () {
+        $("#btnrefresh").click();
+    },1500);
+}
+
 $("body").on("click","#buttonCreateRequest",function () {
     $('#modalRequest').modal('show')
         .find('#modalContent')
@@ -41,6 +52,10 @@ $("body").on("click","#buttonViewAttachments",function () {
 
 $("body").on("click","#buttonViewDocuments",function () {
     loadModal($(this).attr('value'));
+});
+
+$("body").on("click","#buttonViewRecent",function () {
+    loadModal2($(this).attr('value'));
 });
 
 $("body").on("click","#buttonUploadAttachments",function () {

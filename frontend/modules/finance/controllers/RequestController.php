@@ -353,6 +353,24 @@ class RequestController extends Controller
         }
         
     }
+    
+    public function actionRecent()
+    {
+        $model = $this->findModel($_GET['id']);
+        
+        $searchModel = new RequestSearch();
+        $searchModel->payee_id = $_GET['payee_id'];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if (Yii::$app->request->post()) {
+            
+            return $this->redirect(['view', 'id' => $model->request_id]);  
+        }
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_recent', ['model'=>$model, 'dataProvider'=>$dataProvider]);   
+        }
+        
+    }
 
     /**
      * Updates an existing Request model.

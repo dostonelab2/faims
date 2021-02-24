@@ -36,6 +36,18 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+
+Modal::begin([
+    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalContainerLg',
+    'size' => 'modal-lg',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
 ?>
 
 <!--pre>
@@ -395,7 +407,7 @@ Modal::end();
                                                             Html::button('Submit for Validation', ['value' => Url::to(['request/submitforvalidation', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' => $params['btnClass'], 'style'=>'margin-right: 6px;'.(((($model->status_id >= Request::STATUS_SUBMITTED) && ($model->status_id < Request::STATUS_VERIFIED) && Yii::$app->user->can('access-finance-verification') )) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonSubmitForValidation']) .
                                                             
                                                             //Yii::$app->user->can('access-finance-validation')
-                                                            Html::button('Validate Request', ['value' => Url::to(['request/validate', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' => $params['btnClass'], 'style'=>'margin-right: 6px;'.(((($model->status_id >= Request::STATUS_VERIFIED) && ($model->status_id < Request::STATUS_VALIDATED) && Yii::$app->user->can('access-finance-validation') )) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonValidateRequest']) ) 
+                                                            Html::button('Validate Request', ['value' => Url::to(['request/validate', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' => $params['btnClass'], 'style'=>'margin-right: 6px;'.(((($model->status_id >= Request::STATUS_VERIFIED) && ($model->status_id < Request::STATUS_VALIDATED) && Yii::$app->user->can('access-finance-validation') )) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonValidateRequest']) )
                 
                                                             :
                 
@@ -421,6 +433,7 @@ Modal::end();
                             [
                                 [
                                     'content'=>
+                                        Html::button('View Recent Requests', ['value' => Url::to(['request/recent', 'id'=>$model->request_id, 'payee_id'=>$model->payee_id]), 'title' => 'Requests', 'class' => 'btn btn-warning', 'style'=>'margin-right: 6px;', 'id'=>'buttonViewRecent']) .
                                         Html::button('View Documents', ['value' => Url::to(['request/viewdocuments', 'id'=>$model->request_id]), 'title' => 'Documents', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonViewDocuments']) . 
                                         Html::a('Obligation Request  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printos', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) .'<a></a>'.
                                         Html::a('Disbursement Voucher  <i class="glyphicon glyphicon-print"></i>', Url::to(['request/printdv', 'id'=>$model->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary'])
