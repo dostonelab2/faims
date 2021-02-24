@@ -228,3 +228,4 @@ frontend/web/newfile.txt
 vendor.zip
 vendor/kartik-v/yii2-icons/
 vendor/sergmoro1/yii2-google-spreadsheet/
+console/config/db.php

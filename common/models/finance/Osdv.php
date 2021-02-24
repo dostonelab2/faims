@@ -48,7 +48,7 @@ class Osdv extends \yii\db\ActiveRecord
     {
         return [
             [['request_id', 'type_id', 'status_id', 'created_by'], 'required'],
-            [['create_date'], 'safe'],
+            [['create_date', 'cancelled'], 'safe'],
             [['request_id', 'type_id', 'expenditure_class_id', 'status_id', 'created_by'], 'integer'],
         ];
     }

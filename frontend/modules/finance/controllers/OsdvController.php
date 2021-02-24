@@ -262,6 +262,8 @@ class OsdvController extends Controller
         $model->create_date = date("Y-m-d H:i:s");
         if ($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->identity->user_id;
+            $model->status_id = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
+            $model->remarks = '';
             if($model->save(false)){
                 if($model->type_id == 1){
                     /*$os = new Os();

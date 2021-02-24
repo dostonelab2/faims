@@ -70,6 +70,7 @@ class OsdvSearch extends Osdv
             'expenditure_class_id' => $this->expenditure_class_id,
             'status_id' => $this->status_id,
             'created_by' => $this->created_by,
+            'cancelled' => 0,
             //$model->request->payee_id
         ]);
         
