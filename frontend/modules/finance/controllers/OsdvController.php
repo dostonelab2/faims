@@ -128,6 +128,7 @@ class OsdvController extends Controller
         //Yii::$app->user->can('access-finance-validation');
         $status_id = Request::STATUS_CHARGED;
         $searchModel->status_id = $status_id;
+        $searchModel->cancelled = 0;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $numberOfRequests = Request::find()->where('status_id =:status_id',[':status_id'=>$status_id])->count();
