@@ -718,6 +718,7 @@ $headers=$headers.'</td>
        if($model->purchase_request_referrence_no==''){$ref='__________________';}else{$ref=$model->purchase_request_referrence_no;}
        if($model->purchase_request_project_name==''){$pname='__________________';}else{$pname=$model->purchase_request_project_name;}
        if($model->purchase_request_location_project==''){$pproject='__________________';}else{$pproject=$model->purchase_request_location_project;}
+       if(strlen($pname) > 40){$pname = '<span style="font-size: 6px;">'.$pname.'</span>';}
        $assigs = $this->findAssignatory(4);
        $headers='
        <div style="width: 100px;border: 1px solid black;margin:10px;font-weight:bold;text-align:center;float:right;padding:0px;">FASS-PUR F07 <br> <span style="font-weight:lighter;">Rev. 0/ 08-16-07</span></div>
@@ -749,7 +750,7 @@ $headers=$headers.'</td>
        <tr style="height: 12px;">
        <td style="width: 27%;font-size:11px; height: 12px;">&nbsp;Revised&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : May 24, 2004</td>
        <td style="text-align: left;font-size:16px; width: 40.5332%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>ABSTRACT OF BIDS</strong></td>
-       <td style="width: 10%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Name of the Project.&nbsp; : '.$pname.'</td>
+       <td style="width: 10%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Name of the Project.&nbsp; :'. $pname .'</td>
        </tr>
        <tr style="height: 12.2727px;">
        <td style="width: 27%; height: 12.2727px;">&nbsp;</td>
