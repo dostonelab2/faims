@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 
 use common\models\procurement\Division;
 use common\models\procurement\Section;
+use common\models\procurement\Project;
 use common\models\procurement\Unit;
 
 use common\models\procurementplan\Item;
@@ -92,10 +93,17 @@ class BudgetallocationController extends Controller
                 'pageSize' => 20,
             ],
         ]);*/
-    
+        $projects = Project::find()->joinWith('budgetallocation')->orderBy('project_id');
         
         $sectionsDataProvider = new ActiveDataProvider([
             'query' => $sections,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        $projectsDataProvider = new ActiveDataProvider([
+            'query' => $projects,
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -121,6 +129,7 @@ class BudgetallocationController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'sectionsDataProvider' => $sectionsDataProvider,
+            'projectsDataProvider' => $projectsDataProvider,
             //'listDivisions' => $listDivisions,
             
             //'listUnits' => $listUnits,
