@@ -15,7 +15,7 @@ use common\models\budget\Budgetallocationitem;
 /* @var $this yii\web\View */
 /* @var $model common\models\budget\Budgetallocation */
 
-$this->title = $model->section->name;
+$this->title = $model->section_id ? $model->section->name : $model->project->code; 
 $this->params['breadcrumbs'][] = ['label' => 'Budgetallocations', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -55,7 +55,7 @@ Modal::end();
             //'section_id',
             [
                         'attribute'=>'section_id',
-                        'value'=>$model->section->name,
+                        'value'=>$model->section_id ? $model->section->name : $model->project->code,
                         'valueColOptions'=>['style'=>'width:30%'],
                     ],
             'year',
