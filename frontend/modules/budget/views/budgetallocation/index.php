@@ -145,6 +145,50 @@ Modal::end();
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'panel' => [
+                'heading' => '<b>Functional Units</b>',
+                'type' => GridView::TYPE_PRIMARY,
+                //'heading' => $heading,
+            ],
+            // set your toolbar
+            'toolbar' => 
+                        [
+                            [
+                                'content'=>'',
+                                    /*Html::button('PENDING', ['title' => 'Approved', 'class' => 'btn btn-warning', 'style'=>'width: 90px; margin-right: 6px;']) .    
+                                    Html::button('SUBMITTED', ['title' => 'Approved', 'class' => 'btn btn-primary', 'style'=>'width: 90px; margin-right: 6px;']) .
+                                    Html::button('APPROVED', ['title' => 'Approved', 'class' => 'btn btn-success', 'style'=>'width: 90px; margin-right: 6px;'])*/
+                            ],
+                            //'{export}',
+                            //'{toggleData}'
+                        ],
+            
+            'toggleDataOptions' => ['minCount' => 10],
+            //'exportConfig' => $exportConfig,
+            'itemLabelSingle' => 'item',
+            'itemLabelPlural' => 'items'
+        ]);
+
+        echo GridView::widget([
+            //'id' => 'ppmp3',
+            'dataProvider' => $projectsDataProvider, //model section
+            'columns' => [
+                        [
+                            'attribute'=>'code',
+                            'contentOptions' => ['style' => 'padding-left: 25px'],
+                            'width'=>'250px',
+                            'format'=>'raw',
+                            'value'=>function ($model, $key, $index, $widget) { 
+                                //return $model->name;
+                                return Html::a($model->code, ['budgetallocation/view?id='.$model->budgetallocation->budget_allocation_id], ['data-pjax' => 0, 'target'=>'_blank']);
+                            },
+                        ],
+                    ],
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            'panel' => [
+                'heading' => '<b>Projects</b>',
                 'type' => GridView::TYPE_PRIMARY,
                 //'heading' => $heading,
             ],

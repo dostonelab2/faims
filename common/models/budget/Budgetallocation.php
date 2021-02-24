@@ -5,6 +5,7 @@ namespace common\models\budget;
 use Yii;
 use common\models\budget\Budgetallocationitem;
 use common\models\procurement\Section;
+use common\models\procurement\Project;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -65,6 +66,10 @@ class Budgetallocation extends \yii\db\ActiveRecord
     public function getSection()
     {
         return $this->hasOne(Section::className(), ['section_id' => 'section_id']);
+    }
+    public function getProject()
+    {
+        return $this->hasOne(Project::className(), ['project_id' => 'project_id']);
     }
     
     public function getItems()
