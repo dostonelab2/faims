@@ -386,7 +386,7 @@ Modal::end();
 <script>
 $(document).ready(function(){
     $(".kv-row-checkbox").each(function(){
-        if($(this).parent().prev().html().length != 0)
+        if(($(this).parent().prev().html().length != 0) || ($(this).parent().prev().html().length =='(not set)'))
             $(this).prop("disabled",true);
     });
 });
