@@ -153,9 +153,9 @@ class RequestController extends Controller
             $searchModel->division_id = [5];
         }elseif(Yii::$app->user->identity->user_id == 70){
             $searchModel->division_id = [6];
-        }elseif(Yii::$app->user->identity->user_id == 55){
-            $searchModel->division_id = [7];
         }elseif(Yii::$app->user->identity->user_id == 54){
+            $searchModel->division_id = [7];
+        }elseif(Yii::$app->user->identity->user_id == 55){
             $searchModel->division_id = [8];
         }
         /*if(Yii::$app->user->identity->user_id == 2){
