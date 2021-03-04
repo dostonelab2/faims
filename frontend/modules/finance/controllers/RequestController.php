@@ -130,8 +130,8 @@ class RequestController extends Controller
     public function actionValidateindex()
     {
         /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 **/
-        
         /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
+        
         $divisions = Divisionhead::find(['user_id'=> 20])
                         //->select('division_head_id')
                         ->asArray()
