@@ -71,7 +71,9 @@ class RequestSearch extends Request
             'created_by' => $this->created_by,
             'cancelled' => 0,
         ]);
-        //$query->andFilterWhere(['>', 'status_id', 40]);
+        /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 **/
+        
+        /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
         
         if((Yii::$app->user->identity->user_id == 2)){
             $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
@@ -81,6 +83,18 @@ class RequestSearch extends Request
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
                 //->andFilterWhere(['', 'payee_id', 129]);
         }elseif((Yii::$app->user->identity->user_id == 3)){
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
+                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->user_id == 126)){
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
+                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->user_id == 108)){
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
+                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->user_id == 127)){
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
+                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->user_id == 110)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }
