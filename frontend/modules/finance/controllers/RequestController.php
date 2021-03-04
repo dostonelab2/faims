@@ -129,7 +129,9 @@ class RequestController extends Controller
      */
     public function actionValidateindex()
     {
-        //$divisions = Divisionhead::find(['user_id'=> Yii::$app->user->identity->user_id])
+        /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 **/
+        
+        /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
         $divisions = Divisionhead::find(['user_id'=> 20])
                         //->select('division_head_id')
                         ->asArray()
@@ -147,6 +149,14 @@ class RequestController extends Controller
             //$searchModel->payee_id = [129,117];
         }if(Yii::$app->user->identity->user_id == 3){
             $searchModel->division_id = [4];
+        }if(Yii::$app->user->identity->user_id == 62){
+            $searchModel->division_id = [5];
+        }if(Yii::$app->user->identity->user_id == 108){
+            $searchModel->division_id = [6];
+        }if(Yii::$app->user->identity->user_id == 127){
+            $searchModel->division_id = [7];
+        }if(Yii::$app->user->identity->user_id == 110){
+            $searchModel->division_id = [8];
         }
         /*if(Yii::$app->user->identity->user_id == 2){
             $searchModel->payee_id = [129,117];
