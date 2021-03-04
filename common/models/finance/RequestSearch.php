@@ -85,16 +85,16 @@ class RequestSearch extends Request
         }elseif((Yii::$app->user->identity->user_id == 3)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->user_id == 126)){
+        }elseif((Yii::$app->user->identity->user_id == 62)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->user_id == 108)){
+        }elseif((Yii::$app->user->identity->user_id == 70)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->user_id == 127)){
+        }elseif((Yii::$app->user->identity->user_id == 54)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->user_id == 110)){
+        }elseif((Yii::$app->user->identity->user_id == 55)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }
