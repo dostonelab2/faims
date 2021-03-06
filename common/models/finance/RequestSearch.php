@@ -68,7 +68,7 @@ class RequestSearch extends Request
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
             'status_id' => $this->status_id,
-            'division_id' => $this->status_id,
+            'division_id' => $this->division_id,
             'created_by' => $this->created_by,
             'cancelled' => 0,
         ]);
