@@ -116,6 +116,22 @@ Modal::end();
                                 },
                             ],
                             [
+                                'attribute'=>'divsion_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return '<span class="label label-info">'.$model->status->name.'</span>';
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Division::find()->asArray()->all(), 'division_id', 'code'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Status'],
+                            ],
+                            [
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
