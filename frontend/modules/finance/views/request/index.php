@@ -130,7 +130,7 @@ Modal::end();
                                 'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Status'],
+                                'filterInputOptions' => ['placeholder' => 'Select Division'],
                             ],
                             [
                                 'attribute'=>'status_id',
