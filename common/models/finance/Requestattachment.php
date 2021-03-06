@@ -70,7 +70,8 @@ class Requestattachment extends \yii\db\ActiveRecord
     
     public function getSignedattachment()  
     {  
-      return $this->hasOne(Requestattachmentsigned::className(), ['request_attachment_id' => 'request_attachment_id']);  
+      //return $this->hasOne(Requestattachmentsigned::className(), ['request_attachment_id' => 'request_attachment_id']);
+        $model  = Requestattachment::find($id)->orderBy(['request_attachment_signed_id' => SORT_DESC])->one();
     } 
     
     public function getRequest()  
@@ -85,8 +86,8 @@ class Requestattachment extends \yii\db\ActiveRecord
     
     public static function hasAttachment($id)
     {
-        $model  = Requestattachment::find($id)->orderBy(['request_attachment_signed_id' => SORT_DESC])->one();
-        
+        $model  = Requestattachment::findOne($id);
+                
         //$file = 'uploads/finance/request/' . $model->request->request_number.'/'. $model->filename;
         //clearstatcache();
         if($model->filename != NULL){
