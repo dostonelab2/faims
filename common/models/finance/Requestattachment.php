@@ -85,7 +85,7 @@ class Requestattachment extends \yii\db\ActiveRecord
     
     public static function hasAttachment($id)
     {
-        $model  = Requestattachment::findOne($id);
+        $model  = Requestattachment::find($id)->orderBy(['request_attachment_signed_id' => SORT_DESC])->one();
         
         //$file = 'uploads/finance/request/' . $model->request->request_number.'/'. $model->filename;
         //clearstatcache();
