@@ -123,7 +123,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<span class="label label-info">'.$model->status->name.'</span>';
+                                    return '<span class="label label-info">'.$model->division->code.'</span>';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Division::find()->asArray()->all(), 'division_id', 'code'), 
