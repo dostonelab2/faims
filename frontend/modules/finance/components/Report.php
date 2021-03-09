@@ -390,6 +390,23 @@ class Report {
             $DVboxASignatory = 'MAHMUD L. KINGKING';
             $DVboxAPosition = 'ARD-FOS';  
             break;
+          case 5:
+            $DVboxASignatory = 'GERARDO F. PAROT';
+            $DVboxAPosition = 'PSTD-ZDS';  
+            break;  
+          case 6:
+            $DVboxASignatory = 'NUHMAN M. ALJANI';
+            $DVboxAPosition = 'OIC, PSTD-ZDN';  
+            break;
+          case 7:
+            $DVboxASignatory = 'JENNIFER A. PIDOR';
+            $DVboxAPosition = 'PSTD-ZSP';  
+            break; 
+          case 8:
+            $DVboxASignatory = 'RICARDO J. APOLINARIO, III';
+            $DVboxAPosition = 'CSTD-ZC/ISA';  
+            break; 
+                
           default:
             $DVboxASignatory = '';
             $DVboxAPosition = ''; 
