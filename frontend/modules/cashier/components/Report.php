@@ -96,27 +96,27 @@ class Report {
         $template .= "<tr>";
         $template .= "<td colspan='1'>Department :</td>";
         $template .= "<td colspan='2'>Department of Science and Technology - IX</td>";
-        $template .= "<td colspan='2'>&nbsp;</td>";
-        $template .= "<td width='15%'>LDDAP-ADA No.</td>";
-        $template .= "<td colspan='2'>".$model->batch_number."</td>";
+        $template .= "<td colspan='4'>&nbsp;</td>";
+        //$template .= "<td width='15%'>LDDAP-ADA No.</td>";
+        //$template .= "<td colspan='2'>".$model->batch_number."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
         $template .= "<td colspan='1'>Entity Name :</td>";
-        $template .= "<td colspan='4'>&nbsp;</td>";
-        $template .= "<td>Date:</td>";
-        $template .= "<td colspan='2'>".date('m-d-Y',strtotime($model->batch_date))."</td>";
+        $template .= "<td colspan='5'>&nbsp;</td>";
+        //$template .= "<td>Date:</td>";
+        //$template .= "<td colspan='2'>".date('m-d-Y',strtotime($model->batch_date))."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
         $template .= "<td colspan='1'>Operating Unit :</td>";
-        $template .= "<td colspan='4'>&nbsp;</td>";
-        $template .= "<td>Fund Cluster :</td>";
-        $template .= "<td colspan='2'>".Lddapada::FUND_CLUSTER2."</td>";
+        $template .= "<td colspan='6'>&nbsp;</td>";
+        //$template .= "<td>Fund Cluster :</td>";
+        //$template .= "<td colspan='2'>".Lddapada::FUND_CLUSTER2."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
-        $template .= "<td style='text-align: center; border-bottom: 1px solid #000;' colspan='8'>MDS-GSB BRANCH / MDS SUB ACCOUNT NO.: ".$account."</td>";
+        $template .= "<td style='text-align: left; border-bottom: 1px solid #000;' colspan='8'>MDS-GSB BRANCH / MDS SUB ACCOUNT NO.: ".$account."</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
@@ -301,8 +301,29 @@ class Report {
         $template .= "<td style='padding-left: 20px;' colspan='8'>2. MDS-GSB branch concerned shall indicate under Remarks column, non-payments made to concerned creditors due to inconsistency in the information (creditor account name, number) between LDDAP-EC and bank records.</td>";
         $template .= "</tr>";
         
+        
+        
+        
         $template .= "</table>";
-        return $template;
+        
+        $template .= "<table width='100%'>";
+        
+        $template .= "<tr>";
+        $template .= "<td colspan='8'>NOTES:</td>";
+        $template .= "</tr>";
+        
+        $template .= "<tr>";
+        $template .= "<td style='padding-left: 10px; width: 70%;'>The LDDAP-ADA is an accountable form</td>";
+        $template .= "<td style='text-align: right; width: 30%;'>LDDAP-ADA NO. <u>".$model->batch_number."</u></td>";
+        $template .= "</tr>";
+        
+        $template .= "<tr>";
+        $template .= "<td style='padding-left: 10px; width: 70%;'>* Indicate in description/Name and UACS code</td>";
+        $template .= "<td style='text-align: right; width: 30%;'>Date Issued: <u>".date('m-d-Y',strtotime($model->batch_date))."</u></td>";
+        $template .= "</tr>";
+        
+        $template .= "</table>";
+        return $template;   
     }
     
 }
