@@ -66,7 +66,7 @@ class Report {
     
     function template($id)
     {
-        $skip = 140;
+        $skip = 90;
         $skipRow = "<tr><td colspan='8'></td></tr>";
         
         $model = Lddapada::findOne($id);
@@ -143,11 +143,15 @@ class Report {
         //$template .= "<td width='10%'>REMARKS</td>";
         $template .= "</tr>";
         
+        $template .= "<tr>";
+        $template .= "<td colspan='8' style='border-bottom: 1px solid #000; border-right: 1px solid #000; font-weight: bold;'>I. Current Year A/Ps</td>";
+        $template .= "</tr>";
+        
         // ITEMS
         $fmt = Yii::$app->formatter;
         foreach($model->lddapadaItems as $item){
             $template .= "<tr>";
-            $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000; padding-left:  5px;'>".$item->name."</td>";
+            $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000; padding-left:  10px;'>".$item->name."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->creditor->account_number."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000; font-size: x-small;'>".($item->osdv->os ? $item->osdv->os->os_number : $item->osdv->dv->dv_number)."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".($item->osdv->uacs ? $item->osdv->uacs->expenditureobject->object_code : '-')."</td>";
@@ -164,6 +168,11 @@ class Report {
             
             $skip -= 1;
         }
+        $template .= $skipRow;
+        $template .= $skipRow;
+        $template .= $skipRow;
+        
+        
         
         $template .= "<tr>";
         $template .= "<td colspan='8'></td>";
@@ -175,20 +184,58 @@ class Report {
         $template .= "<td colspan='8'>&nbsp;</td>";
         $template .= "</tr>";
         $template .= "<tr>";
+        $template .= "<td colspan='0'>&nbsp;</td>";
+        $template .= "</tr>";
+        $template .= "<tr>";
         $template .= "<td colspan='8'>&nbsp;</td>";
         $template .= "</tr>";
+        
+        
         
         for($i=0; $i<=$skip; $i++){
             $template .= $skipRow;
         }
         
+        $template .= "<tr>";
+        $template .= "<td colspan='4' style='border-top:  1px solid #000; border-bottom:  1px solid #000; padding-left: 10px;'>Sub-total</td>";
+        $template .= "<td style='border-top:  1px solid #000;border-bottom:  1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000;border-bottom:  1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000;border-bottom:  1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000;border-bottom:  1px solid #000;'>&nbsp;</td>";
+        $template .= "</tr>";
+        
+        $template .= $skipRow;
+        $template .= $skipRow;
+        
+        $template .= "<tr>";
+        $template .= "<td colspan='8' style='border-bottom: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;  font-weight: bold;'>II. Past's Year A/Ps</td>";
+        $template .= "</tr>";
+        
+        $template .= "<tr>";
+        $template .= "<td colspan='8'>&nbsp;</td>";
+        $template .= "</tr>";
+        $template .= "<tr>";
+        $template .= "<td colspan='8'>&nbsp;</td>";
+        $template .= "</tr>";
+        
+        $template .= "<tr>";
+        $template .= "<td colspan='4' style='border-top:  1px solid #000; padding-left: 10px; border-bottom: 1px solid #000;'>Sub-total</td>";
+        $template .= "<td style='border-top:  1px solid #000; border-bottom: 1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000; border-bottom: 1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000; border-bottom: 1px solid #000;'>&nbsp;</td>";
+        $template .= "<td style='border-top:  1px solid #000; border-bottom: 1px solid #000;'>&nbsp;</td>";
+        $template .= "</tr>";
+        
+        $template .= $skipRow;
+        $template .= $skipRow;
+        
         // ITEMS FOOTER
         $template .= "<tr>";
-        $template .= "<td style='border-top: 1px solid #000; text-align: center;font-weight: bold;' colspan='4'>TOTAL</td>";
-        $template .= "<td style='text-align: right; padding-right: 10px; border-top: 1px solid #000;font-weight: bold;'>".number_format($item->lddapada->total,2)."</td>";
-        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->taxtotal,2)."</td>";
-        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->nettotal,2)."</td>";
-        $template .= "<td style='border-top: 1px solid #000;text-align: right; padding-right: 10px;'></td>";
+        $template .= "<td style='border-top: 1px solid #000; border-right: 1px solid #000; text-align: center;font-weight: bold;' colspan='4'>TOTAL</td>";
+        $template .= "<td style='text-align: right; padding-right: 10px; border-top: 1px solid #000;  border-right: 1px solid #000; font-weight: bold;'>".number_format($item->lddapada->total,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000; border-right: 1px solid #000; text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->taxtotal,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000;  border-right: 1px solid #000; text-align: right; padding-right: 10px;font-weight: bold;'>".number_format($item->lddapada->nettotal,2)."</td>";
+        $template .= "<td style='border-top: 1px solid #000; border-right: 1px solid #000; text-align: right; padding-right: 10px;'></td>";
         $template .= "</tr>";
         
         // PARAGRAPH
