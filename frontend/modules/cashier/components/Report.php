@@ -170,9 +170,6 @@ class Report {
         }
         $template .= $skipRow;
         $template .= $skipRow;
-        $template .= $skipRow;
-        
-        
         
         $template .= "<tr>";
         $template .= "<td colspan='8'></td>";
