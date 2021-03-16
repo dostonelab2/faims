@@ -66,7 +66,7 @@ class Report {
     
     function template($id)
     {
-        $skip = 90;
+        $skip = 60;
         $skipRow = "<tr><td colspan='8'></td></tr>";
         
         $model = Lddapada::findOne($id);
