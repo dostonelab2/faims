@@ -234,6 +234,7 @@ class Report {
         
             $OSboxBSignatory = 'INGRID T. ABELLA-COLCOL';
             $OSboxBPosition = 'Budget Officer';
+        
             switch ($model->division_id) {
               case 1:
                 $OSboxEsig = '<div float:right;>
@@ -263,9 +264,39 @@ class Report {
                 $OSboxASignatory = 'MAHMUD L. KINGKING';
                 $OSboxAPosition = 'ARD-FOS';  
                 break;
-              default:
-                $OSboxASignatory = '';
-                $OSboxAPosition = ''; 
+              
+              case 5:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
+                              </div>';
+                $OSboxASignatory = 'GERARDO F. PAROT';
+                $OSboxAPosition = 'PSTD-ZDS';  
+                break;
+            
+              case 6:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
+                              </div>';
+                $OSboxASignatory = 'NUHMAN M. ALJANI';
+                $OSboxAPosition = 'OIC, PSTD-ZDN';  
+                break;
+                    
+              case 7:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
+                              </div>';
+                $OSboxASignatory = 'JENNIFER A. PIDOR';
+                $OSboxAPosition = 'PSTD-ZSP';  
+                break;
+            
+              case 8:
+                $OSboxEsig = '<div float:right;>
+                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
+                              </div>';
+                $OSboxASignatory = 'RICARDO J. APOLINARIO, III';
+                $OSboxAPosition = 'CSTD-ZC/ISA';  
+                break;
+                    
             }
        
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
