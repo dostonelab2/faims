@@ -77,7 +77,8 @@ class RequestSearch extends Request
         /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
         
         if((Yii::$app->user->identity->user_id == 2)){
-            $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
+            //$query->andFilterWhere(['in', 'payee_id', $this->payee_id])
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
                   ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }elseif((Yii::$app->user->identity->user_id == 4)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
