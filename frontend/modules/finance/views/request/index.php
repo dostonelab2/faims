@@ -15,6 +15,7 @@ use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
+use common\models\procurement\Division;
 use common\models\system\Profile;
 use common\models\system\Usersection;
 use common\models\sec\Blockchain;
@@ -114,6 +115,22 @@ Modal::end();
                                     //$fmt = Yii::$app->formatter;
                                     return $model->amount;
                                 },
+                            ],
+                            [
+                                'attribute'=>'divsion_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return '<span class="label label-success">'.$model->division->code.'</span>';
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Division::find()->asArray()->all(), 'division_id', 'code'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Division'],
                             ],
                             [
                                 'attribute'=>'status_id',

@@ -7,10 +7,12 @@ use common\models\apiservice\Notificationrecipient;
 use frontend\modules\finance\components\Report;
 
 use common\models\cashier\Creditortmp;
+use common\models\cashier\CreditorSearch;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requestattachment;
 use common\models\finance\Requestattachmentsigned;
+use common\models\finance\Requestpayroll;
 use common\models\finance\Requesttype;
 use common\models\finance\RequestSearch;
 use common\models\procurement\Disbursement;
@@ -142,14 +144,16 @@ class RequestController extends Controller
         $searchModel->cancelled = 0;
         
         if(Yii::$app->user->identity->user_id == 2){
-            $searchModel->payee_id = [129,120];
+            //$searchModel->payee_id = [129,120];
+            $searchModel->division_id = [1];
             //$searchModel->user_id = 2;
         }elseif(Yii::$app->user->identity->user_id == 4){
             $searchModel->division_id = [1,2,3];
             //$searchModel->payee_id = [129,117];
         }elseif(Yii::$app->user->identity->user_id == 3){
             $searchModel->division_id = [4];
-            $searchModel->payee_id = [62,70,54,55];
+            //$searchModel->payee_id = [62,70,54,55];
+            //$searchModel->payee_id = [70,110];
         }elseif(Yii::$app->user->identity->user_id == 62){
             $searchModel->division_id = [5];
         }elseif(Yii::$app->user->identity->user_id == 70){
@@ -245,6 +249,12 @@ class RequestController extends Controller
             'query' => $model->getAttachments(),
             'pagination' => false,
         ]);
+        
+        $payrollDataprovider = new ActiveDataProvider([
+            'query' => $model->getPayrollitems(),
+            'pagination' => false,
+        ]);
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
         }
@@ -253,6 +263,7 @@ class RequestController extends Controller
         return $this->render('view', [
             'model' => $model,
             'attachmentsDataProvider' => $attachmentsDataProvider,
+            'payrollDataprovider' => $payrollDataprovider,
             'request_status' => $request_status,
             'params' => $params,
             'user' => $CurrentUser,
@@ -289,31 +300,69 @@ class RequestController extends Controller
         }
     }
     
-    public function actionCreatenew()
+    public function actionCreatepayroll()
     {
         $model = new Request(['scenario' => 'payroll']);
-        
+
         date_default_timezone_set('Asia/Manila');
         $model->request_date=date("Y-m-d H:i:s");
         if ($model->load(Yii::$app->request->post())) {
             
             $model->request_number = Request::generateRequestNumber();
             $model->created_by = Yii::$app->user->identity->user_id;
+            $model->status_id = Request::STATUS_SUBMITTED;
             $model->payroll = true;
             
             if($model->save(false))
                 return $this->redirect(['viewpayroll', 'id' => $model->request_id]);
             
         }elseif (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_form_new', [
+            return $this->renderAjax('_payroll_form', [
                         'model' => $model,
             ]);
         } else {
-            return $this->render('_form_new', [
+            return $this->render('_payroll_form', [
                         'model' => $model,
             ]);
         }
     }
+    
+    /*public function actionPayrollitems()
+    {
+        $id = $_GET['id'];
+        $model = $this->findModel($id);
+        
+        $searchModel = new CreditorSearch();
+        
+        //creditor_type_id
+        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        if($model->request_type_id == 13 || $model->request_type_id == 15){
+            $searchModel->creditor_type_id = 1;
+        }elseif($model->request_type_id == 14 || $model->request_type_id == 16){
+            $searchModel->creditor_type_id = 2;
+        }elseif($model->request_type_id == 33){
+            $searchModel->creditor_type_id = [1,2];
+        }elseif($model->request_type_id == 34){
+            $searchModel->creditor_type_id = 5;
+        }        
+        
+        $searchModel->payroll = 1;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_payrollitems', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'id' => $id,
+            ]);
+        } else {
+            return $this->render('_payrollitems', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'id' => $id,
+            ]);
+        }
+    }*/
     
     public function actionViewattachments()
     {
@@ -330,7 +379,9 @@ class RequestController extends Controller
                 $modelRequestattachment->last_update = date("Y-m-d H:i:s");
                 $modelRequestattachment->save(false);
             }
-            return $this->redirect(['view', 'id' => $model->request_id]);  
+            
+            $action = $model->payroll ? 'viewpayroll' : 'view';
+            return $this->redirect([$action.'?id='.$model->request_id]);
         }
         if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('_info', ['model'=>$model]);   
@@ -462,11 +513,13 @@ class RequestController extends Controller
             $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
             $model->last_update = date("Y-m-d H:i:s");
             $model->filecode = Requestattachment::generateCode($model->request_attachment_id);
+            $model->status_id = $model->request->payroll ? 10 : 0;
             $model->save(false);
             
             Yii::$app->session->setFlash('success', 'Document Successfully Uploaded!');
             
-            return $this->redirect(['view?id='.$model->request_id]);
+            $action = $model->request->payroll ? 'viewpayroll' : 'view';
+            return $this->redirect([$action.'?id='.$model->request_id]);
         }
         
         if (Yii::$app->request->isAjax) {
