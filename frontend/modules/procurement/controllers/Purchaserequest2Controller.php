@@ -163,7 +163,7 @@ class Purchaserequest2Controller extends Controller
                 //$con = Yii::$app->procurementdb;
                 //$sql = 'SELECT item_id, description, unit,unit_description, cost,SUM(approved_qty) AS qty FROM '.Yii::$app->session->getId().' WHERE YEAR = 2021 AND division_id = 2 AND status_id = 3 GROUP BY item_id';
                 //$items = $con->createCommand($sql)->queryAll();
-                $items->where(['section_id' => '']);
+                $items->where(['section_id' => '','project_id' => '']);
                 $this->deleteTempItem();
                 return $this->renderAjax('create', [
                     'model' => $model,
