@@ -14,6 +14,7 @@ $this->title = 'Purchase Request';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('/js/purchaserequest/ajax-modal-popup.js');
+$this->registerCss($this->render('pr-modal-additems.css'));
 ?>
 
 <div class="purchaserequest-index">

@@ -16,6 +16,8 @@ use kartik\grid\GridView;
 /* @var $model common\models\procurement\Purchaserequest */
 /* @var $form yii\widgets\ActiveForm */
 
+$BaseURL = $GLOBALS['frontend_base_uri'];
+
 $con =  Yii::$app->db;
 $command = $con->createCommand("SELECT `tbl_profile`.`user_id`,CONCAT(`tbl_profile`.`firstname`,', ', `tbl_profile`.`middleinitial` ,' ', `tbl_profile`.`lastname`, ' - ' , `tbl_profile`.`designation`) AS employeename
         FROM `tbl_profile`");
@@ -24,6 +26,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
 
 //var_dump(Json::encode($itemDataProvider));
 //echo Yii::$app->session->getId();
+//$this->registerCss($this->render('additem-modal.css'));
 ?>
 
 <div class="purchaserequest-form">
@@ -71,53 +74,19 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                 <!-- /.box-header -->
                 <div class="box-body collapse" id="toggle-pane-pr-item" style="">
                     <div class="row">
+                        <div class="col-md-2">
+                            <?=
+                            Html::button('Add Items  <i class="fa fa-plus-circle"></i>', [
+                                //'disabled' => $model->status_id != 1 or !$isMember,
+                                //'value' => Url::to(['create']),
+                                'title' => 'Add Items',
+                                'class' => 'btn btn-success btn-block',
+                                'style' => 'margin-bottom: 6px; display: "";',
+                                'id' => 'btnAdditems',
+                            ])
+                            ?>
+                        </div>
                         <div class=col-md-12>
-                            <div class="item-table">
-                                <?php
-                                echo GridView::widget([
-                                    'dataProvider' => $itemDataProvider,
-                                    //'summary' => '',
-                                    'pjax' => true,
-                                    'pjaxSettings' => [
-                                        'options' => [
-                                            'enablePushState' => false,
-                                            'id' => 'pr-item-grid',
-                                            'timeout' => 1000,
-                                            'clientOptions' => ['backdrop' => false]
-                                        ],
-                                    ],
-                                    'options' => ['style' => 'table-layout:fixed;'],
-                                    //'tableOptions' => ['class' => 'my-item-table'],
-                                    //'showPageSummary' => true,
-                                    'columns' => [
-                                        [
-                                            'class' => '\kartik\grid\CheckboxColumn',
-                                            //'headerOptions' => ['class' => 'kartik-sheet-style'],
-                                            'name' => 'ppmp-item', //additional
-                                            'checkboxOptions' => function ($model, $key, $index, $column) {
-                                                //$bool = Tmpitem::find()->where(['item_id' => $model->item_id, 'checked' => 1])->count();
-                                                return [
-                                                    'checked' => $model->checked == 1 ? true : false,
-                                                    'value' => $model->tmppritems_id,
-                                                    'onclick' => 'onCheck(this.value,this.checked)' //additional
-                                                ];
-                                            }
-                                        ],
-                                        [
-                                            'attribute' => 'unit_description'
-                                        ],
-                                        [
-                                            'attribute' => 'description',
-                                        ],
-                                        [
-                                            'attribute' => 'cost'
-                                        ],
-                                    ],
-                                    'responsive' => true,
-                                    'hover' => true
-                                ]);
-                                ?>
-                            </div>
                             <div class="selected-item-table">
                                 <?php
                                 echo GridView::widget([
@@ -180,9 +149,8 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                                                         //'disabled' => $model->status_id != 1 or !$isMember,
                                                         'value' =>  $model->tmppritems_id,
                                                         'title' => 'Remove Item',
-                                                        'class' => 'btn btn-danger btn-circle',
+                                                        'class' => 'btn btn-danger btn-circle buttonRemoveItem',
                                                         'style' => 'margin-right: 6px; display: "";',
-                                                        'id' => 'buttonRemoveItem'
                                                     ]);
                                                 },
                                             ],
@@ -341,36 +309,65 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
         </div>
     </div>
     <?php ActiveForm::end(); ?>
+</div>
+<!-- The Modal -->
+<div id="modal-additems" class="modal-additems-class modal-additems-hide">
+    <!-- Modal content -->
+    <div class="modal-additems-content">
+        <div class="modal-additems-head"><span class="close">&times;</span></div>
+        <div class="modal-additems-body">
+            <div class="item-table">
+                <?php
+                echo GridView::widget([
+                    'dataProvider' => $itemDataProvider,
+                    //'summary' => '',
+                    'pjax' => true,
+                    'pjaxSettings' => [
+                        'options' => [
+                            'enablePushState' => false,
+                            'id' => 'pr-item-grid',
+                            'timeout' => 1000,
+                            'clientOptions' => ['backdrop' => false]
+                        ],
+                    ],
+                    'options' => ['style' => 'table-layout:fixed;'],
+                    //'tableOptions' => ['class' => 'my-item-table'],
+                    //'showPageSummary' => true,
+                    'columns' => [
+                        [
+                            'class' => '\kartik\grid\CheckboxColumn',
+                            //'headerOptions' => ['class' => 'kartik-sheet-style'],
+                            'name' => 'ppmp-item', //additional
+                            'checkboxOptions' => function ($model, $key, $index, $column) {
+                                //$bool = Tmpitem::find()->where(['item_id' => $model->item_id, 'checked' => 1])->count();
+                                return [
+                                    'checked' => $model->checked == 1 ? true : false,
+                                    'value' => $model->tmppritems_id,
+                                    'onclick' => 'onCheck(this.value,this.checked)' //additional
+                                ];
+                            }
+                        ],
+                        [
+                            'attribute' => 'unit_description'
+                        ],
+                        [
+                            'attribute' => 'description',
+                        ],
+                        [
+                            'attribute' => 'cost'
+                        ],
+                    ],
+                    'responsive' => true,
+                    'hover' => true
+                ]);
+                ?>
+            </div>
+        </div>
 
+    </div>
 </div>
 
-<style>
-    .modal-dialog {
-        width: 65%;
-        margin-top: 0%;
-    }
 
-    .btn-circle {
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        padding: 6px 0;
-        font-size: 6px;
-        line-height: 1.42;
-
-    }
-
-    div.item-table {
-        max-height: 250px;
-        overflow: auto;
-    }
-
-    div.selected-item-table {
-        max-height: 250px;
-        overflow: auto;
-        margin-top: 10px;
-    }
-</style>
 
 <script>
     $(document).ready(function() {
@@ -421,6 +418,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                 $('#purchaserequest-project_id').attr("disabled", true)
             }
             $.pjax.reload({
+                async: true,
                 type: "POST",
                 container: "#pr-item-grid",
                 url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -432,6 +430,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
             }).done(function() {
                 $("input.select-on-check-all").hide();
                 $.pjax.reload({
+                    async: true,
                     type: "POST",
                     container: "#selected-item-grid",
                     url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -453,6 +452,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                 $('#purchaserequest-section_id').attr("disabled", true)
             }
             $.pjax.reload({
+                async: true,
                 type: "POST",
                 container: "#pr-item-grid",
                 url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -465,6 +465,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                 $("input.select-on-check-all").hide();
                 var selectProject = true;
                 $.pjax.reload({
+                    async: true,
                     type: "POST",
                     container: "#selected-item-grid",
                     url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -475,9 +476,10 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                 });
             });
         });
-        $('body').on('click', '#buttonRemoveItem', function() {
+        $('body').on('click', '.buttonRemoveItem', function() {
             var removeitem = true;
             $.pjax.reload({
+                async: true,
                 type: "POST",
                 container: "#selected-item-grid",
                 url: "<?php echo Url::to(['create']); ?>",
@@ -488,8 +490,9 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                     section: $("#purchaserequest-section_id").val(),
                 },
             }).done(function() {
-                console.log('success');
+                //console.log('success');
                 $.pjax.reload({
+                    async: true,
                     type: "POST",
                     container: "#pr-item-grid",
                     url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -498,7 +501,19 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                         reloadremoveditems: true,
                     },
                 });
-            });;
+            });
+        });
+        //----show Additems modal------
+        $('body').on('click', '#btnAdditems', function() {
+            //alert('hello claris!!!');
+            $('div.modal-additems-class').removeClass('modal-additems-hide');
+            $('div.modal-additems-class').addClass('modal-additems-show');
+        });
+        //----close Additems modal------
+        $('body').on('click', 'span.close', function() {
+            //alert('hello claris!!!');
+            $('div.modal-additems-class').removeClass('modal-additems-show');
+            $('div.modal-additems-class').addClass('modal-additems-hide');
         });
     });
 </script>
@@ -507,6 +522,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
     function onCheck(item_id, checked) {
         var checkItem = true;
         $.pjax.reload({
+            async: true,
             type: "POST",
             container: "#selected-item-grid",
             url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
@@ -521,6 +537,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
 
     function onQty(item_id, value, cost) {
         $.ajax({
+            async: true,
             type: "POST",
             url: "<?php echo Url::to(['updateqty']); ?>",
             data: {

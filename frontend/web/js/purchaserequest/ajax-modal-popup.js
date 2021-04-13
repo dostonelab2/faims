@@ -3,7 +3,4 @@ $("body").on("click", "#buttonCreatePR", function() {
         .find('#modalContent')
         .load($(this).attr('value'));
     $('#modalHeader').html($(this).attr('title'));
-    setTimeout(function() {
-        $("#btnrefresh").click();
-    }, 1500);
 });
