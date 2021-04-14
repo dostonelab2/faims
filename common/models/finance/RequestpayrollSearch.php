@@ -5,12 +5,12 @@ namespace common\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\Account;
+use common\models\finance\Requestpayroll;
 
 /**
- * AccountSearch represents the model behind the search form about `common\models\finance\Account`.
+ * RequestpayrollSearch represents the model behind the search form about `common\models\finance\Requestpayroll`.
  */
-class AccountSearch extends Account
+class RequestpayrollSearch extends Requestpayroll
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['account_id'], 'integer'],
-            [['title', 'object_code', 'account_code'], 'safe'],
+            [['request_payroll_id', 'request_id', 'active'], 'integer'],
+            [['name'], 'safe'],
+            [['amount'], 'number'],
         ];
     }
 
@@ -41,7 +42,7 @@ class AccountSearch extends Account
      */
     public function search($params)
     {
-        $query = Account::find();
+        $query = Requestpayroll::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +60,13 @@ class AccountSearch extends Account
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'account_id' => $this->account_id,
+            'request_payroll_id' => $this->request_payroll_id,
+            'request_id' => $this->request_id,
+            'amount' => $this->amount,
+            'active' => $this->active,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'object_code', $this->object_code])
-            ->andFilterWhere(['like', 'account_code', $this->account_code]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

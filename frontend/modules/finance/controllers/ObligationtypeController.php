@@ -176,6 +176,40 @@ class ObligationtypeController extends Controller
             ]);
         }
     }
+    
+    public function actionPayroll()
+    {
+        $model = new Dv();
+        
+        if(!isset($model->obligation_type_id))
+            $model->obligation_type_id = $_GET['type_id'];
+
+        $last_DV = Dv::getLastDV($model->obligation_type_id, 1);
+        
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model = new Dv();
+            $model->osdv_id = 0;
+            $model->request_id = 0;
+            $model->obligation_type_id = $_POST['Dv']['obligation_type_id'];
+            $model->dv_number = Dv::generateDvNumber($model->obligation_type_id, $_POST['Dv']['classId'], date("Y-m-d H:i:s"));
+            $model->dv_date = date("Y-m-d H:i:s");
+            
+            if($model->save(false))
+                return $this->redirect(['index']);
+            
+        }elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_payroll', [
+                        'model' => $model,
+                        'last_DV' => $last_DV,
+            ]);
+        } else {
+            return $this->render('_payroll', [
+                        'model' => $model,
+                        'last_DV' => $last_DV,
+            ]);
+        }
+    }
     /**
      * Updates an existing Obligationtype model.
      * If update is successful, the browser will be redirected to the 'view' page.

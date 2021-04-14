@@ -5,6 +5,8 @@ namespace common\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
 
@@ -45,7 +47,9 @@ class RequestosdvSearch extends Request
     public function search($params)
     {
         $query = Request::find();
-    
+        $query2 = Requestpayroll::find();
+        
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -53,7 +57,22 @@ class RequestosdvSearch extends Request
             'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
         
-    
+        $dataProvider2 = new ActiveDataProvider([
+            'query' => $query2,
+            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
+        ]);
+
+        $data = array_merge($dataProvider->getModels(), $dataProvider2->getModels());
+        
+        $dataProvider = new ArrayDataProvider([
+          'allModels' => $data
+        ]);
+        
+        /*$dataProvider = new ActiveDataProvider([
+            'query' => $data,
+            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
+        ]);*/
+        
         $this->load($params);
 
         if (!$this->validate()) {

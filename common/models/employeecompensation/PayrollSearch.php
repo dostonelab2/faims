@@ -1,16 +1,16 @@
 <?php
 
-namespace common\models\finance;
+namespace common\models\employeecompensation;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\Account;
+use common\models\employeecompensation\Payroll;
 
 /**
- * AccountSearch represents the model behind the search form about `common\models\finance\Account`.
+ * PayrollSearch represents the model behind the search form about `common\models\employeecompensation\Payroll`.
  */
-class AccountSearch extends Account
+class PayrollSearch extends Payroll
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['account_id'], 'integer'],
-            [['title', 'object_code', 'account_code'], 'safe'],
+            [['payroll_id', 'obligation_type_id', 'created_by'], 'integer'],
+            [['payroll_date'], 'safe'],
         ];
     }
 
@@ -41,12 +41,13 @@ class AccountSearch extends Account
      */
     public function search($params)
     {
-        $query = Account::find();
+        $query = Payroll::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['payroll_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -59,12 +60,11 @@ class AccountSearch extends Account
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'account_id' => $this->account_id,
+            'payroll_id' => $this->payroll_id,
+            'obligation_type_id' => $this->obligation_type_id,
+            'payroll_date' => $this->payroll_date,
+            'created_by' => $this->created_by,
         ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'object_code', $this->object_code])
-            ->andFilterWhere(['like', 'account_code', $this->account_code]);
 
         return $dataProvider;
     }

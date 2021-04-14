@@ -204,6 +204,8 @@ Modal::end();
                 'format' => 'raw',
                 'displayOnly'=>true, //$model->os 
                 'value' =>  
+                    $model->payroll ? "" : (
+                
                     ($model->dv ? '<h4><span class="label label-success">'.$model->dv->dv_number.'</span></h4>' : 
                     '<h4><span class="label label-warning">'.Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s")).'</span></h4>'.Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generatedvnumber') ? Url::to(['osdv/generatedvnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),
                                                                         'title' => 'Generate DV', 'class' => 'btn btn-md btn-success '
@@ -211,7 +213,8 @@ Modal::end();
                                                                    'id'=>'buttonGenerateDVNumber'])).
                     
                     Html::button('Certify Funds Available', ['value' => Url::to(['osdv/certifycashavailable', 'id'=>$model->osdv_id]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_CHARGED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id >= Request::STATUS_CHARGED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonCertifyfundsavailable']),
+                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_CHARGED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id >= Request::STATUS_CHARGED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonCertifyfundsavailable'])
+                    ),
             ],
 
 
@@ -382,6 +385,213 @@ Modal::end();
     
     </div>
     
+    <?php //if( ($model->payroll == 1 && Yii::$app->user->can('access-finance-disbursement')) || (Yii::$app->user->identity->username == 'Admin')) { ?>
+    <?php if($model->payroll == 1) { ?>
+    <?php
+    $gridColumnsPayroll = [
+            [
+                'class' => 'kartik\grid\SerialColumn',
+                'contentOptions' => ['class' => 'kartik-sheet-style'],
+                'width' => '10px',
+                'header' => '',
+                'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
+                'pageSummary' => '',  
+            ],
+            [   
+                'attribute'=>'creditor_id',
+                'header' => 'Name',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'200px',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    return $model->creditor->name;
+                },
+                
+            ],
+            [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'particulars',
+                'header'=>'Particulars',
+                'width'=>'350px',
+                'refreshGrid'=>true,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->particulars;
+                    },
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '_' . $model->request_payroll_id],
+                        'placement'=>'right',
+                        //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                        'name'=>'amount',
+                        'asPopover' => true,
+                        'value' => $model->particulars,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
+                        'size'=>'lg',
+                        'options' => ['class'=>'form-control', 'rows'=>5, 'placeholder'=>'Enter particulars...'],
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                    ];
+                },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'left',
+                'vAlign'=>'left',
+                'width'=>'800px',
+                'pageSummary' => 'TOTAL', 
+                'pageSummaryOptions' => ['style' => 'text-align: left;'],
+            ],
+            [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'amount',
+                'header'=>'Gross Amount',
+                'width'=>'350px',
+                'refreshGrid'=>true,
+                'format'=>['decimal',2],
+                //'readonly' => !$isMember,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->amount;
+                    },
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '_' . $model->request_payroll_id],
+                        'placement'=>'left',
+                        'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                        //'disabled'=>true,
+                        'name'=>'amount',
+                        'asPopover' => true,
+                        'value' => $model->amount,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                    ];
+                },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'right',
+                'vAlign'=>'left',
+                'width'=>'250px',
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            ],
+            [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'tax',
+                'header'=>'Tax',
+                'width'=>'350px',
+                'refreshGrid'=>true,
+                'format'=>['decimal',2],
+                //'readonly' => !$isMember,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->tax;
+                    },
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '-' . $model->request_payroll_id],
+                        'placement'=>'left',
+                        'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                        //'disabled'=>true,
+                        'name'=>'tax',
+                        'asPopover' => true,
+                        'value' => $model->tax,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                    ];
+                },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'right',
+                'vAlign'=>'left',
+                'width'=>'250px',
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            ],
+            [   
+                'attribute'=>'request_id',
+                'header' => 'DV Number',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
+                'format' => 'raw',
+                'width'=>'150px',
+                /*'value'=> function ($model, $key, $index, $widget) { 
+                    //return $model->dv->dv_number;
+                    return isset($model->dv) ? $model->dv->dv_number : '';
+                },*/
+                'value'=>function ($model, $key, $index, $widget){
+                    $label = ($model->status_id >= Request::STATUS_CHARGED ? '<h4><span class="label label-info">'.$model->dv->dv_number.'</span></h4>' : '<h4><span class="label label-success">'.($model->dv ? $model->dv->dv_number : "").'</span></h4>');
+                    
+                    return ($model->dv ? $label :                         
+                    Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generatedvnumber') ? Url::to(['osdv/generatedvnumber', 'id'=>$model->osdv_id, 'request_payroll_id'=>$model->request_payroll_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),
+                                                                        'title' => 'Generate DV', 'class' => 'btn btn-md btn-success'
+                                                                        .(Yii::$app->user->can('access-finance-generatedvnumber') ? '' : 'disabled'),
+                                                                   'id'=>'buttonGenerateDVNumber']));
+                },
+                'pageSummary' => false,
+            ],
+            [   
+                'attribute'=>'request_id',
+                'header' => 'DV Number',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
+                'format' => 'raw',
+                'width'=>'150px',
+                'value'=>function ($model, $key, $index, $widget){
+                    return ($model->dv ? 
+                    Html::button('Certify Funds Available', ['value' => Url::to(['osdv/certifycashavailable', 'id'=>$model->osdv_id, 'request_payroll_id'=>$model->request_payroll_id]),     
+                                                                'title' => 'Allotment', 'class' => 'btn btn-info'.($model->status_id >= Request::STATUS_CHARGED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id >= Request::STATUS_CHARGED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonCertifyfundsavailable']) : ''
+                    );
+                },
+                'pageSummary' => false,
+            ],
+        ];
+?>
+    
+       <?= GridView::widget([
+            'id' => 'payroll-items',
+            'dataProvider' => $payrollDataprovider,
+            //'filterModel' => $searchModel,
+            'showFooter' => true,
+            'showPageSummary' => true,
+            'columns' => $gridColumnsPayroll, // check the configuration for grid columns by clicking button above
+            
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            // set left panel buttons
+            /*'panel' => [
+                'heading'=>'<h3 class="panel-title">Attachments</h3>',
+                'type'=>'primary',
+            ],*/    
+            'panel' => [
+                'heading' => '<h3 class="panel-title">PAYROLL ITEMS</h3>',
+                'type' => GridView::TYPE_SUCCESS,
+                //'before'=> Html::button('Add Creditors', ['value' => Url::to(['request/payrollitems', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;'.((($model->status_id < Request::STATUS_SUBMITTED)) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonPayrollitems']) ,
+                'before'=> Html::button('Add Creditors', ['value' => Url::to(['osdv/payrollitems', 'id'=>$model->osdv_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonPayrollitems']) ,
+                'after'=>false,
+            ],
+            // set right toolbar buttons
+            'toolbar' => 
+                            [
+                                [
+                                    'content'=>''
+                                ],
+                            ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'persistResize' => false,
+            'toggleDataOptions' => ['minCount' => 10],
+            //'exportConfig' => $exportConfig,
+            'itemLabelSingle' => 'item',
+            'itemLabelPlural' => 'items',
+        ]);
+
+    
+    ?>
+        
+    <?php } ?>
     
     <?php
         $gridColumns = [
@@ -759,10 +969,6 @@ Modal::end();
                     'type' => GridView::TYPE_WARNING,
                     'before'=>Html::button('Add', ['value' => Url::to(['accounttransaction/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
                                                                 'title' => 'Account Transactions', 'class' => 'btn btn-success'.($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 'style'=>'margin-right: 6px;'.(Yii::$app->user->can('access-finance-disbursement') ? '' : 'display: none;'), 'id'=>'buttonAddAccounttransaction']),
-                                /*Html::button('Add', ['value' => Url::to(['accounttransaction/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
-                                                                'title' => 'Account Transactions', 'class' => 'btn btn-success'.($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 'style'=>'margin-right: 6px;', 'id'=>'buttonAddAccounttransaction']),.
-                              Html::button('Certify Cash Available', ['value' => Url::to(['osdv/certifycashavailable', 'id'=>$model->osdv_id]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate']),*/
                     'after'=>false,
                 ],
                 // set right toolbar buttons

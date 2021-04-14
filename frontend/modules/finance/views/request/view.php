@@ -186,8 +186,132 @@ Modal::end();
         ],
     ]); ?>
     
-    <?php
-    $gridColumns = [
+    <?php //if( ($model->payroll == 1 && Yii::$app->user->can('access-finance-disbursement')) || (Yii::$app->user->identity->username == 'Admin')) { ?>
+    <?php //if($model->payroll == 1) { ?>
+    <!--?php
+    $gridColumnsPayroll = [
+            [
+                'class' => 'kartik\grid\SerialColumn',
+                'contentOptions' => ['class' => 'kartik-sheet-style'],
+                'width' => '10px',
+                'header' => '',
+                'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
+                'pageSummary' => '',  
+                
+                //'pageSummary' => '<span style="float:right";>SUBTOTAL<BR>DISCOUNT<BR><B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL</B></span>',  
+
+            ],
+            
+            //'name',
+            
+            [   
+                'attribute'=>'creditor_id',
+                'pageSummary'=>'Total',
+                'header' => 'Name',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'650px',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    return $model->creditor->name;
+                },
+                'pageSummary' => 'TOTAL', 
+                'pageSummaryOptions' => ['style' => 'text-align: right;'],
+            ],
+            [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'amount',
+                'header'=>'Amount',
+                'width'=>'350px',
+                'refreshGrid'=>true,
+                'format'=>['decimal',2],
+                //'readonly' => !$isMember,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->amount;
+                    },
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '_' . $model->request_payroll_id],
+                        'placement'=>'left',
+                        'disabled'=>!Yii::$app->user->can('access-finance-obligation'),
+                        //'disabled'=>true,
+                        'name'=>'amount',
+                        'asPopover' => true,
+                        'value' => $model->amount,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                    ];
+                },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'right',
+                'vAlign'=>'left',
+                'width'=>'100px',
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            ],
+            [   
+                'attribute'=>'creditor_id',
+                'header' => 'DV Number',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'150px',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    return '';
+                },
+                'pageSummary' => false,
+            ],
+        ];
+?-->
+    
+       <!--?= GridView::widget([
+            'id' => 'payroll-items',
+            'dataProvider' => $payrollDataprovider,
+            //'filterModel' => $searchModel,
+            'showFooter' => true,
+            'showPageSummary' => true,
+            'columns' => $gridColumnsPayroll, // check the configuration for grid columns by clicking button above
+            
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            // set left panel buttons
+ 
+            'panel' => [
+                'heading' => '<h3 class="panel-title">Payroll Items</h3>',
+                'type' => GridView::TYPE_SUCCESS,
+                //'before'=> Html::button('Add Creditors', ['value' => Url::to(['request/payrollitems', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;'.((($model->status_id < Request::STATUS_SUBMITTED)) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonPayrollitems']) ,
+                'before'=> Html::button('Add Creditors', ['value' => Url::to(['request/payrollitems', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonPayrollitems']) ,
+                'after'=>false,
+            ],
+            // set right toolbar buttons
+            'toolbar' => 
+                            [
+                                [
+                                    'content'=>''
+                                ],
+                            ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'persistResize' => false,
+            'toggleDataOptions' => ['minCount' => 10],
+            //'exportConfig' => $exportConfig,
+            'itemLabelSingle' => 'item',
+            'itemLabelPlural' => 'items',
+        ]);
+
+    
+    ?-->
+        
+    <?php //} ?>
+    
+    <?php 
+        $gridColumns = [
             [
                 'class' => 'kartik\grid\SerialColumn',
                 'contentOptions' => ['class' => 'kartik-sheet-style'],
@@ -202,7 +326,7 @@ Modal::end();
                 'attribute'=>'attachment_id',
                 'header' => 'Required Documents',
                 'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle;'],
-                'width'=>'550px',
+                'width'=>'650px',
                 'format' => 'raw',
                 'value'=>function ($model, $key, $index, $widget) { 
                     
@@ -376,7 +500,7 @@ Modal::end();
                 'pageSummary' => true
             ],
         ];
-?>
+    ?>
     
     <?= GridView::widget([
             'id' => 'request-attachments',
@@ -455,63 +579,45 @@ Modal::end();
 
 <a id="startButton"  href="javascript:void(0);">Show guide</a>
 
-<?php
-/*if (!$cert_store = file_get_contents("../../common/database/PKI/MAW/MAW_Sign.p12")) {
-    echo "Error: Unable to read the cert file\n";
-    exit;
-}
-
-if (openssl_pkcs12_read($cert_store, $cert_info, "mawDostRegion9")) {
-    echo "Certificate Information\n";
-    echo '<pre>';
-    print_r($cert_info);
-    echo '</pre>';
-} else {
-    echo "Error: Unable to read the cert store.\n";
-    exit;
-}*/
-?>
-
-
 <script type="text/javascript">
-    /*document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
-            window.location.href = 'index?multipage=true';
-        });
-    };*/
-function startIntro(){
-        var intro = introJs();
-          intro.setOptions({
-            steps: [
-              {
-                intro: "Hello world!"
-              },
-              {
-                element: document.querySelector('#step1'),
-                intro: "This is a tooltip."
-              },
-              {
-                element: document.querySelectorAll('#step2')[0],
-                intro: "Ok, wasn't that fun?",
-                position: 'right'
-              },
-              {
-                element: '#step3',
-                intro: 'More features, more fun.',
-                position: 'left'
-              },
-              {
-                element: '#step4',
-                intro: "Another step.",
-                position: 'bottom'
-              },
-              {
-                element: '#step5',
-                intro: 'Get it, use it.'
-              }
-            ]
-          });
 
-          intro.start();
+$("#modalContainer").on("hidden.bs.modal", function () {
+    $.pjax.reload({container:'#payroll-items'});
+});
+    
+function startIntro(){
+    var intro = introJs();
+      intro.setOptions({
+        steps: [
+          {
+            intro: "Hello world!"
+          },
+          {
+            element: document.querySelector('#step1'),
+            intro: "This is a tooltip."
+          },
+          {
+            element: document.querySelectorAll('#step2')[0],
+            intro: "Ok, wasn't that fun?",
+            position: 'right'
+          },
+          {
+            element: '#step3',
+            intro: 'More features, more fun.',
+            position: 'left'
+          },
+          {
+            element: '#step4',
+            intro: "Another step.",
+            position: 'bottom'
+          },
+          {
+            element: '#step5',
+            intro: 'Get it, use it.'
+          }
+        ]
+      });
+
+      intro.start();
       }
-    </script>
+</script>

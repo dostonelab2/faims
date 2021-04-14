@@ -159,6 +159,12 @@ $ppmp_approved = Ppmp::find()
                                 //'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
+                                'label' => 'Skip OS/DV', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/skip'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval') 
+                            ],
+                            [
                                 'label' => 'Disbursement Report', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/report'], 
@@ -218,7 +224,7 @@ $ppmp_approved = Ppmp::find()
                                 'icon' => 'object-ungroup text-aqua', 
                                 'url' => ['/finance/obligationtype/index'], 
                                 //'visible'=> (Yii::$app->user->identity->username == 'Admin')
-                                'visible'=> Yii::$app->user->can('access-finance-verification')//  || (Yii::$app->user->identity->username == 'Admin')
+                                'visible'=> Yii::$app->user->can('access-finance-verification')  || (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
                                 'label' => 'Expenditure Objects', 
@@ -247,6 +253,16 @@ $ppmp_approved = Ppmp::find()
                                 'visible'=> Yii::$app->user->can('access-finance-fileupload') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             //['label' => 'Request', 'icon' => 'object-ungroup', 'url' => ['/finance/request/index']],
+                        ]
+                    ],
+                    [
+                        'label' => 'Employee Compensation', 
+                        'icon' => 'ruble green', 
+                        'url' => ['/employeecompensation/payroll/index'],
+                        'visible'=> Yii::$app->user->can('access-employee-compensation'),
+                        'items' => [
+                            ['label' => 'Payroll Regular', 'icon' => 'commenting', 'url' => ['/employeecompensation/payroll/index']],
+                            ['label' => 'Payroll Contractual', 'icon' => 'commenting', 'url' => ['/employeecompensation/payroll']],
                         ]
                     ],
                     /*[

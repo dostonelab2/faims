@@ -17,6 +17,7 @@ use Yii;
  */
 class Creditor extends \yii\db\ActiveRecord
 {
+    public $request_type_id;
     /**
      * @inheritdoc
      */

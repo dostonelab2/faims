@@ -5,12 +5,13 @@ namespace common\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\Account;
+use common\models\finance\Osdv;
+
 
 /**
- * AccountSearch represents the model behind the search form about `common\models\finance\Account`.
+ * OsdvSearch represents the model behind the search form about `common\models\finance\Osdv`.
  */
-class AccountSearch extends Account
+class OsdvapprovalSearch extends Osdv
 {
     /**
      * @inheritdoc
@@ -18,8 +19,7 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['account_id'], 'integer'],
-            [['title', 'object_code', 'account_code'], 'safe'],
+            [['osdv_id', 'request_id', 'type_id', 'expenditure_class_id', 'status_id', 'created_by'], 'integer'],
         ];
     }
 
@@ -41,12 +41,13 @@ class AccountSearch extends Account
      */
     public function search($params)
     {
-        $query = Account::find();
+        $query = Osdv::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['osdv_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -59,12 +60,16 @@ class AccountSearch extends Account
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'account_id' => $this->account_id,
+            'request_id' => $this->request_id,
+            'type_id' => $this->type_id,
+            'expenditure_class_id' => $this->expenditure_class_id,
+            //'status_id' => $this->status_id,
+            'created_by' => $this->created_by,
+            'cancelled' => 0,
         ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'object_code', $this->object_code])
-            ->andFilterWhere(['like', 'account_code', $this->account_code]);
+        //$query->andFilterWhere(['=', 'status_id', 67]);
+        $query->andFilterWhere(['>=', 'status_id', 65]);
+        $query->andFilterWhere(['<', 'status_id', 70]);
 
         return $dataProvider;
     }

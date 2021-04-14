@@ -53,9 +53,13 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_FOR_DISBURSEMENT = 58; // finance processing team / budgetting staff
     const STATUS_CERTIFIED_FUNDS_AVAILABLE = 60; // Head of the Accounting Unit (Accountant)
     const STATUS_CHARGED = 65; // finance processing team / accounting staff
+    const STATUS_APPROVED_PARTIAL = 67;  // Head of Agency (Regional Director / OIC)
     const STATUS_APPROVED_FOR_DISBURSEMENT = 70;  // Head of Agency (Regional Director / OIC)
     const STATUS_COMPLETED = 80; // 
     const STATUS_RATED = 90;     // end user
+    
+    const SCENARIO_REQUEST = 'request';
+    const SCENARIO_PAYROLL = 'payroll';
     
     public $user_id;
     public $new_payee;
@@ -67,6 +71,13 @@ class Request extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'tbl_request';
+    }
+    
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['payroll'] = ['request_number', 'request_date', 'division_id', 'request_type_id', 'obligation_type_id', 'payee_id', 'particulars', 'amount'];
+        
+        return $scenarios;
     }
 
     /**
@@ -121,6 +132,14 @@ class Request extends \yii\db\ActiveRecord
     public function getAttachments()
     {
         return $this->hasMany(Requestattachment::className(), ['request_id' => 'request_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayrollitems()
+    {
+        return $this->hasMany(Requestpayroll::className(), ['request_id' => 'request_id'])->andOnCondition(['active' => 1]);
     }
     
     /**

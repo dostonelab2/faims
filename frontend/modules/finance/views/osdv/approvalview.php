@@ -140,16 +140,10 @@ Modal::end();
         <div class="panel-heading"><b>Disbursement Status</b></div>
             <div class="panel-body">
                 <div class="form-group" style="text-align: center; <?php echo (Yii::$app->user->can('access-finance-approval') ? ($model->status_id == Request::STATUS_APPROVED_FOR_DISBURSEMENT ? 'display: none;' : '') : 'display: none;') ?>">
-                    <?php echo Html::button('APPROVE FINANCIAL REQUEST', ['value' => Url::to(['osdv/approve', 'id'=>$model->osdv_id]),     
+                    <?php echo $model->payroll ? '<h4><span class="label label-info">See Payroll Items</span></h4>' : Html::button('APPROVE FINANCIAL REQUEST', ['value' => Url::to(['osdv/approve', 'id'=>$model->osdv_id]),     
                                                                         'title' => 'Approve for Disbursement', 'class' => 'btn btn-success '.($model->status_id == Request::STATUS_APPROVED_FOR_DISBURSEMENT ? 'disabled' : ''), 'id'=>'buttonGenerateDVNumber']);
-                        //.($model->status_id == Request::STATUS_APPROVED_FOR_DISBURSEMENT ? 'disabled' : '')
-                        //.(Yii::$app->user->can('access-finance-approval') ? ($model->status_id == Request::STATUS_APPROVED_FOR_DISBURSEMENT ? 'display: none;' : '') : 'display: none;')
                     ?>
-                    
-                    
                 </div>
-                <!--span class="badge badge-success">Approved</span-->
-                
             </div>
         </div>
     </div>
@@ -325,20 +319,9 @@ Modal::end();
                 'panel' => [
                     'heading' => '<h3 class="panel-title">OBLIGATION</h3>',
                     'type' => GridView::TYPE_INFO,
-                    'before'=>'',/*Html::button('Add', ['value' => Url::to(['osallotment/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-success '.($model->status_id == Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligation') ? ($model->status_id == Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonAddAllotment']) . 
-                              Html::button('Obligate', ['value' => Url::to(['osdv/obligate', 'id'=>$model->osdv_id]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id == Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id == Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate'])*/
+                    'before'=>'',
                     'after'=>false,
                 ],
-                // set right toolbar buttons
-                /*'toolbar' => 
-                                [
-                                    [
-                                        'content'=>
-                                            Html::button('Generate Attachments  <i class="glyphicon glyphicon-list"></i>', ['value' => Url::to(['request/generateattachments', 'id'=>$model->request_id]), 'title' => 'Attachment', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonGenerateAttachments'])
-                                    ],
-                                ],*/
                 // set export properties
                 'export' => [
                     'fontAwesome' => true
@@ -353,6 +336,138 @@ Modal::end();
     
     </div>
     
+    <?php if($model->payroll == 1) { ?>
+    <?php
+    $gridColumnsPayroll = [
+            [
+                'class' => 'kartik\grid\SerialColumn',
+                'contentOptions' => ['class' => 'kartik-sheet-style'],
+                'width' => '10px',
+                'header' => '',
+                'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
+                'pageSummary' => '',  
+            ],
+            [   
+                'attribute'=>'creditor_id',
+                'header' => 'Name',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'200px',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    return $model->creditor->name;
+                },
+                
+            ],
+            [
+                'attribute'=>'particulars',
+                'header'=>'Particulars',
+                'width'=>'350px',
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->particulars;
+                    },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'left',
+                'vAlign'=>'left',
+                'width'=>'800px',
+                'pageSummary' => 'TOTAL', 
+                'pageSummaryOptions' => ['style' => 'text-align: left;'],
+            ],
+            [
+                'attribute'=>'amount',
+                'header'=>'Amount',
+                'width'=>'350px',
+                'format'=>['decimal',2],
+                //'readonly' => !$isMember,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->amount;
+                    },
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'padding-right: 20px;'],
+                'hAlign'=>'right',
+                'vAlign'=>'left',
+                'width'=>'250px',
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM,
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            ],
+            [   
+                'attribute'=>'request_id',
+                'header' => 'DV Number',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
+                'format' => 'raw',
+                'width'=>'150px',
+                'value'=> function ($model, $key, $index, $widget) { 
+                    return isset($model->dv) ? $model->dv->dv_number : '';
+                },
+                'pageSummary' => false,
+            ],
+            [   
+                'attribute'=>'request_id',
+                'header' => 'Action',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
+                'format' => 'raw',
+                'width'=>'150px',
+                'value'=>function ($model, $key, $index, $widget){
+                    return ($model->status_id == Request::STATUS_APPROVED_FOR_DISBURSEMENT) ? '<span class="label label-info">APPROVED</span>' :
+                    Html::button('APPROVE', ['value' => Url::to(['osdv/approvepayroll', 'id'=>$model->request_payroll_id]),     
+                                                                'title' => 'Allotment', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-approval') ? ($model->status_id >= Request::STATUS_CHARGED ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonApprovepayroll']);
+                },
+                'pageSummary' => false,
+                //Request::STATUS_CHARGED
+            ],
+        ];
+?>
+    
+       <?= GridView::widget([
+            'id' => 'payroll-items',
+            'dataProvider' => $payrollDataprovider,
+            //'filterModel' => $searchModel,
+            'showFooter' => true,
+            'showPageSummary' => true,
+            'columns' => $gridColumnsPayroll, // check the configuration for grid columns by clicking button above
+            
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            // set left panel buttons
+            /*'panel' => [
+                'heading'=>'<h3 class="panel-title">Attachments</h3>',
+                'type'=>'primary',
+            ],*/    
+            'panel' => [
+                'heading' => '<h3 class="panel-title">PAYROLL ITEMS</h3>',
+                'type' => GridView::TYPE_SUCCESS,
+                //'before'=> Html::button('Add Creditors', ['value' => Url::to(['request/payrollitems', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;'.((($model->status_id < Request::STATUS_SUBMITTED)) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonPayrollitems']) ,
+                'before'=> '',  
+                'after'=>false,
+            ],
+            // set right toolbar buttons
+            'toolbar' => 
+                            [
+                                [
+                                    'content'=>''
+                                ],
+                            ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'persistResize' => false,
+            'toggleDataOptions' => ['minCount' => 10],
+            //'exportConfig' => $exportConfig,
+            'itemLabelSingle' => 'item',
+            'itemLabelPlural' => 'items',
+        ]);
+
+    
+    ?>
+        
+    <?php } ?>
     
     <?php
         $gridColumns = [

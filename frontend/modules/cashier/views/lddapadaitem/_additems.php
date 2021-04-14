@@ -37,27 +37,6 @@ use common\models\cashier\Lddapadaitem;
                                                 ];
                                      }
             ],
-            /*[
-                    'attribute'=>'availability',
-                    'header'=>'Category',
-                    'value'=>function ($model, $key, $index, $widget) { 
-                            if($model->availability == 1){
-                                return 'PART I. AVAILABLE AT PROCUREMENT SERVICE STORES';
-                            }elseif($model->availability == 2){
-                                return 'PART II. OTHER ITEMS NOT AVALABLE AT PS BUT REGULARLY PURCHASED FROM OTHER SOURCES (Note: Please indicate price of items)';
-                            }
-                        },
-                    'headerOptions' => ['style' => 'background-color: #fee082;'],
-                    'contentOptions'=>['style'=>'background-color: #fee082;'],
-                
-                    'group'=>true,  // enable grouping,
-                    'groupedRow'=>true,                    // move grouped column to a single grouped row
-                    //'contentOptions' => ['style' => 'text-align: left; background-color: #ffe699;'],
-                    
-                    'groupOddCssClass'=>'',  // configure odd group cell css class
-                    'groupEvenCssClass'=>'', // configure even group cell css class
-                ],*/
-
             [
                 'attribute' => 'name',
                 'value'=>function ($model, $key, $index, $widget){ 
