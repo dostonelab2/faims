@@ -13,42 +13,58 @@ use common\models\procurementplan\Unitofmeasure;
 
 <div class="item-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'create_item']); ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'product_code')->textInput() ?>
 
-    <?= $form->field($model, 'item_code')->textInput() ?>
+            <?= $form->field($model, 'supply_type')->dropDownList(
+                [
+                    '1' => 'CSE',
+                    '2' => 'NON_CSE'
+                ],
+                [
+                    'prompt' => 'Select Type...'
+                ]
+            ) ?>
 
-    <?= $form->field($model, 'item_category_id')->dropDownList(
-        ArrayHelper::map(Itemcategory::find()->where(['status' => 1])->all(),'item_category_id','category_name'),
-        [
-            'prompt' => 'Select Category...',
-        ]
-        ) ?>
+            <?= $form->field($model, 'item_category_id')->dropDownList(
+                ArrayHelper::map(Itemcategory::find()->where(['status' => 1])->all(), 'item_category_id', 'category_name'),
+                [
+                    'prompt' => 'Select Category...',
+                ]
+            )->label('Item Category') ?>
 
-    <?= $form->field($model, 'item_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'item_name')->textInput(['maxlength' => true]) ?>
+        </div>
 
-    <?= $form->field($model, 'unit_of_measure_id')->dropDownList(
-        ArrayHelper::map(Unitofmeasure::find()->where(['status' => 1])->all(),'unit_of_measure_id','name'),
-        [
-            'prompt' => 'Select Unit of Measurement...'
-        ]
-    ) ?>
+        <div class="col-md-6">
+            <?= $form->field($model, 'unit_of_measure_id')->dropDownList(
+                ArrayHelper::map(Unitofmeasure::find()->where(['status' => 1])->all(), 'unit_of_measure_id', 'name'),
+                [
+                    'prompt' => 'Select Unit of Measurement...'
+                ]
+            )->label('Unit of Measurement') ?>
 
-    <?= $form->field($model, 'price_catalogue')->textInput() ?>
+            <?= $form->field($model, 'price_catalogue')->textInput(['type' => 'number', 'step' => 'any']) ?>
 
-    <?= $form->field($model, 'availability')->dropDownList(
-        [
-            '1' => 'AVAILABLE AT PROCUREMENT SERVICE STORES',
-            '2' => 'ITEMS NOT AVAILABLE AT PS BUT REGULARLY PURCHASED FROM OTHER SOURCES'
-        ],
-        [
-            'prompt' => 'Select Availability...'
-        ]
-    ) ?>
+            <?= $form->field($model, 'availability')->dropDownList(
+                [
+                    '1' => 'AVAILABLE AT PROCUREMENT SERVICE STORES',
+                    '2' => 'ITEMS NOT AVAILABLE AT PS BUT REGULARLY PURCHASED FROM OTHER SOURCES'
+                ],
+                [
+                    'prompt' => 'Select Availability...'
+                ]
+            ) ?>
+            
+        <div class="form-group">
+            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right', 'style' => 'width:25%; margin-top:22px']) ?>
+        </div>
+        </div>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

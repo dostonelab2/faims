@@ -36,8 +36,3 @@ app.controller(MainController, function ($scope, $http, $timeout) {
         $scope.reverse = !$scope.reverse;
     };
 });
-
-
-
-
-

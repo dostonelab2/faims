@@ -17,6 +17,8 @@ use Yii;
  */
 class Item extends \yii\db\ActiveRecord
 {
+    const CSE = 1;
+    const NON_CSE = 2;
     /**
      * @inheritdoc
      */
@@ -31,8 +33,8 @@ class Item extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_category_id', 'item_code', 'item_name', 'unit_of_measure_id', 'price_catalogue'], 'required'],
-            [['item_category_id', 'item_code', 'unit_of_measure_id', 'availability'], 'integer'],
+            [['item_category_id', 'item_name', 'unit_of_measure_id', 'price_catalogue','supply_type'], 'required'],
+            [['item_category_id', 'unit_of_measure_id', 'availability'], 'integer'],
             [['price_catalogue'], 'number'],
             [['last_update'], 'safe'],
             [['item_name'], 'string', 'max' => 300],
@@ -47,7 +49,8 @@ class Item extends \yii\db\ActiveRecord
         return [
             'item_id' => 'Item ID',
             'item_category_id' => 'Item Category ID',
-            'item_code' => 'Item Code',
+            'supply_type' => 'Supply Type',
+            'product_code' => 'Product Code',
             'item_name' => 'Item Name',
             'unit_of_measure_id' => 'Unit Of Measure ID',
             'price_catalogue' => 'Price Catalogue',
@@ -70,5 +73,16 @@ class Item extends \yii\db\ActiveRecord
             return $unit->name;
         else
             return 'unit';
+    }
+    public function getSupplytype()
+    {
+        switch ($this->supply_type) {
+            case self::CSE:
+                return '<span class="label label-primary">CSE</span>';
+                break;
+            case self::NON_CSE:
+                return '<span class="label label-warning">NON_CSE</span>';
+                break;
+        }
     }
 }

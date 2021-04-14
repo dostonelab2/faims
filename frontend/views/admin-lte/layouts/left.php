@@ -326,6 +326,7 @@ $ppmp_approved = Ppmp::find()
                         //'visible'=> Yii::$app->user->can('access-settings'),
                         'items' => [
                             ['label' => 'Profile', 'icon' => 'user', 'url' => ['/profile'],'visible'=> Yii::$app->user->can('access-settings')],
+                            ['label' => 'Change Password', 'icon' => 'key', 'url' => ['/admin/user/change-password'],'visible'=> Yii::$app->user->can('access-settings')],
                             ['label' => 'Login', 'icon' => 'user', 'url' => ['/site/login'],'visible'=>  Yii::$app->user->isGuest],
                             ['label' => 'Sign Out', 'icon' => 'user-times'  , 'url' => Yii::$app->urlManager->createUrl(['/site/logout']), 'visible' => !Yii::$app->user->isGuest, 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>'],
                         ]

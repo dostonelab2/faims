@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\procurementplan\Itemprice;
 use yii\helpers\Json;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * ItemController implements the CRUD actions for Item model.
@@ -67,12 +69,18 @@ class ItemController extends Controller
     {
         $model = new Item();
         $itemprice = new Itemprice();
-        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $itemprice->item_id = $model->item_id;
-            $itemprice->price_catalogue = $_POST['Item']['price_catalogue'];
-            $itemprice->save(false);
-            return $this->redirect(['view', 'id' => $model->item_id]);
+                $itemprice->item_id = $model->item_id;
+                $itemprice->price_catalogue = $_POST['Item']['price_catalogue'];
+                $itemprice->save(false);
+                return $this->redirect([
+                    'index',
+                    'ItemSearch[item_id]' => $model->item_id,
+                ]);
+        } elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -90,14 +98,13 @@ class ItemController extends Controller
     {
         $model = $this->findModel($id);
         $itemprice = new Itemprice();
-        if($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             $itemprice->item_id = $model->item_id;
             $itemprice->price_catalogue = $_POST['Item']['price_catalogue'];
             if ($model->save() && $itemprice->save()) {
                 return $this->redirect(['view', 'id' => $model->item_id]);
             }
-        }
-         else {
+        } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -120,7 +127,6 @@ class ItemController extends Controller
             Yii::$app->session->setFlash('danger', "Database integrity exception, Process not allowed...");
             return $this->redirect(['index']);
         }
-    
     }
 
     /**
@@ -138,20 +144,20 @@ class ItemController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionUpdateprice(){
-        
-        if(Yii::$app->request->post('hasEditable')){
+    public function actionUpdateprice()
+    {
+
+        if (Yii::$app->request->post('hasEditable')) {
             $itemid = Yii::$app->request->post('editableKey');
             $index = Yii::$app->request->post('editableIndex');
             $attr = Yii::$app->request->post('editableAttribute');
             $model = Item::findOne($itemid);
             $model->price_catalogue = $_POST['Item'][$index][$attr];
             //$out = Json::encode(['message'=> $index]);
-            if($model->save()){
+            if ($model->save()) {
                 //echo $out;
                 return true;
             }
         }
-        
     }
 }

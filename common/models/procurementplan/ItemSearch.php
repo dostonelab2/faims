@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\procurementplan\Item;
 
+
 /**
  * ItemSearch represents the model behind the search form about `common\models\procurementplan\Item`.
  */
@@ -20,8 +21,8 @@ class ItemSearch extends Item
     public function rules()
     {
         return [
-            [['item_id', 'item_category_id', 'item_code', 'unit_of_measure_id'], 'integer'],
-            [['item_name', 'last_update'], 'safe'],
+            [['item_id', 'item_category_id', 'unit_of_measure_id'], 'integer'],
+            [['item_name', 'last_update','product_code','supply_type'], 'safe'],
             [['price_catalogue'], 'number'],
         ];
     }
@@ -72,14 +73,15 @@ class ItemSearch extends Item
         // grid filtering conditions
         $query->andFilterWhere([
             'item_id' => $this->item_id,
+            'supply_type' => $this->supply_type,
             'item_category_id' => $this->item_category_id,
-            'item_code' => $this->item_code,
             'unit_of_measure_id' => $this->unit_of_measure_id,
             'price_catalogue' => $this->price_catalogue,
             'last_update' => $this->last_update,
         ]);
 
         $query->andFilterWhere(['like', 'item_name', $this->item_name]);
+        $query->andFilterWhere(['like', 'product_code', $this->product_code,]);
 
         return $dataProvider;
     }
