@@ -108,6 +108,18 @@ Modal::end();
                                     return Html::button('<i class="glyphicon glyphicon-fast-forward"></i>', ['value' => Url::to(['obligationtype/skipdv', 'type_id'=>$model->type_id]), 'title' => Yii::t('app', "Skip DV Number"), 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonSkipDV']);
                                 },
                             ],
+                            [   
+                                'attribute'=>'project_id',
+                                'header' => 'Add Payroll',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                                'format' => 'raw',
+                                'width'=>'80px',
+
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return Html::button('<i class="glyphicon glyphicon-fast-forward"></i>', ['value' => Url::to(['obligationtype/payroll', 'type_id'=>$model->type_id]), 'title' => Yii::t('app', "OSDV for Payroll"), 'class' => 'btn btn-info', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonSkipDV']);
+                                },
+                            ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 'template' => '{view}',

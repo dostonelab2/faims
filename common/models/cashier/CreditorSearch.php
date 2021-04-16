@@ -68,7 +68,16 @@ class CreditorSearch extends Creditor
         $query->andFilterWhere([
             'creditor_id' => $this->creditor_id,
             'creditor_type_id' => $this->creditor_type_id,
+            'active' => 1,
         ]);
+        
+        if(($this->request_type_id == 1)){
+            $query->andFilterWhere(['in', 'creditor_type_id', $this->creditor_type_id]);
+        }elseif(($this->request_type_id == 2)){
+            $query->andFilterWhere(['in', 'creditor_type_id', $this->creditor_type_id]);
+        }elseif(($this->request_type_id == 5)){
+            $query->andFilterWhere(['in', 'creditor_type_id', $this->creditor_type_id]);
+        }
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'bank_name', $this->bank_name])

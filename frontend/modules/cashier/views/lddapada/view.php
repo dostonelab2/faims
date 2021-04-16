@@ -239,7 +239,8 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        return $model->osdv->getGrossamount();
+                        //return $model->request_payroll_id ? $model->gross_amount : $model->osdv->getGrossamount();
+                        return $model->request_payroll_id ? ($model->requestpayroll->amount) : $model->osdv->getGrossamount();
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
@@ -253,13 +254,17 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        if($model->creditor_id == 245){
-                            $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
-                            
-                            return $tax->amount;
+                        if($model->request_payroll_id){
+                            return $model->requestpayroll->tax;
+                        }else{
+                            if($model->creditor_id == 245){
+                                $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+
+                                return $tax->amount;
+                            }
+                            else
+                                return $model->osdv->getTax();
                         }
-                        else
-                            return $model->osdv->getTax();
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
@@ -273,8 +278,8 @@ Modal::end();
                     'format' => ['decimal',2],
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        return $model->osdv->getNetamount();
-                        //return $model->amount;
+                        //return $model->osdv->getNetamount();
+                        return $model->request_payroll_id ? ($model->requestpayroll->amount - $model->requestpayroll->tax) : $model->osdv->getGrossamount();
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
@@ -323,7 +328,11 @@ Modal::end();
                     'format' => 'raw',
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
-                        return Html::a('<i class="glyphicon glyphicon-print"></i>', Url::to(['/finance/request/printdv', 'id'=>$model->osdv->request->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']);
+                        return $model->request_payroll_id ? 
+                        
+                        Html::a('<i class="glyphicon glyphicon-print"></i>', Url::to(['/finance/request/printdvpayroll', 'id'=>$model->request_payroll_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) 
+                            : 
+                        Html::a('<i class="glyphicon glyphicon-print"></i>', Url::to(['/finance/request/printdv', 'id'=>$model->osdv->request->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']);
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,

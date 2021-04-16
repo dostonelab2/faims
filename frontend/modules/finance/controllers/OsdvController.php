@@ -4,11 +4,14 @@ namespace frontend\modules\finance\controllers;
 
 use Yii;
 
+use common\models\cashier\CreditorSearch;
 use common\models\finance\Dv;
 use common\models\finance\Os;
 use common\models\finance\Osdv;
 use common\models\finance\OsdvSearch;
+use common\models\finance\OsdvapprovalSearch;
 use common\models\finance\Request;
+use common\models\finance\Requestpayroll;
 use common\models\finance\RequestSearch;
 use common\models\finance\RequestosdvSearch;
 use common\models\procurement\Expenditureclass;
@@ -123,7 +126,7 @@ class OsdvController extends Controller
      */
     public function actionApprovalindex()
     {
-        $searchModel = new OsdvSearch();
+        $searchModel = new OsdvapprovalSearch();
         
         //Yii::$app->user->can('access-finance-validation');
         $status_id = Request::STATUS_CHARGED;
@@ -171,6 +174,11 @@ class OsdvController extends Controller
                 ]
             ],*/
         ]);
+        
+        $payrollDataprovider = new ActiveDataProvider([
+            'query' => $model->getPayrollitems(),
+            'pagination' => false,
+        ]);
 
         $accountTransactionsDataProvider = new ActiveDataProvider([
             'query' => $model->getAccounttransactions(),
@@ -189,6 +197,7 @@ class OsdvController extends Controller
         
         return $this->render('view', [
             'model' => $model,
+            'payrollDataprovider' => $payrollDataprovider,
             'attachmentsDataProvider' => $attachmentsDataProvider,
             'allotmentsDataProvider' => $allotmentsDataProvider,
             'accountTransactionsDataProvider' => $accountTransactionsDataProvider,
@@ -223,6 +232,11 @@ class OsdvController extends Controller
                 ]
             ],*/
         ]);
+        
+        $payrollDataprovider = new ActiveDataProvider([
+            'query' => $model->getPayrollitems(),
+            'pagination' => false,
+        ]);
 
         $accountTransactionsDataProvider = new ActiveDataProvider([
             'query' => $model->getAccounttransactions(),
@@ -237,6 +251,7 @@ class OsdvController extends Controller
             'model' => $model,
             'attachmentsDataProvider' => $attachmentsDataProvider,
             'allotmentsDataProvider' => $allotmentsDataProvider,
+            'payrollDataprovider' => $payrollDataprovider,
             'accountTransactionsDataProvider' => $accountTransactionsDataProvider,
             'year' => date('Y', strtotime($model->request->request_date)),
         ]);
@@ -295,6 +310,42 @@ class OsdvController extends Controller
         }
     }
 
+    public function actionPayrollitems()
+    {
+        $id = $_GET['id'];
+        $model = $this->findModel($id);
+        
+        $searchModel = new CreditorSearch();
+        
+        //creditor_type_id
+        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        if($model->request->request_type_id == 13 || $model->request->request_type_id == 15){
+            $searchModel->creditor_type_id = 5;
+        }elseif($model->request->request_type_id == 14 || $model->request->request_type_id == 16){
+            $searchModel->creditor_type_id = 5;
+        }elseif($model->request->request_type_id == 33){
+            $searchModel->creditor_type_id = [1,2];
+        }elseif($model->request->request_type_id == 34){
+            $searchModel->creditor_type_id = 5;
+        }        
+        
+        $searchModel->payroll = 1;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_payrollitems', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'id' => $id,
+            ]);
+        } else {
+            return $this->render('_payrollitems', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'id' => $id,
+            ]);
+        }
+    }
     /**
      * Updates an existing Osdv model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -392,6 +443,50 @@ class OsdvController extends Controller
             }
         }
     }
+    
+    public function actionApprovepayroll()
+    {
+        //$model = $this->findModel($_GET['id']);
+        $model = Requestpayroll::findOne($_GET['id']);
+        
+        if(Yii::$app->user->can('access-finance-approval')){
+            if (Yii::$app->request->post()) {
+                $status = $this->allApproved($model->osdv) ? Request::STATUS_APPROVED_FOR_DISBURSEMENT : Request::STATUS_APPROVED_PARTIAL; //70 or 67
+                $model->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+                
+                if($model->save(false)){
+                    
+                    $model->osdv->status_id = $status;
+                    $model->osdv->save(false);
+                    
+                    $model->osdv->request->status_id = $status;
+                    $model->osdv->request->save(false);
+                    
+                    $index = $model->osdv_id;
+                    $scope = 'Osdv';
+                    $data = $model->osdv_id.':'.$model->osdv->request_id.':'.$model->osdv->type_id.':'.$model->osdv->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
+                    Blockchain::createBlock($index, $scope, $data);
+                    
+                    Yii::$app->session->setFlash('success', 'Request Successfully Approved!');
+                    return $this->redirect(['approvalview', 'id' => $model->osdv_id]);
+                    //return $this->redirect(['approvalindex']);
+                }else{
+                    Yii::$app->session->setFlash('warning', $model->getErrors());                 
+                }
+                
+            }
+            
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_approve', ['model' => $model]);
+            } else {
+                return $this->render('_approve', ['model' => $model]);
+            }
+        }else{
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_notallowed', ['model'=>$model]);   
+            }
+        }
+    }
         
     public function actionObligate()
     {
@@ -451,7 +546,13 @@ class OsdvController extends Controller
                 if($model->save(false)){
                     
                     $model->request->status_id = Request::STATUS_CHARGED; //60;
-                    $model->request->save(false);
+                    
+                    if($model->request->save(false)){
+                        $payroll = Requestpayroll::findOne($_GET['request_payroll_id']);
+                        $payroll->status_id = Request::STATUS_CHARGED;
+                        $payroll->osdv_attributes = $model->osdv_attributes;
+                        $payroll->save(false);
+                    }
                     
                     $index = $model->osdv_id;
                     $scope = 'Osdv';
@@ -540,34 +641,60 @@ class OsdvController extends Controller
         
         if($model->accounttransactions){
             if(Yii::$app->user->can('access-finance-generatedvnumber')){
+                
+                
                 if (Yii::$app->request->post()) {
                     $model->status_id = Request::STATUS_CERTIFIED_FUNDS_AVAILABLE; //60
 
-                    if($model->save(false)){
-
-                        $model->request->status_id = $model->status_id; //60;
-                        if($model->request->save(false)){
-                        //if($model->type_id == 1){
-                            $dv = new Dv();
-                            $dv->osdv_id = $model->osdv_id;
-                            $dv->request_id = $model->request->request_id;
-                            $dv->obligation_type_id = $model->request->obligation_type_id;
-                            $dv->dv_number = Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s"));
-                            //$dv->dv_date = date("Y-m-d", strtotime($model->create_date));
-                            $dv->dv_date = date("Y-m-d H:i:s");
-                            $dv->save(false);
+                    if($model->payroll){
+                        if($model->save(false)){
+                            $model->request->status_id = $model->status_id; //60;
+                            //foreach($model->payrollitems as $payroll){
+                                if($model->request->save(false)){
+                                    $dv = new Dv();
+                                    $dv->osdv_id = $model->osdv_id;
+                                    $dv->request_id = $model->request->request_id;
+                                    $dv->obligation_type_id = $model->request->obligation_type_id;
+                                    $dv->dv_number = Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s"));
+                                    $dv->dv_date = date("Y-m-d H:i:s");
+                                    if($dv->save(false)){
+                                        $payroll = Requestpayroll::findOne($_GET['request_payroll_id']);
+                                        $payroll->dv_id = $dv->dv_id;
+                                        $payroll->status_id = Request::STATUS_CERTIFIED_FUNDS_AVAILABLE;
+                                        $payroll->save(false);
+                                    }
+                                }
+                            //}
+                            Yii::$app->session->setFlash('success', 'DVs Number Successfully Generated!');
+                            return $this->redirect(['view', 'id' => $model->osdv_id]);
                         }
-                        
-                        $index = $model->osdv_id;
-                        $scope = 'Osdv';
-                        $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$dv->dv_number.':'.$model->osdv_attributes.':'.$model->status_id;
-                        Blockchain::createBlock($index, $scope, $data);
-
-                        Yii::$app->session->setFlash('success', 'DV Number Successfully Generated!');
-                        return $this->redirect(['view', 'id' => $model->osdv_id]);
                     }else{
-                        Yii::$app->session->setFlash('warning', $model->getErrors());                 
+                        if($model->save(false)){
+                            $model->request->status_id = $model->status_id; //60;
+                            if($model->request->save(false)){
+                            //if($model->type_id == 1){
+                                $dv = new Dv();
+                                $dv->osdv_id = $model->osdv_id;
+                                $dv->request_id = $model->request->request_id;
+                                $dv->obligation_type_id = $model->request->obligation_type_id;
+                                $dv->dv_number = Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s"));
+                                //$dv->dv_date = date("Y-m-d", strtotime($model->create_date));
+                                $dv->dv_date = date("Y-m-d H:i:s");
+                                $dv->save(false);
+                            }
+
+                            $index = $model->osdv_id;
+                            $scope = 'Osdv';
+                            $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$dv->dv_number.':'.$model->osdv_attributes.':'.$model->status_id;
+                            Blockchain::createBlock($index, $scope, $data);
+
+                            Yii::$app->session->setFlash('success', 'DV Number Successfully Generated!');
+                            return $this->redirect(['view', 'id' => $model->osdv_id]);
+                        }else{
+                            Yii::$app->session->setFlash('warning', $model->getErrors());                 
+                        }
                     }
+                        
                 }
 
                 if (Yii::$app->request->isAjax) {
@@ -594,5 +721,17 @@ class OsdvController extends Controller
         if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('_notallowed', ['model'=>$model]);   
             }
+    }
+    
+    public function allApproved($model)
+    {
+        $status = false;
+        foreach($model->payrollitems as $item)
+        {   
+            $status = ($item->status_id == 70) ? true : false;
+            if(!$status)
+            break;
+        }
+        echo $status;
     }
 }

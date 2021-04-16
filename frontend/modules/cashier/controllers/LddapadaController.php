@@ -11,6 +11,7 @@ use common\models\cashier\Lddapadaitem;
 use common\models\cashier\LddapadaSearch;
 use common\models\finance\Osdv;
 use common\models\finance\Request;
+use common\models\finance\Requestpayroll;
 use common\models\procurement\Assignatory;
 use frontend\modules\cashier\components\Report;
 
@@ -57,13 +58,15 @@ class LddapadaController extends Controller
         $items = Lddapadaitem::find()->select('osdv_id')->asArray()->all();
         $count = Osdv::find()
             ->where(['not in', 'osdv_id', $items])
-            ->andWhere(['=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
             ->count();
         
         $new_items = Osdv::find()
             //->select('osdv_id')
             ->where(['not in', 'osdv_id', $items])
-            ->andWhere(['=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
             ->all();
         
         return $this->render('index', [
@@ -251,6 +254,63 @@ class LddapadaController extends Controller
             $model->account_number = $osdv->request->creditor->account_number;
             $model->gross_amount = $osdv->request->amount;
             $model->expenditure_object_id = $osdv->getAccountID();
+            $model->active = 1;
+            $model->save(false);
+        }
+        
+        echo Json::encode(['message'=>$lddapadaId]);
+    }
+    
+    public function actionAddpayrollitems()
+    {
+        /** Post Data
+            itemId : 4
+            checked : true
+            ppmpId : 2
+            year : 2019
+            
+            creditorId:creditor_id,
+            lddapadaId:lddapada_id,
+            checked:checked},
+        **/
+        $lddapadaId = $_POST['lddapadaId'];
+        $payrollId = $_POST['payrollId'];
+        $checked = $_POST['checked'];
+        
+        //$creditor = Creditor::findOne($creditorId);
+        $payroll = Requestpayroll::findOne($payrollId);
+        $lddapada_item = Lddapadaitem::find()->where([
+                                    'lddapada_id' => $lddapadaId, 
+                                    'request_payroll_id' => $payrollId])->one();
+        
+        if($lddapada_item)
+        {
+            //echo Json::encode(['message'=>$ppmp_item]);
+            if($checked == 'true'){
+                $lddapada_item->lddapada_id = $lddapadaId;
+                $lddapada_item->active = 1;
+                $lddapada_item->save(false);
+            }
+            else{
+                //$lddapada_item->lddapada_id = 0;
+                $lddapada_item->active = 0;
+                $lddapada_item->save(false);
+            }
+        }else{
+            $model = new Lddapadaitem();
+        
+            //lddapada_item_id 	lddapada_id 	creditor_id 	creditor_type_id 	name 	bank_name 	account_number 	gross_amount 	alobs_id 	expenditure_object_id 	check_number 	active
+            $model->lddapada_id = $lddapadaId;
+            $model->osdv_id = $payroll->osdv_id;
+            $model->request_payroll_id = $payroll->request_payroll_id;
+            $model->creditor_id = $payroll->creditor_id;
+            $model->creditor_type_id = $payroll->creditor->creditor_type_id;
+            $model->name = $payroll->creditor->name;
+            $model->bank_name = $payroll->creditor->bank_name;
+            $model->account_number = $payroll->creditor->account_number;
+            $model->gross_amount = $payroll->amount;
+            $model->expenditure_object_id = $payroll->osdv->getAccountID();
+            //$model->expenditure_object_id = 0;
             $model->active = 1;
             $model->save(false);
         }

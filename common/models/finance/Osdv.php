@@ -94,6 +94,14 @@ class Osdv extends \yii\db\ActiveRecord
       return $this->hasOne(Request::className(), ['request_id' => 'request_id']);  
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayrollitems()
+    {
+        return $this->hasMany(Requestpayroll::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);
+    }
+    
     public function getStatus()
     {
         return $this->hasOne(Requeststatus::className(), ['request_status_id' => 'status_id']);
@@ -331,4 +339,6 @@ class Osdv extends \yii\db\ActiveRecord
     {
         return ($this->status_id >= Request::STATUS_CHARGED) ? true : false;
     }
+    
+
 }

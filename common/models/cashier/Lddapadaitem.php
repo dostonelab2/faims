@@ -6,6 +6,7 @@ use Yii;
 use common\models\procurement\Expenditureobject;
 use common\models\cashier\Creditor;
 use common\models\finance\Osdv;
+use common\models\finance\Requestpayroll;
 /**
  * This is the model class for table "tbl_lddapada_item".
  *
@@ -98,6 +99,14 @@ class Lddapadaitem extends \yii\db\ActiveRecord
     public function getOsdv()
     {
         return $this->hasOne(Osdv::className(), ['osdv_id' => 'osdv_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestpayroll()
+    {
+        return $this->hasOne(Requestpayroll::className(), ['request_payroll_id' => 'request_payroll_id']);
     }
 
     /**

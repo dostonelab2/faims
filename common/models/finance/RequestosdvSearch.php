@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\finance\Request;
+use common\models\finance\Requestpayroll;
 
 /**
  * RequestSearch represents the model behind the search form about `common\models\finance\Request`.
@@ -44,14 +45,15 @@ class RequestosdvSearch extends Request
     public function search($params)
     {
         $query = Request::find();
-
+    
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
-
+        
+    
         $this->load($params);
 
         if (!$this->validate()) {
@@ -73,8 +75,6 @@ class RequestosdvSearch extends Request
             'tbl_request.status_id' => $this->status_id,
             'tbl_request.created_by' => $this->created_by,
         ]);
-
-        
 
         $query->andFilterWhere(['>=', 'tbl_request.status_id', 50]);
         

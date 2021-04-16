@@ -8,6 +8,7 @@ use common\models\cashier\Lddapadaitem;
 use common\models\cashier\LddapadaitemSearch;
 use common\models\cashier\CreditorSearch;
 use common\models\cashier\OsdvSearch;
+use common\models\cashier\OsdvlddapitemSearch;
 use common\models\finance\Request;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -164,7 +165,8 @@ class LddapadaitemController extends Controller
         $typeId = $_GET['typeId'];
 
         $lddapada = Lddapada::findOne($id); 
-        $searchModel = new OsdvSearch();
+        $searchModel = new OsdvlddapitemSearch();
+//        $searchModel =    new OsdvSearch();
         $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         $searchModel->status_id = $status_id;
         $searchModel->type_id = $lddapada->type_id;
@@ -185,4 +187,5 @@ class LddapadaitemController extends Controller
             ]);
         }
     }
+    
 }

@@ -951,6 +951,12 @@ class RequestController extends Controller
         $report->disbursementvoucher($id);
     }
     
+    function actionPrintdvpayroll($id)
+    {
+        $report = new Report();
+        $report->disbursementvoucherpayroll($id);
+    }
+    
     public function actionAddcreditor() 
     {
         $model = new Demo; // your model can be loaded here

@@ -66,6 +66,10 @@ $("body").on("click","#buttonSubmitForVerification",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonPayrollitems",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonSubmitForValidation",function () {
     loadModal($(this).attr('value'));
 });
@@ -87,6 +91,10 @@ $("body").on("click","#buttonCertifyfundsavailable",function () {
 });
 
 $("body").on("click","#buttonApprove",function () {
+    loadModal($(this).attr('value'));
+});
+
+$("body").on("click","#buttonApprovepayroll",function () {
     loadModal($(this).attr('value'));
 });
 
@@ -144,7 +152,7 @@ $("body").on("click","#buttonCreateOsdv",function () {
 
 $("#modalContainer").on("hidden.bs.modal", function () {
     // put your default event here
-    $.pjax.reload({container:'#request-obligation'});
+    //$.pjax.reload({container:'#request-obligation'});
     $.pjax.reload({container:'#account-transactions'});
 });
 

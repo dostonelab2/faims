@@ -174,7 +174,8 @@ Modal::end();
                                 'buttons' => [
 
                                     'view' => function ($url, $model){
-                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => (($model->payroll != 0) ? '/finance/request/viewpayroll?id=' : '/finance/request/view?id=') . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
+                                        return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/request/view?id=' . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
+                                        //return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => (($model->payroll != 0) ? '/finance/request/viewpayroll?id=' : '/finance/request/view?id=') . $model->request_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]);
                                     },
                                 ],
                             ],
@@ -186,7 +187,7 @@ Modal::end();
                     'type' => GridView::TYPE_PRIMARY,
                     'before'=>  Html::button('New Request', ['value' => Url::to(['request/create']), 'title' => 'Create Request', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']) 
                                 .' '. 
-                                Html::button('New Payroll', ['value' => Url::to(['request/createnew']), 'title' => 'Create Payroll', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']),
+                                Html::button('New Payroll', ['value' => Url::to(['request/createpayroll']), 'title' => 'Create Payroll', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']),
                     'after'=>false,
                 ],
             // set your toolbar

@@ -6,11 +6,12 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 use yii\helpers\Url;
-
+use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 
 use common\models\cashier\Lddapadaitem;
 use common\models\finance\Request;
+use common\models\finance\Requestpayroll;
 /* @var $this yii\web\View */
 /* @var $model common\models\procurementplan\Ppmpitem */
 /* @var $form yii\widgets\ActiveForm */
@@ -22,13 +23,36 @@ use common\models\finance\Request;
                     'class' => '\kartik\grid\CheckboxColumn',
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'name'=>'lddap-ada-items', //additional
+                    'visible' => function ($model) {
+                        return true;
+                    },
                     'checkboxOptions' => function($model, $key, $index, $column) use ($id){
-                                             //$bool = Lddapadaitem::find()->where(['lddapada_id' => $id, 'creditor_id' => $model->request->payee_id, 'active'=>1])->count();
-                                             $bool = Lddapadaitem::find()->where(['osdv_id' => $model->osdv_id, 'active'=>1])->count();
-                                             return ['checked' => $bool,
-                                                    'onclick'=>'onCreditor(this.value,this.checked)' //additional
-                                                    ];
+                                            if(!$model->payroll){
+                                                $bool = Lddapadaitem::find()->where(['osdv_id' => $model->osdv_id, 'active'=>1])->count();
+                                                return ['checked' => $bool, 'onclick'=>'onCreditor(this.value,this.checked)'];
+                                            }else{
+                                                return ['disabled'=>true];
+                                            }
                                          }
+                ],
+                [
+                    'class' => 'kartik\grid\ExpandRowColumn',
+                    'width' => '20px',
+                    'value' => function ($model, $key, $index, $column) {
+                        return GridView::ROW_COLLAPSED;
+                    },
+                    'detail' => function ($model, $key, $index, $column) use ($id){
+                            $query = Requestpayroll::find()->where(['osdv_id' => $model->osdv_id, 'status_id' => 70]);
+
+                            $dataProvider = new ActiveDataProvider([
+                                'query' => $query,
+                                'pagination' => false,
+                            ]);
+                            
+                            return Yii::$app->controller->renderPartial('_request_payroll', ['dataProvider' => $dataProvider, 'id'=>$id]);
+                    },
+                    'headerOptions' => ['class' => 'kartik-sheet-style'],
+                    'expandOneOnly' => false,
                 ],
                 [
                     'attribute' => 'request_id',
@@ -48,7 +72,7 @@ use common\models\finance\Request;
                     'attribute' => 'request_id',
                     'label' => 'DV Number',
                     'value'=>function ($model, $key, $index, $widget){ 
-                                return $model->dv->dv_number;
+                                return $model->payroll ? '' : $model->dv->dv_number;
                             },
                 ],
                 [
