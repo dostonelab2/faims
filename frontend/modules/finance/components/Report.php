@@ -288,89 +288,12 @@ class Report {
             $fin="";
             $x=0;
             $loopss = "";
-            /*foreach ($assig as $ob) {
-                $requestedby = $ob["RequestedBy"];
-                $requestedposition = $ob["RequestedPosition"];
-                $fundsavailable = $ob["FundsAvailable"];
-                $fundsposition = $ob["FundsAvailablePosition"];
-            }*/
-        
-            $OSboxBSignatory = 'INGRID T. ABELLA-COLCOL';
-            $OSboxBPosition = 'Budget Officer';
-        
-            switch ($model->division_id) {
-              case 1:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Martin Ausejo Wee<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'MARTIN A. WEE';
-                $OSboxAPosition = 'Regional Director';
-                break;
-              case 2:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
-                $OSboxAPosition = 'ARD-FASTS';
-                break;
-              case 3:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
-                $OSboxAPosition = 'ARD-FASTS';             
-                break;
-              case 4:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'MAHMUD L. KINGKING';
-                $OSboxAPosition = 'ARD-FOS';  
-                break;
-              
-              case 5:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'GERARDO F. PAROT';
-                $OSboxAPosition = 'PSTD-ZDS';  
-                break;
-            
-              case 6:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'NUHMAN M. ALJANI';
-                $OSboxAPosition = 'OIC, PSTD-ZDN';  
-                break;
-                    
-              case 7:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'JENNIFER A. PIDOR';
-                $OSboxAPosition = 'PSTD-ZSP';  
-                break;
-            
-              case 8:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'RICARDO J. APOLINARIO, III';
-                $OSboxAPosition = 'CSTD-ZC/ISA';  
-                break;
-                    
-            }
-        //$signatory = $this->getSignatory(1,'OS','A');
-        
         
         //Box A
         $content .= $this->getSignatory($model->osdv->osdv_id,$model->division_id,'OS','A')['details'];
-        //$content .= '<div class="os-box-a">'.Html::img(Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\mlk0526.png", ["class"=>"os-box-a-sig"]).'<div class="os-box-a-sig-details">Digitally Signed by Mahmud L. Kingking<br/>'.$sig['name'].date("d-M-Y", 1602560196).'<br/>'.substr("95535071318f167ca492230a2d6f694d150e69372f36167812f24ef9a1a51fc5",0,32).'</div></div>';
     
         //Box B
         $content .= $this->getSignatory($model->osdv->osdv_id,1,'OS','B')['details'];
-        //$content .= '<div class="os-box-b">'.Html::img(Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\itac0107.png", ["class"=>"os-box-b-sig"]).'<div class="os-box-b-sig-details">Digitally Signed by Ingrid T. Abella-Colcol<br/>'.date("d-M-Y", 1602560196).'<br/>'.substr("95535071318f167ca492230a2d6f694d150e69372f36167812f24ef9a1a51fc5",0,32).'</div></div>';
         
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
@@ -608,32 +531,6 @@ class Report {
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
 <span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
 ';
-        
-
-        /*$DVboxASignatory
-        $DVboxPosition    
-        switch ($model->division_id) {
-          case 1:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
-            break;
-          case 2:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 3:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 4:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
-            break;
-          default:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
-        }*/
-        
-        /*if($model=='') { 
-            $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
-        }else{
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
-        }*/
         
 $content .= '
 </tr>
@@ -887,33 +784,7 @@ $content .= '
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
 <span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
 ';
-        
 
-        /*$DVboxASignatory
-        $DVboxPosition    
-        switch ($model->division_id) {
-          case 1:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
-            break;
-          case 2:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 3:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 4:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
-            break;
-          default:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
-        }*/
-        
-        /*if($model=='') { 
-            $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
-        }else{
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
-        }*/
-        
 $content .= '
 </tr>
 <tr style="height: 14px;">
