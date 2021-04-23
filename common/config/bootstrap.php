@@ -15,8 +15,8 @@ if (isset($_SERVER['SERVER_NAME'])) {
     if (!in_array($_SERVER['SERVER_NAME'], $whitelist)) {
         $Backend_URI = 'http://' . $_SERVER['SERVER_NAME'] . '/';
         $BaseURI = $Backend_URI.'/';
-        $Signature_URI = $Backend_URI . "uploads/user/signature/";
-        $Backend_URI = $Backend_URI . "uploads/user/photo/";
+        $Signature_URI = $Backend_URI . "backend/web/uploads/user/signature/";
+        $Backend_URI = $Backend_URI . "backend/web/uploads/user/photo/";
         
         #$FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . ':8082/';
         if($_SERVER['SERVER_NAME'] == '192.168.1.95')
