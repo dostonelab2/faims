@@ -1044,7 +1044,7 @@ $content .= '
     
     function getSignatory($index_id, $division_id, $scope, $box)
     {
-        $url = Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\\";
+        $url = "/images/user/signature/";
         
         // get Signatory for division
         $signatory = Reportsignatory::find()->where('division_id =:division_id AND scope =:scope AND box =:box',[':division_id'=>$division_id, ':scope'=>$scope, ':box'=>$box])->one();
