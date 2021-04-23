@@ -68,15 +68,6 @@ Modal::end();
                     'data-target'=>'#w0'
                 ]) 
                 ?>
-                <?= Html::img("http://faims2.dost9.ph/backend/web/uploads/user/signature/ted0417.png", [ 
-                    'class' => 'img-thumbnail img-responsive',
-                    'alt' => $model->user->username,
-                    'width'=>200,
-                    'data-toggle'=>'modal',
-                    'data-target'=>'#w0'
-                ]) 
-                ?>
-                <img src="/images/user/signature/ted0417.png" style="width: 70%;border-radius: 15px 15px;">
             </div>
             
             <div class="col-md-6">
