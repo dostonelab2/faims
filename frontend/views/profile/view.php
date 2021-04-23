@@ -49,7 +49,7 @@ Modal::end();
         <div class="panel-heading"><i class="fa fa-user-circle fa-adn"></i> View</div>
         <div class="panel-body">
             <div class="col-md-2">
-               <?= Html::img(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\photo\\'.$model->getImageUrl(), [ 
+               <?= Html::img('/images/user/photo/'.$model->getImageUrl(), [ 
                     'class' => 'img-thumbnail img-responsive',
                     'alt' => $model->user->username,
                     'width'=>200,
