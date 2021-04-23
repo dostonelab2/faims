@@ -16,6 +16,7 @@ if (isset($_SERVER['SERVER_NAME'])) {
         $Backend_URI = 'http://' . $_SERVER['SERVER_NAME'] . '/';
         $BaseURI = $Backend_URI.'/';
         $Backend_URI = $Backend_URI . "/uploads/user/photo/";
+        $Signature_URI = $Backend_URI . "/uploads/user/signature/";
         #$FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . ':8082/';
         if($_SERVER['SERVER_NAME'] == '192.168.1.95')
                 $FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . ':8080/';
@@ -23,11 +24,13 @@ if (isset($_SERVER['SERVER_NAME'])) {
                 $FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . '/';
     } else {
         $Backend_URI = 'http://localhost:8080/faims/backend/web/uploads/user/photo/';
+        $Signature_URI = 'http://localhost:8080/faims/backend/web/uploads/user/signaure/';
         $BaseURI = "http://localhost:8080/faims/backend/web/";
         $BaseURI2 = "http://localhost:8080/faims/frontend/web/";
         $FrontendBaseURI = "http://localhost:8080/faims/frontend/web/";
     }
     $GLOBALS['upload_url'] = $Backend_URI;
+    $GLOBALS['signature_url'] = $Signature_URI;
     $GLOBALS['base_uri'] = $BaseURI;
     $GLOBALS['frontend_base_uri'] = $FrontendBaseURI;
 }

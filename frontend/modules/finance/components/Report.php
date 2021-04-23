@@ -4,10 +4,13 @@ namespace frontend\modules\finance\components;
 
 use Yii;
 use kartik\mpdf\Pdf;
+use yii\helpers\Html;
+use common\models\finance\Reportsignatory;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
 use common\models\finance\Osdv;
 use common\models\procurement\Divisionhead;
+use common\models\sec\Blockchain;
 
 
 class Report {
@@ -57,6 +60,10 @@ class Report {
         $mPDF->defaultFont = 'Arial';
         $mPDF->format =Pdf::FORMAT_A4;
         $mPDF->destination = Pdf::DEST_BROWSER;
+        
+        //$mPDF->Image(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\signature\\'.$model->getSignatureUrl(), 100, 100, 210, 297, 'jpg', '', true, false);
+        //$mPDF->image(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\signature\\adm0808.png', 100, 100, 210, 297, 'jpg', '', true, false);
+        
         //$mPDF->methods =['SetFooter'=>['|{PAGENO}|']];
        // $mPDF->SetDirectionality='rtl';
         /*$mPDF->methods = [
@@ -354,7 +361,17 @@ class Report {
                 break;
                     
             }
-       
+        //$signatory = $this->getSignatory(1,'OS','A');
+        
+        
+        //Box A
+        $content .= $this->getSignatory($model->osdv->osdv_id,$model->division_id,'OS','A')['details'];
+        //$content .= '<div class="os-box-a">'.Html::img(Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\mlk0526.png", ["class"=>"os-box-a-sig"]).'<div class="os-box-a-sig-details">Digitally Signed by Mahmud L. Kingking<br/>'.$sig['name'].date("d-M-Y", 1602560196).'<br/>'.substr("95535071318f167ca492230a2d6f694d150e69372f36167812f24ef9a1a51fc5",0,32).'</div></div>';
+    
+        //Box B
+        $content .= $this->getSignatory($model->osdv->osdv_id,1,'OS','B')['details'];
+        //$content .= '<div class="os-box-b">'.Html::img(Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\itac0107.png", ["class"=>"os-box-b-sig"]).'<div class="os-box-b-sig-details">Digitally Signed by Ingrid T. Abella-Colcol<br/>'.date("d-M-Y", 1602560196).'<br/>'.substr("95535071318f167ca492230a2d6f694d150e69372f36167812f24ef9a1a51fc5",0,32).'</div></div>';
+        
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
                             <tr>
@@ -367,20 +384,21 @@ class Report {
                                <td style="height:15x;"></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px; width: 200px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px; width: 200px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+                               <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$OSboxASignatory.'</b></span></td>
-                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>'.$OSboxBSignatory.'</b></span><td>
+                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$this->getSignatory($model->osdv->osdv_id,$model->division_id,'OS','A')['name'].'</b></span></td>
+                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>'.$this->getSignatory($model->osdv->osdv_id,1,'OS','B')['name'].'</b></span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
-                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxBPosition.'</span></td>
+                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id,$model->division_id,'OS','A')['position'].'</span></td>
+                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,1,'OS','B')['position'].'</span></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
-                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,$model->division_id,'OS','A')['date'].'</span></td>
+                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,1,'OS','B')['date'].'</span></td>
                             </tr>
                             <tr>
                                 <td style="with:50%;background:black;"></td>
@@ -1017,5 +1035,41 @@ $content .= '
         } else {
             return true;
         } 
+    }
+    
+    function getBlockchain($index_id, $scope)
+    {
+        return Blockchain::find()->where('scope =:scope AND index_id =:index_id',[':scope'=>$scope, ':index_id'=>$index_id])->one();
+    }
+    
+    function getSignatory($index_id, $division_id, $scope, $box)
+    {
+        $url = Yii::$app->urlManagerBackend->baseUrl."\uploads\user\signature\\";
+        
+        // get Signatory for division
+        $signatory = Reportsignatory::find()->where('division_id =:division_id AND scope =:scope AND box =:box',[':division_id'=>$division_id, ':scope'=>$scope, ':box'=>$box])->one();
+        
+        // get Signature Blockchain
+        $details = $this->getBlockchain($index_id, 'Osdv');
+        
+        $box = strtolower($box);
+            
+        $signatureDetails = [
+            'name' => $signatory->activeUser->profile->getFullname(),
+            'position' => $signatory->activeUser->profile->designation,
+            'date' => date("d-M-Y", $details->timestamp),
+            'details' => '<div class="os-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>"os-box-".$box."-sig"]).'<div class="os-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,32).'</div></div>'
+        ];
+        
+        return $signatureDetails;
+    }
+    
+    function getOSBoxBBlockchain($user_id)
+    {
+        $index_id = 938;
+        $scope = 'Osdv';
+        Blockchain::findOne()->where('scope =:scope AND index_id =:index_id',[':scope'=>$scope, ':index_id'=>$index_id]);
+        
+        return '';
     }
 }

@@ -30,8 +30,8 @@ echo Html::img(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\photo\\'.$mo
                     'width'=>400
                 ]) ;
 Modal::end();
-
 ?>
+
 <div class="profile-view">
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->profile_id], ['class' => 'btn btn-primary']) ?>
@@ -58,6 +58,18 @@ Modal::end();
                 ]) 
                 ?>
             </div>
+            
+            <div class="col-md-2">
+               <?= Html::img(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\signature\\'.$model->getSignatureUrl(), [ 
+                    'class' => 'img-thumbnail img-responsive',
+                    'alt' => $model->user->username,
+                    'width'=>200,
+                    'data-toggle'=>'modal',
+                    'data-target'=>'#w0'
+                ]) 
+                ?>
+            </div>
+            
             <div class="col-md-6">
             <?=
             DetailView::widget([

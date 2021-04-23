@@ -35,23 +35,75 @@ body {
     border-left: 1px solid black;
 }
 .valign-bottom{
-    vertical-align: bottom
+    vertical-align: bottom;
 }
 .text-bold{
-    font-weight: bold
+    font-weight: bold;
 }
 .text-right{
-    text-align: right
+    text-align: right;
 }
 .text-left{
-    text-align: left
+    text-align: left;
 } 
 .text-center{
-    text-align: center
+    text-align: center;
 }
 .padding-right-5{
-    padding-right: 5px
+    padding-right: 5px;
 }
 .padding-left-5{
-    padding-left: 5px
+    padding-left: 5px;
 }
+
+
+/** OS Signature **/
+.os-box-a{
+    padding-left: 100px;
+    padding-top: 60px;
+    position: absolute;
+    top: 560px;
+/*    border: 1px solid #ffe700;*/
+    width: 270px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.os-box-a-sig{
+    height: 90px;
+    float: left;
+}
+
+.os-box-a-sig-details{
+    font-size: 25%;
+    padding-top: 35px;
+/*    width: 200px;*/
+    float: right;
+/*    border: 1px solid #ff0c93;*/
+}
+
+.os-box-b{
+    padding-left: 100px;
+    padding-top: 60px;
+    position: absolute;
+    top: 560px;
+    left: 395px;
+/*    border: 1px solid #ffe700;*/
+    width: 270px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.os-box-b-sig{
+    height: 90px;
+    float: left;
+}
+
+.os-box-b-sig-details{
+    font-size: 25%;
+    padding-top: 35px;
+/*    width: 200px;*/
+    float: right;
+/*    border: 1px solid #ff0c93;*/
+}
+

@@ -16,6 +16,7 @@ $this->title = $model->firstname;
 $this->params['breadcrumbs'][] = ['label' => 'Profile', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $path = Yii::getAlias("@webroot")."\uploads\user\photo\\";
+$sign_path = Yii::getAlias("@webroot")."\uploads\user\signature\\";
 ?>
 <div class="profile-view">
     <p>
@@ -41,6 +42,8 @@ $path = Yii::getAlias("@webroot")."\uploads\user\photo\\";
                 ]) 
                 ?>
             </div>
+
+            
             <div class="col-md-6">
             <?=
             DetailView::widget([
