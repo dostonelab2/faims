@@ -535,7 +535,7 @@ class OsdvController extends Controller
         
         if(Yii::$app->user->can('access-finance-certifycashavailable')){
             if (Yii::$app->request->post()) {
-                $model->status_id = Request::STATUS_CHARGED; //60
+                $model->status_id = Request::STATUS_CHARGED; //65
 
                 if(isset($_POST['Osdv']['subjectToAda']))  
                     $model->osdv_attributes .= ',2';
@@ -545,7 +545,7 @@ class OsdvController extends Controller
                     
                 if($model->save(false)){
                     
-                    $model->request->status_id = Request::STATUS_CHARGED; //60;
+                    $model->request->status_id = Request::STATUS_CHARGED; //65;
                     
                     if($model->request->save(false)){
                         $payroll = Requestpayroll::findOne($_GET['request_payroll_id']);
