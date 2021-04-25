@@ -425,7 +425,7 @@ class Report {
         
         //Box A
         $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
-        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', $statusValidate)['details'];
         
         //Box C
         $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
