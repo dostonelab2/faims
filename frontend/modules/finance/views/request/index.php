@@ -51,10 +51,6 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
-
-//echo Yii::$app->urlManagerBackend->baseUrl;
-//echo '<br/>';
-echo $GLOBALS['signature_url']
 ?>
 
 <div class="request-index">

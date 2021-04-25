@@ -189,7 +189,7 @@ class Report {
         $model = Request::findOne($id);
         $fmt = Yii::$app->formatter;
         
-        $boxAsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
+        //$boxAsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
         
         // Header1
         $content = '<table width="100%"><tbody>
@@ -882,11 +882,6 @@ $content .= '
             return $exception;
         }
         
-        
-//        if($blockchain)
-//            return $blockchain;
-//        else
-//            return $blockchain->getErrors();
     }
     
     function getSignatory($index_id, $division_id, $scope, $form, $box, $status)
