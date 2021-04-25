@@ -117,7 +117,7 @@ class Profile extends \yii\db\ActiveRecord
         ];
     }
     public function getFullname(){
-        return $this->firstname. ' '. $this->lastname;
+        return $this->firstname. ' '.substr($this->middleinitial,0,1). '. '. $this->lastname;
     }
     /**
      * @return \yii\db\ActiveQuery

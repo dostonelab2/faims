@@ -63,7 +63,6 @@ body {
     padding-top: 60px;
     position: absolute;
     top: 560px;
-/*    border: 1px solid #ffe700;*/
     width: 270px;
     height: 150px;
     vertical-align: middle;
@@ -77,10 +76,9 @@ body {
 .os-box-a-sig-details{
     font-size: 25%;
     padding-top: 35px;
+    margin-left: -40px;
     color: blue;
-/*    width: 200px;*/
     float: right;
-/*    border: 1px solid #ff0c93;*/
 }
 
 .os-box-b{
@@ -89,7 +87,6 @@ body {
     position: absolute;
     top: 560px;
     left: 395px;
-/*    border: 1px solid #ffe700;*/
     width: 270px;
     height: 150px;
     vertical-align: middle;
@@ -103,9 +100,80 @@ body {
 .os-box-b-sig-details{
     font-size: 25%;
     padding-top: 35px;
+    margin-left: -40px;
     color: blue;
-/*    width: 200px;*/
     float: right;
-/*    border: 1px solid #ff0c93;*/
 }
 
+/** DV Signature **/
+.dv-box-a{
+    padding-left: 100px;
+    padding-top: 60px;
+    position: absolute;
+    top: 360px;
+    left: 210px;
+    width: 270px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.dv-box-a-sig{
+    height: 90px;
+    float: left;
+}
+
+.dv-box-a-sig-details{
+    font-size: 25%;
+    padding-top: 35px;
+    margin-left: -25px;
+    color: blue;
+    float: right;
+}
+
+.dv-box-c{
+    padding-left: 100px;
+    padding-top: 60px;
+    position: absolute;
+    top: 650px;
+    left: 55px;
+    width: 270px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.dv-box-c-sig{
+    height: 90px;
+    float: left;
+}
+
+.dv-box-c-sig-details{
+    font-size: 25%;
+    margin-left: -45px;
+    padding-top: 35px;
+    color: blue;
+    float: right;
+}
+
+.dv-box-d{
+    padding-left: 100px;
+    padding-top: 60px;
+    position: absolute;
+    top: 650px;
+    left: 475px;
+    width: 270px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.dv-box-d-sig{
+    height: 90px;
+    float: left;
+}
+
+.dv-box-d-sig-details{
+    font-size: 25%;
+    margin-left: -15px;
+    padding-top: 35px;
+    color: blue;
+    float: right;
+}
