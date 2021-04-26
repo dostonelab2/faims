@@ -506,7 +506,7 @@ class Report {
 <tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
-<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->request_id, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['name'].'<br></span>'.$this->getSignatory($model->request_id, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['position'].'</td>
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['position'].'</td>
 ';
         
 $content .= '
