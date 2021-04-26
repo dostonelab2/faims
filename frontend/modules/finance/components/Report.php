@@ -424,11 +424,18 @@ class Report {
         $Assig2Position = '';
         
         //Box A
+        /*$indexValidate = ($model->obligation_type_id == 1) ? $model->request_id : $model->osdv->osdv_id;
+        $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
+        $scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
+        $formValidate = ($model->obligation_type_id == 1) ? 'OS' : 'DV';
+        $content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];*/
+        
         $indexValidate = ($model->obligation_type_id == 1) ? $model->request_id : $model->osdv->osdv_id;
         $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
         $scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
         $formValidate = ($model->obligation_type_id == 1) ? 'OS' : 'DV';
-        $content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];
+        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];
+        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         
         //Box C
         $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
