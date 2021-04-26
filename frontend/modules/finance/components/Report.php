@@ -425,7 +425,8 @@ class Report {
         
         //Box A
         $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
-        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        $scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
+        $content .= $this->getSignatory($model->request_id, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['details'];
         
         //Box C
         $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
@@ -496,7 +497,7 @@ class Report {
 <tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
-<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', $statusValidate)['name'].'<br></span>'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', $statusValidate)['position'].'</td>
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->request_id, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['name'].'<br></span>'.$this->getSignatory($model->request_id, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['position'].'</td>
 ';
         
 $content .= '
