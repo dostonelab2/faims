@@ -194,10 +194,10 @@ Modal::end();
                     [5] => 
                     [6] => 60
                 )*/
-                    $index = $block->index_id;
-                    $scope = 'Osdv';
-                    $data = $block->index_id.':'.$arr[1].':'.$arr[2].':'.$arr[3].':1,2,3:65';
-                    Blockchain::createBlock($index, $scope, $data);
+//                    $index = $block->index_id;
+//                    $scope = 'Osdv';
+//                    $data = $block->index_id.':'.$arr[1].':'.$arr[2].':'.$arr[3].':1,2,3:65';
+//                    Blockchain::createBlock($index, $scope, $data);
             }
         }
         
