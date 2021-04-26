@@ -548,16 +548,18 @@ class OsdvController extends Controller
                     $model->request->status_id = Request::STATUS_CHARGED; //65;
                     
                     if($model->request->save(false)){
-                        $payroll = Requestpayroll::findOne($_GET['request_payroll_id']);
-                        $payroll->status_id = Request::STATUS_CHARGED;
-                        $payroll->osdv_attributes = $model->osdv_attributes;
-                        $payroll->save(false);
+                        if($model->request->payroll){
+                            $payroll = Requestpayroll::findOne($_GET['request_payroll_id']);
+                            $payroll->status_id = Request::STATUS_CHARGED;
+                            $payroll->osdv_attributes = $model->osdv_attributes;
+                            $payroll->save(false);
+                        }
+                        
+                        $index = $model->osdv_id;
+                        $scope = 'Osdv';
+                        $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
+                        Blockchain::createBlock($index, $scope, $data);
                     }
-                    
-                    $index = $model->osdv_id;
-                    $scope = 'Osdv';
-                    $data = $model->osdv_id.':'.$model->request_id.':'.$model->type_id.':'.$model->expenditure_class_id.':'.$model->osdv_attributes.':'.$model->status_id;
-                    Blockchain::createBlock($index, $scope, $data);
                     
                     Yii::$app->session->setFlash('success', 'Request Successfully Certified Cash Available!');
                     return $this->redirect(['view', 'id' => $model->osdv_id]);

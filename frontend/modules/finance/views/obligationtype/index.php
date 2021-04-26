@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 
 use common\models\finance\Os;
 use common\models\finance\Dv;
-
+use common\models\sec\Blockchain;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\finance\ObligationtypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -163,3 +163,47 @@ Modal::end();
 
         ?>
 </div>
+
+
+<pre>
+<?php 
+    foreach($blockchain as $block){
+        $certified = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $block->index_id, ':scope'=> $block->scope, ':status'=>65])->one();
+        
+        $found2 = 'none';
+        
+        if(!$certified){
+            $approved = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $block->index_id, ':scope'=> $block->scope, ':status'=>70])->one();
+            
+            if($approved){
+                echo $block->index_id." ----------- ".$block->scope." ----------- ".$block->data." ----------- ".$approved->data."<br/>";
+                
+                $arr = explode(":",$block->data);
+                    
+//                echo '<pre>';
+//                print_r($arr);
+//                echo '</pre>';
+                
+                /*Array
+                (
+                    [0] => 964
+                    [1] => 1000
+                    [2] => 4
+                    [3] => 2
+                    [4] => DV-21-04-0034-MDS-TF
+                    [5] => 
+                    [6] => 60
+                )*/
+//                $index = $block->index_id;
+//                $scope = 'Osdv';
+//                $data = $block->index_id.':'.$arr[1].':'.$arr[2].':'.$arr[3].':1,2,3:65';
+//                Blockchain::createBlock($index, $scope, $data);
+            }
+        }
+        
+        //$found = $certified ? $certified->data : 'none';
+        //echo $block->index_id." ----------- ".$block->scope." ----------- ".$block->data." ----------- ".$found." ----------- ".$approved->data."<br/>";
+    } 
+
+?>
+</pre>
