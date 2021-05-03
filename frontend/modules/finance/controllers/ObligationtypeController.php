@@ -7,6 +7,7 @@ use common\models\finance\Obligationtype;
 use common\models\finance\ObligationtypeSearch;
 use common\models\finance\Os;
 use common\models\finance\Dv;
+use common\models\finance\Request;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -43,6 +44,7 @@ class ObligationtypeController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $blockchain = Blockchain::find()->where('SUBSTR(`data`, -2, 2) =:status',[':status'=>60])->all();
+        $requests = Request::find()->all();
         
 
         /*$lastOSNumber = Os::find()->orderBy(['os_id'=>SORT_DESC])->one();
@@ -54,6 +56,7 @@ class ObligationtypeController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'blockchain' => $blockchain,
+            'requests' => $requests,
             /*''lastDVNumber_Regular' => $lastDVNumber_Regular,
             'lastDVNumber_Scholarship' => $lastDVNumber_Scholarship,
             'lastDVNumber_TF' => $lastDVNumber_TF,

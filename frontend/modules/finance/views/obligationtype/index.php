@@ -7,9 +7,11 @@ use kartik\editable\Editable;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
-use common\models\finance\Os;
 use common\models\finance\Dv;
+use common\models\finance\Os;
+use common\models\finance\Request;
 use common\models\sec\Blockchain;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\finance\ObligationtypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -167,7 +169,7 @@ Modal::end();
 
 <pre>
 <?php 
-    foreach($blockchain as $block){
+    /* foreach($blockchain as $block){
         $certified = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $block->index_id, ':scope'=> $block->scope, ':status'=>65])->one();
         
         $found2 = 'none';
@@ -180,30 +182,49 @@ Modal::end();
                 
                 $arr = explode(":",$block->data);
                     
-//                echo '<pre>';
-//                print_r($arr);
-//                echo '</pre>';
-                
-                /*Array
-                (
-                    [0] => 964
-                    [1] => 1000
-                    [2] => 4
-                    [3] => 2
-                    [4] => DV-21-04-0034-MDS-TF
-                    [5] => 
-                    [6] => 60
-                )*/
-//                    $index = $block->index_id;
-//                    $scope = 'Osdv';
-//                    $data = $block->index_id.':'.$arr[1].':'.$arr[2].':'.$arr[3].':1,2,3:65';
-//                    Blockchain::createBlock($index, $scope, $data);
+                //$index = $block->index_id;
+                //$scope = 'Osdv';
+                //$data = $block->index_id.':'.$arr[1].':'.$arr[2].':'.$arr[3].':1,2,3:65';
+                //Blockchain::createBlock($index, $scope, $data);
             }
         }
-        
-        //$found = $certified ? $certified->data : 'none';
-        //echo $block->index_id." ----------- ".$block->scope." ----------- ".$block->data." ----------- ".$found." ----------- ".$approved->data."<br/>";
-    } 
+    }*/ 
+    //.$request->creditor->name.
 
+    /*foreach($requests as $request){
+        $chain = Blockchain::find()->where('index_id =:index_id AND scope =:scope',[':index_id'=> $request->request_id, ':scope'=> 'request'])->all();
+        //$chain = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $request->request_id, ':scope'=> 'request', ':status'=>40])->one();
+        $data = "";
+        if($chain){
+            foreach($chain as $c){
+                $data .= substr($c->data, -2, 2).':';
+            }
+            echo $request->request_number." ----------- ".$data." ----------- ".$request->status_id."<br/>";
+        }
+    }*/
+    $request = Request::findOne(1095);
+    $status = [
+        '0' => 20,
+        '1' => 30,
+        '2' => 40,
+    ];
+    $text = $request->request_id.' : ';
+
+    for($i=0;$i<=2;$i++){
+        $exist = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $request->request_id, ':scope'=> 'Request', ':status'=>$status[$i]])->one();
+        
+        //$text .= $exist ? $status[$i] : 'none';
+        
+        if(!$exist){
+            //Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
+            $text .= 'none';
+        }else{
+            $text .= $status[$i];
+        }
+        $text .= " : ";
+        //echo Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
+    }
+    
+    echo $text;
 ?>
 </pre>

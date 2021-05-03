@@ -119,4 +119,17 @@ class Blockchain extends \yii\db\ActiveRecord
     {
         return Blockchain::find()->where(['index_id' => $index, 'scope' => $scope])->asArray()->all();
     }
+    
+    public static function createRequestBlockchain($index, $status)
+    {
+        $model = Request::findOne($index); 
+        $scope = 'Request';
+        $particulars = (strlen($model->particulars) > 200 ) ? substr($model->particulars, 0, 200) : $model->particulars;
+
+        $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$particulars.':'.$model->amount.':'.$status;
+        
+        $blockchain = Blockchain::createBlock($index, $scope, $data);
+
+        return $blockchain ? "Success" : $blockchain->getErrors();
+    }
 }
