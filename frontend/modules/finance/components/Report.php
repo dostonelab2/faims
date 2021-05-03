@@ -431,10 +431,17 @@ class Report {
         $content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];*/
         
         $indexValidate = ($model->obligation_type_id == 1) ? $model->request_id : $model->osdv->osdv_id;
-        $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
+        $statusValidate = ( ($model->obligation_type_id == 1) ? 40 : 58 );
+        //$statusValidate = 40;
         //$scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
+        $scopeValidate = 'Request';
         //$formValidate = ($model->obligation_type_id == 1) ? 'OS' : 'DV';
-        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];
+        $formValidate = 'OS';
+        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['details'];
+        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, 'Request','A', $statusValidate)['details'];
+        //$content .= $this->getSignatory($model->osdv->osdv_id, $model->division_id, 'Osdv', 'OS','A', $statusValidate)['details'];
+        
+        //work for TF
         $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         
         //Box C
@@ -506,9 +513,11 @@ class Report {
 <tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
-<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['position'].'</td>
-';
-        
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
+            .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
+            .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['position'].'</td>';
+            //.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', 40)['name'].'<br></span>'
+            //.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', 40)['position'].'</td>';
 $content .= '
 </tr>
 <tr style="height: 14px;">
