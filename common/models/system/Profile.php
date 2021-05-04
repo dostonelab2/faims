@@ -86,6 +86,18 @@ class Profile extends \yii\db\ActiveRecord
         return $avatar;
         //return $ImageUrl;
     }
+    
+    public function getSignatureFile() 
+    {
+        return isset($this->esig) ? Yii::$app->params['signaturePath'] . $this->esig : null;
+    }
+    
+    public function getSignatureUrl()
+    {
+        $signature = isset($this->esig) ? $this->esig : 'no-esig.png';
+        return $signature;
+    }
+
     /**
      * @inheritdoc
      */
@@ -105,7 +117,7 @@ class Profile extends \yii\db\ActiveRecord
         ];
     }
     public function getFullname(){
-        return $this->firstname. ' '. $this->lastname;
+        return $this->firstname. ' '.substr($this->middleinitial,0,1). '. '. $this->lastname;
     }
     /**
      * @return \yii\db\ActiveQuery

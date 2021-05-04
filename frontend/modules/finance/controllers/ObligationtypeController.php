@@ -7,10 +7,13 @@ use common\models\finance\Obligationtype;
 use common\models\finance\ObligationtypeSearch;
 use common\models\finance\Os;
 use common\models\finance\Dv;
+use common\models\finance\Request;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+
+use common\models\sec\Blockchain;
 /**
  * ObligationtypeController implements the CRUD actions for Obligationtype model.
  */
@@ -39,6 +42,10 @@ class ObligationtypeController extends Controller
     {
         $searchModel = new ObligationtypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $blockchain = Blockchain::find()->where('SUBSTR(`data`, -2, 2) =:status',[':status'=>60])->all();
+        $requests = Request::find()->all();
+        
 
         /*$lastOSNumber = Os::find()->orderBy(['os_id'=>SORT_DESC])->one();
         $lastDVNumber_Regular = Dv::find()->where(['type_id' => 1])->orderBy(['dv_id'=>SORT_DESC])->one();
@@ -48,8 +55,9 @@ class ObligationtypeController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            /*'$lastOSNumber' => $lastOSNumber,
-            'lastDVNumber_Regular' => $lastDVNumber_Regular,
+            'blockchain' => $blockchain,
+            'requests' => $requests,
+            /*''lastDVNumber_Regular' => $lastDVNumber_Regular,
             'lastDVNumber_Scholarship' => $lastDVNumber_Scholarship,
             'lastDVNumber_TF' => $lastDVNumber_TF,
             'lastDVNumber_MDS_TF' => $lastDVNumber_MDS_TF,*/

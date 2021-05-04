@@ -742,7 +742,9 @@ class RequestController extends Controller
                     
                     $index = $model->request_id;
                     $scope = 'Request';
-                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
+                    
+                    $particulars = (strlen($model->particulars) > 200 ) ? substr($model->particulars, 0, 200) : $model->particulars;
+                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$particulars.':'.$model->amount.':'.$model->status_id;
                     
                     $block = Blockchain::createBlock($index, $scope, $data);
                     
@@ -792,7 +794,8 @@ class RequestController extends Controller
                     
                     $index = $model->request_id;
                     $scope = 'Request';
-                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
+                    $particulars = (strlen($model->particulars) > 200 ) ? substr($model->particulars, 0, 200) : $model->particulars;
+                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$particulars.':'.$model->amount.':'.$model->status_id;
                     $block = Blockchain::createBlock($index, $scope, $data);
                     
                     $content = 'Request Number: '.$model->request_number.PHP_EOL;
@@ -839,7 +842,8 @@ class RequestController extends Controller
                     
                     $index = $model->request_id;
                     $scope = 'Request';
-                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
+                    $particulars = (strlen($model->particulars) > 200 ) ? substr($model->particulars, 0, 200) : $model->particulars;
+                    $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$particulars.':'.$model->amount.':'.$model->status_id;
                     Blockchain::createBlock($index, $scope, $data);
                     
                     $content = 'Request Number: '.$model->request_number.PHP_EOL;
@@ -881,7 +885,9 @@ class RequestController extends Controller
         $index = $request->request_id;
         $scope = 'Request';
         $timestamp = time();
-        $data = $request->request_number.':'.$request->request_date.':'.$request->request_type_id.':'.$request->payee_id.':'.$request->particulars.':'.$request->amount.':'.$request->status_id;
+        $particulars = (strlen($model->particulars) > 200 ) ? substr($model->particulars, 0, 200) : $model->particulars;
+        
+        $data = $request->request_number.':'.$request->request_date.':'.$request->request_type_id.':'.$request->payee_id.':'.$particulars.':'.$request->amount.':'.$request->status_id;
         
         $block = new Blockchain();
         $block->index_id = $index;
@@ -1081,5 +1087,15 @@ class RequestController extends Controller
                         'model' => $model,
             ]);
         }
+    }
+    
+    private function actionCreateRequestBlockchain($index, $status)
+    {
+        //$index = $model->request_id;
+        $model = $this->findModel($index); 
+        $scope = 'Request';
+        
+        $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
+        Blockchain::createBlock($index, $scope, $data);
     }
 }

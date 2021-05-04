@@ -4,10 +4,13 @@ namespace frontend\modules\finance\components;
 
 use Yii;
 use kartik\mpdf\Pdf;
+use yii\helpers\Html;
+use common\models\finance\Reportsignatory;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
 use common\models\finance\Osdv;
 use common\models\procurement\Divisionhead;
+use common\models\sec\Blockchain;
 
 
 class Report {
@@ -57,6 +60,10 @@ class Report {
         $mPDF->defaultFont = 'Arial';
         $mPDF->format =Pdf::FORMAT_A4;
         $mPDF->destination = Pdf::DEST_BROWSER;
+        
+        //$mPDF->Image(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\signature\\'.$model->getSignatureUrl(), 100, 100, 210, 297, 'jpg', '', true, false);
+        //$mPDF->image(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\signature\\adm0808.png', 100, 100, 210, 297, 'jpg', '', true, false);
+        
         //$mPDF->methods =['SetFooter'=>['|{PAGENO}|']];
        // $mPDF->SetDirectionality='rtl';
         /*$mPDF->methods = [
@@ -182,7 +189,7 @@ class Report {
         $model = Request::findOne($id);
         $fmt = Yii::$app->formatter;
         
-        $boxAsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
+        //$boxAsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
         
         // Header1
         $content = '<table width="100%"><tbody>
@@ -281,80 +288,13 @@ class Report {
             $fin="";
             $x=0;
             $loopss = "";
-            /*foreach ($assig as $ob) {
-                $requestedby = $ob["RequestedBy"];
-                $requestedposition = $ob["RequestedPosition"];
-                $fundsavailable = $ob["FundsAvailable"];
-                $fundsposition = $ob["FundsAvailablePosition"];
-            }*/
         
-            $OSboxBSignatory = 'INGRID T. ABELLA-COLCOL';
-            $OSboxBPosition = 'Budget Officer';
+        //Box A
+        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['details'];
+    
+        //Box B
+        $content .= $this->getSignatory($model->osdv->osdv_id,2, 'Osdv', 'OS','B', 55)['details'];
         
-            switch ($model->division_id) {
-              case 1:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Martin Ausejo Wee<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'MARTIN A. WEE';
-                $OSboxAPosition = 'Regional Director';
-                break;
-              case 2:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
-                $OSboxAPosition = 'ARD-FASTS';
-                break;
-              case 3:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Rosemarie S. Salazar<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'ROSEMARIE S. SALAZAR';
-                $OSboxAPosition = 'ARD-FASTS';             
-                break;
-              case 4:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'MAHMUD L. KINGKING';
-                $OSboxAPosition = 'ARD-FOS';  
-                break;
-              
-              case 5:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'GERARDO F. PAROT';
-                $OSboxAPosition = 'PSTD-ZDS';  
-                break;
-            
-              case 6:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'NUHMAN M. ALJANI';
-                $OSboxAPosition = 'OIC, PSTD-ZDN';  
-                break;
-                    
-              case 7:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'JENNIFER A. PIDOR';
-                $OSboxAPosition = 'PSTD-ZSP';  
-                break;
-            
-              case 8:
-                $OSboxEsig = '<div float:right;>
-                                <p>System-signed by<br/>Mahmud L. Kingking<br/>Date: 2020.11.11</p>    
-                              </div>';
-                $OSboxASignatory = 'RICARDO J. APOLINARIO, III';
-                $OSboxAPosition = 'CSTD-ZC/ISA';  
-                break;
-                    
-            }
-       
         $content .= '<table style="border-collapse: collapse;width:100%;border:1px solid black;" >
                         <tbody>
                             <tr>
@@ -367,20 +307,21 @@ class Report {
                                <td style="height:15x;"></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px; width: 200px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px; width: 200px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+                               <span>__________________________________</span></td>
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;"><b>'.$OSboxASignatory.'</b></span></td>
-                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;"><b>'.$OSboxBSignatory.'</b></span><td>
+                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['name'].'</b></span></td>
+                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['name'].'</b></span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$OSboxAPosition.'</span></td>
-                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$OSboxBPosition.'</span></td>
+                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['position'].'</span></td>
+                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['position'].'</span></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
-                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
+                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date'].'</span></td>
+                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['date'].'</span></td>
                             </tr>
                             <tr>
                                 <td style="with:50%;background:black;"></td>
@@ -455,52 +396,7 @@ class Report {
     {
         $model = Request::findOne($id);
         $fmt = Yii::$app->formatter;
-        
-        $DVboxCSignatory = 'ROBERTO B. ABELLA';
-        $DVboxCPosition = 'Accountant III';
-        $DVboxDSignatory = 'MARTIN A. WEE';
-        $DVboxDPosition = 'Regional Director';
-        switch ($model->division_id) {
-          case 1:
-            $DVboxASignatory = 'MARTIN A. WEE';
-            $DVboxAPosition = 'Regional Director';
-            break;
-          case 2:
-            $DVboxASignatory = 'ROSEMARIE S. SALAZAR';
-            $DVboxAPosition = 'ARD-FASTS';
-            break;
-          case 3:
-            $DVboxASignatory = 'ROSEMARIE S. SALAZAR';
-            $DVboxAPosition = 'ARD-FASTS';             
-            break;
-          case 4:
-            $DVboxASignatory = 'MAHMUD L. KINGKING';
-            $DVboxAPosition = 'ARD-FOS';  
-            break;
-          case 5:
-            $DVboxASignatory = 'GERARDO F. PAROT';
-            $DVboxAPosition = 'PSTD-ZDS';  
-            break;  
-          case 6:
-            $DVboxASignatory = 'NUHMAN M. ALJANI';
-            $DVboxAPosition = 'OIC, PSTD-ZDN';  
-            break;
-          case 7:
-            $DVboxASignatory = 'JENNIFER A. PIDOR';
-            $DVboxAPosition = 'PSTD-ZSP';  
-            break; 
-          case 8:
-            $DVboxASignatory = 'RICARDO J. APOLINARIO, III';
-            $DVboxAPosition = 'CSTD-ZC/ISA';  
-            break; 
-                
-          default:
-            $DVboxASignatory = '';
-            $DVboxAPosition = ''; 
-        }
-        
-        //$boxBsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
-        
+            
         $content = '<table width="100%">
         <tbody>
         <tr style="height: 43.6667px;">
@@ -526,6 +422,33 @@ class Report {
         $assig2 = '';
         $Assig1 = '';
         $Assig2Position = '';
+        
+        //Box A
+        /*$indexValidate = ($model->obligation_type_id == 1) ? $model->request_id : $model->osdv->osdv_id;
+        $statusValidate = ($model->obligation_type_id == 1) ? 40 : 58;
+        $scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
+        $formValidate = ($model->obligation_type_id == 1) ? 'OS' : 'DV';
+        $content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, $formValidate,'A', $statusValidate)['details'];*/
+        
+        $indexValidate = ($model->obligation_type_id == 1) ? $model->request_id : $model->osdv->osdv_id;
+        $statusValidate = ( ($model->obligation_type_id == 1) ? 40 : 58 );
+        //$statusValidate = 40;
+        //$scopeValidate = ($model->obligation_type_id == 1) ? 'Request' : 'Osdv';
+        $scopeValidate = 'Request';
+        //$formValidate = ($model->obligation_type_id == 1) ? 'OS' : 'DV';
+        $formValidate = 'OS';
+        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, 'DV','A', $statusValidate)['details'];
+        //$content .= $this->getSignatory($indexValidate, $model->division_id, $scopeValidate, 'Request','A', $statusValidate)['details'];
+        //$content .= $this->getSignatory($model->osdv->osdv_id, $model->division_id, 'Osdv', 'OS','A', $statusValidate)['details'];
+        
+        //work for TF
+        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        
+        //Box C
+        $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        
+        //Box D
+        $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
         
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
@@ -553,8 +476,8 @@ class Report {
 <p>Payee</p>
 </td>
 <td style="width: 50%; height: 25px; padding-left: 5px; font-weight: bold;" colspan="3"> '.$model->creditor->name.'</td>
-<td style="width: 20%; height: 25px;">TIN/Employee No.:</td>
-<td style="width: 20%; height: 25px;" colspan="2">ORS/BURS No.: <b>'.($model->osdv->os ? $model->osdv->os->os_number : "").'</b></td>
+<td style="width: 20%; height: 25px;">TIN/Employee No.:<br/>&nbsp;</td>
+<td style="width: 20%; height: 25px;" colspan="2">ORS/BURS No.: <b>'.($model->osdv->os ? $model->osdv->os->os_number : "<br/>&nbsp;").'</b></td>
 </tr>
 <tr style="height: 14px;">
 <td style="width: 10%; height: 25px;">Address</td>
@@ -586,37 +509,15 @@ class Report {
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
 </tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
-<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
-<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
-';
-        
-
-        /*$DVboxASignatory
-        $DVboxPosition    
-        switch ($model->division_id) {
-          case 1:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
-            break;
-          case 2:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 3:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 4:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
-            break;
-          default:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
-        }*/
-        
-        /*if($model=='') { 
-            $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
-        }else{
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
-        }*/
-        
+<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
+            .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
+            .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['position'].'</td>';
+            //.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', 40)['name'].'<br></span>'
+            //.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', 40)['position'].'</td>';
 $content .= '
 </tr>
 <tr style="height: 14px;">
@@ -671,33 +572,33 @@ $content .= '
     </tr>
     </tbody>
     </table>
-    <table style="width: 100%; border-collapse: collapse;" border="1">
+    <table style="width: 100%; border-collapse: collapse; margin-top:-1px; margin-right:-0.75px;" border="1";>
     <tbody>
     <tr style="height: 12px;">
-    <td style="width: 1%; height: 12px; text-align: center;padding:10px;">Signature</td>
-    <td style="width: 49%; height: 12px;"></td>
-    <td style="width: 5%; text-align: center; height: 12px;padding:10px;">Signature</td>
-    <td style="width: 45%; height: 12px;"></td>
+    <td style="width: 1%; height: 12px; text-align: center;padding:10px;border-top:none;">Signature</td>
+    <td style="width: 49%; height: 12px;border-top:none;"></td>
+    <td style="width: 5%; text-align: center; height: 12px;padding:10px;border-top:none;">Signature</td>
+    <td style="width: 45%; height: 12px;border-top:none;"></td>
     </tr>
     <tr style="height: 25px;">
     <td style="width: 1%; height: 25px; text-align: center;padding:10px;">Printed<br />Name</td>
-    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;">ROBERTO B. ABELLA</td>
+    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['name'].'</td>
                                                                                                                          >
     <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name</td>
-    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;">MARTIN A. WEE</td>
+    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['name'].'</td>
     </tr>
     <tr style="height: 16px;">
     <td style="width: 1%; height: 32px; text-align: center;padding:10px;">Position</td>
-    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">Accountant III</td>
+    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['position'].'</td>
     <td style="width: 10%; text-align: center; height: 32px;padding:10px;"><br/>Position<br /><br /></td>
-    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">Regional Director</td>
+    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['position'].'</td>
     </tr>
 
 <tr style="height: 12.4546px;">
 <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
-<td style="width: 40%; height: 25px;">&nbsp;</td>
+<td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
 <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-<td style="width: 40%; height: 12.4546px;">&nbsp;</td>
+<td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
 </tr>
 </tbody>
 </table>
@@ -869,33 +770,7 @@ $content .= '
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
 <span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
 ';
-        
 
-        /*$DVboxASignatory
-        $DVboxPosition    
-        switch ($model->division_id) {
-          case 1:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MARTIN A. WEE<br></span>Regional Director';
-            break;
-          case 2:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 3:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">ROSEMARIE S. SALAZAR<br></span>ARD-FASTS';
-            break;
-          case 4:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">MAHMUD L. KINGKING<br></span>ARD FOS';
-            break;
-          default:
-            $content .= '<span style="text-decoration:underline;font-weight:bold;"><br></span>';
-        }*/
-        
-        /*if($model=='') { 
-            $content .= '<span style="text-decoration:underline;">'.$assig2.'<br></span>'.$Assig2Position.''; 
-        }else{
-            $content .= '<span style="text-decoration:underline;font-weight:bold;">'.$assig1.'<br></span>'.$Assig1Position.'';
-        }*/
-        
 $content .= '
 </tr>
 <tr style="height: 14px;">
@@ -1017,5 +892,38 @@ $content .= '
         } else {
             return true;
         } 
+    }
+    
+    function getBlockchain($index_id, $scope, $status)
+    {
+        try{
+            return Blockchain::find()->where('scope =:scope AND index_id =:index_id AND SUBSTR(`data`, -2, 2) =:status',[':scope'=>$scope, ':index_id'=>$index_id, ':status'=>$status])->one();
+        }catch (\yii\db\Exception $exception){
+            return $exception;
+        }
+        
+    }
+    
+    function getSignatory($index_id, $division_id, $scope, $form, $box, $status)
+    {
+        $url = "/images/user/signature/";
+        
+        // get Signatory for division
+        $signatory = Reportsignatory::find()->where('division_id =:division_id AND scope =:form AND box =:box',[':division_id'=>$division_id, ':form'=>$form, ':box'=>$box])->one();
+        
+        // get Signature Blockchain
+        $details = $this->getBlockchain($index_id, $scope, $status);
+        
+        $box = strtolower($box);
+        $form = strtolower($form);
+            
+        $signatureDetails = [
+            'name' => $signatory->activeUser->profile->getFullname(),
+            'position' => $signatory->activeUser->profile->designation,
+            'date' => date("d-M-Y", $details->timestamp),
+            'details' => '<div class="'.$form.'-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>$form."-box-".$box."-sig"]).'<div class="'.$form.'-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,64).'</div></div>'
+        ];
+        
+        return $signatureDetails;
     }
 }

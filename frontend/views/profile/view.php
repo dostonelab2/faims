@@ -30,8 +30,8 @@ echo Html::img(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\photo\\'.$mo
                     'width'=>400
                 ]) ;
 Modal::end();
-
 ?>
+
 <div class="profile-view">
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->profile_id], ['class' => 'btn btn-primary']) ?>
@@ -49,7 +49,7 @@ Modal::end();
         <div class="panel-heading"><i class="fa fa-user-circle fa-adn"></i> View</div>
         <div class="panel-body">
             <div class="col-md-2">
-               <?= Html::img(Yii::$app->urlManagerBackend->baseUrl.'\uploads\user\photo\\'.$model->getImageUrl(), [ 
+               <?= Html::img('/images/user/photo/'.$model->getImageUrl(), [ 
                     'class' => 'img-thumbnail img-responsive',
                     'alt' => $model->user->username,
                     'width'=>200,
@@ -58,6 +58,18 @@ Modal::end();
                 ]) 
                 ?>
             </div>
+            
+            <div class="col-md-2">
+               <?= Html::img('/images/user/signature/'.$model->getSignatureUrl(), [ 
+                    'class' => 'img-thumbnail img-responsive',
+                    'alt' => $model->user->username,
+                    'width'=>200,
+                    'data-toggle'=>'modal',
+                    'data-target'=>'#w0'
+                ]) 
+                ?>
+            </div>
+            
             <div class="col-md-6">
             <?=
             DetailView::widget([
