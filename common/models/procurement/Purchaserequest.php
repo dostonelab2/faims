@@ -60,7 +60,6 @@ class Purchaserequest extends \yii\db\ActiveRecord
 
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -84,7 +83,6 @@ class Purchaserequest extends \yii\db\ActiveRecord
             'lineitembudgetlist' => 'Lineitem Budget',
         ];
     }
-
     public function getBidpurchaseid()
     {
         return $this->hasOne(BidsDetails::className(), ['purchase_request_id' => 'purchase_request_id']);
@@ -93,9 +91,21 @@ class Purchaserequest extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Division::className(), ['division_id' => 'division_id']);
     }
+    public function getSection()
+    {
+        return $this->hasOne(Section::className(), ['section_id' => 'section_id']);
+    }
+    public function getProject()
+    {
+        return $this->hasOne(Project::className(), ['project_id' => 'project_id']);
+    }
     public function getProfile()
     {
         return $this->hasOne(Profile::className(), ['user_id' => 'purchase_request_requestedby_id']);
+    }
+    public function getPurchaseRequestDetails()
+    {
+        return $this->hasMany(PurchaseRequestDetails::className(), ['purchase_request_id' => 'purchase_request_id']);
     }
     public function getPonumber()
     {

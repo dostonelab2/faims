@@ -41,7 +41,12 @@ class PurchaserequestSearch extends Purchaserequest
      */
     public function search($params)
     {
-        $query = Purchaserequest::find();
+        if(Yii::$app->user->can('access-pr-all-items')){
+            $query = Purchaserequest::find();
+        }else{
+            $query = Purchaserequest::find()->where("tbl_purchase_request.user_id = '".yii::$app->user->getId()."' OR tbl_purchase_request.purchase_request_requestedby_id = '".yii::$app->user->getId()."'");
+        }
+        
 
         // add conditions that should always apply here
 

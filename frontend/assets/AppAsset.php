@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'css/introjs.css',
        // 'css/bootstrap-responsive.min.css',
         'css/demo.css',
+        'css/animate.min.css'
     ];
     public $js = [
         'js/bootbox.min.js',

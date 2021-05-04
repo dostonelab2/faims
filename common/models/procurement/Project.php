@@ -4,6 +4,7 @@ namespace common\models\procurement;
 
 use common\models\budget\Budgetallocation;
 use common\models\procurementplan\Ppmp;
+use common\models\system\Usersection;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -87,5 +88,8 @@ class Project extends \yii\db\ActiveRecord
             $year = date('Y');
         }
         return $this->hasOne(Budgetallocation::className(), ['project_id' => 'project_id'])->where(['year' => $year]);
+    }
+    public function getUsersection(){
+        return $this->hasMany(Usersection::className(), ['project_id' => 'project_id']);
     }
 }

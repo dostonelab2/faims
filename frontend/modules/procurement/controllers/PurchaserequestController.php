@@ -625,7 +625,7 @@ class PurchaserequestController extends Controller
         $gg = date('Y');
         $con =  Yii::$app->db;
         $command = $con->createCommand("SELECT MAX(SUBSTR(`tbl_purchase_request`.`purchase_request_number`,10)) + 1 AS NextNumber FROM `fais-procurement`.`tbl_purchase_request`
-WHERE YEAR(`tbl_purchase_request`.`purchase_request_date`) =" . $gg);
+        WHERE YEAR(`tbl_purchase_request`.`purchase_request_date`) =" . $gg);
         $nextValue = $command->queryAll();
         foreach ($nextValue as $bbb) {
             $a = $bbb['NextNumber'];
@@ -649,7 +649,7 @@ WHERE YEAR(`tbl_purchase_request`.`purchase_request_date`) =" . $gg);
             `fnGetSection`(`tbl_purchase_request`.`section_id`) AS section,
             `fnGetDivision`(`tbl_purchase_request`.`division_id`) AS division
             FROM `tbl_purchase_request_details` 
-            INNER JOIN `tbl_purchase_request` 
+            INNER JOIN `tbl_purchase_request`
             ON `tbl_purchase_request`.`purchase_request_id` = `tbl_purchase_request_details`.`purchase_request_id`
             INNER JOIN `fais`.`tbl_unit_type`
             ON `tbl_unit_type`.`unit_type_id` = `tbl_purchase_request_details`.`unit_id`

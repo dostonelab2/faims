@@ -2,6 +2,7 @@
 
 namespace common\models\procurementplan;
 use common\models\procurementplan\Unitofmeasure;
+use common\models\procurement\UnitType;
 use Yii;
 
 /**
@@ -71,6 +72,14 @@ class Item extends \yii\db\ActiveRecord
         $unit = Unitofmeasure::findOne($this->unit_of_measure_id);
         if($unit)
             return $unit->name;
+        else
+            return 'unit';
+    }
+    public function getUnittype()
+    {
+        $unit = Unittype::findOne($this->unit_of_measure_id);
+        if($unit)
+            return $unit->name_short;
         else
             return 'unit';
     }

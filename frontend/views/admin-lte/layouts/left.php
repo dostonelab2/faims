@@ -128,6 +128,7 @@ $ppmp_approved = Ppmp::find()
                         'visible'=> Yii::$app->user->can('access-procurement'),
                         'items' => [
                             ['label' => 'Purchase Request', 'icon' => 'cart-plus', 'url' => ['/procurement/purchaserequest/index']],
+                            ['label' => 'Purchase Request V2', 'icon' => 'cart-plus', 'url' => ['/procurement/purchaserequest2/index']],
                             /*['label' => 'Obligation Request', 'icon' => 'object-ungroup', 'url' => ['/procurement/obligationrequest/index']],*/
                             ['label' => 'Quotations, Bids and Awards', 'icon' => 'object-ungroup', 'url' => ['/procurement/bids/index'],'visible'=> Yii::$app->user->can('access-bidsquotation')],
                             ['label' => 'Purchase Order', 'icon' => 'tags', 'url' => ['/procurement/purchaseorder/index'],'visible'=> Yii::$app->user->can('access-purchaseorder')],
