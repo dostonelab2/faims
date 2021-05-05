@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use common\components\Functions;
 
 $func = new Functions();
-
+echo $BaseURL;
 
 $BaseURL = $GLOBALS['frontend_base_uri'];
 $this->title = 'Quotation Bids and Awards';
