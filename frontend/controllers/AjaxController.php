@@ -17,7 +17,7 @@ class AjaxController extends \yii\web\Controller
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $con = Yii::$app->procurementdb;
-        if(yii::$app->user->can('access-pr-all-items')){
+        if(Yii::$app->user->can('access-pr-all-items')){
         //if(Yii::$app->user->identity->username == 'Admin' || (Yii::$app->user->identity->id == 13)){
         //if(Yii::$app->user->identity->id == 13){
             $sql = "SELECT tbl_purchase_request.purchase_request_id,

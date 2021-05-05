@@ -2,8 +2,11 @@
 
 namespace frontend\modules\procurement\controllers;
 
+use common\models\procurement\Purchaseorderdetails;
 use Yii;
 use common\models\procurement\Purchaserequest;
+use common\models\procurement\PurchaseRequestDetails;
+use common\models\procurement\Section;
 use common\models\procurement\Tmpitem;
 use frontend\models\PurchaserequestSearch;
 use yii\web\Controller;
@@ -12,6 +15,10 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
+use yii\db\Transaction;
+
+
+//use yii\base\Exception;
 
 /**
  * Purchaserequest2Controller implements the CRUD actions for Purchaserequest model.
@@ -55,8 +62,14 @@ class Purchaserequest2Controller extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model =  PurchaseRequestDetails::find()->where(['purchase_request_id' => $id]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $model,
+        ]);
+        return $this->renderAjax('view', [
+            'model' => $model,
+            'detail' => $this->findModel($id),
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -72,7 +85,7 @@ class Purchaserequest2Controller extends Controller
         //var_dump(Json::encode($items));
         //echo('</pre>');
         $model = new Purchaserequest();
-        
+
         $items = Tmpitem::find()->where(['session_id' => Yii::$app->session->getId()]);
         $itemDataProvider = new ActiveDataProvider([
             'query' => $items,
@@ -87,15 +100,16 @@ class Purchaserequest2Controller extends Controller
                 if ($tmpitem) {
                     //echo Json::encode(['message'=>$ppmp_item]);
                     if ($_POST['checked'] == 'true') {
-                        $items->where(['section_id' => $_POST['section'], 'checked' => 1, 'session_id' => Yii::$app->session->getId()]);
+                        $items->where(['checked' => 1, 'session_id' => Yii::$app->session->getId()]);
                         $tmpitem->checked = 1;
+                        $tmpitem->is_deleted = 0;
                         $tmpitem->save(false);
                         return $this->renderAjax('create', [
                             'model' => $model,
                             'itemDataProvider' => $itemDataProvider,
                         ]);
                     } else {
-                        $items->where(['section_id' => $_POST['section'], 'checked' => 1, 'session_id' => Yii::$app->session->getId()]);
+                        $items->where(['checked' => 1, 'session_id' => Yii::$app->session->getId()]);
                         $tmpitem->checked = 0;
                         $tmpitem->save(false);
                         return $this->renderAjax('create', [
@@ -139,8 +153,9 @@ class Purchaserequest2Controller extends Controller
             } elseif (isset($_POST['removeitem']) == true) {
                 //$this->setTempItem();
                 $tmpitem = Tmpitem::find()->where(['tmppritems_id' => $_POST['tmppritems_id']])->one();
-                $items->where(['section_id' => $_POST['section'], 'checked' => 1, 'session_id' => Yii::$app->session->getId()]);
+                $items->where(['checked' => 1, 'session_id' => Yii::$app->session->getId()]);
                 $tmpitem->checked = 0;
+                $tmpitem->is_deleted = 1;
                 $tmpitem->save(false);
                 return $this->renderAjax('create', [
                     'model' => $model,
@@ -148,31 +163,97 @@ class Purchaserequest2Controller extends Controller
                 ]);
             } elseif (isset($_POST['reloadremoveditems']) == true) {
                 //$this->setTempItem();
-                $items->where(['section_id' => $_POST['section'], 'session_id' => Yii::$app->session->getId()]);
+                $items->where(['session_id' => Yii::$app->session->getId()]);
                 return $this->renderAjax('create', [
                     'model' => $model,
                     'itemDataProvider' => $itemDataProvider
                 ]);
             } else {
-                //$con2 = Yii::$app->procurementdb;
-                //$sql2 = 'CREATE TEMPORARY TABLE ' . Yii::$app->session->getId() . '
-                //        (
-                //            SELECT * FROM vw_ppmp_items
-                //        )';
-                //$con2->createCommand($sql2)->execute();
-                //$con = Yii::$app->procurementdb;
-                //$sql = 'SELECT item_id, description, unit,unit_description, cost,SUM(approved_qty) AS qty FROM '.Yii::$app->session->getId().' WHERE YEAR = 2021 AND division_id = 2 AND status_id = 3 GROUP BY item_id';
-                //$items = $con->createCommand($sql)->queryAll();
-                $items->where(['section_id' => '','project_id' => '']);
+                $items->where(['section_id' => '', 'project_id' => '']);
                 $this->deleteTempItem();
                 return $this->renderAjax('create', [
                     'model' => $model,
-                    'itemDataProvider' => $itemDataProvider
+                    'itemDataProvider' => $itemDataProvider,
+                    //'prNumber' => $this->GeneratePRid()
                 ]);
             }
-        }/*else{
+        } else {
             return $this->redirect('index');
-        }*/
+        }
+    }
+    public function actionSubmitpr()
+    {
+        $session = Yii::$app->session;
+        $purchase_request_id = $this->GeneratePRid();
+        $purchase_request_number = $this->GeneratePRNumber();
+        $session_id = Yii::$app->session->getId();
+        $con = Yii::$app->procurementdb;
+        $transaction = $con->beginTransaction();
+        $sql = 'INSERT INTO `tbl_purchase_request_details`
+                    (`purchase_request_id`,
+                    `purchase_request_number`,
+                    `unit_id`,
+                    `purchase_request_details_item_description`,
+                    `purchase_request_details_quantity`,
+                    `purchase_request_details_price`) 
+                SELECT :purchase_request_id AS `purchase_request_id`,
+                       :purchase_request_number AS `purchase_request_number`,
+                        `unit`,
+                        `description`,
+                        `qty`,
+                        `cost`
+                FROM `tmppritems` 
+                WHERE session_id = :session_id AND checked = 1';
+        try {
+            if (Yii::$app->request->isPost) {
+                $model = new Purchaserequest();
+                $model->purchase_request_id = $purchase_request_id;
+                $model->purchase_request_number = $purchase_request_number;
+
+                if ($_POST['Purchaserequest']['purchase_request_sai_number'] != '') {
+                    $model->purchase_request_sai_number = $_POST['Purchaserequest']['purchase_request_sai_number'];
+                    $model->purchase_request_saidate = $_POST['Purchaserequest']['purchase_request_saidate'];
+                }
+
+                $section = Section::findOne($_POST['Purchaserequest']['hidden_section_id']);
+                $model->section_id = $_POST['Purchaserequest']['hidden_section_id'];
+                $model->division_id = $section->division_id;
+
+                if (isset($_POST['Purchaserequest']['project_id'])) $model->project_id = $_POST['Purchaserequest']['project_id'];
+                $model->purchase_request_date = $_POST['Purchaserequest']['purchase_request_date'];
+                $model->purchase_request_purpose = $_POST['Purchaserequest']['purchase_request_purpose'];
+                if ($_POST['Purchaserequest']['purchase_request_referrence_no'] != '') $model->purchase_request_referrence_no = $_POST['Purchaserequest']['purchase_request_referrence_no'];
+                if ($_POST['Purchaserequest']['purchase_request_project_name'] != '') $model->purchase_request_project_name = $_POST['Purchaserequest']['purchase_request_project_name'];
+                if ($_POST['Purchaserequest']['purchase_request_location_project'] != '') $model->purchase_request_location_project = $_POST['Purchaserequest']['purchase_request_location_project'];
+                //$model->section_id = $_POST['Purchaserequest']['hidden_section_id'];
+                $model->purchase_request_requestedby_id = $_POST['Purchaserequest']['purchase_request_requestedby_id'];
+                $model->purchase_request_approvedby_id = $_POST['Purchaserequest']['purchase_request_approvedby_id'];
+                $model->user_id = Yii::$app->user->id;
+                if ($model->save(false)) {
+                    $con->createCommand($sql)
+                        ->bindValues([
+                            ':purchase_request_id' => $purchase_request_id,
+                            ':purchase_request_number' => $purchase_request_number,
+                            ':session_id' => $session_id
+                        ])
+                        ->execute();
+                }
+                if (!$model->save(false)) throw new \Exception('Not Save...');
+                $transaction->commit();
+                $session->set('savepopup', "executed");
+                return $this->redirect('index');
+            }
+            $session->set('errorpopup', "executed");
+            return $this->redirect('index');
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $session->set('errorpopup', "executed");
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            $session->set('errorpopup', "executed");
+            throw $e;
+        }
     }
 
     /**
@@ -183,15 +264,117 @@ class Purchaserequest2Controller extends Controller
      */
     public function actionUpdate($id)
     {
+        $session = Yii::$app->session;
         $model = $this->findModel($id);
+        $prdetails = PurchaseRequestDetails::find()->where(['purchase_request_id' => $model->purchase_request_id])->all();
+        
+        $session_id = Yii::$app->session->getId();
+        //if (Yii::$app->request->isAjax) {
+        $timestamp = strtotime($model->purchase_request_date);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->purchase_request_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
+        if (Yii::$app->request->isAjax) {
+            $this->deleteTempItem();
+            $con = Yii::$app->procurementdb;
+            $sql =
+                'INSERT INTO `tmppritems`(`session_id` ,`ppmp_id`, `division_id`, 
+                    `section_id`, `project_id`,
+                    `year`, `item_id`,
+                    `description`, `unit`,
+                    `unit_description`, `cost`,
+                    `checked`, `qty`,
+                    `approved_qty`, `supplemental`, 
+                    `status_id`,
+                    `date`) 
+                SELECT \'' . $session_id . '\' AS session_id,
+                    `ppmp_id`, `division_id`, 
+                    `section_id`, `project_id`,
+                    `year`, `item_id`,
+                    `description`, `unit`,
+                    `unit_description`, `cost`,
+                    `checked`, `qty`,
+                    `approved_qty`, `supplemental`, 
+                    `status_id`,
+                    DATE(NOW()) AS DATE
+                FROM vw_ppmp_items WHERE section_id = :section_id 
+                    AND project_id = :project_id                   
+                    AND year = :year AND status_id=3
+                    AND NOT EXISTS (SELECT session_id FROM tmppritems
+                                    WHERE session_id = :session_id)';
+            $con->createCommand($sql)
+                ->bindValues([
+                    ':section_id' => $model->project_id == '' ? $model->section_id : '',
+                    ':project_id' => $model->project_id == '' ? '' : $model->project_id,
+                    ':session_id' => $session_id,
+                    ':year' => date('Y', $timestamp)
+                ])
+                ->execute();
+            $tmpitems = Tmpitem::find();
+
+            foreach ($prdetails as $prdetail) {
+                $item = $tmpitems->where(['session_id' => Yii::$app->session->getId(), 'description' => $prdetail->purchase_request_details_item_description])->one();
+                $item->checked = 1;
+                $item->qty = $prdetail->purchase_request_details_quantity;
+                $item->save(false);
+            }
+            $items = Tmpitem::find()->where(['session_id' => Yii::$app->session->getId(), 'checked' => 1]);
+            $items2 = $tmpitems->where(['session_id' => Yii::$app->session->getId()]);
+            $itemDataProvider = new ActiveDataProvider([
+                'query' => $items,
+                'pagination' => false,
+                'sort' => [
+                    'attributes' => ['item_id'],
+                ],
             ]);
+            $itemDataProvider2 = new ActiveDataProvider([
+                'query' => $items2,
+                'pagination' => false,
+                'sort' => [
+                    'attributes' => ['item_id'],
+                ],
+            ]);
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'itemDataProvider' => $itemDataProvider,
+                'itemDataProvider2' => $itemDataProvider2
+            ]);
+        } 
+        
+        if (Yii::$app->request->post()) {
+            $items = Tmpitem::find()->where(['session_id' => Yii::$app->session->getId(), 'checked' => 1])->all();
+            $model->purchase_request_purpose = $_POST['Purchaserequest']['purchase_request_purpose'];
+            $model->purchase_request_referrence_no = $_POST['Purchaserequest']['purchase_request_referrence_no'];
+            $model->purchase_request_project_name = $_POST['Purchaserequest']['purchase_request_project_name'];
+            $model->purchase_request_location_project = $_POST['Purchaserequest']['purchase_request_location_project'];
+            if ($model->save()) {
+                $deleteditems = Tmpitem::find()->where(['session_id' => Yii::$app->session->getId(), 'is_deleted' => 1])->all();
+                foreach($deleteditems as $deleteditem){
+                    $isdeleteditem = PurchaseRequestDetails::find()->where(['purchase_request_id' => $model->purchase_request_id, 'purchase_request_details_item_description' => $deleteditem['description']])->one();
+                    $isdeleteditem->delete();
+                }
+                foreach($items as $item){
+                    $pritems = PurchaseRequestDetails::find()->where(['purchase_request_id' => $model->purchase_request_id, 'purchase_request_details_item_description' => $item['description']])->one();
+                    if($pritems){
+                        $pritems->purchase_request_details_quantity = $item['qty'];
+                        $pritems->save(false);
+                    }
+                    if(!$pritems){
+                        $pritems2 = new PurchaseRequestDetails();
+                        $pritems2->purchase_request_id = $id;
+                        $pritems2->purchase_request_number = $model->purchase_request_number;
+                        $pritems2->purchase_request_details_unit = $item['unit_description'];
+                        $pritems2->unit_id = $item['unit'];
+                        $pritems2->purchase_request_details_item_description = $item['description'];
+                        $pritems2->purchase_request_details_quantity = $item['qty'];
+                        $pritems2->purchase_request_details_price = $item['cost'];
+                        $pritems2->save(false);
+                    }        
+                    //echo $item['qty'];
+                }
+                $session->set('savepopup', "executed");
+                return $this->redirect('index');
+            }
         }
+        return $this->redirect('index');
     }
 
     /**
@@ -226,9 +409,9 @@ class Purchaserequest2Controller extends Controller
     {
         $session_id = '\'' . Yii::$app->session->getId() . '\'';
         //if (Yii::$app->request->isAjax) {
-            $con = Yii::$app->procurementdb;
-            $sql =
-                'INSERT INTO `tmppritems`(`session_id` ,`ppmp_id`, `division_id`, 
+        $con = Yii::$app->procurementdb;
+        $sql =
+            'INSERT INTO `tmppritems`(`session_id` ,`ppmp_id`, `division_id`, 
                     `section_id`, `project_id`,
                     `year`, `item_id`,
                     `description`, `unit`,
@@ -247,11 +430,11 @@ class Purchaserequest2Controller extends Controller
                     `approved_qty`, `supplemental`, 
                     `status_id`,
                     DATE(NOW()) as date
-                FROM vw_ppmp_items WHERE '.$selection.
-                    ' AND year=' . $_POST['year'] . ' AND status_id=3
+                FROM vw_ppmp_items WHERE ' . $selection .
+            ' AND year=' . $_POST['year'] . ' AND status_id=3
                     AND NOT EXISTS (SELECT session_id FROM tmppritems
                                     WHERE session_id = ' . $session_id . ')';
-            $con->createCommand($sql)->execute();
+        $con->createCommand($sql)->execute();
         //}
     }
     public function deleteTempItem()
@@ -267,5 +450,30 @@ class Purchaserequest2Controller extends Controller
             $tmpitem->qty = $_POST['qty'];
             $tmpitem->save(false);
         }
+    }
+    public function GeneratePRNumber()
+    {
+        $characters = "PR";
+        $yr = date('y');
+        $mt = date('m');
+        $gg = date('Y');
+        $con =  Yii::$app->db;
+        $command = $con->createCommand("SELECT MAX(SUBSTR(`tbl_purchase_request`.`purchase_request_number`,10)) + 1 AS NextNumber FROM `fais-procurement`.`tbl_purchase_request`
+        WHERE YEAR(`tbl_purchase_request`.`purchase_request_date`) =" . $gg);
+        $nextValue = $command->queryAll();
+        foreach ($nextValue as $bbb) {
+            $a = $bbb['NextNumber'];
+        }
+        $nextValue = $a;
+        $documentcode = $characters . "-" . $yr . "-" . $mt . "-";
+        $documentcode = $documentcode . str_pad($nextValue, 4, '0', STR_PAD_LEFT);
+        return $documentcode;
+    }
+    public function GeneratePRid()
+    {
+        $con = Yii::$app->procurementdb;
+        $command = $con->createCommand("SELECT MAX(purchase_request_id) + 1 AS NextNumber  FROM tbl_purchase_request");
+        $nextValue = $command->queryOne();
+        return $nextValue['NextNumber'];
     }
 }

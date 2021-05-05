@@ -176,6 +176,9 @@ class Section extends \yii\db\ActiveRecord
         }
         return $this->hasOne(Budgetallocation::className(), ['section_id' => 'section_id'])->where(['year' => $year]);
     }
+    public function getUsersection(){
+        return $this->hasMany(Usersection::className(), ['section_id' => 'section_id']);
+    }
     
     /*public function getBudgetallocation()
     {

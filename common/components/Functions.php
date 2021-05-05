@@ -82,7 +82,7 @@ class Functions extends Component
         return $generateheader;
     }
 
-    /***
+    /**
      * @param string Close Title Description
      * @param string Proceed Title Description
      * @param int Set True if there will be a proceed button
@@ -272,6 +272,17 @@ class Functions extends Component
                         $('.sweet-alert').css('display','none');
                         $('.skin-green').removeClass(\"stop-scrolling\");
                         }"),
+        ]);
+    }
+    function CrudAlert2($title="Saved Successfully",$type=Alert::TYPE_WARNING,$showclose=false,$showcancel=false) {
+        return  Alert::widget([
+            'options' => [
+                'showCloseButton' => $showclose,
+                'showCancelButton' => $showcancel,
+                'title' => $title,
+                'type' => $type ,
+                'timer' => 1000
+            ],
         ]);
     }
 
