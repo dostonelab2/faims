@@ -38,16 +38,31 @@ $this->params['breadcrumbs'][] = $this->title;
     //'filterModel' => $searchModel,
     'summary' => false,
     'columns' => [
-        ['attribute' => 'unit_id'],
-        
-        ['attribute' => 'purchase_request_details_item_description'],
-        ['attribute' => 'purchase_request_details_quantity'],
-        ['attribute' => 'purchase_request_details_price'],
+        [
+            'attribute' => 'unit_id',
+            'header' => 'Unit',
+            'value' => function($model){
+               return $model->unittype->name_short;
+            }
+        ],
+        [
+            'attribute' => 'purchase_request_details_item_description',
+            'format' => 'html',
+            'header' => 'Item Description'
+        ],
+        [
+            'attribute' => 'purchase_request_details_quantity',
+            'header' => 'Quantity'
+        ],
+        [
+            'attribute' => 'purchase_request_details_price',
+            'header' => 'Price'
+        ],
         [
             'attribute' => 'purchase_request_details_price',
             'header' => 'Total',
             'value' => function($model){
-                
+                return $model->purchase_request_details_quantity * $model->purchase_request_details_price;
             }
         ],
     ],

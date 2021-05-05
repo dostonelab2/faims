@@ -41,9 +41,9 @@ class PurchaseRequestDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['purchase_request_id', 'unit_id', 'purchase_request_details_quantity','purchase_request_details_status'], 'integer'],
+            [['purchase_request_id', 'unit_id', 'purchase_request_details_quantity', 'purchase_request_details_status'], 'integer'],
             [['purchase_request_details_price'], 'number'],
-            [['purchase_request_details_item_description', 'item_description','purchase_request_details_unit'], 'string'],
+            [['purchase_request_details_item_description', 'item_description', 'purchase_request_details_unit'], 'string'],
         ];
     }
 
@@ -65,8 +65,8 @@ class PurchaseRequestDetails extends \yii\db\ActiveRecord
             'purchase_request_details_status' => 'Status',
         ];
     }
-
-
-
-
+    public function getUnittype()
+    {
+        return $this->hasOne(UnitType::className(), ['unit_type_id' => 'unit_id']);
+    }
 }
