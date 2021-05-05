@@ -13,16 +13,16 @@ $whitelist = array(
 );
 if (isset($_SERVER['SERVER_NAME'])) {
     if (!in_array($_SERVER['SERVER_NAME'], $whitelist)) {
-        $Backend_URI = 'http://' . $_SERVER['SERVER_NAME'] . '/';
+        $Backend_URI = 'https://' . $_SERVER['SERVER_NAME'] . '/';
         $BaseURI = $Backend_URI.'/';
         $Signature_URI = $Backend_URI . "backend/web/uploads/user/signature/";
         $Backend_URI = $Backend_URI . "backend/web/uploads/user/photo/";
         
         #$FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . ':8082/';
         if($_SERVER['SERVER_NAME'] == '192.168.1.95')
-                $FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . ':8080/';
+                $FrontendBaseURI = 'https://' . $_SERVER['SERVER_NAME'] . ':8080/';
         else
-                $FrontendBaseURI = 'http://' . $_SERVER['SERVER_NAME'] . '/';
+                $FrontendBaseURI = 'https://' . $_SERVER['SERVER_NAME'] . '/';
     } else {
         $Backend_URI = 'http://localhost:8080/faims/backend/web/uploads/user/photo/';
         $Signature_URI = 'http://localhost:8080/faims/backend/web/uploads/user/signaure/';
