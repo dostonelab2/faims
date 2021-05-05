@@ -65,4 +65,9 @@ class DefaultController extends Controller
             //'approved' => $approved,
         ]);
     }
+    
+    public function actionIndex2()
+    {
+        return $this->render('index3');
+    }
 }
