@@ -17,8 +17,6 @@ $this->registerJsFile($BaseURL.'js/app.js');
 $this->registerJsFile($BaseURL.'js/jquery.tabletojson.js');
 $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
 $this->registerJsFile($BaseURL.'js/custom.js');
-
-echo $BaseURL;
 ?>
 
 <div class="request-index">
