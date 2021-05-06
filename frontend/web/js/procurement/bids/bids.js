@@ -247,10 +247,19 @@ jQuery(document).ready(function ($) {
             type: "POST",
             url: frontendURI + "procurement/bids/checkselected",
             data: {chkRow: chkRow.val() , chkStatus: bools , chkBids: chkBids},
-            success: function (response) {
+            success: function (response,data) {
                 //alert(response);
-                 $("#kv-grid-data2-togdata-all").click();
-                 $("#kv-grid-data2-togdata-page").click();
+                 //$("#kv-grid-data2-togdata-all").click();
+                 //$("#kv-grid-data2-togdata-page").click();
+
+                /************************update 5-6-2021*********************/
+                if(checked==true){
+                    $('#status-badge-' + chkRow.val()).html('<span class="badge btn-block" style="background: black;">Pending for Award <i class="fa fa-pencil"></i></span>');
+                }else{
+                    $('#status-badge-' + chkRow.val()).html('<span class="badge btn-block" style="background: green;">Available for Award <i class="fa fa-toggle-on"></i></span>');
+                }
+                
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError);

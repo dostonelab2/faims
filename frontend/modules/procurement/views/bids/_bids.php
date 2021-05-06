@@ -472,6 +472,9 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                         'class' => 'kartik\grid\DataColumn',
                                         'format'=>'html',
                                         'header'=>'Status',
+                                        'contentOptions' => function($model){
+                                            return ['id' => 'status-badge-'.$model->bids_details_id];
+                                        },
                                         'value'=>function($model,$key,$index,$widget) {
                                             switch ($model->bids_details_status) {
                                                 case 0:
