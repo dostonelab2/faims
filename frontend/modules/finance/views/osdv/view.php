@@ -336,6 +336,9 @@ Modal::end();
                     'hAlign'=>'right',
                     'vAlign'=>'left',
                     'width'=>'100px',
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                 ],
             ];
     ?>
@@ -344,6 +347,7 @@ Modal::end();
                 'id' => 'request-obligation',
                 'dataProvider' => $allotmentsDataProvider,
                 //'filterModel' => $searchModel,
+                'showPageSummary' => true,
                 'columns' => $gridColumns, // check the configuration for grid columns by clicking button above
                 'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
                 'headerRowOptions' => ['class' => 'kartik-sheet-style'],
