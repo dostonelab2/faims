@@ -279,6 +279,7 @@ class OsdvController extends Controller
             $model->created_by = Yii::$app->user->identity->user_id;
             $model->status_id = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
             $model->remarks = '';
+            $model->payroll = $_POST['Osdv']['payroll'];
             if($model->save(false)){
                 if($model->type_id == 1){
                     /*$os = new Os();

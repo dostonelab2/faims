@@ -39,6 +39,13 @@ use kartik\detail\DetailView;
                 'format'=>['decimal', 2],
                 'inputContainer' => ['class'=>'col-sm-6'],
             ],
+            [
+                'attribute'=>'payroll',
+                'id'=>'payrollVar',
+                'label'=>'Payroll',
+                'value' => $model->payroll ? 'YES' : 'NO',
+                'inputContainer' => ['class'=>'col-sm-6'],
+            ],
         ];?>
     <?= DetailView::widget([
             'model' => $model,
