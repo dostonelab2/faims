@@ -314,6 +314,37 @@ class OsdvController extends Controller
     public function actionPayrollitems()
     {
         $id = $_GET['id'];
+        $model = new Requestpayroll();
+        
+        $model->osdv_id = $id;
+        //creditor_type_id
+        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->creditor_id = $_POST['Requestpayroll']['creditor_id'];
+            $model->particulars = $_POST['Requestpayroll']['particulars'];
+            $model->status_id = 0;
+            $model->active = 1;
+            if($model->save(false)){
+                return $this->redirect(['view', 'id' => $model->osdv_id]);   
+            }
+                 
+        }elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_formcreditor', [
+                        'model' => $model,
+                        'osdv_id' => $id,
+            ]);
+        } else {
+            return $this->render('_formcreditor', [
+                        'model' => $model,
+                        'osdv_id' => $id,
+            ]);
+        }
+    }
+    
+    public function actionPayrollitems2()
+    {
+        $id = $_GET['id'];
         $model = $this->findModel($id);
         
         $searchModel = new CreditorSearch();
