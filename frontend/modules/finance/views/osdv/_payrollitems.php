@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 
 use common\models\cashier\Creditortype;
 use common\models\finance\Requestpayroll;
+use common\models\finance\Requestpayrollitem;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -30,10 +31,10 @@ use common\models\finance\Requestpayroll;
                 'class' => '\kartik\grid\CheckboxColumn',
                 'headerOptions' => ['class' => 'kartik-sheet-style'],
                 'name'=>'account', //additional
-                'checkboxOptions' => function($model, $key, $index, $column) use ($id){
-                                         $bool = Requestpayroll::find()->where(['osdv_id'=>$id, 'creditor_id'=>$model->creditor_id,'active'=>1])->count();
+                'checkboxOptions' => function($model, $key, $index, $column) use ($request_payroll_id, $osdv_id){
+                                         $bool = Requestpayrollitem::find()->where(['request_payroll_id'=>$request_payroll_id, 'creditor_id'=>$model->creditor_id,'active'=>1])->count();
                                          return ['checked' => $bool,
-                                                'onclick'=>'onAdditem('.$id.',this.value, this.checked)' //additional
+                                                'onclick'=>'onAdditem('.$request_payroll_id.','.$osdv_id.',this.value, this.checked)' //additional
                                                 //'onclick'=>'alert(this.value)' //additional
                                                 ];
                                      },
@@ -82,11 +83,11 @@ use common\models\finance\Requestpayroll;
 
 
 <script type="text/javascript">
-function onAdditem(id,creditorid,checked){
+function onAdditem(requestpayrollid,osdvid,creditorid,checked){
     $.ajax({
             type: "POST",
-            url: "<?php echo Url::to(['requestpayroll/additem']); ?>",
-            data: {id: id, creditorid: creditorid, checked: checked},
+            url: "<?php echo Url::to(['requestpayrollitem/additem']); ?>",
+            data: {requestpayrollid: requestpayrollid, osdvid: osdvid, creditorid: creditorid, checked: checked},
             success: function(data){ 
                 }
             });

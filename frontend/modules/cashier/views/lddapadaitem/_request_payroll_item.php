@@ -39,7 +39,7 @@ use common\models\procurement\Fundsource;
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'name'=>'lddap-ada-payroll-items', //additional
                     'checkboxOptions' => function($model, $key, $index, $column) use ($id){
-                                                $bool = Lddapadaitem::find()->where(['request_payroll_id' => $model->request_payroll_id, 'osdv_id'=>$model->osdv_id, 'active'=>1])->count();
+                                                $bool = Lddapadaitem::find()->where(['request_payroll_item_id' => $model->request_payroll_item_id, 'osdv_id'=>$model->osdv_id, 'active'=>1])->count();
                                                 return ['checked' => $bool, 'onclick'=>'onCreditorpayroll(this.value,this.checked)'];
                                          }
                 ],
@@ -53,7 +53,7 @@ use common\models\procurement\Fundsource;
             [
                 'attribute' => 'dv_id',
                 'value'=>function ($model, $key, $index, $widget){ 
-                            return $model->dv->dv_number;
+                            return $model->requestpayroll->dv ? $model->requestpayroll->dv->dv_number : '';
                         },
             ],
             [
@@ -71,12 +71,12 @@ use common\models\procurement\Fundsource;
 <br/>
 <script>
 //function onCreditorpayroll(osdv_id,checked){
-function onCreditorpayroll(payroll_id,checked){
+function onCreditorpayroll(payroll_item_id,checked){
     var lddapada_id = <?php echo $id?>;
     $.ajax({
             type: "POST",
             url: "<?php echo Url::to(['lddapada/addpayrollitems']); ?>",
-            data: {payrollId:payroll_id,lddapadaId:lddapada_id,checked:checked},
+            data: {payroll_item_id:payroll_item_id,lddapadaId:lddapada_id,checked:checked},
             success: function(data){ 
                 }
             });

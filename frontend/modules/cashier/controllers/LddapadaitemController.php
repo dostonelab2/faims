@@ -161,29 +161,29 @@ class LddapadaitemController extends Controller
     
     public function actionAddcreditors()
     {
-        $id = $_GET['id'];
+        $lddapada_id = $_GET['id'];
         $typeId = $_GET['typeId'];
 
-        $lddapada = Lddapada::findOne($id); 
+        $lddapada = Lddapada::findOne($lddapada_id); 
         $searchModel = new OsdvlddapitemSearch();
 //        $searchModel =    new OsdvSearch();
         $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         $searchModel->status_id = $status_id;
         $searchModel->type_id = $lddapada->type_id;
-        $searchModel->lddapadaId = $id;
+        $searchModel->lddapadaId = $lddapada_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_addcreditors', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'id' => $id,
+                        'lddapada_id' => $lddapada_id,
             ]);
         } else {
             return $this->render('_additems', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'id' => $id,
+                        'lddapada_id' => $lddapada_id,
             ]);
         }
     }
