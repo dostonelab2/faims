@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'purchase_request_id') ?>
 
-    <?= $form->field($model, 'purchase_request_number')->label(false) ?>
+    <?= $form->field($model, 'globalSearch')->label(false) ?>
 
     <?php // $form->field($model, 'purchase_request_sai_number') ?>
 

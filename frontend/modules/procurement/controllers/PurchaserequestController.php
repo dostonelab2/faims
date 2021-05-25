@@ -653,7 +653,7 @@ class PurchaserequestController extends Controller
             ON `tbl_purchase_request`.`purchase_request_id` = `tbl_purchase_request_details`.`purchase_request_id`
             INNER JOIN `fais`.`tbl_unit_type`
             ON `tbl_unit_type`.`unit_type_id` = `tbl_purchase_request_details`.`unit_id`
-WHERE `tbl_purchase_request_details`.`purchase_request_id`=" . $id;
+        WHERE `tbl_purchase_request_details`.`purchase_request_id`=" . $id;
         $porequest = $con->createCommand($sql)->queryAll();
         return $porequest;
     }

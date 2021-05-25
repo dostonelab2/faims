@@ -5,21 +5,23 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\procurement\Purchaserequest;
+use common\models\procurement\VwPurchaseRequest;
 
 /**
  * PurchaserequestSearch represents the model behind the search form about `common\models\procurement\Purchaserequest`.
  */
-class PurchaserequestSearch extends Purchaserequest
+class PurchaserequestSearch extends VwPurchaseRequest
 {
     /**
      * @inheritdoc
      */
+    public $globalSearch;
+
     public function rules()
     {
         return [
-            [['purchase_request_id', 'division_id', 'section_id', 'purchase_request_approvedby_id', 'user_id'], 'integer'],
-            [['purchase_request_number', 'purchase_request_sai_number', 'purchase_request_date', 'purchase_request_saidate', 'purchase_request_purpose', 'purchase_request_referrence_no', 'purchase_request_project_name', 'purchase_request_location_project'], 'safe'],
+            [['purchase_request_id',  'purchase_request_requestedby_id', 'user_id'], 'integer'],
+            [['purchase_request_number','globalSearch','division_name', 'section_name','purchase_request_purpose'], 'safe'],
         ];
     }
 
@@ -42,9 +44,9 @@ class PurchaserequestSearch extends Purchaserequest
     public function search($params)
     {
         if(Yii::$app->user->can('access-pr-all-items')){
-            $query = Purchaserequest::find();
+            $query = VwPurchaseRequest::find();
         }else{
-            $query = Purchaserequest::find()->where("tbl_purchase_request.user_id = '".yii::$app->user->getId()."' OR tbl_purchase_request.purchase_request_requestedby_id = '".yii::$app->user->getId()."'");
+            $query = VwPurchaseRequest::find()->where("user_id = '".yii::$app->user->getId()."' OR purchase_request_requestedby_id = '".yii::$app->user->getId()."'");
         }
         
 
@@ -52,11 +54,9 @@ class PurchaserequestSearch extends Purchaserequest
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => [
-                'defaultOrder' => [
-                    'purchase_request_number' => SORT_DESC
-                ]
-            ]
+            //'pagination' => false,
+            //'sort' => ['attributes' => ['purchase_request_number']],
+            'sort' => ['defaultOrder' => ['purchase_request_number' => SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -80,7 +80,10 @@ class PurchaserequestSearch extends Purchaserequest
             'user_id' => $this->user_id,
         ]);*/
 
-        $query->andFilterWhere(['like', 'purchase_request_number', $this->purchase_request_number]);
+        $query->orFilterWhere(['like', 'purchase_request_number', $this->globalSearch])
+              ->orFilterWhere(['like', 'purchase_request_purpose', $this->globalSearch])
+              ->orFilterWhere(['like', 'requested_by', $this->globalSearch])
+              ->orFilterWhere(['like', 'po_number', $this->globalSearch]);
             //->andFilterWhere(['like', 'purchase_request_sai_number', $this->purchase_request_sai_number])
             //->andFilterWhere(['like', 'purchase_request_purpose', $this->purchase_request_purpose])
             //->andFilterWhere(['like', 'purchase_request_referrence_no', $this->purchase_request_referrence_no])

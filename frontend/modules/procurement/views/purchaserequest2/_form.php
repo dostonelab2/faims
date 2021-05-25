@@ -11,6 +11,9 @@ use common\models\procurement\Project;
 use common\models\procurement\Tmpitem;
 use yii\helpers\Json;
 use kartik\grid\GridView;
+use yii\web\View;
+
+use dosamigos\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\procurement\Purchaserequest */
@@ -30,25 +33,25 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
 ?>
 
 <div class="purchaserequest-form">
-    <?php 
+    <?php
     $form = ActiveForm::begin([
         'id' => 'create_pr_form',
-        'action' => $this->context->route == 'procurement/purchaserequest2/create' ? '/procurement/purchaserequest2/submitpr' : '/procurement/purchaserequest2/update?id='.$model->purchase_request_id,
+        'action' => $this->context->route == 'procurement/purchaserequest2/create' ? '/procurement/purchaserequest2/submitpr' : '/procurement/purchaserequest2/update?id=' . $model->purchase_request_id,
         'method' => 'post'
-    ]); 
+    ]);
     ?>
     <div class="row">
         <div class="col-md-4">
             <input type="hidden" id="hidden_section_id" name="Purchaserequest[hidden_section_id]" value="">
             <?= $form->field($model, 'section_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(Section::find()->joinWith('usersection',false,'INNER JOIN')->where(['tbl_user_section.user_id' => yii::$app->user->getId()])->all(), 'section_id', 'name'),
+                'data' => ArrayHelper::map(Section::find()->joinWith('usersection', false, 'INNER JOIN')->where(['tbl_user_section.user_id' => yii::$app->user->getId()])->all(), 'section_id', 'name'),
                 'options' => ['placeholder' => 'Select a section...', 'disabled' => $this->context->route == 'procurement/purchaserequest2/create' ? false : true],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
             ]) ?>
             <?= $form->field($model, 'project_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(Project::find()->joinWith('usersection',false,'INNER JOIN')->where(['tbl_user_section.user_id' => yii::$app->user->getId()])->all(), 'project_id', 'code'),
+                'data' => ArrayHelper::map(Project::find()->joinWith('usersection', false, 'INNER JOIN')->where(['tbl_user_section.user_id' => yii::$app->user->getId()])->all(), 'project_id', 'code'),
                 'options' => ['placeholder' => 'Select a project ...', 'disabled' => 'disabled'],
                 'pluginOptions' => [
                     'allowClear' => true
@@ -120,6 +123,11 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                                         ],
                                         [
                                             'attribute' => 'description',
+                                            'header' => 'Description',
+                                            'value' => function ($model) {
+                                                return Html::a($model->description, '#', ['class' => 'specslink', 'onclick' => 'showmodalitemspecification(' . $model->tmppritems_id . ',"' . $model->description . '")']).'<div id="specs-'. $model->tmppritems_id  .'">'.$model->specs.'</div>';
+                                            },
+                                            'format' => 'raw'
                                         ],
                                         [
                                             'attribute' => 'qty',
@@ -265,10 +273,10 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
         </div>
 
         <div class="form-group col-md-12">
-            <?php 
-            if($model->isNewRecord){
+            <?php
+            if ($model->isNewRecord) {
                 echo Html::submitButton($model->isNewRecord ? 'Create Purchase Request' : 'Update Purchase Request', ['id' => $model->isNewRecord ? 'btn-submit-pr' : 'btn-update-prs', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',]);
-            }else{
+            } else {
                 echo Html::submitButton('Update', ['id' => 'btn-update-pr', 'class' => 'btn btn-primary',]);
             }
             ?>
@@ -276,7 +284,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
     </div>
     <?php ActiveForm::end(); ?>
 </div>
-<!-- The Modal -->
+<!-- The Modal for add item -->
 <div id="modal-additems" class="modal-additems-class modal-additems-hide">
     <!-- Modal content -->
     <div class="modal-additems-content animate__animated animate__faster">
@@ -285,7 +293,7 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
             <div class="item-table">
                 <?php
                 echo GridView::widget([
-                    'dataProvider' => $this ->context->route == 'procurement/purchaserequest2/update' ? $itemDataProvider2 : $itemDataProvider,
+                    'dataProvider' => $this->context->route == 'procurement/purchaserequest2/update' ? $itemDataProvider2 : $itemDataProvider,
                     //'summary' => '',
                     'pjax' => true,
                     'pjaxSettings' => [
@@ -327,257 +335,40 @@ $listEmployees = ArrayHelper::map($employees, 'user_id', 'employeename');
                     'hover' => true
                 ]);
                 ?>
+                
             </div>
         </div>
 
     </div>
 </div>
+<!-- The Modal for item specification-->
+<div id="modal-itemspecification" class="modal-itemspecification-class modal-itemspecification-hide">
+    <!-- Modal content -->
+    <div class="modal-itemspecification-content animate__animated animate__faster">
+        <div class="modal-itemspecification-head"><span class="close" id="close-spec">&times;</span></div>
+        <div class="modal-itemspecification-body">
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Item Description</th>
+                        <td id='detail-item-desc'></td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php echo CKEditor::widget(['name' => "txtitemdesc", 'id' => 'txtitemdesc', 'preset' => 'full', 'value' => "", 'clientOptions' => ['height' => 200, 'width' => '100%'],]); ?>
+            <?=
+            Html::button('Update  <i class="fa fa-edit"></i>', [
+                'title' => 'Update item specification',
+                'class' => 'btn btn-success btn-block',
+                'style' => 'margin-bottom: 6px; display: "";',
+                'id' => 'btnUpdatespecs',
+            ])
+            ?>
+        </div>
 
+    </div>
+</div>
 
-
-<script>
-    $(document).ready(function() {
-        /*
-        var feed = {
-            created_at: "2017-03-14T01:00:32Z",
-            entry_id: 33358,
-            field1: "4",
-            field2: "4",
-            field3: "0"
-        };
-
-        var data = [];
-        data.push(feed);
-
-        console.log(data);
-        */
-        $("input.select-on-check-all").hide();
-        $("#plus-minus").click(function() {
-
-            $("#toggle-pane-pr-item").slideToggle('slow', function() {
-                if ($('#toggle-pane-pr-item').is(':hidden')) {
-                    console.log('hidden');
-                    $('#plus-minus').removeClass('fa-minus');
-                    $('#plus-minus').addClass('fa-plus');
-                } else {
-                    console.log('show');
-                    $('#plus-minus').removeClass('fa-plus');
-                    $('#plus-minus').addClass('fa-minus');
-                }
-
-            });
-            //$("p").remove();
-        });
-        /*
-        $(".editable-col-qty").on("keypress keyup blur", function(event) {
-            //this.value = this.value.replace(/[^0-9\.]/g,'');
-            $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
-            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
-        });*/
-
-        $('body').on('change', '#purchaserequest-section_id', function() {
-            var selectSection = true;
-            var year = new Date($('#purchaserequest-purchase_request_date').val());
-            //$("#purchaserequest-project_id").prop("readonly", true);
-            if ($(this).val() == '') {
-                $('#purchaserequest-project_id').attr("disabled", true);
-                $('#hidden_section_id').val('');
-            } else {
-                $('#purchaserequest-project_id').attr("disabled", false);
-                $('#hidden_section_id').val($(this).val());
-            }
-            $.pjax.reload({
-                async: true,
-                type: "POST",
-                container: "#pr-item-grid",
-                url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-                data: {
-                    section: $(this).val(),
-                    year: year.getFullYear(),
-                    selectSection: selectSection
-                },
-            }).done(function() {
-                $("input.select-on-check-all").hide();
-                $.pjax.reload({
-                    async: true,
-                    type: "POST",
-                    container: "#selected-item-grid",
-                    url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-                    data: {
-                        section: $("#purchaserequest-section_id").val(),
-                        reloadsectionitems: true,
-                        //selectSection: false
-                    },
-                });
-            });
-        });
-        $('body').on('change', '#purchaserequest-project_id', function() {
-            var selectProject = true;
-            var year = new Date($('#purchaserequest-purchase_request_date').val());
-            //$("#purchaserequest-project_id").prop("readonly", true);
-            if ($(this).val() == '') {
-                $('#purchaserequest-section_id').attr("disabled", false);
-                //$('#purchaserequest-section_id').val('');
-            } else {
-                $('#purchaserequest-section_id').attr("disabled", true);
-            }
-            $.pjax.reload({
-                async: true,
-                type: "POST",
-                container: "#pr-item-grid",
-                url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-                data: {
-                    selectProject: selectProject,
-                    project: $(this).val(),
-                    year: year.getFullYear()
-                }
-            }).done(function() {
-                $("input.select-on-check-all").hide();
-                var selectProject = true;
-                $.pjax.reload({
-                    async: true,
-                    type: "POST",
-                    container: "#selected-item-grid",
-                    url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-                    data: {
-                        project: $("#purchaserequest-project_id").val(),
-                        reloadprojectitems: true,
-                    },
-                });
-            });
-        });
-        $('body').on('click', '.buttonRemoveItem', function() {
-            var removeitem = true;
-            $.pjax.reload({
-                async: true,
-                type: "POST",
-                container: "#selected-item-grid",
-                url: "<?php echo Url::to(['create']); ?>",
-                data: {
-                    //section: $("#purchaserequest-section_id").val(),
-                    tmppritems_id: $(this).val(),
-                    removeitem: true,
-                    section: $("#purchaserequest-section_id").val(),
-                },
-            }).done(function() {
-                //console.log('success');
-                $.pjax.reload({
-                    async: true,
-                    type: "POST",
-                    container: "#pr-item-grid",
-                    url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-                    data: {
-                        section: $("#purchaserequest-section_id").val(),
-                        reloadremoveditems: true,
-                    },
-                });
-            });
-        });
-        //----show Additems modal------
-        $('body').on('click', '#btnAdditems', function() {
-            //alert('hello clarrise!!!');
-            $('div.modal-additems-class').removeClass('modal-additems-hide');
-            $('div.modal-additems-class').addClass('modal-additems-show');
-            $('div.modal-additems-content').removeClass('animate__fadeOut');
-            $('div.modal-additems-content').addClass('animate__fadeIn');
-        });
-        //----close Additems modal------
-        $('body').on('click', 'span.close', function() {
-            $('div.modal-additems-content').removeClass('animate__fadeIn');
-            $('div.modal-additems-content').addClass('animate__fadeOut');
-            //element.addEventListener('animationend', () => {
-            $('div.modal-additems-class').removeClass('modal-additems-show');
-            $('div.modal-additems-class').addClass('modal-additems-hide');
-            //});
-        });
-        /************for update PR**********/
-        /*$('#btn-update-pr').click(function() {
-            url = $('#buttonUpdatePR').attr('value');
-            $('#create_pr_form').submit(function(e) {
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-                e.stopPropagation();
-                var form = $(this);
-                if (e.result == true) {
-                    $.ajax({
-                        async: true,
-                        type: 'POST',
-                        url: url,
-                        data: form.serialize(),
-                        success: function(data) {
-                            return true;
-                        }
-                    });
-                }
-            });
-        });*/
-        /***********for Submitting PR**********/
-        /*
-        $('#btn-submit-pr').click(function() {
-            $('#create_pr_form').submit(function(e) {
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-                e.stopPropagation();
-                var form = $(this);
-                if (e.result == true) {
-                    $.ajax({
-                        async: true,
-                        type: 'POST',
-                        url: "<?php //echo Url::to(['submitpr']); ?>",
-                        data: form.serialize() + '&submit=' + true,
-                        success: function(data) {
-                            return true;
-                        }
-                    });
-                }
-            });
-        });*/
-    });
-</script>
-
-<script type="text/javascript">
-    function onCheck(item_id, checked) {
-        var checkItem = true;
-        $.pjax.reload({
-            async: true,
-            type: "POST",
-            container: "#selected-item-grid",
-            url: "<?php echo Url::to(['purchaserequest2/create']); ?>",
-            data: {
-                itemId: item_id,
-                checked: checked,
-                checkItem: checkItem,
-                section: $("#purchaserequest-section_id").val()
-            }
-        })
-    }
-
-    function onQty(item_id, value, cost) {
-        $.ajax({
-            async: true,
-            type: "POST",
-            url: "<?php echo Url::to(['updateqty']); ?>",
-            data: {
-                item_id: item_id,
-                qty: value
-            },
-            success: function(data) {
-                //console.log('success');
-                $("div.total-" + item_id).html((value * cost).toFixed(2))
-            }
-        });
-    }
-
-    function showtextbox(item_id) {
-        $(':input.txtqty').not('[id=' + 'txtqty_' + item_id + ']').hide();
-        $('#txtqty_' + item_id).show();
-        $('#txtqty_' + item_id).select();
-        $('a.qtylink').not('[id=' + 'qtylink_' + item_id + ']').show();
-        $('#qtylink_' + item_id).hide();
-        $(':input#txtqty_' + item_id).focusout(function() {
-            $(this).hide();
-            $('#qtylink_' + item_id).show();
-            $('#qtylink_' + item_id).html($(this).val());
-        });
-    }
-</script>
+<?php
+$this->registerJs($this->render('pr-form.js'),View::POS_READY,'pr-form');
+?>

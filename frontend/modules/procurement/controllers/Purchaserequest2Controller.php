@@ -16,6 +16,7 @@ use yii\helpers\Json;
 use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 use yii\db\Transaction;
+use yii\db\Query;
 
 
 //use yii\base\Exception;
@@ -46,9 +47,10 @@ class Purchaserequest2Controller extends Controller
      */
     public function actionIndex()
     {
+        //$prlist = new Query();
         $searchModel = new PurchaserequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -194,12 +196,14 @@ class Purchaserequest2Controller extends Controller
                     `purchase_request_number`,
                     `unit_id`,
                     `purchase_request_details_item_description`,
+                    `purchase_request_details_item_specification`,
                     `purchase_request_details_quantity`,
                     `purchase_request_details_price`) 
                 SELECT :purchase_request_id AS `purchase_request_id`,
                        :purchase_request_number AS `purchase_request_number`,
                         `unit`,
                         `description`,
+                        `specs`,
                         `qty`,
                         `cost`
                 FROM `tmppritems` 
@@ -313,6 +317,7 @@ class Purchaserequest2Controller extends Controller
             foreach ($prdetails as $prdetail) {
                 $item = $tmpitems->where(['session_id' => Yii::$app->session->getId(), 'description' => $prdetail->purchase_request_details_item_description])->one();
                 $item->checked = 1;
+                $item->specs = $prdetail->purchase_request_details_item_specification;
                 $item->qty = $prdetail->purchase_request_details_quantity;
                 $item->save(false);
             }
@@ -349,12 +354,15 @@ class Purchaserequest2Controller extends Controller
                 $deleteditems = Tmpitem::find()->where(['session_id' => Yii::$app->session->getId(), 'is_deleted' => 1])->all();
                 foreach($deleteditems as $deleteditem){
                     $isdeleteditem = PurchaseRequestDetails::find()->where(['purchase_request_id' => $model->purchase_request_id, 'purchase_request_details_item_description' => $deleteditem['description']])->one();
-                    $isdeleteditem->delete();
+                    if($isdeleteditem){
+                        $isdeleteditem->delete();
+                    }
                 }
                 foreach($items as $item){
                     $pritems = PurchaseRequestDetails::find()->where(['purchase_request_id' => $model->purchase_request_id, 'purchase_request_details_item_description' => $item['description']])->one();
                     if($pritems){
                         $pritems->purchase_request_details_quantity = $item['qty'];
+                        $pritems->purchase_request_details_item_specification = $item['specs'];
                         $pritems->save(false);
                     }
                     if(!$pritems){
@@ -364,6 +372,7 @@ class Purchaserequest2Controller extends Controller
                         $pritems2->purchase_request_details_unit = $item['unit_description'];
                         $pritems2->unit_id = $item['unit'];
                         $pritems2->purchase_request_details_item_description = $item['description'];
+                        $pritems2->purchase_request_details_item_specification = $item['specs'];
                         $pritems2->purchase_request_details_quantity = $item['qty'];
                         $pritems2->purchase_request_details_price = $item['cost'];
                         $pritems2->save(false);
@@ -475,5 +484,14 @@ class Purchaserequest2Controller extends Controller
         $command = $con->createCommand("SELECT MAX(purchase_request_id) + 1 AS NextNumber  FROM tbl_purchase_request");
         $nextValue = $command->queryOne();
         return $nextValue['NextNumber'];
+    }
+    public function loadspecs($id){
+        $model =  Tmpitem::find()->where(['tmppritems_id' => $id]);
+    }
+    public function actionUpdatespecs(){
+        $id = $_POST['item_id'];
+        $model = Tmpitem::find()->where(['tmppritems_id' => $id])->one();
+        $model->specs = $_POST['specs'];
+        $model->save(false);
     }
 }

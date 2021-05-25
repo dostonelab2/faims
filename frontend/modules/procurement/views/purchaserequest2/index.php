@@ -31,7 +31,12 @@ $func = new Functions();
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <?= $this->render('_search', ['model' => $searchModel]) ?>
+                    <div class="purchaserequest-search">
+                        <?php
+                        echo $this->render('_search', ['model' => $searchModel]);
+                        //echo Html::input('text', 'PurchaserequestSearch[purchase_request_number]', '', ['id' => 'purchaserequestsearch-purchase_request_number', 'class' => 'form-control']);
+                        ?>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <?php // Html::a('Create Purchase Request', ['create'], ['class' => 'btn btn-success btn-block']) 
@@ -50,14 +55,31 @@ $func = new Functions();
             </div>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
+                //'pjax' => true,
+                /*'pjaxSettings' => [
+                    'neverTimeout'=>true,
+                    'options' => [
+                        'enablePushState' => true,
+                        'id' => 'pr-pjax'
+                    ],
+                ],*/
                 //'filterModel' => $searchModel,
                 'summary' => false,
+                'tableOptions' => ['id' => 'pr-table'],
                 'options' => ['style' => 'table-layout:fixed;'],
                 'columns' => [
                     //['class' => 'yii\grid\SerialColumn'],
-                    'purchase_request_number',
+                    [
+                        'attribute' => 'purchase_request_number',
+                        //'enableSorting' => true,
+                        'label' => 'PR Number',
+                        'headerOptions' => [
+                            'style' => 'width:11%'
+                        ],
+                    ],
                     [
                         'attribute' => 'purchase_request_purpose',
+                        'header' => 'Purpose',
                         'format' => 'ntext',
                         'headerOptions' => [
                             'style' => 'width:40%'
@@ -65,21 +87,21 @@ $func = new Functions();
                         'value' => 'purchase_request_purpose'
                     ],
                     [
-                        'attribute' => 'division_id',
-                        'header' => 'Division/Project',
+                        'attribute' => 'division_name',
+                        'header' => 'Division',
                         'value' => function ($model, $key, $index, $widget) {
-                            if ($model->division) {
-                                return $model->division->name;
+                            if ($model) {
+                                return $model->division_name;
                             }
-                            return $model->project->code;
                         }
                     ],
                     [
                         'attribute' => 'purchase_request_requestedby_id',
+                        'header' => 'Requested by',
                         'value' => function ($model, $key, $index, $widget) {
                             //$user = $model->requestedby->profile;
-                            if ($model->profile) {
-                                return $model->profile->fullname;
+                            if ($model) {
+                                return $model->requested_by;
                             }
                         }
 
@@ -90,7 +112,7 @@ $func = new Functions();
                         'format' => 'html',
                         'header' => 'P.O. Numbers',
                         'value' => function ($model, $key, $index, $widget) {
-                            return $model->getPonumber();
+                            return $model->po_number;
                         }
                     ],
                     [
@@ -99,12 +121,12 @@ $func = new Functions();
                         'template' => '{view} {update} {print}',
                         'buttons' => [
                             'view' => function ($url, $model) {
-                                return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['id' => 'buttonViewPR', 'value' => Url::to(['view','id' => $model->purchase_request_id]),'class' => 'btn btn-success btn-sm', 'data-toggle' => 'tooltip', 'title' => 'view']);
+                                return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['id' => 'buttonViewPR', 'value' => Url::to(['view', 'id' => $model->purchase_request_id]), 'class' => 'btn btn-success btn-sm', 'data-toggle' => 'tooltip', 'title' => 'view']);
                                 //return Html::a('<button type="button" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-eye-open"></span></button>',$url);  
                                 //return Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['href' => Url::to($url),'class' => 'btn btn-success btn-sm']); 
                             },
                             'update' => function ($url, $model) {
-                                return Html::button('<span class="glyphicon glyphicon-pencil"></span>', [ 'id' => 'buttonUpdatePR','value' => Url::to(['update', 'id' => $model->purchase_request_id]),'class' => 'btn btn-info btn-sm', 'data-toggle' => 'tooltip', 'title' => 'update']);
+                                return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['id' => 'buttonUpdatePR', 'value' => Url::to(['update', 'id' => $model->purchase_request_id]), 'class' => 'btn btn-info btn-sm', 'data-toggle' => 'tooltip', 'title' => 'update']);
                             },
                             'print' => function ($url, $model) {
                                 return Html::a('<span class="glyphicon glyphicon-print"></span>', ['/procurement/purchaserequest/reportprfull', 'id' => $model->purchase_request_id], ['class' => 'btn btn-warning btn-sm', 'data-toggle' => 'tooltip', 'title' => 'print', 'target' => '_blank']);
@@ -141,39 +163,50 @@ Modal::begin([
 echo "<div id='modalContent2'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 
-  // This section will allow to popup a notification
-  $session = Yii::$app->session;
-  if ($session->isActive) {
-      $session->open();
-      if (isset($session['deletepopup'])) {
-          $func->CrudAlert2("Deleted Successfully",Alert::TYPE_WARNING);
-          unset($session['deletepopup']);
-          $session->close();
-      }
-      if (isset($session['updatepopup'])) {
-          $func->CrudAlert2("Updated Successfully");
-          unset($session['updatepopup']);
-          $session->close();
-      }
-      if (isset($session['savepopup'])) {
-          $func->CrudAlert2("Saved Successfully",Alert::TYPE_SUCCESS,true);
-          unset($session['savepopup']);
-          $session->close();
-      }
-      if (isset($session['errorpopup'])) {
-          $func->CrudAlert2("Error Transaction",Alert::TYPE_WARNING,true);
-          unset($session['errorpopup']);
-          $session->close();
-      }
-  }
+// This section will allow to popup a notification
+$session = Yii::$app->session;
+if ($session->isActive) {
+    $session->open();
+    if (isset($session['deletepopup'])) {
+        $func->CrudAlert2("Deleted Successfully", Alert::TYPE_WARNING);
+        unset($session['deletepopup']);
+        $session->close();
+    }
+    if (isset($session['updatepopup'])) {
+        $func->CrudAlert2("Updated Successfully");
+        unset($session['updatepopup']);
+        $session->close();
+    }
+    if (isset($session['savepopup'])) {
+        $func->CrudAlert2("Saved Successfully", Alert::TYPE_SUCCESS, true);
+        unset($session['savepopup']);
+        $session->close();
+    }
+    if (isset($session['errorpopup'])) {
+        $func->CrudAlert2("Error Transaction", Alert::TYPE_WARNING, true);
+        unset($session['errorpopup']);
+        $session->close();
+    }
+}
 ?>
 
 
 
 <script>
-$(document).ready(function(){
-    $('div.sa-confirm-button-container button.confirm').click(function(){
-        location.reload();
+    $(document).ready(function() {
+        $('div.sa-confirm-button-container button.confirm').click(function() {
+            location.reload();
+        });
+
+
+        /************Filter Table************/
+        /*
+        $("#purchaserequestsearch-purchase_request_number").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table#pr-table tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });*/
+        
     });
-});
 </script>

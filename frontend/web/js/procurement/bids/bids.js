@@ -258,8 +258,7 @@ jQuery(document).ready(function ($) {
                 }else{
                     $('#status-badge-' + chkRow.val()).html('<span class="badge btn-block" style="background: green;">Available for Award <i class="fa fa-toggle-on"></i></span>');
                 }
-                
-                
+           
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError);
