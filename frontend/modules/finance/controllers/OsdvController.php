@@ -21,6 +21,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\filters\VerbFilter;
 
 /**
@@ -202,6 +203,7 @@ class OsdvController extends Controller
             'allotmentsDataProvider' => $allotmentsDataProvider,
             'accountTransactionsDataProvider' => $accountTransactionsDataProvider,
             'year' => date('Y', strtotime($model->request->request_date)),
+            'osdv_id' => $id,
         ]);
     }
     
@@ -279,6 +281,7 @@ class OsdvController extends Controller
             $model->created_by = Yii::$app->user->identity->user_id;
             $model->status_id = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
             $model->remarks = '';
+            $model->payroll = $_POST['Osdv']['payroll'];
             if($model->save(false)){
                 if($model->type_id == 1){
                     /*$os = new Os();
@@ -313,7 +316,39 @@ class OsdvController extends Controller
     public function actionPayrollitems()
     {
         $id = $_GET['id'];
-        $model = $this->findModel($id);
+        $model = new Requestpayroll();
+        
+        $model->osdv_id = $id;
+        //creditor_type_id
+        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->creditor_id = $_POST['Requestpayroll']['creditor_id'];
+            $model->particulars = $_POST['Requestpayroll']['particulars'];
+            $model->status_id = 0;
+            $model->active = 1;
+            if($model->save(false)){
+                return $this->redirect(['view', 'id' => $model->osdv_id]);   
+            }
+                 
+        }elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_formcreditor', [
+                        'model' => $model,
+                        'osdv_id' => $id,
+            ]);
+        } else {
+            return $this->render('_formcreditor', [
+                        'model' => $model,
+                        'osdv_id' => $id,
+            ]);
+        }
+    }
+    
+    public function actionRequestpayrollitems()
+    {
+        $request_payroll_id = $_GET['request_payroll_id'];
+        $osdv_id = $_GET['osdv_id'];
+        $model = $this->findModel($osdv_id);
         
         $searchModel = new CreditorSearch();
         
@@ -336,13 +371,15 @@ class OsdvController extends Controller
             return $this->renderAjax('_payrollitems', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'id' => $id,
+                        'request_payroll_id' => $request_payroll_id,
+                        'osdv_id' => $model->osdv_id,
             ]);
         } else {
             return $this->render('_payrollitems', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'id' => $id,
+                        'request_payroll_id' => $request_payroll_id,
+                        'osdv_id' => $model->osdv_id,
             ]);
         }
     }

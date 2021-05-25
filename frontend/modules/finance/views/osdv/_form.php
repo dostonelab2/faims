@@ -48,6 +48,7 @@ use common\models\finance\Obligationtype;
                                 success: function (data, textStatus, jqXHR) {
                                     //$('.image-loader').removeClass( \"img-loader\" );
                                     $('#request').html(data);
+                                    $('#osdv-payroll').val($('#request-payroll').val());
                                 },
                                 beforeSend: function (xhr) {
                                     //$('.image-loader').addClass( \"img-loader\" );
@@ -109,6 +110,8 @@ use common\models\finance\Obligationtype;
                         'allowClear' => false
                     ],
                 ])->label('Expenditure Class'); ?>
+                
+    <?= $form->field($model, 'payroll')->hiddenInput()->label(false) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style'=>'text-align: center;']) ?>

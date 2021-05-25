@@ -353,13 +353,13 @@ Modal::end();
                 'headerOptions' => ['style' => 'text-align: center;'],
                 'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
                 'format' => 'raw',
-                'width'=>'200px',
+                'width'=>'250px',
                 'value'=> function ($model, $key, $index, $widget) { 
-                    return $model->creditor->name;
+                    return '<span style="text-align: left; font-weight: bold; float: left; color: black;">'.$model->creditor->name.'</span><br/><p style="text-align: left; float: left;">'.$model->particulars.'</p>';
                 },
                 
             ],
-            [
+            /*[
                 'attribute'=>'particulars',
                 'header'=>'Particulars',
                 'width'=>'350px',
@@ -370,10 +370,9 @@ Modal::end();
                 'contentOptions' => ['style' => 'padding-right: 20px;'],
                 'hAlign'=>'left',
                 'vAlign'=>'left',
-                'width'=>'800px',
                 'pageSummary' => 'TOTAL', 
                 'pageSummaryOptions' => ['style' => 'text-align: left;'],
-            ],
+            ],*/
             [
                 'attribute'=>'amount',
                 'header'=>'Amount',
@@ -387,7 +386,6 @@ Modal::end();
                 'contentOptions' => ['style' => 'padding-right: 20px;'],
                 'hAlign'=>'right',
                 'vAlign'=>'left',
-                'width'=>'250px',
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM,
                 'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
@@ -398,7 +396,7 @@ Modal::end();
                 'headerOptions' => ['style' => 'text-align: center;'],
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
                 'format' => 'raw',
-                'width'=>'150px',
+                'width'=>'250px',
                 'value'=> function ($model, $key, $index, $widget) { 
                     return isset($model->dv) ? $model->dv->dv_number : '';
                 },

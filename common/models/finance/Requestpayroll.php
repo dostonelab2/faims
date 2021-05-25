@@ -2,9 +2,6 @@
 namespace common\models\finance;
 
 use common\models\cashier\Creditor;
-
-
-
 use Yii;
 
 /**
@@ -84,5 +81,13 @@ class Requestpayroll extends \yii\db\ActiveRecord
     public function getOsdv()
     {
         return $this->hasOne(Osdv::className(), ['osdv_id' => 'osdv_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestpayrollitems()
+    {
+        return $this->hasMany(Requestpayrollitem::className(), ['request_payroll_id' => 'request_payroll_id'])->andOnCondition(['active' => 1]);
     }
 }

@@ -7,6 +7,7 @@ use common\models\procurement\Expenditureobject;
 use common\models\cashier\Creditor;
 use common\models\finance\Osdv;
 use common\models\finance\Requestpayroll;
+use common\models\finance\Requestpayrollitem;
 /**
  * This is the model class for table "tbl_lddapada_item".
  *
@@ -104,9 +105,9 @@ class Lddapadaitem extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRequestpayroll()
+    public function getRequestpayrollitem()
     {
-        return $this->hasOne(Requestpayroll::className(), ['request_payroll_id' => 'request_payroll_id']);
+        return $this->hasOne(Requestpayrollitem::className(), ['request_payroll_item_id' => 'request_payroll_item_id']);
     }
 
     /**

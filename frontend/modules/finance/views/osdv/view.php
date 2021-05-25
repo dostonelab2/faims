@@ -9,13 +9,16 @@ use kartik\detail\DetailView;
 use kartik\editable\Editable;
 use kartik\grid\GridView;
 
+use yii\data\ActiveDataProvider;
 use yii\bootstrap\Modal;
+
 use common\models\cashier\Creditor;
 use common\models\finance\Accounttransaction;
 use common\models\finance\Dv;
 use common\models\finance\Obligationtype;
 use common\models\finance\Os;
 use common\models\finance\Request;
+use common\models\finance\Requestpayrollitem;
 use common\models\finance\Requestattachment;
 use common\models\finance\Requesttype;
 use common\models\finance\Taxcategory;
@@ -278,7 +281,7 @@ Modal::end();
                     'attribute'=>'expenditure_object_id',
                     'header' => 'Expenditure Object',
                     'headerOptions' => ['style' => 'padding-left: 25px;'],
-                    'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle;     font-weight: bold;'],
+                    'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle; font-weight: bold;'],
                     'width'=>'200px',
                     'value'=>function ($model, $key, $index, $widget) { 
                         //return $model->expenditure_object_id;
@@ -336,6 +339,9 @@ Modal::end();
                     'hAlign'=>'right',
                     'vAlign'=>'left',
                     'width'=>'100px',
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                 ],
             ];
     ?>
@@ -344,6 +350,7 @@ Modal::end();
                 'id' => 'request-obligation',
                 'dataProvider' => $allotmentsDataProvider,
                 //'filterModel' => $searchModel,
+                'showPageSummary' => true,
                 'columns' => $gridColumns, // check the configuration for grid columns by clicking button above
                 'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
                 'headerRowOptions' => ['class' => 'kartik-sheet-style'],
@@ -392,36 +399,60 @@ Modal::end();
             [
                 'class' => 'kartik\grid\SerialColumn',
                 'contentOptions' => ['class' => 'kartik-sheet-style'],
-                'width' => '10px',
                 'header' => '',
-                'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
+                'width'=>'10px',
+                'headerOptions' => ['style' => 'text-align: center;'],
                 'pageSummary' => '',  
             ],
-            [   
+            [
+                    'class' => 'kartik\grid\ExpandRowColumn',
+                    'width' => '10px',
+                    'value' => function ($model, $key, $index, $column) {
+                        return GridView::ROW_COLLAPSED;
+                    },
+                    'detail' => function ($model, $key, $index, $column) use ($osdv_id){
+                            //$query = Requestpayrollitem::find()->where(['request_payroll_id ' => $model->request_payroll_id, 'active' => 1]);
+
+                            $dataProvider = new ActiveDataProvider([
+                                'query' => $model->getRequestpayrollitems(),
+                                'pagination' => false,
+                            ]);
+                            
+                            return Yii::$app->controller->renderPartial('_request_payroll_item', ['model'=>$model, 'dataProvider' => $dataProvider, 'type'=>1]);
+                    },
+                    'headerOptions' => ['class' => 'kartik-sheet-style'],
+                    'expandOneOnly' => false,
+            ],
+            /*[   
                 'attribute'=>'creditor_id',
                 'header' => 'Name',
                 'headerOptions' => ['style' => 'text-align: center;'],
-                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle;'],
+                'contentOptions' => ['style' => 'text-align: left; vertical-align: middle; width: 10px;'],
                 'format' => 'raw',
-                'width'=>'200px',
+                'width'=>'250px',
                 'value'=> function ($model, $key, $index, $widget) { 
                     return $model->creditor->name;
                 },
                 
-            ],
+            ],*/
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'particulars',
                 'header'=>'Particulars',
-                'width'=>'350px',
                 'refreshGrid'=>true,
+                'width'=>'650px',
+                'contentOptions' => [
+                    'style'=>'max-width:150px; overflow: auto; white-space: normal; word-wrap: break-word;'
+                ],
                 'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->particulars;
+                        return '<span style="text-align: left; font-weight: bold; float: left; color: black;">'.$model->creditor->name.'</span><br/><p style="text-align: left; float: left;">'.$model->particulars.'</p>';
                     },
+                'format'=>'raw',
                 'editableOptions'=> function ($model , $key , $index) {
                     return [
                         'options' => ['id' => $index . '_' . $model->request_payroll_id],
-                        'placement'=>'right',
+                        'contentOptions' => ['style' => 'padding-right: 20px; text-align: left;'],
+                        'placement'=>'bottom',
                         //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
                         'name'=>'amount',
                         'asPopover' => true,
@@ -432,19 +463,14 @@ Modal::end();
                         'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
                     ];
                 },
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'padding-right: 20px;'],
-                'hAlign'=>'left',
-                'vAlign'=>'left',
-                'width'=>'800px',
                 'pageSummary' => 'TOTAL', 
-                'pageSummaryOptions' => ['style' => 'text-align: left;'],
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right:30px;'],
             ],
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'amount',
                 'header'=>'Gross Amount',
-                'width'=>'350px',
+                'width'=>'150px',
                 'refreshGrid'=>true,
                 'format'=>['decimal',2],
                 //'readonly' => !$isMember,
@@ -468,7 +494,6 @@ Modal::end();
                 'contentOptions' => ['style' => 'padding-right: 20px;'],
                 'hAlign'=>'right',
                 'vAlign'=>'left',
-                'width'=>'250px',
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM,
                 'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
@@ -477,7 +502,6 @@ Modal::end();
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'tax',
                 'header'=>'Tax',
-                'width'=>'350px',
                 'refreshGrid'=>true,
                 'format'=>['decimal',2],
                 //'readonly' => !$isMember,
@@ -501,7 +525,7 @@ Modal::end();
                 'contentOptions' => ['style' => 'padding-right: 20px;'],
                 'hAlign'=>'right',
                 'vAlign'=>'left',
-                'width'=>'250px',
+                'width'=>'150px',
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM,
                 'pageSummaryOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
@@ -530,7 +554,7 @@ Modal::end();
             ],
             [   
                 'attribute'=>'request_id',
-                'header' => 'DV Number',
+                'header' => 'Funds Available',
                 'headerOptions' => ['style' => 'text-align: center;'],
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
                 'format' => 'raw',
@@ -549,24 +573,16 @@ Modal::end();
        <?= GridView::widget([
             'id' => 'payroll-items',
             'dataProvider' => $payrollDataprovider,
-            //'filterModel' => $searchModel,
             'showFooter' => true,
             'showPageSummary' => true,
             'columns' => $gridColumnsPayroll, // check the configuration for grid columns by clicking button above
-            
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
-            // set left panel buttons
-            /*'panel' => [
-                'heading'=>'<h3 class="panel-title">Attachments</h3>',
-                'type'=>'primary',
-            ],*/    
             'panel' => [
                 'heading' => '<h3 class="panel-title">PAYROLL ITEMS</h3>',
                 'type' => GridView::TYPE_SUCCESS,
-                //'before'=> Html::button('Add Creditors', ['value' => Url::to(['request/payrollitems', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;'.((($model->status_id < Request::STATUS_SUBMITTED)) ? ($model->attachments ? '' : 'display: none;') : 'display: none;'), 'id'=>'buttonPayrollitems']) ,
                 'before'=> Html::button('Add Creditors', ['value' => Url::to(['osdv/payrollitems', 'id'=>$model->osdv_id]), 'title' => 'Submit', 'class' =>'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonPayrollitems']) ,
                 'after'=>false,
             ],

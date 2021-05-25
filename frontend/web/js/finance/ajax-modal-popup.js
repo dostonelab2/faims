@@ -70,6 +70,10 @@ $("body").on("click","#buttonPayrollitems",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonRequestpayrollitems",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonSubmitForValidation",function () {
     loadModal($(this).attr('value'));
 });
