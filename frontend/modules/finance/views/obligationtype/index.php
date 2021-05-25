@@ -224,7 +224,6 @@ Modal::end();
         $text .= " : ";
         //echo Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
     }
-    
     echo $text;
 ?>
 </pre>
