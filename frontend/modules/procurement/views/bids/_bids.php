@@ -191,7 +191,7 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                         'style'=>'max-width:200px; overflow: auto; white-space: normal; word-wrap: break-word;'
                                                     ],
                                                     'value'=>function ($model, $key, $index, $widget) {
-                                                        return $model->purchase_request_details_item_description.$model->purchase_request_details_item_specification;
+                                                        return $model->purchase_request_details_item_description;
                                                     },
                                                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                                                 ],
