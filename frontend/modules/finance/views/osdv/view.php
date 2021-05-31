@@ -401,7 +401,7 @@ Modal::end();
                 'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
                 'pageSummary' => '',  
             ],
-            [   
+            /*[   
                 'attribute'=>'creditor_id',
                 'header' => 'Name',
                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -412,8 +412,39 @@ Modal::end();
                     return $model->creditor->name;
                 },
                 
-            ],
+            ],*/
             [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'particulars',
+                'header'=>'Particulars',
+                'refreshGrid'=>true,
+                'width'=>'650px',
+                'contentOptions' => [
+                    'style'=>'max-width:150px; overflow: auto; white-space: normal; word-wrap: break-word;'
+                ],
+                'value'=>function ($model, $key, $index, $widget) { 
+                        return '<span style="text-align: left; font-weight: bold; float: left; color: black;">'.$model->creditor->name.'</span><br/><p style="text-align: left; float: left;">'.$model->particulars.'</p>';
+                    },
+                'format'=>'raw',
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '_' . $model->request_payroll_id],
+                        'contentOptions' => ['style' => 'padding-right: 20px; text-align: left;'],
+                        'placement'=>'bottom',
+                        //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                        'name'=>'amount',
+                        'asPopover' => true,
+                        'value' => $model->particulars,
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
+                        'size'=>'lg',
+                        'options' => ['class'=>'form-control', 'rows'=>5, 'placeholder'=>'Enter particulars...'],
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                    ];
+                },
+                'pageSummary' => 'TOTAL', 
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right:30px;'],
+            ],
+            /*[
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'particulars',
                 'header'=>'Particulars',
@@ -443,7 +474,7 @@ Modal::end();
                 'width'=>'800px',
                 'pageSummary' => 'TOTAL', 
                 'pageSummaryOptions' => ['style' => 'text-align: left;'],
-            ],
+            ],*/
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'amount',
