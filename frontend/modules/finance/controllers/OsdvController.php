@@ -21,7 +21,6 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\filters\VerbFilter;
 
 /**
@@ -203,7 +202,6 @@ class OsdvController extends Controller
             'allotmentsDataProvider' => $allotmentsDataProvider,
             'accountTransactionsDataProvider' => $accountTransactionsDataProvider,
             'year' => date('Y', strtotime($model->request->request_date)),
-            'osdv_id' => $id,
         ]);
     }
     
@@ -344,11 +342,10 @@ class OsdvController extends Controller
         }
     }
     
-    public function actionRequestpayrollitems()
+    public function actionPayrollitems2()
     {
-        $request_payroll_id = $_GET['request_payroll_id'];
-        $osdv_id = $_GET['osdv_id'];
-        $model = $this->findModel($osdv_id);
+        $id = $_GET['id'];
+        $model = $this->findModel($id);
         
         $searchModel = new CreditorSearch();
         
@@ -371,15 +368,13 @@ class OsdvController extends Controller
             return $this->renderAjax('_payrollitems', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'request_payroll_id' => $request_payroll_id,
-                        'osdv_id' => $model->osdv_id,
+                        'id' => $id,
             ]);
         } else {
             return $this->render('_payrollitems', [
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
-                        'request_payroll_id' => $request_payroll_id,
-                        'osdv_id' => $model->osdv_id,
+                        'id' => $id,
             ]);
         }
     }

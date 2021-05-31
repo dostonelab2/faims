@@ -314,7 +314,7 @@ class RequestController extends Controller
             $model->payroll = true;
             
             if($model->save(false))
-                return $this->redirect(['view', 'id' => $model->request_id]);
+                return $this->redirect(['viewpayroll', 'id' => $model->request_id]);
             
         }elseif (Yii::$app->request->isAjax) {
             return $this->renderAjax('_payroll_form', [

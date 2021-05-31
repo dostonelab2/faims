@@ -30,9 +30,8 @@ use common\models\cashier\Lddapadaitem;
                 'class' => '\kartik\grid\CheckboxColumn',
                 'headerOptions' => ['class' => 'kartik-sheet-style'],
                 'name'=>'lddap-ada-items', //additional
-                'checkboxOptions' => function($model, $key, $index, $column) use ($lddapada_id){
-                                         $bool = Lddapadaitem::find()->where(['lddapada_id' => $lddapada_id, 'creditor_id' => $model->request->creditor, 'active'=>1])->count();
-                                         //$bool = Lddapadaitem::find()->where(['lddapada_id' => $lddapada_id, 'creditor_id' => $model->creditor_id, 'active'=>1])->count();
+                'checkboxOptions' => function($model, $key, $index, $column) use ($id){
+                                         $bool = Lddapadaitem::find()->where(['lddapada_id' => $id, 'creditor_id' => $model->creditor_id, 'active'=>1])->count();
                                          return ['checked' => $bool,
                                                 'onclick'=>'onCreditor(this.value,this.checked)' //additional
                                                 ];
@@ -41,13 +40,13 @@ use common\models\cashier\Lddapadaitem;
             [
                 'attribute' => 'name',
                 'value'=>function ($model, $key, $index, $widget){ 
-                            return $model->request->creditor->name;
+                            return $model->name;
                         },
             ],
             [
                 'attribute' => 'account_number',
                 'value'=>function ($model, $key, $index, $widget){ 
-                            return $model->request->creditor->account_number;
+                            return $model->account_number;
                         },
             ],
             //'price_catalogue',
@@ -56,7 +55,7 @@ use common\models\cashier\Lddapadaitem;
 ?>
 <script type="text/javascript">
 function onCreditor(creditor_id,checked){
-    var lddapada_id = <?php echo $lddapada_id?>;
+    var lddapada_id = <?php echo $id?>;
     $.ajax({
             type: "POST",
             url: "<?php echo Url::to(['lddapada/additems']); ?>",
