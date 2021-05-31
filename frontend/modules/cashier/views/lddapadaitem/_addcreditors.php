@@ -11,16 +11,13 @@ use yii\widgets\ActiveForm;
 
 use common\models\cashier\Lddapadaitem;
 use common\models\finance\Request;
-use common\models\finance\Requestpayrollitem;
+use common\models\finance\Requestpayroll;
 /* @var $this yii\web\View */
 /* @var $model common\models\procurementplan\Ppmpitem */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <?php
-
-
-
         $gridColumns = [
                 [
                     'class' => '\kartik\grid\CheckboxColumn',
@@ -29,7 +26,7 @@ use common\models\finance\Requestpayrollitem;
                     'visible' => function ($model) {
                         return true;
                     },
-                    'checkboxOptions' => function($model, $key, $index, $column) use ($lddapada_id){
+                    'checkboxOptions' => function($model, $key, $index, $column) use ($id){
                                             if(!$model->payroll){
                                                 $bool = Lddapadaitem::find()->where(['osdv_id' => $model->osdv_id, 'active'=>1])->count();
                                                 return ['checked' => $bool, 'onclick'=>'onCreditor(this.value,this.checked)'];
@@ -44,15 +41,15 @@ use common\models\finance\Requestpayrollitem;
                     'value' => function ($model, $key, $index, $column) {
                         return GridView::ROW_COLLAPSED;
                     },
-                    'detail' => function ($model, $key, $index, $column) use ($lddapada_id){
-                            $query = Requestpayrollitem::find()->where(['osdv_id' => $model->osdv_id]);
+                    'detail' => function ($model, $key, $index, $column) use ($id){
+                            $query = Requestpayroll::find()->where(['osdv_id' => $model->osdv_id, 'status_id' => 70]);
 
                             $dataProvider = new ActiveDataProvider([
                                 'query' => $query,
                                 'pagination' => false,
                             ]);
                             
-                            return Yii::$app->controller->renderPartial('_request_payroll_item', ['dataProvider' => $dataProvider, 'id'=>$lddapada_id]);
+                            return Yii::$app->controller->renderPartial('_request_payroll', ['dataProvider' => $dataProvider, 'id'=>$id]);
                     },
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'expandOneOnly' => false,
@@ -127,7 +124,7 @@ use common\models\finance\Requestpayrollitem;
 
 <script type="text/javascript">
 function onItem(creditor_id,checked){
-    var lddapada_id = <?php echo $lddapada_id?>;
+    var lddapada_id = <?php echo $id?>;
     $.ajax({
             type: "POST",
             url: "<?php echo Url::to(['lddapada/additems']); ?>",
@@ -142,7 +139,7 @@ function onItem(creditor_id,checked){
 }
     
 function onCreditor(osdv_id,checked){
-    var lddapada_id = <?php echo $lddapada_id?>;
+    var lddapada_id = <?php echo $id?>;
     $.ajax({
             type: "POST",
             url: "<?php echo Url::to(['lddapada/additems']); ?>",

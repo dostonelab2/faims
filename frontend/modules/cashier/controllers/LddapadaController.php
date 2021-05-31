@@ -12,7 +12,6 @@ use common\models\cashier\LddapadaSearch;
 use common\models\finance\Osdv;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
-use common\models\finance\Requestpayrollitem;
 use common\models\procurement\Assignatory;
 use frontend\modules\cashier\components\Report;
 
@@ -275,15 +274,14 @@ class LddapadaController extends Controller
             checked:checked},
         **/
         $lddapadaId = $_POST['lddapadaId'];
-        //$payrollId = $_POST['payrollId'];
-        $payroll_item_id = $_POST['payroll_item_id'];
+        $payrollId = $_POST['payrollId'];
         $checked = $_POST['checked'];
         
         //$creditor = Creditor::findOne($creditorId);
-        $payroll = Requestpayrollitem::findOne($payroll_item_id);
+        $payroll = Requestpayroll::findOne($payrollId);
         $lddapada_item = Lddapadaitem::find()->where([
                                     'lddapada_id' => $lddapadaId, 
-                                    'request_payroll_item_id' => $payroll_item_id])->one();
+                                    'request_payroll_id' => $payrollId])->one();
         
         if($lddapada_item)
         {
@@ -304,15 +302,14 @@ class LddapadaController extends Controller
             //lddapada_item_id 	lddapada_id 	creditor_id 	creditor_type_id 	name 	bank_name 	account_number 	gross_amount 	alobs_id 	expenditure_object_id 	check_number 	active
             $model->lddapada_id = $lddapadaId;
             $model->osdv_id = $payroll->osdv_id;
-            //$model->request_payroll_id = $payroll->request_payroll_id;
-            $model->request_payroll_item_id = $payroll->request_payroll_item_id;
+            $model->request_payroll_id = $payroll->request_payroll_id;
             $model->creditor_id = $payroll->creditor_id;
             $model->creditor_type_id = $payroll->creditor->creditor_type_id;
             $model->name = $payroll->creditor->name;
             $model->bank_name = $payroll->creditor->bank_name;
             $model->account_number = $payroll->creditor->account_number;
             $model->gross_amount = $payroll->amount;
-            $model->expenditure_object_id = $payroll->requestpayroll->osdv->getAccountID();
+            $model->expenditure_object_id = $payroll->osdv->getAccountID();
             //$model->expenditure_object_id = 0;
             $model->active = 1;
             $model->save(false);
