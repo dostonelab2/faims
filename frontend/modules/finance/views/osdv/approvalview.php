@@ -15,6 +15,7 @@ use common\models\finance\Accounttransaction;
 use common\models\finance\Dv;
 use common\models\finance\Os;
 use common\models\finance\Request;
+use common\models\finance\Requestpayroll;
 use common\models\finance\Requestattachment;
 use common\models\finance\Requesttype;
 
@@ -37,12 +38,24 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 
-//echo $model->status_id.'<br/>';
+/** Override for Payroll Items
+$rq = Requestpayroll::findOne(18);
+$status = 70;
+
+$rq->osdv->status_id = $status;
+$rq->osdv->save(false);
+
+$rq->osdv->request->status_id = $status;
+$rq->osdv->request->save(false);
+
+echo $status.' : STATUS<br/>';
+echo $rq->osdv->request->status_id.' : REQUEST<br/>';
+echo $rq->osdv->status_id.' : OSDV<br/>';
+echo $rq->status_id.' : PPAYROLL<br/>';
+**/
+
 //echo Os::generateOsNumber($model->request->obligation_type_id,$model->request->request_date);
 ?>
-<!--pre>
-<?php //print_r($model->accounttransactions);?>
-</pre-->
 <div>
    
 <div class="row">
