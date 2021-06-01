@@ -153,7 +153,6 @@ Modal::end();
             [
                 'attribute'=>'type_id',
                 'label'=>'Fund Source',
-                'visible' => false,
                 'labelColOptions'=>['style'=>'width:35%; text-align: right;'],
                 'inputContainer' => ['class'=>'col-sm-2'],
                 'value' => $model->type->name,
@@ -167,6 +166,7 @@ Modal::end();
             [
                 'attribute'=>'request_id',
                 'label'=>'OS Number',
+                'visible' => ($model->type_id == 1) ? true : false,
                 'inputContainer' => ['class'=>'col-sm-2'],
                 'format' => 'raw',
                 'displayOnly'=>true, //$model->os 
