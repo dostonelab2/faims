@@ -64,7 +64,8 @@ Modal::end();
                 'label'=>'Request Number',
                 'inputContainer' => ['class'=>'col-sm-6'],
                 'displayOnly'=>true,
-                'value' => $model->request->request_number,
+                'format'=>'raw',
+                'value' => $model->request->request_number . '  <span class="label label-success">'.$model->osdv_id.'</span>',
             ],
             [
                 'attribute'=>'request_id',
