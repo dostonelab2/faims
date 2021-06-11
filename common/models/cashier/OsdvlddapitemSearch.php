@@ -71,13 +71,13 @@ class OsdvlddapitemSearch extends Osdv
         ]);
         
         $items = Lddapadaitem::find()->select('osdv_id')->where(['<>', 'lddapada_id', $this->lddapadaId])->all();
-        $query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
-        $query->andFilterWhere(['not in','osdv_id', $items]);
+        //$query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
+        //$query->andFilterWhere(['not in','osdv_id', $items]);
 //        $query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
 //        $query->andFilterWhere(['=','tbl_os.osdv_id', $this->os_id]);
         
-        $query->andFilterWhere(['>=', 'status_id', 67]);
-        $query->andFilterWhere(['<=', 'status_id', 70]);
+        $query->andFilterWhere(['=', 'status_id', 67]);
+        //$query->andFilterWhere(['<=', 'status_id', 70]);
 
         return $dataProvider;
     }
