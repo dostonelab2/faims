@@ -78,7 +78,8 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     $html = "";
                                     foreach($model->lddapadaItems as $item){
-                                        $html .= $item->name.' (<b>'.number_format($item->osdv->getNetamount(),2).'</b>)<br/>';
+                                        $amount = $item->request_payroll_id ? ($item->requestpayroll->amount - $item->requestpayroll->tax) : $item->osdv->getNetamount();
+                                        $html .= $item->name.' (<b>'.number_format($amount,2).'</b>)<br/>';
                                     }
                                     return $html;
                                 }
