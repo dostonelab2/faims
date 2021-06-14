@@ -279,7 +279,8 @@ Modal::end();
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) {
                         //return $model->osdv->getNetamount();
-                        return $model->request_payroll_id ? ($model->requestpayroll->amount - $model->requestpayroll->tax) : $model->osdv->getGrossamount();
+                        //return $model->request_payroll_id ? ($model->requestpayroll->amount - $model->requestpayroll->tax) : $model->osdv->getGrossamount();
+                        return $model->request_payroll_id ? ($model->requestpayroll->amount - $model->requestpayroll->tax) : $model->osdv->getNetamount();
                     },
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_AVG,
