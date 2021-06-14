@@ -45,7 +45,7 @@ use common\models\procurement\Fundsource;
                                                     $exist = Lddapadaitem::find()->where(['request_payroll_id' => 24, 'lddapada_id'=>$id])->count();
                                                     return ['checked' => $bool, 'onclick'=>'onCreditorpayroll(this.value,this.checked)', 'disabled'=>($exist ? false : true)];
                                                  }else{
-                                                    return ['disabled'=>false];
+                                                    return ['disabled'=>false,  'onclick'=>'onCreditorpayroll(this.value,this.checked)'];
                                                  }
                     }
                 ],
