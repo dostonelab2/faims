@@ -198,7 +198,8 @@ Modal::end();
                     'format' => 'raw',
                     'width'=>'150px',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->osdv->request->creditor->account_number;
+                        //return $model->osdv->request->creditor->account_number;
+                        return $model->creditor->account_number;
                     },
                 ],
                 //'alobs_id',
