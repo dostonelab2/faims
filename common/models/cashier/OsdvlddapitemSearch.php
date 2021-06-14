@@ -76,8 +76,8 @@ class OsdvlddapitemSearch extends Osdv
 //        $query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
 //        $query->andFilterWhere(['=','tbl_os.osdv_id', $this->os_id]);
         
-        $query->andFilterWhere(['=', 'status_id', 67]);
-        //$query->andFilterWhere(['<=', 'status_id', 70]);
+        //$query->andFilterWhere(['=', 'status_id', 67]);
+        $query->andFilterWhere(['=', 'status_id', 70]);
 
         return $dataProvider;
     }
