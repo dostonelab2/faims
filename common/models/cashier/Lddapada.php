@@ -140,7 +140,8 @@ class Lddapada extends \yii\db\ActiveRecord
         $runningtotal = 0;
         foreach($items as $item)
         {
-            $runningtotal += $item->osdv->getGrossamount();
+            //$item->request_payroll_id ? ($item->requestpayroll->amount) : $item->osdv->getGrossamount()
+            $runningtotal += $item->request_payroll_id ? $item->requestpayroll->amount : $item->osdv->getGrossamount();
         }
         return $runningtotal;
     }
@@ -151,7 +152,20 @@ class Lddapada extends \yii\db\ActiveRecord
         $runningtotal = 0;
         foreach($items as $item)
         {
-            $runningtotal += $item->osdv->getTax();
+            if(isset($model->request_payroll_id)){
+                return $model->requestpayroll->tax;
+            }else{
+                if($item->creditor_id == 245){
+                    $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+
+                    $taxAmount = $tax->amount;
+                }
+                else
+                    $taxAmount = $item->osdv->getTax();
+            }
+            
+            
+            $runningtotal += $taxAmount;
         }
         return $runningtotal;
     }
@@ -162,7 +176,8 @@ class Lddapada extends \yii\db\ActiveRecord
         $runningtotal = 0;
         foreach($items as $item)
         {
-            $runningtotal += $item->osdv->getNetamount();
+            //$item->request_payroll_id ? ($item->requestpayroll->amount - $item->requestpayroll->tax) : $item->osdv->getNetamount();
+            $runningtotal += $item->request_payroll_id ? ($item->requestpayroll->amount - $item->requestpayroll->tax) : $item->osdv->getNetamount();
         }
         return $runningtotal;
     }
