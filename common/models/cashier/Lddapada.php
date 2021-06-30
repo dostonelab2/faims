@@ -3,6 +3,7 @@
 namespace common\models\cashier;
 
 use Yii;
+use common\models\finance\Accounttransaction;
 use common\models\finance\Obligationtype;
 /**
  * This is the model class for table "tbl_lddapada".
@@ -156,7 +157,7 @@ class Lddapada extends \yii\db\ActiveRecord
                 return $model->requestpayroll->tax;
             }else{
                 if($item->creditor_id == 245){
-                    $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                    $tax = Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
 
                     $taxAmount = $tax->amount;
                 }

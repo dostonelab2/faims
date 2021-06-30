@@ -707,6 +707,19 @@ $content .= '
         $Assig1 = '';
         $Assig2Position = '';
         
+        $indexValidate = ($model->osdv->type_id == 1) ? $model->osdv->request_id : $model->osdv->osdv_id;
+        $statusValidate = ( ($model->osdv->type_id == 1) ? 40 : 58 );
+        
+        //PAYROLL_DV
+        //work for TF
+        $content .= $this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        
+        //Box C
+        //$content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        
+        //Box D
+        //$content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
+        
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
 <tr style="height: 5px;">
@@ -913,14 +926,19 @@ $content .= '
         
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
-        
+        //$details2 = $this->getBlockchain(1305, 'Osdv', 70);
+        //var_dump($details);
         $box = strtolower($box);
         $form = strtolower($form);
             
         $signatureDetails = [
-            'name' => $signatory->activeUser->profile->getFullname(),
+            'name' => $signatory->activeUser->profile->fullname,
             'position' => $signatory->activeUser->profile->designation,
-            'date' => date("d-M-Y", $details->timestamp),
+            //'test' => $index_id.' : '.$scope.' : '.$status,
+            'date' => date("d-M-Y"),
+            //'details' => $index_id.' : '.$scope.' : '.$status.' | ',
+            //'details' => $details2->timestamp,
+            //'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>$form."-box-".$box."-sig"]).'<div class="'.$form.'-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,64).'</div></div>'
         ];
         

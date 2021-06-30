@@ -5,8 +5,9 @@ namespace frontend\modules\cashier\components;
 use Yii;
 use kartik\mpdf\Pdf;
 //use rmrevin\yii\fontawesome\FA;
-use common\models\cashier\Lddapada;
 use common\models\finance\Accounttransaction;
+use common\models\cashier\Lddapada;
+
 
 class Report {
 
@@ -154,7 +155,7 @@ class Report {
                 return $model->requestpayroll->tax;
             }else{
                 if($item->creditor_id == 245){
-                    $tax = Accounttransaction::find()->where(['request_id' => $model->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+                    $tax = Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
 
                     $taxAmount = $tax->amount;
                 }
