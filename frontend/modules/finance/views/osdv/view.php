@@ -115,7 +115,7 @@ Modal::end();
                 'label'=>'Remarks',
                 'format'=>'raw',
                 'inputContainer' => ['class'=>'col-sm-6'],
-                'value' => $model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
+                'value' => $model->request->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
             ],
             /*[
                 'attribute'=>'request_id',
@@ -445,15 +445,22 @@ Modal::end();
                 'pageSummary' => 'TOTAL', 
                 'pageSummaryOptions' => ['style' => 'text-align: right; padding-right:30px;'],
             ],
-            /*[
+            [
                 'class'=>'kartik\grid\EditableColumn',
-                'attribute'=>'particulars',
-                'header'=>'Particulars',
-                'width'=>'350px',
+                'attribute'=>'dv_accounts',
+                'header'=>'DV Accounts',
                 'refreshGrid'=>true,
                 'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->particulars;
+                        $keys = explode(',',$model->dv_accounts);
+                            $text = "";
+                            for($i=0; $i<count($keys); $i++){
+                                $account = Accounttransaction::findOne($keys[$i]);
+                                if($account)
+                                    $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.',<br/>';
+                            }
+                            return $text;
                     },
+                'format'=>'raw',
                 'editableOptions'=> function ($model , $key , $index) {
                     return [
                         'options' => ['id' => $index . '_' . $model->request_payroll_id],
@@ -461,21 +468,33 @@ Modal::end();
                         //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
                         'name'=>'amount',
                         'asPopover' => true,
-                        'value' => $model->particulars,
-                        'inputType' => \kartik\editable\Editable::INPUT_TEXTAREA,
-                        'size'=>'lg',
-                        'options' => ['class'=>'form-control', 'rows'=>5, 'placeholder'=>'Enter particulars...'],
-                        'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
+                        'value' => function ($model) {
+                            $keys = explode(',',$model->dv_accounts);
+                            $text = "";
+                            for($i=0; $i<count($keys); $i++){
+                                if($account)
+                                    $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.',<br/>';
+                            }
+                            return $text;
+                        },
+                        'format'=>'raw',
+                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                        'data' => ArrayHelper::map(Accounttransaction::find()->where('request_id =:request_id',[':request_id'=>$model->osdv->osdv_id])->all(),'account_transaction_id','account.title'),
+                        'size'=>'md',
+                        'options' => ['multiple'=>true, 'class'=>'form-control', 'rows'=>10,],
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updatedvaccounts']], // point to the new action
                     ];
                 },
                 'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'padding-right: 20px;'],
-                'hAlign'=>'left',
-                'vAlign'=>'left',
-                'width'=>'800px',
+                'contentOptions' => [
+                    'style'=>'max-width:150px; overflow: auto; white-space: normal; word-wrap: break-word; text-align: left;'
+                ],
+                //'hAlign'=>'left',
+                //'vAlign'=>'top',
+                'width'=>'200px',
                 'pageSummary' => 'TOTAL', 
                 'pageSummaryOptions' => ['style' => 'text-align: left;'],
-            ],*/
+            ],
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'amount',

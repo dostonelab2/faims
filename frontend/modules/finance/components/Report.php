@@ -636,7 +636,7 @@ $content .= '
         $model = Requestpayroll::findOne($id);
         $fmt = Yii::$app->formatter;
         
-        $DVboxCSignatory = 'ROBERTO B. ABELLA';
+        /*$DVboxCSignatory = 'ROBERTO B. ABELLA';
         $DVboxCPosition = 'Accountant III';
         $DVboxDSignatory = 'MARTIN A. WEE';
         $DVboxDPosition = 'Regional Director';
@@ -677,7 +677,7 @@ $content .= '
           default:
             $DVboxASignatory = '';
             $DVboxAPosition = ''; 
-        }
+        }*/
         
         //$boxBsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
         
@@ -715,10 +715,10 @@ $content .= '
         $content .= $this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         
         //Box C
-        //$content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
         
         //Box D
-        //$content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
+        $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
         
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
@@ -779,10 +779,15 @@ $content .= '
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
 </tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
-<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
-<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
-';
+
+<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
+            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
+            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['position']
+            .'</td>';
 
 $content .= '
 </tr>

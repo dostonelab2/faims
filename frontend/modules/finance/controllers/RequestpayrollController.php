@@ -176,4 +176,29 @@ class RequestpayrollController extends Controller
                return false;
        }
     }
+
+    public function actionUpdatedvaccounts() {
+       if (Yii::$app->request->post('hasEditable')) {
+           $ids = Yii::$app->request->post('editableKey');
+           
+           $index = Yii::$app->request->post('editableIndex');
+           $attr = Yii::$app->request->post('editableAttribute');
+           $qty = $_POST['Requestpayroll'][$index][$attr];
+           
+           $data = "";
+           if(count($qty) > 1){
+               for($i=0; $i<count($qty); $i++)
+                    $data .= ((count($qty) - $i) == 1) ? $qty[$i] : $qty[$i].',';
+           }else{
+               $data = $qty[0];
+           }
+           
+           $model = Requestpayroll::findOne($ids);
+           $model->$attr = $data; //$fmt->asDecimal($amt,2);
+           if($model->save(false))
+               return true;
+           else
+               return false;
+       }
+    }
 }
