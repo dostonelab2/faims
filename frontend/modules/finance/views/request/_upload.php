@@ -16,6 +16,7 @@ echo $form->field($model, 'pdfFile')->widget(FileInput::classname(), [
     //'disabled' => $model->request->owner() ? false : true, //this also disables buttons on fileActionSettings below
     'pluginOptions' => [
         'allowedFileExtensions'=>['pdf'],
+        'showPreview' => true,
         'previewFileType' => 'any',
         'overwriteInitial' => true,
         //'initialPreview' =>[Requestattachment::checkFile($model->attachment_id)],
