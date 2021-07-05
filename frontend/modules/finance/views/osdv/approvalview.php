@@ -38,8 +38,8 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 
-/** Override for Payroll Items
-$rq = Requestpayroll::findOne(18);
+/** Override for Payroll Items **/
+/*$rq = Requestpayroll::findOne(22);
 $status = 70;
 
 $rq->osdv->status_id = $status;
@@ -51,8 +51,8 @@ $rq->osdv->request->save(false);
 echo $status.' : STATUS<br/>';
 echo $rq->osdv->request->status_id.' : REQUEST<br/>';
 echo $rq->osdv->status_id.' : OSDV<br/>';
-echo $rq->status_id.' : PPAYROLL<br/>';
-**/
+echo $rq->status_id.' : PPAYROLL<br/>';*/
+/** **/
 
 //echo Os::generateOsNumber($model->request->obligation_type_id,$model->request->request_date);
 ?>
@@ -720,6 +720,32 @@ echo $rq->status_id.' : PPAYROLL<br/>';
                     }
                     
                     return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachment', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']);
+                },
+            ],
+            [   
+                'attribute'=>'filename',
+                'header' => 'For Approval',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'80px',
+                'value'=>function ($model, $key, $index, $widget) { 
+                    $btnCss = [];
+                    $status = Requestattachment::hasAttachment($model->request_attachment_id);
+                    
+                    switch($status){
+                        case 0:
+                            $btnCss = 'btn btn-danger';
+                            break;
+                        case 1:
+                            if($model->status_id)
+                                $btnCss = 'btn btn-success';
+                            else
+                                $btnCss = 'btn btn-warning';
+                            break;
+                    }
+                    
+                    return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);
                 },
             ],
             [
