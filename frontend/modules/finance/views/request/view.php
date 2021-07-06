@@ -387,7 +387,7 @@ Modal::end();
                 'width'=>'80px',
                 'value'=>function ($model, $key, $index, $widget) { 
                     
-                    $link = "/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
+                    $link = Yii::app()->baseUrl."/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
                     /*$btnCss = [];
                     $status = Requestattachment::hasAttachment($model->request_attachment_id);
                     
