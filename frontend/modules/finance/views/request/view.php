@@ -1,5 +1,6 @@
 <?php
 
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -11,6 +12,7 @@ use kartik\grid\GridView;
 use kartik\widgets\SwitchInput;
 
 use yii\bootstrap\Modal;
+
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestattachment;
@@ -385,9 +387,9 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
-                'value'=>function ($model, $key, $index, $widget) { 
-                    
-                    $link = Yii::app()->baseUrl."/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
+                'value'=>function ($model, $key, $index, $widget){ 
+
+                    $link = "/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
                     /*$btnCss = [];
                     $status = Requestattachment::hasAttachment($model->request_attachment_id);
                     
