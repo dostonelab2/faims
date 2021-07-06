@@ -386,6 +386,8 @@ Modal::end();
                 'format' => 'raw',
                 'width'=>'80px',
                 'value'=>function ($model, $key, $index, $widget) { 
+                    
+                    $link = "/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
                     /*$btnCss = [];
                     $status = Requestattachment::hasAttachment($model->request_attachment_id);
                     
@@ -404,7 +406,7 @@ Modal::end();
                     return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);*/
                     
                     //return Yii::$app->controller->renderPartial('_attachments');
-                    return Html::a('Download Application', 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', ['target' => '_blank', 'class' => 'box_button fl download_link']);
+                    return Html::a('<i class="glyphicon glyphicon-file"></i> View', $link, ['target' => '_blank', 'class' => 'btn btn-primary']);
                         
                 },
             ],
