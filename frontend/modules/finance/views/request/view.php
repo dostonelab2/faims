@@ -403,7 +403,7 @@ Modal::end();
                     
                     return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);*/
                     
-                    return Yii::$app->controller->renderPartial('_attachments');
+                    //return Yii::$app->controller->renderPartial('_attachments');
                 },
             ],
             [   
