@@ -3,9 +3,8 @@
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
-<div class="container">
+<div class="containers">
     <div class="row">
-		<h2>Showing PDF in popup modal preview using Bootstrap Easy Modal Plugin</h2>
         <a class="btn btn-primary view-pdf" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">View PDF</a>        
 	</div>
 </div>

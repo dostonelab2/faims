@@ -386,7 +386,7 @@ Modal::end();
                 'format' => 'raw',
                 'width'=>'80px',
                 'value'=>function ($model, $key, $index, $widget) { 
-                    $btnCss = [];
+                    /*$btnCss = [];
                     $status = Requestattachment::hasAttachment($model->request_attachment_id);
                     
                     switch($status){
@@ -401,7 +401,9 @@ Modal::end();
                             break;
                     }
                     
-                    return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);
+                    return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);*/
+                    
+                    return Yii::$app->controller->renderPartial('_attachments');
                 },
             ],
             [   
@@ -608,7 +610,7 @@ Modal::end();
 <br><br>
 <?php 
 //return Yii::$app->controller->renderPartial('_request_payroll', ['dataProvider' => $dataProvider, 'id'=>$id]);
-echo Yii::$app->controller->renderPartial('_attachments');
+//echo Yii::$app->controller->renderPartial('_attachments');
 
 ?>
 
