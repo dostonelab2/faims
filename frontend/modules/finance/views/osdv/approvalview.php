@@ -796,6 +796,6 @@ echo $rq->status_id.' : PPAYROLL<br/>';*/
 <br><br>
 <?php 
 //return Yii::$app->controller->renderPartial('_request_payroll', ['dataProvider' => $dataProvider, 'id'=>$id]);
-echo Yii::$app->controller->renderPartial('_dummy');
+//echo Yii::$app->controller->renderPartial('_dummy');
 
 ?>
