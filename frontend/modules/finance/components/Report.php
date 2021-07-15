@@ -731,7 +731,7 @@ $content .= '
 <td style="width: 20%; height: 13px;" colspan="2">Date : '.$model->osdv->dv->dv_date.'</td>
 </tr>
 <tr style="height: 8px;">
-<td style="width: 80%; height: 8px;" colspan="2">DV No. : <b>'.$model->osdv->dv->dv_number.'</b></td>
+<td style="width: 80%; height: 8px;" colspan="2">DV No. : <b>'.$model->dv->dv_number.'</b></td>
 </tr>
 <tr style="height: 13px;">
 <td style="width: 10%; height: 25px;">Mode of <br />Payment</td>
