@@ -30,6 +30,8 @@ class AppAsset extends AssetBundle
         'js/cashier/ajax-modal-popup.js',
         'js/employeecompensation/ajax-modal-popup.js',
         'js/finance/ajax-modal-popup.js',
+        'js/finance/fileinput.min.js',
+        'js/finance/sortable.min.js',
         'js/intro.js',
         //'js/supplemental/ajax-modal-popup.js',
         

@@ -64,7 +64,8 @@ Modal::end();
                 'label'=>'Request Number',
                 'inputContainer' => ['class'=>'col-sm-6'],
                 'displayOnly'=>true,
-                'value' => $model->request->request_number,
+                'format'=>'raw',
+                'value' => $model->request->request_number . '  <span class="label label-success">'.$model->osdv_id.'</span>',
             ],
             [
                 'attribute'=>'request_id',
@@ -114,7 +115,7 @@ Modal::end();
                 'label'=>'Remarks',
                 'format'=>'raw',
                 'inputContainer' => ['class'=>'col-sm-6'],
-                'value' => $model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
+                'value' => $model->request->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
             ],
             /*[
                 'attribute'=>'request_id',
@@ -401,7 +402,7 @@ Modal::end();
                 'headerOptions' => ['style' => 'text-align: center; width: 10px;'],
                 'pageSummary' => '',  
             ],
-            [   
+            /*[   
                 'attribute'=>'creditor_id',
                 'header' => 'Name',
                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -412,20 +413,25 @@ Modal::end();
                     return $model->creditor->name;
                 },
                 
-            ],
+            ],*/
             [
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'particulars',
                 'header'=>'Particulars',
-                'width'=>'350px',
                 'refreshGrid'=>true,
+                'width'=>'650px',
+                'contentOptions' => [
+                    'style'=>'max-width:150px; overflow: auto; white-space: normal; word-wrap: break-word;'
+                ],
                 'value'=>function ($model, $key, $index, $widget) { 
-                        return $model->particulars;
+                        return '<span style="text-align: left; font-weight: bold; float: left; color: black;">'.$model->creditor->name.'</span><br/><p style="text-align: left; float: left;">'.$model->particulars.'</p>';
                     },
+                'format'=>'raw',
                 'editableOptions'=> function ($model , $key , $index) {
                     return [
                         'options' => ['id' => $index . '_' . $model->request_payroll_id],
-                        'placement'=>'right',
+                        'contentOptions' => ['style' => 'padding-right: 20px; text-align: left;'],
+                        'placement'=>'bottom',
                         //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
                         'name'=>'amount',
                         'asPopover' => true,
@@ -436,11 +442,56 @@ Modal::end();
                         'formOptions'=>['action' => ['/finance/requestpayroll/updateamount']], // point to the new action
                     ];
                 },
+                'pageSummary' => 'TOTAL', 
+                'pageSummaryOptions' => ['style' => 'text-align: right; padding-right:30px;'],
+            ],
+            [
+                'class'=>'kartik\grid\EditableColumn',
+                'attribute'=>'dv_accounts',
+                'header'=>'DV Accounts',
+                'refreshGrid'=>true,
+                'value'=>function ($model, $key, $index, $widget) { 
+                        $keys = explode(',',$model->dv_accounts);
+                            $text = "";
+                            for($i=0; $i<count($keys); $i++){
+                                $account = Accounttransaction::findOne($keys[$i]);
+                                if($account)
+                                    $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.',<br/>';
+                            }
+                            return $text;
+                    },
+                'format'=>'raw',
+                'editableOptions'=> function ($model , $key , $index) {
+                    return [
+                        'options' => ['id' => $index . '_' . $model->request_payroll_id],
+                        'placement'=>'right',
+                        //'disabled'=>!Yii::$app->user->can('access-finance-disbursement'),
+                        'name'=>'amount',
+                        'asPopover' => true,
+                        'value' => function ($model) {
+                            $keys = explode(',',$model->dv_accounts);
+                            $text = "";
+                            for($i=0; $i<count($keys); $i++){
+                                if($account)
+                                    $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.',<br/>';
+                            }
+                            return $text;
+                        },
+                        'format'=>'raw',
+                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                        'data' => ArrayHelper::map(Accounttransaction::find()->where('request_id =:request_id',[':request_id'=>$model->osdv->osdv_id])->all(),'account_transaction_id','account.title'),
+                        'size'=>'md',
+                        'options' => ['multiple'=>true, 'class'=>'form-control', 'rows'=>10,],
+                        'formOptions'=>['action' => ['/finance/requestpayroll/updatedvaccounts']], // point to the new action
+                    ];
+                },
                 'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'padding-right: 20px;'],
-                'hAlign'=>'left',
-                'vAlign'=>'left',
-                'width'=>'800px',
+                'contentOptions' => [
+                    'style'=>'max-width:150px; overflow: auto; white-space: normal; word-wrap: break-word; text-align: left;'
+                ],
+                //'hAlign'=>'left',
+                //'vAlign'=>'top',
+                'width'=>'200px',
                 'pageSummary' => 'TOTAL', 
                 'pageSummaryOptions' => ['style' => 'text-align: left;'],
             ],

@@ -39,9 +39,15 @@ use common\models\procurement\Fundsource;
                     'headerOptions' => ['class' => 'kartik-sheet-style'],
                     'name'=>'lddap-ada-payroll-items', //additional
                     'checkboxOptions' => function($model, $key, $index, $column) use ($id){
+                                         //if($model->osdv_id == $_GET['id']){
                                                 $bool = Lddapadaitem::find()->where(['request_payroll_id' => $model->request_payroll_id, 'osdv_id'=>$model->osdv_id, 'active'=>1])->count();
-                                                return ['checked' => $bool, 'onclick'=>'onCreditorpayroll(this.value,this.checked)'];
-                                         }
+                                                 if($bool){
+                                                    $exist = Lddapadaitem::find()->where(['request_payroll_id' => 24, 'lddapada_id'=>$id])->count();
+                                                    return ['checked' => $bool, 'onclick'=>'onCreditorpayroll(this.value,this.checked)', 'disabled'=>($exist ? false : true)];
+                                                 }else{
+                                                    return ['disabled'=>false,  'onclick'=>'onCreditorpayroll(this.value,this.checked)'];
+                                                 }
+                    }
                 ],
             [
                 'attribute' => 'name',

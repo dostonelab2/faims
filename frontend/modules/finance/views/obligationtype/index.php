@@ -202,21 +202,21 @@ Modal::end();
             echo $request->request_number." ----------- ".$data." ----------- ".$request->status_id."<br/>";
         }
     }*/
-    $request = Request::findOne(1087);
+    /*$request = Request::findOne(972);
     $status = [
         '0' => 20,
         '1' => 30,
-        '2' => 40,
+        '2' => 40
     ];
     $text = $request->request_id.' : ';
 
-    for($i=0;$i<=2;$i++){
+    for($i=0;$i<=3;$i++){
         $exist = Blockchain::find()->where('index_id =:index_id AND scope =:scope AND SUBSTR(`data`, -2, 2) =:status',[':index_id'=> $request->request_id, ':scope'=> 'Request', ':status'=>$status[$i]])->one();
         
         //$text .= $exist ? $status[$i] : 'none';
         
         if(!$exist){
-            //Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
+            Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
             $text .= 'none';
         }else{
             $text .= $status[$i];
@@ -224,6 +224,6 @@ Modal::end();
         $text .= " : ";
         //echo Blockchain::createRequestBlockchain($request->request_id, $status[$i]);
     }
-    echo $text;
+    echo $text;*/
 ?>
 </pre>

@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -11,6 +10,7 @@ use kartik\grid\GridView;
 use kartik\widgets\SwitchInput;
 
 use yii\bootstrap\Modal;
+
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestattachment;
@@ -380,6 +380,38 @@ Modal::end();
             ],
             [   
                 'attribute'=>'filename',
+                'header' => 'For Approval',
+                'headerOptions' => ['style' => 'text-align: center;'],
+                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                'format' => 'raw',
+                'width'=>'80px',
+                'value'=>function ($model, $key, $index, $widget){ 
+
+                    $link = "/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
+                    /*$btnCss = [];
+                    $status = Requestattachment::hasAttachment($model->request_attachment_id);
+                    
+                    switch($status){
+                        case 0:
+                            $btnCss = 'btn btn-danger';
+                            break;
+                        case 1:
+                            if($model->status_id)
+                                $btnCss = 'btn btn-success';
+                            else
+                                $btnCss = 'btn btn-warning';
+                            break;
+                    }
+                    
+                    return Html::button('<i class="glyphicon glyphicon-file"></i> View', ['value' => Url::to(['request/uploadattachmenttest', 'id'=>$model->request_attachment_id]), 'title' => Yii::t('app', "Attachment"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachmentstest']);*/
+                    
+                    //return Yii::$app->controller->renderPartial('_attachments');
+                    return Html::a('<i class="glyphicon glyphicon-file"></i> View', $link, ['target' => '_blank', 'class' => 'btn btn-primary']);
+                        
+                },
+            ],
+            [   
+                'attribute'=>'filename',
                 'header' => 'Signed Attachments',
                 'headerOptions' => ['style' => 'text-align: center;'],
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
@@ -578,6 +610,13 @@ Modal::end();
 
     
     ?>
+
+<br><br>
+<?php 
+//return Yii::$app->controller->renderPartial('_request_payroll', ['dataProvider' => $dataProvider, 'id'=>$id]);
+//echo Yii::$app->controller->renderPartial('_attachments');
+
+?>
 
 <a id="startButton"  href="javascript:void(0);">Show guide</a>
 

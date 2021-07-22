@@ -531,6 +531,44 @@ class RequestController extends Controller
         }
     }
     
+    public function actionUploadattachmenttest($id){
+        $model = Requestattachment::findOne($id);
+        date_default_timezone_set('Asia/Manila');
+        
+        if (Yii::$app->request->post()) {
+            $random = Yii::$app->security->generateRandomString(40);
+            $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+            
+            //$path = 'uploads/finance/request/' . $model->request->request_number.'/';
+            $path = Yii::getAlias('@uploads') . "/finance/request/" . $model->request->request_number;
+            if(!file_exists($path)){
+                mkdir($path, 0755, true);
+                $indexFile = fopen($path.'/index.php', 'w') or die("Unable to open file!");
+            }
+                
+            $model->pdfFile->saveAs( $path ."/". $model->request_attachment_id . $random . '.' . $model->pdfFile->extension);
+            //$model->pdfFile->saveAs('uploads/finance/request/' . $model->request->request_number.'/'. $model->request_attachment_id . $random . '.' . $model->pdfFile->extension);
+            $model->filename = $model->request_attachment_id . $random . '.' . $model->pdfFile->extension;
+            $model->last_update = date("Y-m-d H:i:s");
+            $model->filecode = Requestattachment::generateCode($model->request_attachment_id);
+            $model->status_id = $model->request->payroll ? 10 : 0;
+            $model->save(false);
+            
+            Yii::$app->session->setFlash('success', 'Document Successfully Uploaded!');
+            
+            $action = $model->request->payroll ? 'viewpayroll' : 'view';
+            return $this->redirect([$action.'?id='.$model->request_id]);
+        }
+        
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_viewattachment', ['model'=>$model]);   
+        }else {
+            return $this->render('_viewattachment', [
+                        'model' => $model,
+            ]);
+        }
+    }
+    
     public function actionSignedattachment($id)
     {
         //Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/uploads/';

@@ -5,8 +5,9 @@ namespace frontend\modules\cashier\components;
 use Yii;
 use kartik\mpdf\Pdf;
 //use rmrevin\yii\fontawesome\FA;
-use common\models\cashier\Lddapada;
 use common\models\finance\Accounttransaction;
+use common\models\cashier\Lddapada;
+
 
 class Report {
 
@@ -150,18 +151,32 @@ class Report {
         // ITEMS
         $fmt = Yii::$app->formatter;
         foreach($model->lddapadaItems as $item){
+            if(isset($model->request_payroll_id)){
+                return $model->requestpayroll->tax;
+            }else{
+                if($item->creditor_id == 245){
+                    $tax = Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one();
+
+                    $taxAmount = $tax->amount;
+                }
+                else
+                    $taxAmount = $item->osdv->getTax();
+                    //$taxAmount = '1';
+            }
+            
             $template .= "<tr>";
             $template .= "<td style='border-bottom: 1px solid #000; border-right: 1px solid #000; padding-left:  10px;'>".$item->name."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->creditor->account_number."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000; font-size: x-small;'>".($item->osdv->os ? $item->osdv->os->os_number : $item->osdv->dv->dv_number)."</td>";
             $template .= "<td style='text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".($item->osdv->uacs ? $item->osdv->uacs->expenditureobject->object_code : '-')."</td>";
-            $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getGrossamount(),2)."</td>";
+            $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->request_payroll_id ? ($item->requestpayroll->amount) : $item->osdv->getGrossamount(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px; border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format(
                  ($item->creditor_id == 245) ?
-                    Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one()->amount : $item->osdv->getTax()
+                    Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one()->amount : $taxAmount
+                    //Accounttransaction::find()->where(['request_id' => $item->osdv_id, 'account_id' => 31, 'debitcreditflag' => 2])->orderBy(['account_transaction_id' => SORT_DESC])->one()->amount : $item->osdv->getTax()
  
                 ,2)."</td>";
-            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->osdv->getNetamount(),2)."</td>";
+            $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".number_format($item->request_payroll_id ? ($item->requestpayroll->amount - $item->requestpayroll->tax) : $item->osdv->getNetamount(),2)."</td>";
             $template .= "<td style='text-align: right; padding-right: 10px;border-bottom: 1px solid #000; border-right: 1px solid #000;'>".$item->check_number."</td>";
 
             $template .= "</tr>";

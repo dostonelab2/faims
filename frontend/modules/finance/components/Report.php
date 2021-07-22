@@ -636,7 +636,7 @@ $content .= '
         $model = Requestpayroll::findOne($id);
         $fmt = Yii::$app->formatter;
         
-        $DVboxCSignatory = 'ROBERTO B. ABELLA';
+        /*$DVboxCSignatory = 'ROBERTO B. ABELLA';
         $DVboxCPosition = 'Accountant III';
         $DVboxDSignatory = 'MARTIN A. WEE';
         $DVboxDPosition = 'Regional Director';
@@ -677,7 +677,7 @@ $content .= '
           default:
             $DVboxASignatory = '';
             $DVboxAPosition = ''; 
-        }
+        }*/
         
         //$boxBsignatory = Divisionhead::find(['division_id'=> $model->division_id])->one();
         
@@ -707,6 +707,19 @@ $content .= '
         $Assig1 = '';
         $Assig2Position = '';
         
+        $indexValidate = ($model->osdv->type_id == 1) ? $model->osdv->request_id : $model->osdv->osdv_id;
+        $statusValidate = ( ($model->osdv->type_id == 1) ? 40 : 58 );
+        
+        //PAYROLL_DV
+        //work for TF
+        $content .= $this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        
+        //Box C
+        $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        
+        //Box D
+        $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
+        
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
 <tr style="height: 5px;">
@@ -718,7 +731,7 @@ $content .= '
 <td style="width: 20%; height: 13px;" colspan="2">Date : '.$model->osdv->dv->dv_date.'</td>
 </tr>
 <tr style="height: 8px;">
-<td style="width: 80%; height: 8px;" colspan="2">DV No. : <b>'.$model->osdv->dv->dv_number.'</b></td>
+<td style="width: 80%; height: 8px;" colspan="2">DV No. : <b>'.$model->dv->dv_number.'</b></td>
 </tr>
 <tr style="height: 13px;">
 <td style="width: 10%; height: 25px;">Mode of <br />Payment</td>
@@ -766,10 +779,15 @@ $content .= '
 <tr style="height: 14px;">
 <td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
 </tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
+<tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 14px;">
-<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:75px;" colspan="7"><span style="vertical-align:top;"> 
-<span style="text-decoration:underline;font-weight:bold;">'.$DVboxASignatory.'<br></span>'.$DVboxAPosition.'</td>
-';
+
+<td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
+<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
+            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
+            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['position']
+            .'</td>';
 
 $content .= '
 </tr>
@@ -913,14 +931,19 @@ $content .= '
         
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
-        
+        //$details2 = $this->getBlockchain(1305, 'Osdv', 70);
+        //var_dump($details);
         $box = strtolower($box);
         $form = strtolower($form);
             
         $signatureDetails = [
-            'name' => $signatory->activeUser->profile->getFullname(),
+            'name' => $signatory->activeUser->profile->fullname,
             'position' => $signatory->activeUser->profile->designation,
-            'date' => date("d-M-Y", $details->timestamp),
+            //'test' => $index_id.' : '.$scope.' : '.$status,
+            'date' => date("d-M-Y"),
+            //'details' => $index_id.' : '.$scope.' : '.$status.' | ',
+            //'details' => $details2->timestamp,
+            //'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>$form."-box-".$box."-sig"]).'<div class="'.$form.'-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,64).'</div></div>'
         ];
         
