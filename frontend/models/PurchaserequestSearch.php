@@ -54,7 +54,7 @@ class PurchaserequestSearch extends VwPurchaseRequest
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            //'pagination' => false,
+            'pagination' => false,
             //'sort' => ['attributes' => ['purchase_request_number']],
             'sort' => ['defaultOrder' => ['purchase_request_number' => SORT_DESC]]
         ]);
