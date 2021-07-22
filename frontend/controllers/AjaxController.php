@@ -7,6 +7,10 @@ use common\models\procurement\Purchaserequest;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\SqlDataProvider;
+use common\models\procurement\VwPurchaseRequest;
+use yii\data\ActiveDataProvider;
+use frontend\models\PurchaserequestSearch;
 
 
 
@@ -248,7 +252,36 @@ class AjaxController extends \yii\web\Controller
         $iYcoord = $x - 1 + $iYcoord + 10;
         return $x;
     }
+    public function actionPurchaserequest2()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //$con = Yii::$app->procurementdb;
+        //$sql = "SELECT * FROM vw_purchase_request";
+        //$porequest2 = $con->createCommand($sql)->queryAll();
+        //return $porequest2;
 
+        /*$purchaserequest = VwPurchaseRequest::find();
+        $provider = new ActiveDataProvider([
+            'query' =>  $purchaserequest,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'purchase_request_id' => SORT_DESC,
+                ]
+            ],
+        ]);*/
+        $searchModel = new PurchaserequestSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(isset($_GET['page'])){
+            $model = $dataProvider->getModels();
+            return $model;
+        }
+        //$dataProvider->pagination->page = 2;
+        $model = $dataProvider->getModels();
+        return $model;
+    }
 }
 
 
