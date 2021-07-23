@@ -16,9 +16,9 @@
             $unit = $pr["name_long"];
         }
         $append = "<tr>";
-        $append = $append . "<td width='10%' style='text-align: center;border:none;vertical-align: top;font-size:11px;'>".$x."</td>";
-        $append = $append . "<td width='60%' style='padding-left: 5px;vertical-align: top;font-size:11px;'>" . $itemdescription . "</td>";
-        $append = $append . "<td width='15%' style='text-align: center; vertical-align: top;font-size:11px;'>" . $quantity . " " . $unit . "</td>";
+        $append = $append . "<td width='10%' style='text-align: center;border:none;vertical-align: top;font-size:12px;'>".$x."</td>";
+        $append = $append . "<td style='padding-left: 5px;vertical-align: top;font-size:12px;'>" . $itemdescription . "</td>";
+        $append = $append . "<td width='15%' style='text-align: center; vertical-align: top;font-size:12px;'>" . $quantity . " " . $unit . "</td>";
         $append = $append . "<td width='15%' style='font-size:11px;text-align: center;'>" . $price . "</td>";
         //$append = $append . "<td>" . $totalcost . "</td>";
         $append = $append . "</tr>";
