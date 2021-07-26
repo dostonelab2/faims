@@ -12,6 +12,8 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
+use common\models\finance\Dv;
+use common\models\finance\Os;
 use common\models\finance\Request;
 use common\models\system\Profile;
 /* @var $this yii\web\View */
@@ -48,23 +50,17 @@ Modal::end();
       <?php
         echo GridView::widget([
             'id' => 'request',
+            'filterModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'columns' => [
-                            /*[
-                                'attribute'=>'request_id',
-                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
-                                'width'=>'80px',
-                                'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->request->request_number;
-                                },
-                            ],*/
                             [
                                 'attribute'=>'request_date',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'150px',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return date('Y-m-d', strtotime($model->request->request_date));
+                                    return date('Y-m-d', strtotime($model->request_date));
                                 },
                             ],
                             [
@@ -76,7 +72,7 @@ Modal::end();
                                 ],
                                 'format' => 'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<b>' . Creditor::findOne($model->request->payee_id)->name. '</b><br>' .$model->request->particulars;
+                                    return '<b>' . Creditor::findOne($model->payee_id)->name. '</b><br>' .$model->particulars;
                                 },
                             ],
                             
@@ -90,6 +86,12 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b><br/>'.$model->os->os_date : '';
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Os::find()->orderBy(['os_id' => SORT_DESC])->asArray()->all(), 'os_id', 'os_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select OS'],
                             ],
                             [
                                 'attribute'=>'osdv_id',
@@ -101,6 +103,12 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b><br/>'.$model->dv->dv_date : '';
                                 },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Dv::find()->orderBy(['dv_id' => SORT_DESC])->asArray()->all(), 'dv_id', 'dv_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select DV'],
                             ],
                             [
                                 'attribute'=>'amount',
@@ -110,7 +118,7 @@ Modal::end();
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
                                     //return $model->accounttransactions->taxable ? '0.00' : '<b>'.$model->request->amount.'</b>';
-                                    return $model->getNetamount();
+                                    return $model->osdv->getNetamount();
                                 },
                             ],
                             [
@@ -121,7 +129,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->getTax();
+                                    return $model->osdv->getTax();
                                     //return '<b>'.$model->request->amount.'</b>';
                                 },
                             ],
@@ -133,7 +141,7 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    return $model->getGrossamount();
+                                    return $model->osdv->getGrossamount();
                                     //return '<b>'.$model->request->amount.'</b>';
                                 },
                             ],

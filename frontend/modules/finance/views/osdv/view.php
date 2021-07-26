@@ -73,6 +73,7 @@ Modal::end();
                 'inputContainer' => ['class'=>'col-sm-6'],
                 'value' => $model->request->requesttype->name,
                 'type'=>DetailView::INPUT_SELECT2, 
+                'displayOnly'=>true,
                 'widgetOptions'=>[
                     'data'=>ArrayHelper::map(Requesttype::find()->orderBy(['name'=>SORT_ASC])->all(),'request_type_id','name'),
                     'options' => ['placeholder' => 'Select Type'],
@@ -85,6 +86,7 @@ Modal::end();
                 'inputContainer' => ['class'=>'col-sm-6'],
                 'value' => $model->request->creditor->name,
                 'type'=>DetailView::INPUT_SELECT2, 
+                'displayOnly'=>true,
                 'widgetOptions'=>[
                     'data'=>ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
                     'options' => ['placeholder' => 'Select Payee'],
@@ -95,15 +97,16 @@ Modal::end();
                 'attribute'=>'request_id',
                 'label'=>'Particulars',
                 'inputContainer' => ['class'=>'col-sm-6'],
+                'displayOnly'=>true,
                 'value' => $model->request->particulars,
             ],
 
             [
-                'attribute'=>'request_id',
+                'attribute'=>'grossamount',
                 'label'=>'Amount (P)',
                 'format'=>['decimal', 2],
                 'inputContainer' => ['class'=>'col-sm-6'],
-                'value' => $model->request->amount,
+                'value' => $model->grossamount,
             ],
             [
                 'group'=>true,
@@ -133,13 +136,13 @@ Modal::end();
             'mode'=>DetailView::MODE_VIEW,
             'container' => ['id'=>'kv-demo'],
             //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
-            //'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() ) ? '{update}' : '', //hides buttons on detail view
-            'buttons1' => '',
+            'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || Yii::$app->user->can('access-finance-disbursement') ) ? '{update}' : '', //hides buttons on detail view
+            //'buttons1' => '',
             'attributes' => $attributes,
             'condensed' => true,
             'responsive' => true,
             'hover' => true,
-            //'formOptions' => ['action' => ['request/view', 'id' => $model->request_id]],
+            'formOptions' => ['action' => ['osdv/view', 'id' => $model->osdv_id]],
             'panel' => [
                 //'type' => 'Primary', 
                 'heading'=>'REQUEST DETAILS',
@@ -151,7 +154,6 @@ Modal::end();
         
     
     </div>
-    
     <?php if(!$model->cancelled){ ?>
     <div class="col-sm-4">
     <?php $attributes = [

@@ -5,6 +5,7 @@ namespace frontend\modules\finance\components;
 use Yii;
 use kartik\mpdf\Pdf;
 use yii\helpers\Html;
+use common\models\finance\Accounttransaction;
 use common\models\finance\Reportsignatory;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
@@ -764,9 +765,18 @@ $content .= '
 <td style="width: 15%; height: 125px; text-align: center;padding:5px;vertical-align:top;"></td>
 <td style="width: 15%; height: 125px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
-        foreach($model->osdv->allotments as $allotment){
+        $keys = explode(',',$model->dv_accounts);
+        $text = "";
+        for($i=0; $i<count($keys); $i++){
+            $account = Accounttransaction::findOne($keys[$i]);
+            if($account)
+                $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.',<br/>';
+        }
+        $content .= $text;
+        
+        /*foreach($model->osdv->allotments as $allotment){
                 $content .= $allotment->name.'<br/>';
-            }
+            }*/
         $content .= '</td>
 
 <td style="width: 20%; height: 125px; text-align: right;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">'.number_format($model->amount - $model->tax,2).'</td>
@@ -803,24 +813,52 @@ $content .= '
 <tr style="height: 14px;">
 <td style="width: 50%; height: 50px; text-align: left;padding:5px;vertical-align:top; font-weight: bold;" colspan="3">';
         
-        foreach($model->osdv->accounttransactions as $transaction){
+        /*foreach($model->osdv->accounttransactions as $transaction){
                 $content .= $transaction->account->title.'<br/>';
-            }
+            }*/
+        
+        $keys = explode(',',$model->dv_accounts);
+        $text = "";
+        for($i=0; $i<count($keys); $i++){
+            $account = Accounttransaction::findOne($keys[$i]);
+            if($account)
+                $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->title : $account->account->title.'<br/>';
+        }
+        $content .= $text;
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
-        foreach($model->osdv->accounttransactions as $transaction){
+        /*foreach($model->osdv->accounttransactions as $transaction){
                 $content .= $transaction->account->object_code.'<br/>';
-            }
+            }*/
+         $keys = explode(',',$model->dv_accounts);
+        $text = "";
+        for($i=0; $i<count($keys); $i++){
+            $account = Accounttransaction::findOne($keys[$i]);
+            if($account)
+                $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->object_code : $account->account->object_code.'<br/>';
+        }
+        $content .= $text;
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
         
-        foreach($model->osdv->accounttransactions as $transaction){
+        $keys = explode(',',$model->dv_accounts);
+        $text = "";
+        for($i=0; $i<count($keys); $i++){
+            $account = Accounttransaction::findOne($keys[$i]);
+            if($account){
+                //$text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->object_code : $account->account->object_code.'<br/>';
+                //$text .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
+            }
+        }
+        $content .= $text;
+        
+        /*foreach($model->osdv->accounttransactions as $transaction){
                 //$content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->getNetAmount(),2).'<br/>' : '-'.'<br/>';
                 $content .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
-            }
+        }*/
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">';

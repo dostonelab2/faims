@@ -108,7 +108,8 @@ class OsdvController extends Controller
      */
     public function actionReport()
     {
-        $searchModel = new OsdvSearch();
+        //$searchModel = new OsdvSearch();
+        $searchModel = new RequestosdvSearch();
         
         $status_id = Request::STATUS_CHARGED;
         
@@ -179,6 +180,16 @@ class OsdvController extends Controller
             'query' => $model->getPayrollitems(),
             'pagination' => false,
         ]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if($model->save()){ 
+                $model->request->amount = $_POST['Osdv']['grossamount'];
+                $model->request->save();
+                Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
+            }
+            
+        }
 
         $accountTransactionsDataProvider = new ActiveDataProvider([
             'query' => $model->getAccounttransactions(),
