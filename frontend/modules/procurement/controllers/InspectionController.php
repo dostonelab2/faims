@@ -320,7 +320,7 @@ $ss=$ss
 <td style="width: 50%; height: 20px; text-align: left; border-top: none; border-bottom: none;font-size:11px;">&nbsp;Date Received : ________________</td>
 </tr>
 <tr style="height: 20px;">
-<td style="width: 50%; text-align: left; height: 250px; vertical-align: top; border-top: none;"><span style="font-size: 55px; vertical-align: top;">▯ <span style="font-size: 11px; vertical-align: top;">Inspected, verified and found OK Inspected, verified and found OK</span></span>
+<td style="width: 50%; text-align: left; height: 250px; vertical-align: top; border-top: none;"><span style="font-size: 55px; vertical-align: top;">▯ <span style="font-size: 11px; vertical-align: top;">Inspected, verified and found OK as to quantity & specifications.</span></span>
 <p style="text-align: left; padding-left: 15px;"></p>
 </td>
 <td style="width: 50%; text-align: left; height: 250px; vertical-align: top; border-top: none;">

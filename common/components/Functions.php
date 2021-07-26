@@ -160,7 +160,11 @@ class Functions extends Component
     function GridHeader($HeaderTitle,$Sortfields) {
         if ($Sortfields=="") {
             $gridheader='<th style="text-align: right!important;" class="kartik-sheet-style">'.$HeaderTitle.'</th>';
-        }else{
+        }
+        else if ($Sortfields=="default") {
+            $gridheader='<th class="kartik-sheet-style">'.$HeaderTitle.'</th>';
+        }
+        else{
         $gridheader='<th class="kartik-sheet-style">'.$HeaderTitle.'<a ng-click="sort_by('.$Sortfields.');"><i class="glyphicon glyphicon-sort"></i></a></th>';
         }
         return $gridheader;

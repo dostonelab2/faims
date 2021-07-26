@@ -349,3 +349,8 @@ div.selected-item-table {
     border: 1px solid #888;
     width: 80%;
 }
+
+/***per-page dropdown list****/
+.VueTables__limit{
+  display: none;
+}

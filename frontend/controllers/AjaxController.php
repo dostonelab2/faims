@@ -7,6 +7,10 @@ use common\models\procurement\Purchaserequest;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\SqlDataProvider;
+use common\models\procurement\VwPurchaseRequest;
+use yii\data\ActiveDataProvider;
+use frontend\models\PurchaserequestSearch;
 
 
 
@@ -27,9 +31,18 @@ class AjaxController extends \yii\web\Controller
                 tbl_section.name AS section_name,
                 tbl_purchase_request.purchase_request_purpose,
                 fnGetAssignatoryName(purchase_request_requestedby_id) AS requested_by,
-                fnGetPurchaseNo(tbl_purchase_request.purchase_request_id) AS PONum
-
-
+                (SELECT
+                    GROUP_CONCAT(DISTINCT CONCAT(`c`.`purchase_order_number`) ORDER BY `c`.`purchase_order_number` ASC SEPARATOR ', ')
+                FROM ((`fais-procurement`.`tbl_bids_details` `a`
+                    JOIN `fais-procurement`.`tbl_purchase_order_details` `b`
+                        ON (`a`.`bids_details_id` = `b`.`bids_details_id`))
+                    JOIN `fais-procurement`.`tbl_purchase_order` `c`
+                        ON (`c`.`purchase_order_id` = `b`.`purchase_order_id`))
+                WHERE `a`.`bids_details_status` = 1
+                    AND `a`.`purchase_request_id` = `tbl_purchase_request`.`purchase_request_id`
+                ORDER BY `c`.`purchase_order_number`) AS PONum,
+                tbl_purchase_request.status AS status
+                
                 FROM tbl_purchase_request
                 INNER JOIN fais.tbl_division
                 ON tbl_division.division_id = tbl_purchase_request.division_id
@@ -46,7 +59,8 @@ class AjaxController extends \yii\web\Controller
 	    tbl_section.name AS section_name,
 	    tbl_purchase_request.purchase_request_purpose,
 	    fnGetAssignatoryName(purchase_request_requestedby_id) AS requested_by,
-	    fnGetPurchaseNo(tbl_purchase_request.purchase_request_id) AS PONum
+	    fnGetPurchaseNo(tbl_purchase_request.purchase_request_id) AS PONum,
+        tbl_purchase_request.status AS status
 	
 	    
 	    FROM tbl_purchase_request
@@ -190,6 +204,7 @@ class AjaxController extends \yii\web\Controller
 	    ON `tbl_division`.`division_id` = `tbl_purchase_request`.`division_id`
 	    INNER JOIN `fais`.`tbl_section`
 	    ON `tbl_section`.`section_id` = `tbl_purchase_request`.`section_id`
+        WHERE `tbl_purchase_request`.`status` = 1
 	    ORDER BY purchase_request_number DESC";
         $porequest = $con->createCommand($sql)->queryAll();
         return $porequest;
@@ -248,7 +263,36 @@ class AjaxController extends \yii\web\Controller
         $iYcoord = $x - 1 + $iYcoord + 10;
         return $x;
     }
+    public function actionPurchaserequest2()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //$con = Yii::$app->procurementdb;
+        //$sql = "SELECT * FROM vw_purchase_request";
+        //$porequest2 = $con->createCommand($sql)->queryAll();
+        //return $porequest2;
 
+        /*$purchaserequest = VwPurchaseRequest::find();
+        $provider = new ActiveDataProvider([
+            'query' =>  $purchaserequest,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'purchase_request_id' => SORT_DESC,
+                ]
+            ],
+        ]);*/
+        $searchModel = new PurchaserequestSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(isset($_GET['page'])){
+            $model = $dataProvider->getModels();
+            return $model;
+        }
+        //$dataProvider->pagination->page = 2;
+        $model = $dataProvider->getModels();
+        return $model;
+    }
 }
 
 

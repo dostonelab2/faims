@@ -71,6 +71,43 @@ class PurchaserequestController extends Controller
         }
     }
 
+    public function actionTag()
+    {
+        $request = Yii::$app->request;
+        if ($request->get('id') && $request->get('view')) {
+            $id = $request->get('id');
+            $model = $this->findModel($id);
+            $prdetails = $this->getprDetails($model->purchase_request_id);
+            return $this->renderAjax('_tag', [
+                'model' => $model,
+                'prdetails' => $prdetails,
+            ]);
+        }
+    }
+
+    public function actionApprove()
+    {
+        if(Yii::$app->request->isAjax){
+            $id = Yii::$app->request->get('id');
+            $model = $this->findModel($id);
+            $model->status = 1;
+            $model->tag_user_id = Yii::$app->user->id;
+            $model->date_tag = date("Y-m-d H:i:s");
+            $model->save();
+        }
+    }
+    public function actionDisapprove()
+    {
+        if(Yii::$app->request->isAjax){
+            $id = Yii::$app->request->get('id');
+            $model = $this->findModel($id);
+            $model->status = 2;
+            $model->tag_user_id = Yii::$app->user->id;
+            $model->date_tag = date("Y-m-d H:i:s");
+            $model->save();
+        }
+    }
+
     public function actionReportpr($id)
     {
         $request = Yii::$app->request;

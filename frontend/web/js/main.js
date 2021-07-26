@@ -95,7 +95,7 @@ jQuery(document).ready(function ($) {
         var x = $(this).data('id');
         jQuery.ajax( {
             type: "POST",
-            url:  "view?id=" + x + "&view=views",
+            url:  "view?id=" + x + "&view=view",
             dataType: "text",
             success: function ( response ) {
                 //console.log(response);
@@ -107,6 +107,62 @@ jQuery(document).ready(function ($) {
             }
         } );
     });
+
+    $('body').on('click','.myTagging' , function() {
+        $(".loadpartial").fadeIn(300);
+        $(".loadpartial").show();
+        var x = $(this).data('id');
+        jQuery.ajax( {
+            type: "POST",
+            url:  "tag?id=" + x + "&view=tag",
+            dataType: "text",
+            success: function ( response ) {
+                //console.log(response);
+                $("#mycontenttag").html(response);
+                $(".loadpartial").hide();
+            },
+            error: function ( xhr, ajaxOptions, thrownError ) {
+                alert( thrownError );
+            }
+        } );
+    });
+
+    $('body').on('click','.btn-approve' , function() {
+       var r = confirm("Are you sure you want to approve this request?");
+       if(r == true){
+        var x = $(this).data('id');
+            jQuery.ajax( {
+                type: "POST",
+                url:  "approve?id=" + x,
+                //data: {},
+                success: function ( response ) {                    
+                    location.reload();
+                },
+                error: function ( xhr, ajaxOptions, thrownError ) {
+                    alert( thrownError );
+                }
+            } );
+       }
+    });
+
+    $('body').on('click','.btn-disapprove' , function() {
+        var r = confirm("Are you sure you want to disapprove this request?");
+        if(r == true){
+         var x = $(this).data('id');
+             jQuery.ajax( {
+                 type: "POST",
+                 url:  "disapprove?id=" + x,
+                 //data: {},
+                 success: function ( response ) {                    
+                     location.reload();
+                 },
+                 error: function ( xhr, ajaxOptions, thrownError ) {
+                     alert( thrownError );
+                 }
+             } );
+        }
+     });
+
     $('#myAdd').on('hidden.bs.modal', function () {
         location.reload();
     });
