@@ -79,14 +79,14 @@ use common\modules\pdfprint;
 
     <div class="col-lg-12">
         <div class="col-lg-8">
-
+            
         </div>
         <div class="col-lg-2">
-            <button type="button" class="btn-approve btn btn-lg btn-success btn-block" data-id = "<?= $model->purchase_request_id?>">Approve</a>
+            <button type="button" class="btn-approve btn btn-lg btn-success btn-block" data-id = "<?= $model->purchase_request_id?>">Approve</button>
         </div>
         <div class="col-lg-2">
-        <button type="button" class="btn-disapprove btn btn-lg btn-danger btn-block" data-id = "<?= $model->purchase_request_id?>">Disapprove</a>
+            <button type="button" class="btn-disapprove btn btn-lg btn-danger btn-block" data-id = "<?= $model->purchase_request_id?>">Disapprove</button>
         </div>
-</div>
+   </div>
 
 </div>
