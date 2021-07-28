@@ -250,7 +250,7 @@ class Functions extends Component
         $gridclose = $gridclose.'<div class="col-md-12" ng-show="filteredItems == 0">';
         $gridclose = $gridclose.'<div class="col-md-12"><h4>'.$NotFoundData.'</h4></div></div>';
         $gridclose = $gridclose.'<div class="col-md-12" ng-show="filteredItems > 0">';
-        $gridclose = $gridclose.'<div pagination="" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filteredItems" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>';
+        $gridclose = $gridclose.'<ul uib-pagination total-items="totalItems" max-size=10 ng-model="currentPage" ng-change="pageChanged()"></ul>';
         $gridclose = $gridclose.'</div></div></div></div></div>';
 
         return $gridclose;
