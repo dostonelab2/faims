@@ -130,7 +130,7 @@ jQuery(document).ready(function ($) {
     $('body').on('click','.btn-approve' , function() {
        var r = confirm("Are you sure you want to approve this request?");
        if(r == true){
-        var x = $(this).data('id');
+        var x = $(this).val();
             jQuery.ajax( {
                 type: "POST",
                 url:  "approve?id=" + x,
@@ -148,10 +148,28 @@ jQuery(document).ready(function ($) {
     $('body').on('click','.btn-disapprove' , function() {
         var r = confirm("Are you sure you want to disapprove this request?");
         if(r == true){
-         var x = $(this).data('id');
+         var x = $(this).val();
              jQuery.ajax( {
                  type: "POST",
                  url:  "disapprove?id=" + x,
+                 //data: {},
+                 success: function ( response ) {                    
+                     location.reload();
+                 },
+                 error: function ( xhr, ajaxOptions, thrownError ) {
+                     alert( thrownError );
+                 }
+             } );
+        }
+     });
+
+     $('body').on('click','.btn-review' , function() {
+        var r = confirm("Are you sure you want to tag this request as reviewed?");
+        if(r == true){
+         var x = $(this).val();
+             jQuery.ajax( {
+                 type: "POST",
+                 url:  "review?id=" + x,
                  //data: {},
                  success: function ( response ) {                    
                      location.reload();
