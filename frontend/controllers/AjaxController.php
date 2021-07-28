@@ -41,7 +41,11 @@ class AjaxController extends \yii\web\Controller
                 WHERE `a`.`bids_details_status` = 1
                     AND `a`.`purchase_request_id` = `tbl_purchase_request`.`purchase_request_id`
                 ORDER BY `c`.`purchase_order_number`) AS PONum,
-                tbl_purchase_request.status AS status
+                tbl_purchase_request.status AS status,
+                (SELECT 
+                    MAX(purchase_request_details_status) 
+                FROM tbl_purchase_request_details
+                WHERE purchase_request_id = `tbl_purchase_request`.`purchase_request_id`) AS request_status
                 
                 FROM tbl_purchase_request
                 INNER JOIN fais.tbl_division
