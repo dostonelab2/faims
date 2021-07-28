@@ -108,6 +108,18 @@ class PurchaserequestController extends Controller
         }
     }
 
+    public function actionReview()
+    {
+        if(Yii::$app->request->isAjax){
+            $id = Yii::$app->request->get('id');
+            $model = $this->findModel($id);
+            $model->status = 3;
+            $model->tag_user_id = Yii::$app->user->id;
+            $model->date_tag = date("Y-m-d H:i:s");
+            $model->save();
+        }
+    }
+
     public function actionReportpr($id)
     {
         $request = Yii::$app->request;
