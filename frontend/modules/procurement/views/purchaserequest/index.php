@@ -146,7 +146,7 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <!-- *********************************** Generate Header Modal for tagging********************************************** -->
     <?= $func->GenerateHeaderModal("myTagging", "Request Module", '70', 10) ?>
     <div class="request-tag">
-    <div class="loadpartial">
+    <div class="loadpartial2">
             <img src="<?= $BaseURL; ?>/images/loading.gif">
         </div>
         <div id="mycontenttag">
