@@ -87,7 +87,7 @@ class PurchaserequestController extends Controller
 
     public function actionApprove()
     {
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->get('id');
             $model = $this->findModel($id);
             $model->status = 1;
@@ -98,7 +98,7 @@ class PurchaserequestController extends Controller
     }
     public function actionDisapprove()
     {
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->get('id');
             $model = $this->findModel($id);
             $model->status = 2;
@@ -110,7 +110,7 @@ class PurchaserequestController extends Controller
 
     public function actionReview()
     {
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->get('id');
             $model = $this->findModel($id);
             $model->status = 3;
@@ -829,5 +829,270 @@ class PurchaserequestController extends Controller
         ];
 
         return $details;
+    }
+
+    public function actionReportquotation($id)
+    {
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $supplier = '';
+        $address = '';
+        $sub = '';
+        $employee = '';
+        //$employee = explode("|",$employee);
+        $sub = '';
+        $model = $this->findModel($id);
+        $prdetails = $this->getprDetails2($model->purchase_request_id);
+        $content = $this->renderPartial('_reportquotations', ['prdetails' => $prdetails, 'model' => $model]);
+        $assig =$this->findAssignatory(3);
+        $pdf = new Pdf();
+        $pdf->format = pdf::FORMAT_A4;
+        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
+        $pdf->destination = $pdf::DEST_BROWSER;
+        //$sub = date('F j, Y',$sub);
+        $pdf->content = $content;
+        $pdf->cssFile = '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+        $pdf->cssInline = '.kv-heading-1{font-size:18px}.nospace-border{border:0px;}.no-padding{ padding:0px;}.print-container{font-size:11px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;} h1 {border-bottom: 2px solid blackfont-weight:normal;margin-bottom:5px;width: 140px;}';
+        $pdf->marginTop = 157;
+        $pdf->marginBottom = 50;
+        $headers = '
+        <table width="100%">
+    <tbody>
+    <tr style="height: 43.6667px;">
+    <td style="width: 82.4103%; height: 43.6667px;">
+    <p>&nbsp;</p>
+    </td>
+    <td style="width: 12.5897%; height: 43.6667px;">
+    <table border="1" width="100%" style="border-collapse: collapse;">
+    <tbody>
+    <tr>
+    <td>
+    <p><h6><strong>FASS-PUR F06</strong>&nbsp; Rev. 0/ 08-16-07</h6></p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    
+    <table style="width: 100%;">
+    <tbody>
+    <tr>
+    <td style="text-align: center;">Republic of the Philippines</td>
+    </tr>
+    <tr>        
+    <td style="text-align: center;"><strong>'.$assig->CompanyTitle.'</strong></td>
+    </tr>
+    <tr>
+    <td style="text-align: center;">'.$assig->RegionOffice.'</td>
+    </tr>
+    <tr>
+    <td style="text-align: center;">'.$assig->Address.'</td>
+    </tr>
+    <tr>
+    <td style="text-align: center;">&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>
+    
+    <table style="width: 100%;">
+    <tbody>
+    <tr style="height: 12px;">
+    <td style="height: 12px; width: 50%;font-size:11px;">Standard Form Number&nbsp;: SF-GOOD-60</td>
+    <td style="height: 12px; width: 50%;font-size:11px;">Project Ref.No.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ';
+    if($model->purchase_request_referrence_no=='') {
+        $headers=$headers.'_______________________________________';
+    }else{
+        $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_referrence_no.'</span>';
+    }
+    
+    $headers=$headers.'</td>
+    </tr>
+    <tr style="height: 12.6364px;">
+    <td style="height: 12.6364px; width: 50%;font-size:11px;">Revised on&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: May 24, 2004&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+    <td style="height: 12.6364px;font-size:11px;">Name of the Project&nbsp; &nbsp; &nbsp; &nbsp;: ';
+    if($model->purchase_request_project_name=='') {
+        $headers=$headers.'_______________________________________';
+    }else{
+        $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_project_name.'</span>';
+    }
+    
+    $headers=$headers.'</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="width: 50%; height: 12px;font-size:11px;">Standard Form Title&nbsp; &nbsp; &nbsp; &nbsp;: <span style="text-decoration: underline;">REQUEST FOR QUOTATION</span></td>
+    <td style="height: 12px;font-size:11px;">Location of the Project&nbsp; &nbsp;: ';
+    if($model->purchase_request_location_project=='') {
+        $headers=$headers.'_______________________________________';
+    }else{
+        $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_location_project.'</span>';
+    }
+    
+    $headers=$headers.'</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="height: 12px;">&nbsp;</td>
+    <td style="height: 12px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="height: 12px;font-size:11px;">';
+    
+    if($supplier=='') {
+        $headers=$headers.'_______________________________________';
+    }else{
+         $headers=$headers.'<span style="text-decoration:underline;">'.strtoupper($supplier).'</span>';
+    }
+    
+    $headers=$headers.'</td>
+    
+    
+    <td style="height: 12px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="height: 12px;font-size:11px;">';
+    
+    if($address=='') {
+        $headers=$headers.'_______________________________________';
+    }else{
+        $headers=$headers.'<span style="text-decoration:underline;">'.$address.'</span>';
+    }
+    
+    $headers=$headers.'</td>
+    
+    <td style="height: 12px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="height: 12px;font-size:11px;" colspan="2"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please quote  your  lowest   price  on  the   item/s  listed   below,  subject  to  the   General   Conditions   on   the  last page,  stating  the   shortest   time  of   delivery
+      and   submit   your  quotation  duly   signed  by  your  representative   not   later than <span style="text-decoration:underline;">'.$sub.'</span> in an envelope.</p></td>
+    </tr>
+    </tbody>
+    </table>
+    <div style="height:30px;"></div>
+    <table style="width:100%;">
+    <tr>
+    <td style="width:80%;"></td>
+    <td style="width:20%;text-align:center;"><td>
+    </tr>
+        <tr>
+            <td style="width:80%;"></td>
+            <td style="width:35%;font-size:13px;text-align:center;"><b>Ronnel B. Gundoy</b><br/>Supply Officer<td>
+        </tr>
+    </table>
+    <div style="height:25px;"></div>
+    <table style="width: 100%;">
+    <tbody>
+    <tr>
+    <td style="width: 10%;font-size:10px; vertical-align: top; text-align: left;">Note:</td>
+    <td style="width: 90%;font-size:10px;line-space:11px; vertical-align: top;">
+    <p>&nbsp;<strong>1</strong><strong>. ALL ENTRIES MUST BE TYPEWRITTEN</strong></p>
+    <p><strong>&nbsp;2</strong><strong>.</strong><strong> DELIVERY PERIOD WITHIN _________ CALENDAR DAYS</strong></p>
+    <p><strong>&nbsp;3</strong><strong>. WARRANTY SHALL</strong> <strong>B</strong><strong>E</strong> <strong>F</strong><strong>OR</strong> <strong>A</strong> <strong>P</strong><strong>ERIOD</strong> <strong>O</strong><strong>F</strong><strong> SIX (6) MONTHS FOR SUPPLIES &amp; MATERIALS, ONE(1) YEAR FOR EQUIPMENT, FROM DATE OF&nbsp; &nbsp; &nbsp;<strong>ACCEPTANCE BY THE PROCURING ENTITY.</strong></strong></p>
+    <p><strong>&nbsp;4. PRICE VALIDITY</strong> <strong>S</strong><strong>HALL BE FOR</strong><strong> A PERIOD OF _________ CALENDAR DAYS.</strong></p>
+    <p><strong>&nbsp;5. G-EPS</strong> <strong>R</strong><strong>EGISTRATION</strong><strong> CERTIFICATE SHALL BE ATTACHED UPON SUBMISSION OF THE QUOTATION</strong></p>
+    <p><strong>&nbsp;6</strong><strong>. BIDDERS</strong> <strong>SH</strong><strong>A</strong><strong>LL SUBMIT</strong><strong> ORIGINAL BROCHURES SHOWING CERTIFICATIONS OF THE PRODUCT BEING OFFERED</strong></p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    
+    <div style="height:35px;"></div>
+    <table style="width:100%;border-collapse:collapse;" border="1">
+    <thead>
+        <tr>
+            <th style="text-align:center;font-size:11px;"> Item/s No.</th>
+            <th style="text-align:center;font-size:11px;"> Item/s Description.</th>
+            <th style="text-align:center;font-size:11px;"> Qty.</th>
+            <th style="text-align:center;font-size:11px;"> Unit Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td width="10%" style="height:375px;"></td>
+            <td width="60%" style="height:375px;"></td>
+            <td width="15%" style="height:375px;"></td>
+            <td width="15%" style="height:375px;"></td>
+        </td>
+    </tbody>
+    </table>
+    
+    <div style="height:10px"></div>
+    
+    <table style="width: 100%;">
+    <tbody>
+    <tr style="height: 12px;">
+    <td style="width: 45.0699%; height: 12px;font-size:9px;">Brand and Model&nbsp;:  __________________________________________</td>
+    <td style="width: 53.5839%; height: 12px;font-size:9px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="width: 45.0699%; height: 12px;font-size:9px;">Delivery Period &nbsp;&nbsp;&nbsp;: __________________________________________</td>
+    <td style="width: 53.5839%; height: 12px;font-size:9px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="width: 45.0699%; height: 12px;font-size:9px;">Warranty &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: __________________________________________ </td>                                                                                                                                                           </td>
+    <td style="width: 53.5839%; height: 12px;font-size:9px;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12px;">
+    <td style="width: 45.0699%; height: 12px;font-size:9px;">Price Validity&nbsp; &nbsp; &nbsp; &nbsp;: __________________________________________</td>
+    <td style="width: 53.5839%; height: 12px;font-size:9px; text-align: right;">&nbsp;</td>
+    </tr>
+    <tr style="height: 12.7273px;">
+    <td style="width: 45.0699%; height: 12.7273px;font-size:9px;">&nbsp;</td>
+    <td style="width: 53.5839%; height: 12.7273px;font-size:9px; text-align: right;">___________________________________________________</td>
+    </tr>
+    <tr style="height: 12.7273px;">
+    <td style="width: 45.0699%; height: 12.7273px;font-size:9px;">&nbsp;</td>
+    <td style="width: 53.5839%; height: 12.7273px;font-size:9px; text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Supplier</td>
+    </tr>
+    </tbody>
+    </table>
+    
+    
+        ';
+    
+    
+        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $model->purchase_request_number . '</div><div style="text-align: left;font-size:11px;font-weight: lighter"><span style="font-size:11px;">'.date("F j, Y").'</span></div>';
+        $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
+        $oddEvenConfiguration =
+            [
+                'L' => [ // L for Left part of the header
+                    'content' => $LeftFooterContent,
+                ],
+                'C' => [ // C for Center part of the header
+                    'content' => '',
+                ],
+                'R' => [
+                    'content' => $RightFooterContent,
+                ],
+                'line' => 0, // That's the relevant parameter
+            ];
+        $headerFooterConfiguration = [
+            'odd' => $oddEvenConfiguration,
+            'even' => $oddEvenConfiguration
+        ];
+        $pdf->options = [
+            'title' => 'Report Title',
+            'defaultheaderline' => 0,
+            'defaultfooterline' => 0,
+            'subject' => 'Report Subject'];
+    
+        $pdf->methods = [
+            'SetHeader' => [$headers],
+            'SetFooter' => [$headerFooterConfiguration],
+        ];
+    
+        return $pdf->render();
+    
+}
+    function getprDetails2($id)
+    {
+        $con = Yii::$app->procurementdb;
+        $sql = "SELECT * FROM `fais-procurement`.`tbl_purchase_request_details`
+            INNER JOIN `fais`.`tbl_unit_type` 
+            ON `tbl_purchase_request_details`.`unit_id` = `tbl_unit_type`.`unit_type_id`
+            WHERE `purchase_request_id`=" . $id;
+        $porequest = $con->createCommand($sql)->queryAll();
+        return $porequest;
     }
 }
