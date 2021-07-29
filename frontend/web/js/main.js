@@ -109,8 +109,8 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('click','.myTagging' , function() {
-        $(".loadpartial2").fadeIn(300);
-        $(".loadpartial2").show();
+        $(".loadpartial").fadeIn(300);
+        $(".loadpartial").show();
         var x = $(this).data('id');
         jQuery.ajax( {
             type: "POST",
@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
             success: function ( response ) {
                 //console.log(response);
                 $("#mycontenttag").html(response);
-                $(".loadpartial2").hide();
+                $(".loadpartial").hide();
             },
             error: function ( xhr, ajaxOptions, thrownError ) {
                 alert( thrownError );
