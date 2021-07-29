@@ -76,7 +76,7 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
             <span class="label label-warning">Created</span>
         </div>
         <div ng-if="data.status == 1">
-            <span class="label label-success" uib-popover="{{data.request_status == 2 ? 'Awarded' : 'Ongoing'}}" popover-trigger="'mouseenter'" popover-title="Request Status:">Approved</span>
+            <span class="label label-success" uib-popover="{{data.request_status == 2 ? 'Awarded' : 'Ongoing'}}" popover-trigger="'mouseenter'" popover-title="Bid Status:">Approved</span>
         </div>
         <div ng-if="data.status == 2">
             <span class="label label-danger">Disapproved</span>
@@ -92,7 +92,7 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <?= $func->GridButton('purchase_request_id', "", "btnView", "primary", "", "grdbutton", "fa fa-eye", "myView", "myView") ?>
     <?= $func->GridButton('purchase_request_id', "", "btnEdit", "default ", "", "grdbutton", "fa fa-edit", "Update", "myEdit") ?>
     <h5 style='display: inline-block;margin:0px;' data-step='5' data-intro='Click here to Report'><a href="reportprfull?id={{data.purchase_request_id}}" class="btn-pdfprint btn btn-warning grdbutton"> <i class="fa fa-print"></i></a></h5>
-    <h5 ng-if="data.status == 0 || data.status == 3" style="display: inline-block;margin:0px;" data-step="2" data-intro="Click here to Tag"><a type="button" title="status tagging" data-target="#myTagging" data-toggle="modal" data-id="{{data.purchase_request_id}}" class="myTagging btn btn-success  grdbutton"> <i class="fa fa-tag"></i></a></h5>
+    <h5 ng-if="data.status == 0 || data.status == 3" style="display: inline-block;margin:0px;" data-step="2" data-intro="Click here to Tag"><a type="button" title="" data-target="#myTagging" data-toggle="modal" data-id="{{data.purchase_request_id}}" class="myTagging btn btn-success  grdbutton"> <i class="fa fa-tag"></i></a></h5>
     <?= $func->GridGroupEnd(); ?>
     <!-- *********************************** Close Group for Buttons ************************************************ -->
     <?=
@@ -146,7 +146,7 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <!-- *********************************** Generate Header Modal for tagging********************************************** -->
     <?= $func->GenerateHeaderModal("myTagging", "Request Module", '70', 10) ?>
     <div class="request-tag">
-    <div class="loadpartial2">
+    <div class="loadpartial">
             <img src="<?= $BaseURL; ?>/images/loading.gif">
         </div>
         <div id="mycontenttag">
