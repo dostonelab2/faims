@@ -232,6 +232,9 @@ class Functions extends Component
             case "Delete":
                 $grdbtn = '<h5 style=\'display: inline-block;margin:0px;\' data-step=\'4\' data-intro=\'Click here to Delete\'><a data-method="post" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" href="'.$BaseURL.$ModuleURL.'delete?id={{data.'.$datavalue.'}}" data-id="{{data.'.$datavalue.'}}" data-ok="Yes" data-cancel="No" data-title="Delete" id="'.$buttonid.'" class="btn btn-'.$buttontype.' '.$buttonblock.' '.$css.'">'.$buttontitle.' <i class="'.$fa.'"></i></a></h5>';
                 break;
+            case "myTagging":
+                $grdbtn = '<h5 ng-if="data.status == 0 || data.status == 3" style=\'display: inline-block;margin:0px;\' data-step=\'3\' data-intro=\'Click here to Tag\'><a type="button" title="'.$tooltips.'" data-target="#'.$btncase.'" data-toggle="modal" data-id="{{data.'.$datavalue.'}}" class="'.$ModuleURL.' btn btn-'.$buttontype.' '.$buttonblock.' '.$css.'">'.$buttontitle.' <i class="'.$fa.'"></i></a></h5>';
+                break;
             default:
                 $grdbtn = '<h5 style=\'display: inline-block;margin:0px;\' data-step=\'2\' data-intro=\'Click here to View\'><a type="button" title="'.$tooltips.'" data-target="#'.$btncase.'" data-toggle="modal" data-id="{{data.'.$datavalue.'}}"  class="'.$ModuleURL.' btn btn-'.$buttontype.' '.$buttonblock.' '.$css.'">'.$buttontitle.' <i class="'.$fa.'"></i></a></h5>';
                 break;
