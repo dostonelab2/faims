@@ -13,6 +13,7 @@ use common\modules\pdfprint;
 
 use common\components\Functions;
 use yii2mod\alert\Alert;
+use yii\bootstrap\Modal;
 
 
 
@@ -92,7 +93,8 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <?= $func->GridButton('purchase_request_id', "", "btnView", "primary", "", "grdbutton", "fa fa-eye", "myView", "myView") ?>
     <?= $func->GridButton('purchase_request_id', "", "btnEdit", "default ", "", "grdbutton", "fa fa-edit", "Update", "myEdit") ?>
     <h5 style='display: inline-block;margin:0px;' data-step='5' data-intro='Click here to Report'><a href="reportprfull?id={{data.purchase_request_id}}" class="btn-pdfprint btn btn-warning grdbutton"> <i class="fa fa-print"></i></a></h5>
-    <h5 ng-if="data.status == 0 || data.status == 3" style="display: inline-block;margin:0px;" data-step="2" data-intro="Click here to Tag"><a type="button" title="" data-target="#myTagging" data-toggle="modal" data-id="{{data.purchase_request_id}}" class="myTagging btn btn-success  grdbutton"> <i class="fa fa-tag"></i></a></h5>
+    <!--<h5 ng-if="data.status == 0 || data.status == 3" style="display: inline-block;margin:0px;" data-step="2" data-intro="Click here to Tag"><a type="button" title="" data-target="#myTagging" data-toggle="modal" data-id="{{data.purchase_request_id}}" class="myTagging btn btn-success  grdbutton"> <i class="fa fa-tag"></i></a></h5>-->
+    <h5 ng-if="data.status == 0 || data.status == 3" style="display: inline-block;margin:0px;" data-step="2" data-intro="Click here to Tag"><a type="button" title="" data-id="{{data.purchase_request_id}}" value="/procurement/purchaserequest/tag?id={{ data.purchase_request_id }}&view=tag" class="myTagging btn btn-success  grdbutton"> <i class="fa fa-tag"></i></a></h5>
     <?= $func->GridGroupEnd(); ?>
     <!-- *********************************** Close Group for Buttons ************************************************ -->
     <?=
@@ -157,7 +159,23 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     $func->GenerateFooterModal("Close", "Proceed", 0);
     ?>
     <!-- *********************************** Generate Footer Modal ************************************************ -->
-
+    
+    <!-- *********************************** Modal for tagging ************************************************ -->
+    <?php
+        Modal::begin([
+            'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+            'id' => 'modalTag',
+            'size' => 'modal-lg',
+            'options'=> [
+                    'tabindex'=>false,
+                ],
+        ]);
+        
+        echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+        Modal::end();
+    ?>
+    <!-- *********************************** Modal for tagging end ***************************************** -->
+   
     <!-- *********************************** Close for View ************************************************ -->
     <?php
     // This section will allow to popup a notification
