@@ -107,7 +107,7 @@ jQuery(document).ready(function ($) {
             }
         } );
     });
-/*
+
     $('body').on('click','.myTagging' , function() {
         $(".loadpartial").fadeIn(300);
         $(".loadpartial").show();
@@ -126,18 +126,7 @@ jQuery(document).ready(function ($) {
             }
         } );
     });
-    */
-
-    $("body").on("click",".myTagging",function () {
-        $('#modalTag').modal('show')
-            .find('#modalContent')
-            .load($(this).attr('value'));
-        $('#modalHeader').html('Request Module');
-        setTimeout(function () {
-            $("#btnrefresh").click();
-        },1500);
-    });
-
+    
     $('body').on('click','.btn-approve' , function() {
        var r = confirm("Are you sure you want to approve this request?");
        if(r == true){
