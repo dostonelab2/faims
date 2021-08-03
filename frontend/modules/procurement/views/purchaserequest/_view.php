@@ -82,7 +82,7 @@ use common\modules\pdfprint;
 
         </div>
         <div class="col-lg-2">
-            <a href="reportpr?id=<?=$model->purchase_request_id?>" class="btn-pdfprint btn btn-lg btn-primary btn-block">Print</a>
+            <a href="reportquotation?id=<?=$model->purchase_request_id?>" class="btn-pdfprint btn btn-lg btn-primary btn-block">Print</a>
         </div>
 </div>
 
