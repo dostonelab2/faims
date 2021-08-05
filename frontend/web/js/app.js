@@ -8,7 +8,7 @@ app.filter('startFrom', function() {
         return [];
     }
 });
-app.controller(MainController, function ($scope, $http, $timeout) {
+app.controller(MainController, ['$scope', '$http', '$timeout' ,function ($scope, $http, $timeout) {
     $http({
         origin: "*",
         method: 'GET',
@@ -35,5 +35,5 @@ app.controller(MainController, function ($scope, $http, $timeout) {
         $scope.predicate = predicate;
         $scope.reverse = !$scope.reverse;
     };
-});
+}]);
 //
