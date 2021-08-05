@@ -753,13 +753,25 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
 
                                         [
                                             'attribute'=>'purchase_order_number',
-                                            'label'=>'Purchase Order Nymber',
+                                            'format' => 'raw',
+                                            'label'=>'Purchase Order Number',
                                             'headerOptions' => ['class' => 'kartik-sheet-style'],
                                             'group'=>true,  // enable grouping,
                                             'groupedRow'=>true,                    // move grouped column to a single grouped row
                                             'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
                                             'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
-
+                                            'value' => function($model){
+                                               return $model["purchase_order_number"] .' '. Html::button(
+                                                'Cancel PO',
+                                                [
+                                                    'title' => 'Export',
+                                                    'value' => Url::to(['cancelpo']),
+                                                    'class' => 'btn btn-danger btnexport',
+                                                    'style' => 'width: 110px; margin-right: 6px;',
+                                                    'id' => 'btnExport'
+                                                ]
+                                            );
+                                            }
                                         ],
 
                                        [
