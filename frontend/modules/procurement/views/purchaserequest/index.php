@@ -33,7 +33,7 @@ $this->registerJsFile($BaseURL . 'js/angular.min.js');
 //$this->registerJsFile($BaseURL . 'js/ui-bootstrap-tpls-0.10.0.min.js');
 $this->registerJsFile($BaseURL . 'js/ui-bootstrap-custom-tpls-2.5.0.min.js');
 $this->registerJsFile($BaseURL . 'js/jquery.tabletojson.js');
-$this->registerJsFile($BaseURL . 'js/app.js');
+$this->registerJsFile($BaseURL . 'js/app.min.js');
 $this->registerJsFile($BaseURL . 'js/custom.js');
 
 //echo Yii::$app->user->identity->id;
@@ -75,13 +75,13 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
             <span class="label label-warning">Created</span>
         </div>
         <div ng-if="data.status == 1">
-            <span class="label label-success" uib-popover="{{data.request_status == 2 ? 'Awarded' : 'Ongoing'}}" popover-trigger="'mouseenter'" popover-title="Bid Status:">Approved</span>
+            <span class="label label-pr label-success" uib-popover="{{data.request_status == 2 ? 'Awarded' : 'Ongoing'}}" popover-trigger="'mouseenter'" popover-title="Bid Status:">Approved</span>
         </div>
         <div ng-if="data.status == 2">
-            <span class="label label-danger">Disapproved</span>
+            <span class="label label-pr label-danger">Disapproved</span>
         </div>
         <div ng-if="data.status == 3">
-            <span class="label label-info">Reviewed</span>
+            <span class="label label-pr label-info">Reviewed</span>
         </div>
     </td>
 
