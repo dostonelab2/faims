@@ -6,7 +6,7 @@ use Yii;
 use common\models\procurementplan\Ppmpitem;
 use common\models\procurementplan\Ppmp;
 use common\models\procurementplan\SupplementalSearch;
-use common\models\procurementplan\itemSearch;
+use common\models\procurementplan\ItemSearch;
 use common\models\procurementplan\RemainingSupplementalItem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
