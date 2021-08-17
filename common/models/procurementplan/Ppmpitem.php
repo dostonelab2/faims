@@ -6,7 +6,7 @@ use common\models\procurementplan\Itemcategory;
 //use common\models\procurementplan\Ppmpitem;
 use common\models\procurementplan\Unitofmeasure;
 use common\models\procurementplan\Ppmp;
-use common\models\procurement\Unittype;
+use common\models\procurement\UnitType;
 use Yii;
 
 /**
@@ -127,7 +127,7 @@ class Ppmpitem extends \yii\db\ActiveRecord
     }
     public function getUnittype()
     {
-        return $this->hasOne(Unittype::className(), ['unit_type_id' => 'unit']);
+        return $this->hasOne(UnitType::className(), ['unit_type_id' => 'unit']);
     }
     /**
      * @return \yii\db\ActiveQuery

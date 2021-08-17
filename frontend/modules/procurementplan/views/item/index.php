@@ -6,7 +6,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use common\models\procurementplan\Unitofmeasure;
-use common\models\procurement\Unittype;
+use common\models\procurement\UnitType;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\procurementplan\ItemSearch */
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'unit_of_measure_id',
-                'filter' => arrayHelper::map(Unittype::find()->asArray()->all(), 'unit_type_id', 'name_short'),
+                'filter' => arrayHelper::map(UnitType::find()->asArray()->all(), 'unit_type_id', 'name_short'),
                    
                 
                 //'filterOptions' => ['id' => 'uom_filter'],

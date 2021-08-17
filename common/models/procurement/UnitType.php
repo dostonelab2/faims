@@ -11,7 +11,7 @@ use Yii;
  * @property string $name_short
  * @property string $name_long
  */
-class Unittype extends \yii\db\ActiveRecord
+class UnitType extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
