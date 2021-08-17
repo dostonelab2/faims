@@ -126,7 +126,7 @@ use yii\widgets\Pjax;
                 'attribute' => 'unit_of_measure_id',
                 'header' => 'UoM',
                 'value'=>function ($model, $key, $index, $widget){ 
-                            return $model->getUnit();
+                            return $model->getUnittype();
                         },
             ],
             //'price_catalogue',
