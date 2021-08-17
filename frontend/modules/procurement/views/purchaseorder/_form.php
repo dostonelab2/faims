@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use kartik\widgets\SwitchInput;
-use common\models\procurement\UnitType;
+use common\models\procurement\Unittype;
 use yii\helpers\ArrayHelper;
 
 use dosamigos\ckeditor\CKEditor;
@@ -14,7 +14,7 @@ use dosamigos\ckeditor\CKEditor;
 /* @var $form yii\widgets\ActiveForm */
 
 $BaseURL = $GLOBALS['frontend_base_uri'];
-$units = UnitType::find()->all();
+$units = Unittype::find()->all();
 $listUnits = ArrayHelper::map($units,'unit_type_id','name_short');
 
 $this->registerJsFile('https://code.jquery.com/ui/1.12.1/jquery-ui.js');

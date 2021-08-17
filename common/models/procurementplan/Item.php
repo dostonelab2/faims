@@ -2,7 +2,7 @@
 
 namespace common\models\procurementplan;
 use common\models\procurementplan\Unitofmeasure;
-use common\models\procurement\UnitType;
+use common\models\procurement\Unittype;
 use Yii;
 
 /**
