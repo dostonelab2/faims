@@ -3,7 +3,7 @@
 namespace frontend\modules\procurement\controllers;
 
 use Yii;
-use common\models\procurement\Unittype;
+use common\models\procurement\UnitType;
 use common\models\procurement\UnittypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,7 +63,7 @@ class UnittypeController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Unittype();
+        $model = new UnitType();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->unit_type_id]);
