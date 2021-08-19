@@ -86,7 +86,7 @@ use common\models\procurementplan\Unitofmeasure;
             [
                 'attribute' => 'unit_of_measure_id',
                 'value'=>function ($model, $key, $index, $widget){ 
-                            return $model->getUnittype();
+                            return $model->getUnit();
                         },
             ],
             //'price_catalogue',
