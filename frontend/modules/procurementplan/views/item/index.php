@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 //'filterOptions' => ['id' => 'uom_filter'],
                 'value' => function ($model, $key, $index, $widget) {
-                    return $model->getUnittype();
+                    return $model->getUnit();
                 },
             ],
             [
