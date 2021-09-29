@@ -1,3 +1,10 @@
+<script type="text/javascript">
+    $(function() {
+        $(".knob").knob();
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+
 <?php
 use kartik\helpers\Html;
 use yii\helpers\Url;
@@ -132,7 +139,7 @@ Modal::end();
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Division'],
                             ],
-                            [
+                            /*[
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
@@ -147,6 +154,26 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Status'],
+                            ],*/
+                            [
+                                'attribute'=>'status_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    $status = ($model->status ? $model->status->name : "");
+                                    
+                                    return '
+                                        <div class="col-xs-4 text-center"">
+                                            <div style="display:inline;width:60px;height:60px;">
+                                                <canvas width="70" height="70" style="width: 60px; height: 60px;"></canvas>
+                                                
+                                                <input type="text" class="knob" data-readonly="true" value="'.$model->status_id.'" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 10px; margin-left: -30px; border: 0px; background: none; font: bold 12px Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; appearance: none;"></div>
+                                        </div>';
+                                    return $percent;
+                                },
+
                             ],
                             [
                                 'attribute'=>'created_by',

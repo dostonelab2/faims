@@ -443,6 +443,7 @@ class Report {
         //$content .= $this->getSignatory($model->osdv->osdv_id, $model->division_id, 'Osdv', 'OS','A', $statusValidate)['details'];
         
         //work for TF
+        //$content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         
         //Box C
@@ -966,22 +967,22 @@ $content .= '
         
         // get Signatory for division
         $signatory = Reportsignatory::find()->where('division_id =:division_id AND scope =:form AND box =:box',[':division_id'=>$division_id, ':form'=>$form, ':box'=>$box])->one();
-        
+        //var_dump($signatory);
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
-        //$details2 = $this->getBlockchain(1305, 'Osdv', 70);
+        //$details = $this->getBlockchain($index_id, 'Request', 40);
         //var_dump($details);
         $box = strtolower($box);
         $form = strtolower($form);
-            
+        
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
             'position' => $signatory->activeUser->profile->designation,
             //'test' => $index_id.' : '.$scope.' : '.$status,
-            'date' => date("d-M-Y",$details->timestamp),
+            //'date' => date("d-M-Y"),
             //'details' => $index_id.' : '.$scope.' : '.$status.' | ',
             //'details' => $details2->timestamp,
-            //'date' => date("d-M-Y", $details->timestamp),
+            'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>$form."-box-".$box."-sig"]).'<div class="'.$form.'-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,64).'</div></div>'
         ];
         

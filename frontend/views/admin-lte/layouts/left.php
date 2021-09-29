@@ -152,6 +152,7 @@ $ppmp_approved = Ppmp::find()
                         'visible'=> Yii::$app->user->can('access-finance'),
                         //'visible'=> false,
                         'items' => [
+                            
                             [
                                 'label' => 'Dashboard' , 
                                 'icon' => 'dashboard text-aqua', 
@@ -297,6 +298,7 @@ $ppmp_approved = Ppmp::find()
                         'url' => '/#',
                         'visible'=> Yii::$app->user->can('access-system-tools'),
                         'items' => [
+                            ['label' => 'Logs', 'icon' => 'list-alt text-orange', 'url' => ['/logs/blockchain/index'],'visible'=> Yii::$app->user->can('access-gii')],
                             ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],'visible'=> Yii::$app->user->can('access-gii')],
                             ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],'visible'=> Yii::$app->user->can('access-debug')],
                             ['label' => 'Package List', 'icon' => 'cog', 'url' => ['/package'],'visible'=> Yii::$app->user->can('access-package-list')],

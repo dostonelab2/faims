@@ -212,6 +212,8 @@ class RequestController extends Controller
         
         $request_status = $this->checkStatus($model->status_id);
         
+        $blocks = Blockchain::find()->where(['index_id' => $id, 'scope' => 'Request'])->all();
+        
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAttachments(),
             'pagination' => false,
@@ -234,6 +236,7 @@ class RequestController extends Controller
             'request_status' => $request_status,
             'params' => $params,
             'user' => $CurrentUser,
+            'blocks' => $blocks,
         ]);
     }
     

@@ -33,6 +33,8 @@ class AppAsset extends AssetBundle
         'js/finance/fileinput.min.js',
         'js/finance/sortable.min.js',
         'js/intro.js',
+        //'js/dashboard/dashboard.js',
+        //'js/dashboard/jquery.knob.min.js',
         //'js/supplemental/ajax-modal-popup.js',
         
     ];
