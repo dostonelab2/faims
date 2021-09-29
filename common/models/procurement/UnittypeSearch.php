@@ -41,7 +41,7 @@ class UnittypeSearch extends UnitType
      */
     public function search($params)
     {
-        $query = Unittype::find();
+        $query = UnitType::find();
 
         // add conditions that should always apply here
 

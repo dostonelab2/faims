@@ -84,6 +84,26 @@ jQuery(document).ready(function ($) {
         } );
     });
 
+    $(document).on('click','#btncancelpo', function(){
+        var txt;
+        var r = confirm("Are you sure you want to cancel this PO?");
+        if (r == true) {
+            var pr_id = $("#btncancelpo").val();
+            pr_id = atob(atob(pr_id.toUpperCase()));
+            jQuery.ajax( {
+                type: "POST",
+                url: frontendURI + "procurement/bids/cancelpo",
+                data:{pr_id:pr_id},
+                success: function ( response ) {
+                    console.log(pr_id);
+                },
+                error: function ( xhr, ajaxOptions, thrownError ) {
+                    alert( thrownError );
+                }
+            } );
+        } 
+    });
+
     $('body').on('click','#changespopup' , function() {
         $('div#homeids-container').each(function () {
             if ($("#homeids-container .mypopup").hasClass('selected')) {

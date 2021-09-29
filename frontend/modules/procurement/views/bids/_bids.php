@@ -32,6 +32,8 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
 
 
 //$this->registerJsFile($BaseURL.'js/custom.js');
+//echo base64_encode('854');
+//echo base64_decode(base64_decode(strtoupper('tve9pq==')));
 ?>
 
 <div class="bids-form">
@@ -753,13 +755,31 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
 
                                         [
                                             'attribute'=>'purchase_order_number',
-                                            'label'=>'Purchase Order Nymber',
+                                            'format' => 'raw',
+                                            'label'=>'Purchase Order Number',
                                             'headerOptions' => ['class' => 'kartik-sheet-style'],
                                             'group'=>true,  // enable grouping,
                                             'groupedRow'=>true,                    // move grouped column to a single grouped row
                                             'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
                                             'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
-
+                                            'value' => function($model){
+                                                if ($model['purchase_order_status'] == 1){
+                                                    return $model["purchase_order_number"] .' '. Html::button(
+                                                        'Cancel PO',
+                                                        [
+                                                            'title' => 'Cancel PO',
+                                                            'value' => strtolower(base64_encode(base64_encode($model['purchase_request_id']))),
+                                                            'class' => 'btn btn-danger btncancelpo',
+                                                            'style' => 'width: 110px; margin-right: 6px;',
+                                                            'id' => 'btncancelpo'
+                                                        ]
+                                                    );
+                                                }
+                                                if ($model['purchase_order_status'] == 2){
+                                                    return $model["purchase_order_number"] .' '. '<span class="badge" style="background:#FF0000;">Canceled <i class="fa fa-remove"></i></span>';
+                                                }
+                                      
+                                            }
                                         ],
 
                                        [
@@ -918,6 +938,7 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                 next.tab('show');
             });
         };
+
     </script>
 
 

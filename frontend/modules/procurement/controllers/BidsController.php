@@ -270,6 +270,9 @@ class BidsController extends Controller
             }
         return $mstat;
     }
+    public function actionCancelpo(){
+        
+    }
 
     public function actionCheckselected()
     {
@@ -1081,6 +1084,7 @@ $headers=$headers.'</td>
         foreach ($pordetails as $pr) {
             $x++;
             $data[] = ['bids_id' => $pr["bids_id"],
+                'purchase_request_id' => $pr["purchase_request_id"],
                 'supplier_id' => $pr["supplier_id"],
                 'SupplierName' => $pr["SupplierName"],
                 'purchase_order_number' => $pr["purchase_order_number"],
@@ -1088,10 +1092,12 @@ $headers=$headers.'</td>
                 'bids_item_description' => $pr["bids_item_description"],
                 'bids_quantity' => $pr["bids_quantity"],
                 'bids_price' => $pr["bids_price"],
+                'purchase_order_status' => $pr["purchase_order_status"]
             ];
         }
         if ($x == 0) {
             $data[] = ['bids_id' => '',
+                'purchase_request_id' => '',
                 'supplier_id' => '',
                 'SupplierName' => '',
                 'purchase_order_number' => '',
@@ -1099,6 +1105,7 @@ $headers=$headers.'</td>
                 'bids_item_description' => '',
                 'bids_quantity' => '',
                 'bids_price' => '',
+                'purchase_order_status' => ''
             ];
         }
 

@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'unit_of_measure_id',
             [
                 'attribute' => 'unit_of_measure_id',
-                'value' => $model->getUnit()
+                'value' => $model->getUnittype()
             ],
             [
                 'attribute' => 'price_catalogue',
