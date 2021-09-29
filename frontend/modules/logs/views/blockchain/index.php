@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $link = '/finance/request/view';
                                         break;
                                       case 'Osdv':
-                                        $label = $model->osdv->dv->dv_number;
+                                        $label = $model->osdv->dv ? $model->osdv->dv->dv_number : '-';
                                         $link = '/finance/osdv/view';
                                         break;
 
