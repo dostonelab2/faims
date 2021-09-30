@@ -139,7 +139,7 @@ Modal::end();
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Division'],
                             ],
-                            /*[
+                            [
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
@@ -154,8 +154,8 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Status'],
-                            ],*/
-                            [
+                            ],
+                            /*[
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
@@ -174,7 +174,7 @@ Modal::end();
                                     return $percent;
                                 },
 
-                            ],
+                            ],*/
                             [
                                 'attribute'=>'created_by',
                                 'headerOptions' => ['style' => 'text-align: center;'],
