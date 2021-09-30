@@ -118,7 +118,7 @@ Modal::end();
                 'label'=>'Remarks',
                 'format'=>'raw',
                 'inputContainer' => ['class'=>'col-sm-6'],
-                'value' => $model->request->cancelled ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
+                'value' => ($model->request->cancelled || $model->cancelled) ? '<span class="label label-danger">CANCELLED</span>' : $model->remarks,
             ],
             /*[
                 'attribute'=>'request_id',
