@@ -20,7 +20,7 @@ use common\models\system\Profile;
 /* @var $searchModel common\models\finance\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Disbursement Report';
+$this->title = 'Report of Disbursement';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Modal Create Request
@@ -84,7 +84,7 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b><br/>'.$model->os->os_date : '';
+                                    return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b>' : '';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Os::find()->orderBy(['os_id' => SORT_DESC])->asArray()->all(), 'os_id', 'os_number'), 
@@ -101,7 +101,8 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b><br/>'.$model->dv->dv_date : '';
+                                    return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b>' : '';
+                                    //return $model->dv->dv_number;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Dv::find()->orderBy(['dv_id' => SORT_DESC])->asArray()->all(), 'dv_id', 'dv_number'), 
