@@ -35,7 +35,11 @@ $ppmp_submitted = Ppmp::find()
                     ->count();
 $ppmp_approved = Ppmp::find()
                     ->where(['year' => date('Y'), 'status_id' => 3])
-                    ->count();                    
+                    ->count();   
+
+//count Financial Request badges
+
+
 ?>
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -100,7 +104,7 @@ $ppmp_approved = Ppmp::find()
                             ['label' => 'LDDAP-ADA', 'icon' => 'money', 'url' => ['/cashier/lddapada/index']],
                             ['label' => 'Creditors', 'icon' => 'clipboard', 'url' => ['/cashier/creditor/index']],
                             [
-                                'label' => 'Disbursement Report', 
+                                'label' => 'Report of Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/report'], 
                                 'visible'=> Yii::$app->user->can('access-cashiering')
@@ -183,6 +187,15 @@ $ppmp_approved = Ppmp::find()
                                 'icon' => 'thumbs-up text-aqua', 
                                 'url' => ['/finance/osdv/approvalindex'], 
                                 'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
+                                
+                                'template' => '<a href="{url}">
+                                                    {icon}
+                                                    {label}
+                                                    <span class="pull-right-container">
+                                                        <span class="label label-info pull-right">100</span>
+                                                    </span>
+                                                </a>',
+                                
                                 'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
