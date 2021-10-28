@@ -125,6 +125,26 @@ Modal::end();
                                 },
                             ],
                             [
+                                'attribute'=>'created_by',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle; '],
+                                'width'=>'250px',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    //return Profile::find($model->created_by)->one()->fullname;
+                                    return $model->request->profile->fullname;
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Profile::find()->asArray()->all(), 'profile_id', 
+                                                                function($model) {
+                                                                    return $model['firstname'].' '.$model['lastname'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Created by'],
+                            ],
+                            [
                                 'class' => kartik\grid\ActionColumn::className(),
                                 'template' => '{view}',
                                 'buttons' => [
