@@ -174,7 +174,7 @@ $request_for_approval = Request::find()
                                 'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval') 
                             ],
                             [
-                                'label' => 'Disbursement Report', 
+                                'label' => 'Report of Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/report'], 
                                 'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
