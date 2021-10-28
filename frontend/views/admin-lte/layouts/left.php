@@ -1,4 +1,5 @@
 <?php
+use common\models\finance\Request;
 use common\models\system\User;
 use common\models\procurementplan\Ppmp;
 
@@ -38,7 +39,9 @@ $ppmp_approved = Ppmp::find()
                     ->count();   
 
 //count Financial Request badges
-
+$request_for_approval = Request::find()
+                    ->where(['status_id' => Request::STATUS_CHARGED])
+                    ->count();
 
 ?>
 <aside class="main-sidebar">
@@ -192,7 +195,7 @@ $ppmp_approved = Ppmp::find()
                                                     {icon}
                                                     {label}
                                                     <span class="pull-right-container">
-                                                        <span class="label label-info pull-right">100</span>
+                                                        <span class="label label-info pull-right">'.$request_for_approval.'</span>
                                                     </span>
                                                 </a>',
                                 
