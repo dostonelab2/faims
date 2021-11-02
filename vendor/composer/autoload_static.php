@@ -89,6 +89,7 @@ class ComposerStaticInitb2e31f2d92d734baadeb2c74aa89265e
             'yii\\debug\\' => 10,
             'yii\\composer\\' => 13,
             'yii\\bootstrap\\' => 14,
+            'yii\\bootstrap4\\' => 15,
             'yii\\authclient\\' => 15,
             'yii\\' => 4,
             'yii2tech\\spreadsheet\\' => 21,
@@ -282,6 +283,10 @@ class ComposerStaticInitb2e31f2d92d734baadeb2c74aa89265e
         'yii\\bootstrap\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-bootstrap',
+        ),
+        'yii\\bootstrap4\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-bootstrap4/src',
         ),
         'yii\\authclient\\' => 
         array (

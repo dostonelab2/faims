@@ -6,4 +6,6 @@ return [
     
     'signaturePath'=>"\web\uploads\user\signature",
     'signatureUrl'=>"/uploads/user/signature/",
+    //'bsVersion' => '4.x',
+    //'bsDependencyEnabled' => false,
 ];
