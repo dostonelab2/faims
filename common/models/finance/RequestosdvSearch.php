@@ -13,6 +13,8 @@ use common\models\finance\Requestpayroll;
  */
 class RequestosdvSearch extends Request
 {
+    public $start_date;
+    public $end_date;
     /**
      * @inheritdoc
      */ 
@@ -83,6 +85,8 @@ class RequestosdvSearch extends Request
         $query->andFilterWhere(['like', 'os.os_id', $this->os_id]);
         $query->andFilterWhere(['like', 'dv.dv_id', $this->dv_id]);
         //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
+        
+        $query->andFilterWhere(['between', 'date', $this->start_date, $this->end_date]);
 
         //$query->andWhere('request.osdv.os.os_number LIKE "%' . $this->os_id . '%" ');
         return $dataProvider;
