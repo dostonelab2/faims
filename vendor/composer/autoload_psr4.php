@@ -49,6 +49,7 @@ return array(
     'kartik\\editable\\' => array($vendorDir . '/kartik-v/yii2-editable'),
     'kartik\\dialog\\' => array($vendorDir . '/kartik-v/yii2-dialog'),
     'kartik\\detail\\' => array($vendorDir . '/kartik-v/yii2-detail-view'),
+    'kartik\\daterange\\' => array($vendorDir . '/kartik-v/yii2-date-range'),
     'kartik\\date\\' => array($vendorDir . '/kartik-v/yii2-widget-datepicker'),
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'jamband\\schemadump\\tests\\' => array($vendorDir . '/jamband/yii2-schemadump/tests'),

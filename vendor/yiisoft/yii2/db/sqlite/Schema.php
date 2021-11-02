@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\db\CheckConstraint;
 use yii\db\ColumnSchema;
 use yii\db\Constraint;
+use yii\db\ConstraintFinderInterface;
 use yii\db\ConstraintFinderTrait;
 use yii\db\Expression;
 use yii\db\ForeignKeyConstraint;
@@ -24,12 +25,13 @@ use yii\helpers\ArrayHelper;
  * Schema is the class for retrieving metadata from a SQLite (2/3) database.
  *
  * @property string $transactionIsolationLevel The transaction isolation level to use for this transaction.
- * This can be either [[Transaction::READ_UNCOMMITTED]] or [[Transaction::SERIALIZABLE]].
+ * This can be either [[Transaction::READ_UNCOMMITTED]] or [[Transaction::SERIALIZABLE]]. This property is
+ * write-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Schema extends \yii\db\Schema
+class Schema extends \yii\db\Schema implements ConstraintFinderInterface
 {
     use ConstraintFinderTrait;
 
@@ -37,7 +39,7 @@ class Schema extends \yii\db\Schema
      * @var array mapping from physical column types (keys) to abstract column types (values)
      */
     public $typeMap = [
-        'tinyint' => self::TYPE_SMALLINT,
+        'tinyint' => self::TYPE_TINYINT,
         'bit' => self::TYPE_SMALLINT,
         'boolean' => self::TYPE_BOOLEAN,
         'bool' => self::TYPE_BOOLEAN,
@@ -67,9 +69,18 @@ class Schema extends \yii\db\Schema
         'enum' => self::TYPE_STRING,
     ];
 
+    /**
+     * {@inheritdoc}
+     */
+    protected $tableQuoteCharacter = '`';
+    /**
+     * {@inheritdoc}
+     */
+    protected $columnQuoteCharacter = '`';
+
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function findTableNames($schema = '')
     {
@@ -78,7 +89,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTableSchema($name)
     {
@@ -95,7 +106,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTablePrimaryKey($tableName)
     {
@@ -103,7 +114,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTableForeignKeys($tableName)
     {
@@ -126,7 +137,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTableIndexes($tableName)
     {
@@ -134,7 +145,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTableUniques($tableName)
     {
@@ -142,7 +153,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadTableChecks($tableName)
     {
@@ -181,34 +192,12 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      * @throws NotSupportedException if this method is called.
      */
     protected function loadTableDefaultValues($tableName)
     {
         throw new NotSupportedException('SQLite does not support default value constraints.');
-    }
-
-    /**
-     * Quotes a table name for use in a query.
-     * A simple table name has no schema prefix.
-     * @param string $name table name
-     * @return string the properly quoted table name
-     */
-    public function quoteSimpleTableName($name)
-    {
-        return strpos($name, '`') !== false ? $name : "`$name`";
-    }
-
-    /**
-     * Quotes a column name for use in a query.
-     * A simple column name has no prefix.
-     * @param string $name column name
-     * @return string the properly quoted column name
-     */
-    public function quoteSimpleColumnName($name)
-    {
-        return strpos($name, '`') !== false || $name === '*' ? $name : "`$name`";
     }
 
     /**
@@ -222,7 +211,7 @@ class Schema extends \yii\db\Schema
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @return ColumnSchemaBuilder column schema builder instance
      */
     public function createColumnSchemaBuilder($type, $length = null)
@@ -391,6 +380,19 @@ class Schema extends \yii\db\Schema
     }
 
     /**
+     * Returns table columns info.
+     * @param string $tableName table name
+     * @return array
+     */
+    private function loadTableColumnsInfo($tableName)
+    {
+        $tableColumns = $this->db->createCommand('PRAGMA TABLE_INFO (' . $this->quoteValue($tableName) . ')')->queryAll();
+        $tableColumns = $this->normalizePdoRowKeyCase($tableColumns, true);
+
+        return ArrayHelper::index($tableColumns, 'cid');
+    }
+
+    /**
      * Loads multiple types of constraints and returns the specified ones.
      * @param string $tableName table name.
      * @param string $returnType return type:
@@ -409,9 +411,7 @@ class Schema extends \yii\db\Schema
              * SQLite may not have an "origin" column in INDEX_LIST
              * See https://www.sqlite.org/src/info/2743846cdba572f6
              */
-            $tableColumns = $this->db->createCommand('PRAGMA TABLE_INFO (' . $this->quoteValue($tableName) . ')')->queryAll();
-            $tableColumns = $this->normalizePdoRowKeyCase($tableColumns, true);
-            $tableColumns = ArrayHelper::index($tableColumns, 'cid');
+            $tableColumns = $this->loadTableColumnsInfo($tableName);
         }
         $result = [
             'primaryKey' => null,
@@ -448,6 +448,25 @@ class Schema extends \yii\db\Schema
                 ]);
             }
         }
+
+        if ($result['primaryKey'] === null) {
+            /*
+             * Additional check for PK in case of INTEGER PRIMARY KEY with ROWID
+             * See https://www.sqlite.org/lang_createtable.html#primkeyconst
+             */
+            if ($tableColumns === null) {
+                $tableColumns = $this->loadTableColumnsInfo($tableName);
+            }
+            foreach ($tableColumns as $tableColumn) {
+                if ($tableColumn['pk'] > 0) {
+                    $result['primaryKey'] = new Constraint([
+                        'columnNames' => [$tableColumn['name']],
+                    ]);
+                    break;
+                }
+            }
+        }
+
         foreach ($result as $type => $data) {
             $this->setTableMetadata($tableName, $type, $data);
         }
@@ -463,6 +482,6 @@ class Schema extends \yii\db\Schema
      */
     private function isSystemIdentifier($identifier)
     {
-        return strpos($identifier, 'sqlite_') === 0;
+        return strncmp($identifier, 'sqlite_', 7) === 0;
     }
 }

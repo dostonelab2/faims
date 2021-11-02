@@ -3,13 +3,14 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
- * @version   2.0.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
+ * @version   3.0.2
  */
 
 namespace kartik\base;
 
 use ReflectionClass;
+use ReflectionException;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -17,7 +18,6 @@ use yii\helpers\ArrayHelper;
  * TranslationTrait manages methods for all translations used in Krajee extensions
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
- * @since 2.0.1
  */
 trait TranslationTrait
 {
@@ -41,7 +41,7 @@ trait TranslationTrait
      * @param string $dir the directory path where translation files will exist
      * @param string $cat the message category
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function initI18N($dir = '', $cat = '')
     {

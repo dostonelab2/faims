@@ -522,7 +522,7 @@ return array (
   'sergmoro1/yii2-google-spreadsheet' => 
   array (
     'name' => 'sergmoro1/yii2-google-spreadsheet',
-    'version' => '9999999-dev',
+    'version' => 'dev-master',
     'alias' => 
     array (
       '@sergmoro1/googless' => $vendorDir . '/sergmoro1/yii2-google-spreadsheet',
@@ -707,6 +707,24 @@ return array (
     'alias' => 
     array (
       '@yii2assets/pdfjs' => $vendorDir . '/yii2assets/yii2-pdfjs',
+    ),
+  ),
+  'yii2tech/spreadsheet' => 
+  array (
+    'name' => 'yii2tech/spreadsheet',
+    'version' => '1.0.5.0',
+    'alias' => 
+    array (
+      '@yii2tech/spreadsheet' => $vendorDir . '/yii2tech/spreadsheet/src',
+    ),
+  ),
+  'kartik-v/yii2-date-range' => 
+  array (
+    'name' => 'kartik-v/yii2-date-range',
+    'version' => '1.5.0.0',
+    'alias' => 
+    array (
+      '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range',
     ),
   ),
 );

@@ -17,6 +17,7 @@ use yii\console\ExitCode;
 use yii\db\MigrationInterface;
 use yii\helpers\Console;
 use yii\helpers\FileHelper;
+use yii\helpers\Inflector;
 
 /**
  * BaseMigrateController is the base class for migrate controllers.
@@ -93,7 +94,7 @@ abstract class BaseMigrateController extends Controller
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function options($actionID)
     {
@@ -117,6 +118,8 @@ abstract class BaseMigrateController extends Controller
             if (empty($this->migrationNamespaces) && empty($this->migrationPath)) {
                 throw new InvalidConfigException('At least one of `migrationPath` or `migrationNamespaces` should be specified.');
             }
+
+            $this->migrationNamespaces = (array) $this->migrationNamespaces;
 
             foreach ($this->migrationNamespaces as $key => $value) {
                 $this->migrationNamespaces[$key] = trim($value, '\\');
@@ -445,7 +448,7 @@ abstract class BaseMigrateController extends Controller
     }
 
     /**
-     * Truncates the whole database and starts the migration from the beginning.
+     * Drops all tables and related constraints. Starts the migration from the beginning.
      *
      * ```
      * yii migrate/fresh
@@ -461,12 +464,13 @@ abstract class BaseMigrateController extends Controller
         }
 
         if ($this->confirm(
-            "Are you sure you want to reset the database and start the migration from the beginning?\nAll data will be lost irreversibly!")) {
+            "Are you sure you want to drop all tables and related constraints and start the migration from the beginning?\nAll data will be lost irreversibly!")) {
             $this->truncateDatabase();
-            $this->actionUp();
-        } else {
-            $this->stdout('Action was cancelled by user. Nothing has been performed.');
+            return $this->actionUp();
         }
+
+        $this->stdout('Action was cancelled by user. Nothing has been performed.');
+        return ExitCode::OK;
     }
 
     /**
@@ -643,7 +647,7 @@ abstract class BaseMigrateController extends Controller
                 'namespace' => $namespace,
             ]);
             FileHelper::createDirectory($migrationPath);
-            file_put_contents($file, $content);
+            file_put_contents($file, $content, LOCK_EX);
             $this->stdout("New migration created successfully.\n", Console::FG_GREEN);
         }
     }
@@ -661,17 +665,15 @@ abstract class BaseMigrateController extends Controller
         if (strpos($name, '\\') !== false) {
             $namespace = substr($name, 0, strrpos($name, '\\'));
             $name = substr($name, strrpos($name, '\\') + 1);
-        } else {
-            if ($this->migrationPath === null) {
-                $migrationNamespaces = $this->migrationNamespaces;
-                $namespace = array_shift($migrationNamespaces);
-            }
+        } elseif ($this->migrationPath === null) {
+            $migrationNamespaces = $this->migrationNamespaces;
+            $namespace = array_shift($migrationNamespaces);
         }
 
         if ($namespace === null) {
             $class = 'm' . gmdate('ymd_His') . '_' . $name;
         } else {
-            $class = 'M' . gmdate('ymdHis') . ucfirst($name);
+            $class = 'M' . gmdate('ymdHis') . Inflector::camelize($name);
         }
 
         return [$namespace, $class];

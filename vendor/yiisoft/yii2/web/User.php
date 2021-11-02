@@ -11,6 +11,7 @@ use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidValueException;
+use yii\di\Instance;
 use yii\rbac\CheckAccessInterface;
 
 /**
@@ -105,7 +106,8 @@ class User extends Component
      */
     public $authTimeout;
     /**
-     * @var CheckAccessInterface The access checker to use for checking access.
+     * @var CheckAccessInterface|string|array The access checker object to use for checking access or the application
+     * component ID of the access checker.
      * If not set the application auth manager will be used.
      * @since 2.0.9
      */
@@ -165,6 +167,9 @@ class User extends Component
         if ($this->enableAutoLogin && !isset($this->identityCookie['name'])) {
             throw new InvalidConfigException('User::identityCookie must contain the "name" element.');
         }
+        if ($this->accessChecker !== null) {
+            $this->accessChecker = Instance::ensure($this->accessChecker, '\yii\rbac\CheckAccessInterface');
+        }
     }
 
     private $_identity = false;
@@ -184,8 +189,16 @@ class User extends Component
     {
         if ($this->_identity === false) {
             if ($this->enableSession && $autoRenew) {
-                $this->_identity = null;
-                $this->renewAuthStatus();
+                try {
+                    $this->_identity = null;
+                    $this->renewAuthStatus();
+                } catch (\Exception $e) {
+                    $this->_identity = false;
+                    throw $e;
+                } catch (\Throwable $e) {
+                    $this->_identity = false;
+                    throw $e;
+                }
             } else {
                 return null;
             }
@@ -208,12 +221,12 @@ class User extends Component
     {
         if ($identity instanceof IdentityInterface) {
             $this->_identity = $identity;
-            $this->_access = [];
         } elseif ($identity === null) {
             $this->_identity = null;
         } else {
             throw new InvalidValueException('The identity object must implement IdentityInterface.');
         }
+        $this->_access = [];
     }
 
     /**
@@ -246,11 +259,27 @@ class User extends Component
             } else {
                 $log = "User '$id' logged in from $ip. Session not enabled.";
             }
+
+            $this->regenerateCsrfToken();
+
             Yii::info($log, __METHOD__);
             $this->afterLogin($identity, false, $duration);
         }
 
         return !$this->getIsGuest();
+    }
+
+    /**
+     * Regenerates CSRF token
+     *
+     * @since 2.0.14.2
+     */
+    protected function regenerateCsrfToken()
+    {
+        $request = Yii::$app->getRequest();
+        if ($request->enableCsrfCookie || $this->enableSession) {
+            $request->getCsrfToken(true);
+        }
     }
 
     /**
@@ -416,7 +445,7 @@ class User extends Component
             && (!$checkAjax || !$request->getIsAjax())
             && $canRedirect
         ) {
-            $this->setReturnUrl($request->getUrl());
+            $this->setReturnUrl($request->getAbsoluteUrl());
         }
         if ($this->loginUrl !== null && $canRedirect) {
             $loginUrl = (array) $this->loginUrl;

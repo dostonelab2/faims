@@ -49,7 +49,8 @@
         "phpoffice/phpspreadsheet": "^1.10",
         "linslin/yii2-curl": "*",
         "yii2assets/yii2-pdfjs": "^1.0",
-        "yii2tech/spreadsheet": "^1.0"
+        "yii2tech/spreadsheet": "^1.0",
+        "kartik-v/yii2-date-range": "1.5.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
