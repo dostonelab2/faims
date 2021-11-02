@@ -1,4 +1,5 @@
 <?php
+use common\models\finance\Request;
 use common\models\system\User;
 use common\models\procurementplan\Ppmp;
 
@@ -35,7 +36,13 @@ $ppmp_submitted = Ppmp::find()
                     ->count();
 $ppmp_approved = Ppmp::find()
                     ->where(['year' => date('Y'), 'status_id' => 3])
-                    ->count();                    
+                    ->count();   
+
+//count Financial Request badges
+$request_for_approval = Request::find()
+                    ->where(['status_id' => Request::STATUS_CHARGED])
+                    ->count();
+
 ?>
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -100,7 +107,7 @@ $ppmp_approved = Ppmp::find()
                             ['label' => 'LDDAP-ADA', 'icon' => 'money', 'url' => ['/cashier/lddapada/index']],
                             ['label' => 'Creditors', 'icon' => 'clipboard', 'url' => ['/cashier/creditor/index']],
                             [
-                                'label' => 'Disbursement Report', 
+                                'label' => 'Report of Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/report'], 
                                 'visible'=> Yii::$app->user->can('access-cashiering')
@@ -152,6 +159,7 @@ $ppmp_approved = Ppmp::find()
                         'visible'=> Yii::$app->user->can('access-finance'),
                         //'visible'=> false,
                         'items' => [
+                            
                             [
                                 'label' => 'Dashboard' , 
                                 'icon' => 'dashboard text-aqua', 
@@ -166,7 +174,7 @@ $ppmp_approved = Ppmp::find()
                                 'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval') 
                             ],
                             [
-                                'label' => 'Disbursement Report', 
+                                'label' => 'Report of Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/report'], 
                                 'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
@@ -182,6 +190,15 @@ $ppmp_approved = Ppmp::find()
                                 'icon' => 'thumbs-up text-aqua', 
                                 'url' => ['/finance/osdv/approvalindex'], 
                                 'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
+                                
+                                'template' => '<a href="{url}">
+                                                    {icon}
+                                                    {label}
+                                                    <span class="pull-right-container">
+                                                        <span class="label label-info pull-right">'.$request_for_approval.'</span>
+                                                    </span>
+                                                </a>',
+                                
                                 'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
@@ -297,6 +314,7 @@ $ppmp_approved = Ppmp::find()
                         'url' => '/#',
                         'visible'=> Yii::$app->user->can('access-system-tools'),
                         'items' => [
+                            ['label' => 'Logs', 'icon' => 'list-alt text-orange', 'url' => ['/logs/blockchain/index'],'visible'=> Yii::$app->user->can('access-gii')],
                             ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],'visible'=> Yii::$app->user->can('access-gii')],
                             ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],'visible'=> Yii::$app->user->can('access-debug')],
                             ['label' => 'Package List', 'icon' => 'cog', 'url' => ['/package'],'visible'=> Yii::$app->user->can('access-package-list')],

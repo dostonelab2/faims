@@ -4,7 +4,11 @@ namespace common\models\sec;
 
 use Yii;
 
+use common\models\finance\Osdv;
 use common\models\finance\Request;
+use common\models\finance\Requesttype;
+use common\models\system\Profile;
+
 /**
  * This is the model class for table "tbl_blockchain".
  *
@@ -65,6 +69,21 @@ class Blockchain extends \yii\db\ActiveRecord
             'hash' => 'Hash',
             'nonce' => 'Nonce',
         ];
+    }
+    
+    public function getProfile()  
+    {  
+      return $this->hasOne(Profile::className(), ['user_id' => 'user_id']);  
+    }
+    
+    public function getRequest()  
+    {  
+      return $this->hasOne(Request::className(), ['request_id' => 'index_id']);  
+    }
+    
+    public function getOsdv()  
+    {  
+      return $this->hasOne(Osdv::className(), ['osdv_id' => 'index_id']);  
     }
     
     /**

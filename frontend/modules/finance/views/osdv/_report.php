@@ -4,7 +4,10 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
 
+use kartik\form\ActiveForm;
+
 use kartik\datecontrol\DateControl;
+use kartik\daterange\DateRangePicker;
 use kartik\detail\DetailView;
 use kartik\editable\Editable; 
 use kartik\grid\GridView;
@@ -20,7 +23,7 @@ use common\models\system\Profile;
 /* @var $searchModel common\models\finance\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Disbursement Report';
+$this->title = 'Report of Disbursement';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Modal Create Request
@@ -37,6 +40,29 @@ echo "<div id='modalContent'><div style='text-align:center'><img src='/images/lo
 Modal::end();
 
 ///echo '<span class="badge btn-success">'.$numberOfRequests.'</span>';
+
+$addon = <<< HTML
+<span class="input-group-text">
+    <i class="fas fa-calendar-alt"></i>
+</span>
+HTML;
+echo '<label class="control-label">Date Range</label>';
+echo '<div class="input-group drp-container">';
+echo DateRangePicker::widget([
+    'name'=>'date_range_1',
+    'value'=>'01-Jan-14 to 20-Feb-14',
+    'convertFormat'=>true,
+    'useWithAddon'=>true,
+    'pluginOptions'=>[
+        'locale'=>[
+            'format'=>'d-M-y',
+            'separator'=>' to ',
+        ],
+        'opens'=>'left'
+    ]
+]) . $addon;
+echo '</div>';
+
 ?>
 <div class="request-index">
 
@@ -62,8 +88,56 @@ Modal::end();
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return date('Y-m-d', strtotime($model->request_date));
                                 },
+                                /*'filterType' => GridView::FILTER_DATE_RANGE,
+                                    'value' => function($model) {
+                                        if ($model->request_date) {
+                                            return date('Y-m-d H:i:s',$model->request_date);
+                                        }
+                                        return null;
+                                    },
+                                    'filterWidgetOptions' => [
+                                        'startAttribute' => 'request_date_c', //Attribute of start time
+                                        'endAttribute' => 'request_date_e',   //The attributes of the end time
+                                        'convertFormat'=>true, // Importantly, true uses the local - > format time format to convert PHP time format to js time format.
+                                        'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd hh:ii:ss',//Date format
+                                              'timePicker'=>true, //Display time
+                        //                        'Time Picker Increment'=>5, //min interval
+                                             'timePicker24Hour' => true, //24 hour system
+                                            'locale'=>['format' => 'Y-m-d H:i:s'], //php formatting time
+                                        ]
+                                    ],*/
                             ],
                             [
+                                'attribute'=>'payee_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
+                                'width'=>'800px',
+                                'contentOptions' => [
+                                    'style'=>'max-width:300px; overflow: auto; white-space: normal; word-wrap: break-word;'
+                                ],
+                                'format' => 'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
+                                        'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
+                                        //'data-toggle'=>'tooltip',
+                                        //'data-content'=>Profile::find($model->created_by)->one()->fullname,
+                                        //'data-toggle'=>'popover',
+                                        'style'=>'text-decoration: underline; cursor:pointer;'
+                                    ]).'<br>' .$model->particulars;
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
+                                                                function($model) {
+                                                                    return $model['name'].' | '.$model['address'];
+                                                                }
+                                                            ), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Payee']
+                            ],
+                            /*[
                                 'attribute'=>'payee_id',
                                 'contentOptions' => ['style' => 'padding-left: 25px; font-weigth: bold;'],
                                 'width'=>'550px',
@@ -84,7 +158,7 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b><br/>'.$model->os->os_date : '';
+                                    return isset($model->os->os_id) ? '<b>'.$model->os->os_number.'</b>' : '';
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Os::find()->orderBy(['os_id' => SORT_DESC])->asArray()->all(), 'os_id', 'os_number'), 
@@ -101,7 +175,71 @@ Modal::end();
                                 'width'=>'150px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b><br/>'.$model->dv->dv_date : '';
+                                    return isset($model->dv->dv_id) ? '<b>'.$model->dv->dv_number.'</b>' : '';
+                                    //return $model->dv->dv_number;
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Dv::find()->orderBy(['dv_id' => SORT_DESC])->asArray()->all(), 'dv_id', 'dv_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select DV'],
+                            ],*/
+                            [
+                                'attribute'=>'os_id',
+                                'header'=>'OS Number',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
+                                'width'=>'220px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    switch ($model->status_id) {
+                                      case ($model->status_id==50):
+                                        $label = 'label-warning';
+                                        break;
+                                      case ($model->status_id==55):
+                                        $label = 'label-success';
+                                        break;
+                                      case ($model->status_id>55):
+                                        $label = 'label-info';
+                                        break;
+                                      default:
+                                        $label = 'label-warning';
+                                    }
+                                    
+                                    //return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
+                                    return (isset($model->osdv->os) ? '<span class="label '.$label.'">'.$model->osdv->os->os_number.'</span><br/>'.$model->osdv->os->os_date : '');
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Os::find()->orderBy(['os_id' => SORT_DESC])->asArray()->all(), 'os_id', 'os_number'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select OS'],
+                            ],
+                            [
+                                'attribute'=>'dv_id',
+                                'header'=>'DV Number',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
+                                'width'=>'220px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    switch ($model->status_id) {
+                                      case ($model->status_id==60):
+                                        $label = 'label-warning';
+                                        break;
+                                      case ($model->status_id==65):
+                                        $label = 'label-success';
+                                        break;
+                                      case ($model->status_id>65):
+                                        $label = 'label-info';
+                                        break;
+                                      default:
+                                        $label = 'label-warning';
+                                            
+                                    }
+                                    return (isset($model->osdv->dv) ? '<span class="label '.$label.'">'.$model->osdv->dv->dv_number.'</span><br/>'.$model->osdv->dv->dv_date : '');
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Dv::find()->orderBy(['dv_id' => SORT_DESC])->asArray()->all(), 'dv_id', 'dv_number'), 
@@ -176,9 +314,20 @@ Modal::end();
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
-                    'before'=>'',/*Html::button('Validated Requests  &nbsp;&nbsp;<span class="badge badge-light"></span>', ['value' => Url::to(['osdv/create']), 'title' => 'Request', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateOsdv']),*/
+                    'before'=>Html::button('Validated Requests  &nbsp;&nbsp;<span class="badge badge-light"></span>', ['value' => Url::to(['osdv/create']), 'title' => 'Request', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateOsdv']),/*.' '.
+                    DateRangePicker::widget([
+                        'model'=>$model,
+                        'attribute'=>'datetime_range',
+                        'convertFormat'=>true,
+                        'pluginOptions'=>[
+                            'timePicker'=>true,
+                            'timePickerIncrement'=>30,
+                            'format'=>'Y-m-d h:i A'
+                        ]
+                    ]),*/
                     'after'=>false,
                 ],
+            
             // set your toolbar
             'toolbar' => 
                         [

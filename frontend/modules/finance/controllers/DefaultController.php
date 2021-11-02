@@ -68,6 +68,6 @@ class DefaultController extends Controller
     
     public function actionIndex2()
     {
-        return $this->render('index3');
+        return $this->render('dashboard');
     }
 }

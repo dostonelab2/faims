@@ -165,6 +165,11 @@ class Request extends \yii\db\ActiveRecord
         return $this->hasOne(Division::className(), ['division_id' => 'division_id']);
     }
     
+    public function getDv()
+    {
+        return $this->hasOne(Dv::className(), ['request_id' => 'request_id']);
+    }
+    
     public function getStatus()
     {
         return $this->hasOne(Requeststatus::className(), ['request_status_id' => 'status_id']);
@@ -178,6 +183,11 @@ class Request extends \yii\db\ActiveRecord
     public function getOsdv()  
     {  
       return $this->hasOne(Osdv::className(), ['request_id' => 'request_id']);  
+    }
+    
+    public function getOs()  
+    {  
+      return $this->hasOne(Os::className(), ['request_id' => 'request_id']);  
     }
     
     static function generateRequestNumber($date = NULL, $count = NULL)

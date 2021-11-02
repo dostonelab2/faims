@@ -111,7 +111,7 @@ class OsdvController extends Controller
         //$searchModel = new OsdvSearch();
         $searchModel = new RequestosdvSearch();
         
-        $status_id = Request::STATUS_CHARGED;
+        $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         

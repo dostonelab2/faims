@@ -19,7 +19,7 @@ use yii\helpers\Url;
         <h4 style="background-color:gainsboro"><b>PART I: CUSTOMER RATING OF SERVICE QUALITY</b></h4>
             <?php
             echo GridView::widget([
-                'dataProvider' => $evaluatioAttribProvider,
+                'dataProvider' => $evaluationAttribProvider,
                 'summary' => '',
                 'showPageSummary' => true,
                 'columns' => [
