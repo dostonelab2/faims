@@ -39,8 +39,7 @@ if (Yii::$app->controller->action->id === 'login') {
             }
         </style>
         <script type="text/javascript">
-            var frontendURI = "<?= $GLOBALS["frontend_base_uri"];
-            ?>";
+            var frontendURI = "<?= $GLOBALS["frontend_base_uri"];?>";
             var HeaderController = "<?= str_replace(" ", "",strtolower(Html::encode($this->title))); ?>";
             var MainController = "<?= str_replace(" ", "",strtolower(Html::encode($this->title))).'ctrl'; ?>";
             
