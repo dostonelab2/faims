@@ -41,8 +41,6 @@ use yii\helpers\FileHelper;
  */
 class FileMutex extends Mutex
 {
-    use RetryAcquireTrait;
-
     /**
      * @var string the directory to store mutex files. You may use [path alias](guide:concept-aliases) here.
      * Defaults to the "mutex" subdirectory under the application runtime path.
@@ -61,13 +59,6 @@ class FileMutex extends Mutex
      * but read-only for other users.
      */
     public $dirMode = 0775;
-    /**
-     * @var bool whether file handling should assume a Windows file system.
-     * This value will determine how [[releaseLock()]] goes about deleting the lock file.
-     * If not set, it will be determined by checking the DIRECTORY_SEPARATOR constant.
-     * @since 2.0.16
-     */
-    public $isWindows;
 
     /**
      * @var resource[] stores all opened lock files. Keys are lock names and values are file handles.
@@ -87,9 +78,6 @@ class FileMutex extends Mutex
         if (!is_dir($this->mutexPath)) {
             FileHelper::createDirectory($this->mutexPath, $this->dirMode, true);
         }
-        if ($this->isWindows === null) {
-            $this->isWindows = DIRECTORY_SEPARATOR === '\\';
-        }
     }
 
     /**
@@ -101,8 +89,11 @@ class FileMutex extends Mutex
     protected function acquireLock($name, $timeout = 0)
     {
         $filePath = $this->getLockFilePath($name);
-        return $this->retryAcquire($timeout, function () use ($filePath, $name) {
+        $waitTime = 0;
+
+        while (true) {
             $file = fopen($filePath, 'w+');
+
             if ($file === false) {
                 return false;
             }
@@ -113,7 +104,13 @@ class FileMutex extends Mutex
 
             if (!flock($file, LOCK_EX | LOCK_NB)) {
                 fclose($file);
-                return false;
+
+                if (++$waitTime > $timeout) {
+                    return false;
+                }
+
+                sleep(1);
+                continue;
             }
 
             // Under unix we delete the lock file before releasing the related handle. Thus it's possible that we've acquired a lock on
@@ -130,12 +127,15 @@ class FileMutex extends Mutex
                 clearstatcache(true, $filePath);
                 flock($file, LOCK_UN);
                 fclose($file);
-                return false;
+                continue;
             }
 
             $this->_files[$name] = $file;
             return true;
-        });
+        }
+
+        // Should not be reached normally.
+        return false;
     }
 
     /**
@@ -149,7 +149,7 @@ class FileMutex extends Mutex
             return false;
         }
 
-        if ($this->isWindows) {
+        if (DIRECTORY_SEPARATOR === '\\') {
             // Under windows it's not possible to delete a file opened via fopen (either by own or other process).
             // That's why we must first unlock and close the handle and then *try* to delete the lock file.
             flock($this->_files[$name], LOCK_UN);

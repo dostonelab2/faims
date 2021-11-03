@@ -38,12 +38,7 @@ class m150207_210500_i18n_init extends Migration
         ], $tableOptions);
 
         $this->addPrimaryKey('pk_message_id_language', '{{%message}}', ['id', 'language']);
-        $onUpdateConstraint = 'RESTRICT';
-        if ($this->db->driverName === 'sqlsrv') {
-            // 'NO ACTION' is equivalent to 'RESTRICT' in MSSQL
-            $onUpdateConstraint = 'NO ACTION';
-        }
-        $this->addForeignKey('fk_message_source_message', '{{%message}}', 'id', '{{%source_message}}', 'id', 'CASCADE', $onUpdateConstraint);
+        $this->addForeignKey('fk_message_source_message', '{{%message}}', 'id', '{{%source_message}}', 'id', 'CASCADE', 'RESTRICT');
         $this->createIndex('idx_source_message_category', '{{%source_message}}', 'category');
         $this->createIndex('idx_message_language', '{{%message}}', 'language');
     }

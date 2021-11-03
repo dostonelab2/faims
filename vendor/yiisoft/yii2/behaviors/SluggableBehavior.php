@@ -17,9 +17,6 @@ use yii\validators\UniqueValidator;
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.
  *
- * Note: This behavior relies on php-intl extension for transliteration. If it is not installed it
- * falls back to replacements defined in [[\yii\helpers\Inflector::$transliteration]].
- *
  * To use SluggableBehavior, insert the following code to your ActiveRecord class:
  *
  * ```php
@@ -127,7 +124,7 @@ class SluggableBehavior extends AttributeBehavior
 
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init()
     {
@@ -143,7 +140,7 @@ class SluggableBehavior extends AttributeBehavior
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getValue($event)
     {

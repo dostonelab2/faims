@@ -54,7 +54,8 @@ use yii\helpers\StringHelper;
  *
  * > Note: although this parser fully emulates regular structure of the `$_FILES`, related temporary
  * files, which are available via `tmp_name` key, will not be recognized by PHP as uploaded ones.
- * Thus functions like `is_uploaded_file()` and `move_uploaded_file()` will fail on them.
+ * Thus functions like `is_uploaded_file()` and `move_uploaded_file()` will fail on them. This also
+ * means [[UploadedFile::saveAs()]] will fail as well.
  *
  * @property int $uploadFileMaxCount Maximum upload files count.
  * @property int $uploadFileMaxSize Upload file max size in bytes.
@@ -124,7 +125,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function parse($rawBody, $contentType)
     {
@@ -190,7 +191,6 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                             @fclose($tmpResource);
                         } else {
                             fwrite($tmpResource, $value);
-                            rewind($tmpResource);
                             $fileInfo['tmp_name'] = $tmpFileName;
                             $fileInfo['tmp_resource'] = $tmpResource; // save file resource, otherwise it will be deleted
                         }
@@ -217,9 +217,9 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     private function parseHeaders($headerContent)
     {
         $headers = [];
-        $headerParts = preg_split('/\\R/su', $headerContent, -1, PREG_SPLIT_NO_EMPTY);
+        $headerParts = preg_split('/\\R/s', $headerContent, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($headerParts as $headerPart) {
-            if (strpos($headerPart, ':') === false) {
+            if (($separatorPos = strpos($headerPart, ':')) === false) {
                 continue;
             }
 
@@ -320,8 +320,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                 $namePart = trim($namePart, ']');
                 if ($namePart === '') {
                     $current[] = [];
-                    $keys = array_keys($current);
-                    $lastKey = array_pop($keys);
+                    $lastKey = array_pop(array_keys($current));
                     $current = &$current[$lastKey];
                 } else {
                     if (!isset($current[$namePart])) {
@@ -350,7 +349,8 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             return (int) $verboseSize;
         }
         $sizeUnit = trim($verboseSize, '0123456789');
-        $size = trim(str_replace($sizeUnit, '', $verboseSize));
+        $size = str_replace($sizeUnit, '', $verboseSize);
+        $size = trim($size);
         if (!is_numeric($size)) {
             return 0;
         }

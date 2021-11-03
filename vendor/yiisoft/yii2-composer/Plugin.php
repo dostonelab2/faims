@@ -13,7 +13,6 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
-use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use Composer\Script;
 use Composer\Script\ScriptEvents;
@@ -26,10 +25,6 @@ use Composer\Script\ScriptEvents;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    /**
-     * @var Installer
-     */
-    private $_installer;
     /**
      * @var array noted package updates.
      */
@@ -45,29 +40,14 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
-        $this->_installer = new Installer($io, $composer);
-        $composer->getInstallationManager()->addInstaller($this->_installer);
+        $installer = new Installer($io, $composer);
+        $composer->getInstallationManager()->addInstaller($installer);
         $this->_vendorDir = rtrim($composer->getConfig()->get('vendor-dir'), '/');
         $file = $this->_vendorDir . '/yiisoft/extensions.php';
         if (!is_file($file)) {
             @mkdir(dirname($file), 0777, true);
             file_put_contents($file, "<?php\n\nreturn [];\n");
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function deactivate(Composer $composer, IOInterface $io)
-    {
-        $composer->getInstallationManager()->removeInstaller($this->_installer);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function uninstall(Composer $composer, IOInterface $io)
-    {
     }
 
     /**
@@ -96,31 +76,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 'fromPretty' => $operation->getInitialPackage()->getPrettyVersion(),
                 'to' => $operation->getTargetPackage()->getVersion(),
                 'toPretty' => $operation->getTargetPackage()->getPrettyVersion(),
-                'direction' => $this->_isUpgrade($event, $operation) ? 'up' : 'down',
+                'direction' => $event->getPolicy()->versionCompare(
+                    $operation->getInitialPackage(),
+                    $operation->getTargetPackage(),
+                    '<'
+                ) ? 'up' : 'down',
             ];
         }
-    }
-
-    /**
-     * @param PackageEvent $event
-     * @param UpdateOperation $operation
-     * @return bool
-     */
-    private function _isUpgrade(PackageEvent $event, UpdateOperation $operation)
-    {
-        // Composer 1.7.0+
-        if (method_exists('Composer\Package\Version\VersionParser', 'isUpgrade')) {
-            return VersionParser::isUpgrade(
-                $operation->getInitialPackage()->getVersion(),
-                $operation->getTargetPackage()->getVersion()
-            );
-        }
-
-        return $event->getPolicy()->versionCompare(
-            $operation->getInitialPackage(),
-            $operation->getTargetPackage(),
-            '<'
-        );
     }
 
     /**
@@ -213,12 +175,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     private function findUpgradeNotes($packageName, $fromVersion)
     {
-        if (preg_match('/^([0-9]\.[0-9]+\.?[0-9]*)/', $fromVersion, $m)) {
-            $fromVersionMajor = $m[1];
-        } else {
-            $fromVersionMajor = $fromVersion;
-        }
-
         $upgradeFile = $this->_vendorDir . '/' . $packageName . '/UPGRADE.md';
         if (!is_file($upgradeFile) || !is_readable($upgradeFile)) {
             return false;
@@ -226,14 +182,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $lines = preg_split('~\R~', file_get_contents($upgradeFile));
         $relevantLines = [];
         $consuming = false;
-        // whether an exact match on $fromVersion has been encountered
-        $foundExactMatch = false;
         foreach($lines as $line) {
-            if (preg_match('/^Upgrade from Yii ([0-9]\.[0-9]+\.?[0-9\.]*)/i', $line, $matches)) {
-                if ($matches[1] === $fromVersion) {
-                    $foundExactMatch = true;
-                }
-                if (version_compare($matches[1], $fromVersion, '<') && ($foundExactMatch || version_compare($matches[1], $fromVersionMajor, '<'))) {
+            if (preg_match('/^Upgrade from Yii ([0-9]\.[0-9]+\.?[0-9]*)/i', $line, $matches)) {
+                if (version_compare($matches[1], $fromVersion, '<')) {
                     break;
                 }
                 $consuming = true;
@@ -248,10 +199,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Check whether a version is numeric, e.g. 2.0.10.
      * @param string $version
-     * @return bool
+     * @return int|false
      */
     private function isNumericVersion($version)
     {
-        return (bool) preg_match('~^([0-9]\.[0-9]+\.?[0-9\.]*)~', $version);
+        return preg_match('~^([0-9]\.[0-9]+\.?[0-9]*)~', $version);
     }
 }

@@ -8,8 +8,8 @@
 namespace yii\web;
 
 use Yii;
-use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidParamException;
 use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
@@ -62,15 +62,15 @@ use yii\helpers\Url;
 class Response extends \yii\base\Response
 {
     /**
-     * @event \yii\base\Event an event that is triggered at the beginning of [[send()]].
+     * @event ResponseEvent an event that is triggered at the beginning of [[send()]].
      */
     const EVENT_BEFORE_SEND = 'beforeSend';
     /**
-     * @event \yii\base\Event an event that is triggered at the end of [[send()]].
+     * @event ResponseEvent an event that is triggered at the end of [[send()]].
      */
     const EVENT_AFTER_SEND = 'afterSend';
     /**
-     * @event \yii\base\Event an event that is triggered right after [[prepare()]] is called in [[send()]].
+     * @event ResponseEvent an event that is triggered right after [[prepare()]] is called in [[send()]].
      * You may respond to this event to filter the response content before it is sent to the client.
      */
     const EVENT_AFTER_PREPARE = 'afterPrepare';
@@ -272,7 +272,7 @@ class Response extends \yii\base\Response
      * This method will set the corresponding status text if `$text` is null.
      * @param int $value the status code
      * @param string $text the status text. If not set, it will be set automatically based on the status code.
-     * @throws InvalidArgumentException if the status code is invalid.
+     * @throws InvalidParamException if the status code is invalid.
      * @return $this the response object itself
      */
     public function setStatusCode($value, $text = null)
@@ -282,7 +282,7 @@ class Response extends \yii\base\Response
         }
         $this->_statusCode = (int) $value;
         if ($this->getIsInvalid()) {
-            throw new InvalidArgumentException("The HTTP status code is invalid: $value");
+            throw new InvalidParamException("The HTTP status code is invalid: $value");
         }
         if ($text === null) {
             $this->statusText = isset(static::$httpStatuses[$this->_statusCode]) ? static::$httpStatuses[$this->_statusCode] : '';
@@ -296,7 +296,7 @@ class Response extends \yii\base\Response
     /**
      * Sets the response status code based on the exception.
      * @param \Exception|\Error $e the exception object.
-     * @throws InvalidArgumentException if the status code is invalid.
+     * @throws InvalidParamException if the status code is invalid.
      * @return $this the response object itself
      * @since 2.0.12
      */
@@ -362,11 +362,12 @@ class Response extends \yii\base\Response
      */
     protected function sendHeaders()
     {
-        if (headers_sent($file, $line)) {
-            throw new HeadersAlreadySentException($file, $line);
+        if (headers_sent()) {
+            return;
         }
         if ($this->_headers) {
-            foreach ($this->getHeaders() as $name => $values) {
+            $headers = $this->getHeaders();
+            foreach ($headers as $name => $values) {
                 $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', $name)));
                 // set replace for first occurrence of header but false afterwards to allow multiple
                 $replace = true;
@@ -401,23 +402,7 @@ class Response extends \yii\base\Response
             if ($cookie->expire != 1 && isset($validationKey)) {
                 $value = Yii::$app->getSecurity()->hashData(serialize([$cookie->name, $value]), $validationKey);
             }
-            if (PHP_VERSION_ID >= 70300) {
-                setcookie($cookie->name, $value, [
-                    'expires' => $cookie->expire,
-                    'path' => $cookie->path,
-                    'domain' => $cookie->domain,
-                    'secure' => $cookie->secure,
-                    'httpOnly' => $cookie->httpOnly,
-                    'sameSite' => !empty($cookie->sameSite) ? $cookie->sameSite : null,
-                ]);
-            } else {
-                // Work around for setting sameSite cookie prior PHP 7.3
-                // https://stackoverflow.com/questions/39750906/php-setcookie-samesite-strict/46971326#46971326
-                if (!is_null($cookie->sameSite)) {
-                    $cookie->path .= '; samesite=' . $cookie->sameSite;
-                }
-                setcookie($cookie->name, $value, $cookie->expire, $cookie->path, $cookie->domain, $cookie->secure, $cookie->httpOnly);
-            }
+            setcookie($cookie->name, $value, $cookie->expire, $cookie->path, $cookie->domain, $cookie->secure, $cookie->httpOnly);
         }
     }
 
@@ -432,11 +417,7 @@ class Response extends \yii\base\Response
             return;
         }
 
-        // Try to reset time limit for big files
-        if (!function_exists('set_time_limit') || !@set_time_limit(0)) {
-            Yii::warning('set_time_limit() is not available', __METHOD__);
-        }
-
+        set_time_limit(0); // Reset time limit for big files
         $chunkSize = 8 * 1024 * 1024; // 8MB per chunk
 
         if (is_array($this->stream)) {
@@ -786,11 +767,7 @@ class Response extends \yii\base\Response
      */
     protected function getDispositionHeaderValue($disposition, $attachmentName)
     {
-        $fallbackName = str_replace(
-            ['%', '/', '\\', '"', "\x7F"],
-            ['_', '_', '_', '\\"', '_'],
-            Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE)
-        );
+        $fallbackName = str_replace('"', '\\"', str_replace(['%', '/', '\\'], '_', Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE)));
         $utfName = rawurlencode(str_replace(['%', '/', '\\'], '', $attachmentName));
 
         $dispositionHeader = "{$disposition}; filename=\"{$fallbackName}\"";
@@ -863,18 +840,18 @@ class Response extends \yii\base\Response
             // ensure the route is absolute
             $url[0] = '/' . ltrim($url[0], '/');
         }
-        $request = Yii::$app->getRequest();
         $url = Url::to($url);
-        if (strncmp($url, '/', 1) === 0 && strncmp($url, '//', 2) !== 0) {
-            $url = $request->getHostInfo() . $url;
+        if (strpos($url, '/') === 0 && strpos($url, '//') !== 0) {
+            $url = Yii::$app->getRequest()->getHostInfo() . $url;
         }
 
         if ($checkAjax) {
-            if ($request->getIsAjax()) {
-                if (in_array($statusCode, [301, 302]) && preg_match('/Trident\/|MSIE[ ]/', $request->userAgent)) {
+            if (Yii::$app->getRequest()->getIsAjax()) {
+                if (Yii::$app->getRequest()->getHeaders()->get('X-Ie-Redirect-Compatibility') !== null && $statusCode === 302) {
+                    // Ajax 302 redirect in IE does not work. Change status code to 200. See https://github.com/yiisoft/yii2/issues/9670
                     $statusCode = 200;
                 }
-                if ($request->getIsPjax()) {
+                if (Yii::$app->getRequest()->getIsPjax()) {
                     $this->getHeaders()->set('X-Pjax-Url', $url);
                 } else {
                     $this->getHeaders()->set('X-Redirect', $url);
@@ -1051,12 +1028,6 @@ class Response extends \yii\base\Response
      */
     protected function prepare()
     {
-        if ($this->statusCode === 204) {
-            $this->content = '';
-            $this->stream = null;
-            return;
-        }
-
         if ($this->stream !== null) {
             return;
         }
@@ -1080,12 +1051,12 @@ class Response extends \yii\base\Response
         }
 
         if (is_array($this->content)) {
-            throw new InvalidArgumentException('Response content must not be an array.');
+            throw new InvalidParamException('Response content must not be an array.');
         } elseif (is_object($this->content)) {
             if (method_exists($this->content, '__toString')) {
                 $this->content = $this->content->__toString();
             } else {
-                throw new InvalidArgumentException('Response content must be a string or an object implementing __toString().');
+                throw new InvalidParamException('Response content must be a string or an object implementing __toString().');
             }
         }
     }

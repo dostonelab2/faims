@@ -26,7 +26,7 @@ use yii\widgets\FragmentCache;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class View extends Component implements DynamicContentAwareInterface
+class View extends Component
 {
     /**
      * @event Event an event that is triggered by [[beginPage()]].
@@ -86,19 +86,15 @@ class View extends Component implements DynamicContentAwareInterface
      */
     public $blocks;
     /**
-     * @var array|DynamicContentAwareInterface[] a list of currently active dynamic content class instances.
-     * This property is used internally to implement the dynamic content caching feature. Do not modify it directly.
+     * @var array a list of currently active fragment cache widgets. This property
+     * is used internally to implement the content caching feature. Do not modify it directly.
      * @internal
-     * @deprecated Since 2.0.14. Do not use this property directly. Use methods [[getDynamicContents()]],
-     * [[pushDynamicContent()]], [[popDynamicContent()]] instead.
      */
     public $cacheStack = [];
     /**
      * @var array a list of placeholders for embedding dynamic contents. This property
      * is used internally to implement the content caching feature. Do not modify it directly.
      * @internal
-     * @deprecated Since 2.0.14. Do not use this property directly. Use methods [[getDynamicPlaceholders()]],
-     * [[setDynamicPlaceholders()]], [[addDynamicPlaceholder()]] instead.
      */
     public $dynamicPlaceholders = [];
 
@@ -184,7 +180,7 @@ class View extends Component implements DynamicContentAwareInterface
             }
         } elseif ($context instanceof ViewContextInterface) {
             $file = $context->getViewPath() . DIRECTORY_SEPARATOR . $view;
-        } elseif (($currentViewFile = $this->getRequestedViewFile()) !== false) {
+        } elseif (($currentViewFile = $this->getViewFile()) !== false) {
             $file = dirname($currentViewFile) . DIRECTORY_SEPARATOR . $view;
         } else {
             throw new InvalidCallException("Unable to resolve view file for view '$view': no active view context.");
@@ -222,7 +218,7 @@ class View extends Component implements DynamicContentAwareInterface
      */
     public function renderFile($viewFile, $params = [], $context = null)
     {
-        $viewFile = $requestedFile = Yii::getAlias($viewFile);
+        $viewFile = Yii::getAlias($viewFile);
 
         if ($this->theme !== null) {
             $viewFile = $this->theme->applyTo($viewFile);
@@ -238,13 +234,10 @@ class View extends Component implements DynamicContentAwareInterface
             $this->context = $context;
         }
         $output = '';
-        $this->_viewFiles[] = [
-            'resolved' => $viewFile,
-            'requested' => $requestedFile
-        ];
+        $this->_viewFiles[] = $viewFile;
 
         if ($this->beforeRender($viewFile, $params)) {
-            Yii::debug("Rendering view file: $viewFile", __METHOD__);
+            Yii::trace("Rendering view file: $viewFile", __METHOD__);
             $ext = pathinfo($viewFile, PATHINFO_EXTENSION);
             if (isset($this->renderers[$ext])) {
                 if (is_array($this->renderers[$ext]) || is_string($this->renderers[$ext])) {
@@ -270,16 +263,7 @@ class View extends Component implements DynamicContentAwareInterface
      */
     public function getViewFile()
     {
-        return empty($this->_viewFiles) ? false : end($this->_viewFiles)['resolved'];
-    }
-
-    /**
-     * @return string|bool the requested view currently being rendered. False if no view file is being rendered.
-     * @since 2.0.16
-     */
-    protected function getRequestedViewFile()
-    {
-        return empty($this->_viewFiles) ? false : end($this->_viewFiles)['requested'];
+        return end($this->_viewFiles);
     }
 
     /**
@@ -372,11 +356,6 @@ class View extends Component implements DynamicContentAwareInterface
      * @param string $statements the PHP statements for generating the dynamic content.
      * @return string the placeholder of the dynamic content, or the dynamic content if there is no
      * active content cache currently.
-     *
-     * Note that most methods that indirectly modify layout such as registerJS() or registerJSFile() do not
-     * work with dynamic rendering.
-     *
-     * @see https://github.com/yiisoft/yii2/issues/17673
      */
     public function renderDynamic($statements)
     {
@@ -392,36 +371,18 @@ class View extends Component implements DynamicContentAwareInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDynamicPlaceholders()
-    {
-        return $this->dynamicPlaceholders;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDynamicPlaceholders($placeholders)
-    {
-        $this->dynamicPlaceholders = $placeholders;
-    }
-
-    /**
-     * {@inheritdoc}
+     * Adds a placeholder for dynamic content.
+     * This method is internally used.
+     * @param string $placeholder the placeholder name
+     * @param string $statements the PHP statements for generating the dynamic content
      */
     public function addDynamicPlaceholder($placeholder, $statements)
     {
         foreach ($this->cacheStack as $cache) {
-            if ($cache instanceof DynamicContentAwareInterface) {
-                $cache->addDynamicPlaceholder($placeholder, $statements);
-            } else {
-                // TODO: Remove in 2.1
-                $cache->dynamicPlaceholders[$placeholder] = $statements;
-            }
+            $cache->dynamicPlaceholders[$placeholder] = $statements;
         }
         $this->dynamicPlaceholders[$placeholder] = $statements;
-}
+    }
 
     /**
      * Evaluates the given PHP statements.
@@ -432,37 +393,6 @@ class View extends Component implements DynamicContentAwareInterface
     public function evaluateDynamicContent($statements)
     {
         return eval($statements);
-    }
-
-    /**
-     * Returns a list of currently active dynamic content class instances.
-     * @return DynamicContentAwareInterface[] class instances supporting dynamic contents.
-     * @since 2.0.14
-     */
-    public function getDynamicContents()
-    {
-        return $this->cacheStack;
-    }
-
-    /**
-     * Adds a class instance supporting dynamic contents to the end of a list of currently active
-     * dynamic content class instances.
-     * @param DynamicContentAwareInterface $instance class instance supporting dynamic contents.
-     * @since 2.0.14
-     */
-    public function pushDynamicContent(DynamicContentAwareInterface $instance)
-    {
-        $this->cacheStack[] = $instance;
-    }
-
-    /**
-     * Removes a last class instance supporting dynamic contents from a list of currently active
-     * dynamic content class instances.
-     * @since 2.0.14
-     */
-    public function popDynamicContent()
-    {
-        array_pop($this->cacheStack);
     }
 
     /**

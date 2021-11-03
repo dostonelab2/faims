@@ -64,16 +64,10 @@ class StringValidator extends Validator
      * If this property is not set, [[\yii\base\Application::charset]] will be used.
      */
     public $encoding;
-    /**
-     * @var boolean whether to require the value to be a string data type.
-     * If false any scalar value will be treated as it's string equivalent.
-     * @since 2.0.33
-     */
-    public $strict = true;
 
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init()
     {
@@ -105,14 +99,12 @@ class StringValidator extends Validator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
-        if (!$this->strict && is_scalar($value) && !is_string($value)) {
-            $value = (string)$value;
-        }
+
         if (!is_string($value)) {
             $this->addError($model, $attribute, $this->message);
 
@@ -133,14 +125,10 @@ class StringValidator extends Validator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function validateValue($value)
     {
-        if (!$this->strict && is_scalar($value) && !is_string($value)) {
-            $value = (string)$value;
-        }
-
         if (!is_string($value)) {
             return [$this->message, []];
         }
@@ -161,7 +149,7 @@ class StringValidator extends Validator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
@@ -172,7 +160,7 @@ class StringValidator extends Validator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getClientOptions($model, $attribute)
     {
