@@ -16,6 +16,7 @@ use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Dv;
+use common\models\finance\Obligationtype;
 use common\models\finance\Os;
 use common\models\finance\Request;
 use common\models\system\Profile;
@@ -198,13 +199,28 @@ $DateRangePicker = function(){
                                 'filterInputOptions' => ['placeholder' => 'Select DV'],
                             ],
                             [
+                                'attribute'=>'obligation_type_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->fundsource->name;
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'obligation_type_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],
+                            ],
+                            [
                                 'attribute'=>'amount',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
                                 'width'=>'150px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    //return $model->accounttransactions->taxable ? '0.00' : '<b>'.$model->request->amount.'</b>';
                                     return $model->osdv->getNetamount();
                                 },
                             ],

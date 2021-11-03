@@ -89,7 +89,6 @@ Modal::end();
                                         $label = 'label-warning';
                                     }
                                     
-                                    //return isset($model->osdv->os) ? '<b>'.$model->osdv->os->os_number.'</b><br/>'.date('Y-m-d', strtotime($model->osdv->os->os_date)) : '';
                                     return (isset($model->osdv->os) ? '<span class="label '.$label.'">'.$model->osdv->os->os_number.'</span><br/>'.$model->osdv->os->os_date : '');
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,

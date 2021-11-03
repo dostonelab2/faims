@@ -64,6 +64,7 @@ class RequestosdvSearch extends Request
             return $dataProvider;
         }
 
+        $query->joinWith(['osdv']);
         $query->joinWith(['osdv.os as os']);
         $query->joinWith(['osdv.dv as dv']);
 
@@ -72,6 +73,7 @@ class RequestosdvSearch extends Request
             'request_id' => $this->request_id,
             //'request_date' => $this->request_date,
             //'request_date' => date('Y-m-d h:i:s',strtotime('2021-06-15')),
+            'tbl_request.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
