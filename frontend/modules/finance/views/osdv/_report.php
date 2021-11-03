@@ -80,7 +80,7 @@ $DateRangePicker = function(){
                                 'attribute'=>'request_date',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
-                                'width'=>'350px',
+                                'width'=>'250px',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return date('Y-m-d', strtotime($model->request_date));
                                 },
@@ -99,9 +99,10 @@ $DateRangePicker = function(){
                                         'convertFormat'=>true, // Importantly, true uses the local - > format time format to convert PHP time format to js time format.
                                         'pluginOptions' => [
                                             'format' => 'yyyy-mm-dd',//Date format
-                                            'timePicker'=>true, //Display time
-                                            'timePicker24Hour' => true, //24 hour system
+                                            //'timePicker'=>true, //Display time
+                                            //'timePicker24Hour' => true, //24 hour system
                                             'locale'=>['format' => 'Y-m-d'], //php formatting time
+                                            'opens'=>'left',
                                         ]
                                     ],
                             ],
@@ -246,7 +247,7 @@ $DateRangePicker = function(){
             'toolbar' => 
                         [
                             [
-                                'content'=> $DateRangePicker() //Date Range Picker
+                                'content'=> '',//$DateRangePicker() //Date Range Picker
                                    
                             ],
                             //'{export}',
