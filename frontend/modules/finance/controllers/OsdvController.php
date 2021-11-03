@@ -108,10 +108,19 @@ class OsdvController extends Controller
      */
     public function actionReport()
     {
-        //$searchModel = new OsdvSearch();
         $searchModel = new RequestosdvSearch();
         
         $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+        
+        if(isset($_GET['RequestosdvSearch'])){
+            
+            $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime($_GET['RequestosdvSearch']['request_date_s'])));
+            //$request_date_s = date('Y-m-d', strtotime($_GET['RequestosdvSearch']['request_date_s']));
+            $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime($_GET['RequestosdvSearch']['request_date_e'])));
+            
+            $searchModel->request_date_s = $request_date_s;
+            $searchModel->request_date_e = $request_date_e;    
+        }
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         

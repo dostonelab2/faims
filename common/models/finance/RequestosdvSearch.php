@@ -13,8 +13,8 @@ use common\models\finance\Requestpayroll;
  */
 class RequestosdvSearch extends Request
 {
-    public $start_date;
-    public $end_date;
+    public $request_date_s;
+    public $request_date_e;
     /**
      * @inheritdoc
      */ 
@@ -64,13 +64,16 @@ class RequestosdvSearch extends Request
             return $dataProvider;
         }
 
+        $query->joinWith(['osdv']);
         $query->joinWith(['osdv.os as os']);
         $query->joinWith(['osdv.dv as dv']);
 
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            'request_date' => $this->request_date,
+            //'request_date' => $this->request_date,
+            //'request_date' => date('Y-m-d h:i:s',strtotime('2021-06-15')),
+            'tbl_request.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
@@ -81,12 +84,16 @@ class RequestosdvSearch extends Request
         $query->andFilterWhere(['>=', 'tbl_request.status_id', 50]);
         
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);
+        //$query->andFilterWhere(['>=', 'request_date', '2021-06-16']);
 
         $query->andFilterWhere(['like', 'os.os_id', $this->os_id]);
         $query->andFilterWhere(['like', 'dv.dv_id', $this->dv_id]);
         //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
         
-        $query->andFilterWhere(['between', 'date', $this->start_date, $this->end_date]);
+        
+        $query->andFilterWhere(['between', 'request_date', $this->request_date_s, $this->request_date_e]);
+        //$query->andFilterWhere(['>=', 'request_date', $this->request_date_s]);
+        //$query->andFilterWhere(['<=', 'request_date', $this->request_date_e]);
 
         //$query->andWhere('request.osdv.os.os_number LIKE "%' . $this->os_id . '%" ');
         return $dataProvider;
