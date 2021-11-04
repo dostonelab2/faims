@@ -76,20 +76,51 @@ $DateRangePicker = function(){
                 'showPageSummary' => true,
                 //'columns' => $gridColumns, // check the configuration for grid columns by clicking button above
                 'columns' => [
+                            /*[
+                                'attribute'=>'request_date',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center;'],
+                                'width'=>'250px',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    //return date('Y-m-d', strtotime($model->osdv->lddapada->batch_date));
+                                    return date('Y-m-d', strtotime($model->request_date));
+                                },
+                                'hAlign' => GridView::ALIGN_CENTER,
+                                'filterType' => GridView::FILTER_DATE_RANGE,
+                                    'value' => function($model) {
+                                        if ($model->request_date) {
+                                            return date('Y-m-d', strtotime($model->request_date));
+                                        }
+                                        return null;
+                                    },
+                                    'filterWidgetOptions' => [
+                                        'startAttribute' => 'request_date_s', //Attribute of start time
+                                        'endAttribute' => 'request_date_e',   //The attributes of the end time
+                                        'convertFormat'=>true, // Importantly, true uses the local - > format time format to convert PHP time format to js time format.
+                                        'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',//Date format
+                                            //'timePicker'=>true, //Display time
+                                            //'timePicker24Hour' => true, //24 hour system
+                                            'locale'=>['format' => 'Y-m-d'], //php formatting time
+                                            'opens'=>'left',
+                                        ]
+                                    ],
+                            ],*/
                             [
                                 'attribute'=>'request_date',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'250px',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return date('Y-m-d', strtotime($model->request_date));
+                                    return date('Y-m-d', strtotime($model->osdv->lddapadaitem->lddapada->batch_date));
+                                    //return date('Y-m-d', strtotime($model->request_date));
                                 },
                                 //'filterType' => $DateRangePicker(),
                                 'hAlign' => GridView::ALIGN_CENTER,
                                 'filterType' => GridView::FILTER_DATE_RANGE,
                                     'value' => function($model) {
                                         if ($model->request_date) {
-                                            return date('Y-m-d', strtotime($model->request_date));
+                                            return isset($model->osdv->lddapadaitem) ? date('Y-m-d', strtotime($model->osdv->lddapadaitem->lddapada->batch_date)) : '';
                                         }
                                         return null;
                                     },
@@ -207,13 +238,15 @@ $DateRangePicker = function(){
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->fundsource->name;
                                 },
+                                /*'filter'=>true,
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'obligation_type_id', 'name'), 
                                 'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],
+                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],*/
                             ],
+                            
                             [
                                 'attribute'=>'amount',
                                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -269,14 +302,7 @@ $DateRangePicker = function(){
                     'before'=>'',
                     'after'=>false,
                 ],
-                // set right toolbar buttons
-                /*'toolbar' => 
-                                [
-                                    [
-                                        'content'=>
-                                            Html::button('Generate Attachments  <i class="glyphicon glyphicon-list"></i>', ['value' => Url::to(['request/generateattachments', 'id'=>$model->request_id]), 'title' => 'Attachment', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonGenerateAttachments'])
-                                    ],
-                                ],*/
+                
                 // set export properties
                 'export' => [
                     'fontAwesome' => true

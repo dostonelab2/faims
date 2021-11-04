@@ -4,6 +4,7 @@ namespace common\models\finance;
 
 use Yii;
 
+use common\models\cashier\Lddapadaitem;
 use common\models\procurement\Type;
 use common\models\procurement\Expenditureclass;
 /**
@@ -328,6 +329,12 @@ class Osdv extends \yii\db\ActiveRecord
     public function getUacs()  
     {  
       return $this->hasOne(Osallotment::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);  
+    }
+    
+    
+    public function getLddapadaitem()  
+    {  
+      return $this->hasOne(Lddapadaitem::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);  
     }
     
     public function isObligated()
