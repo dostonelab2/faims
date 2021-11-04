@@ -180,6 +180,12 @@ $request_for_approval = Request::find()
                                 'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
+                                'label' => 'Report of Disbursement (Payroll)', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/reportpayroll'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
+                            ],
+                            [
                                 'label' => 'Obligation and Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/index'], 

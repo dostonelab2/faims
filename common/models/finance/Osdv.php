@@ -100,7 +100,7 @@ class Osdv extends \yii\db\ActiveRecord
      */
     public function getPayrollitems()
     {
-        return $this->hasMany(Requestpayroll::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['active' => 1]);
+        return $this->hasMany(Requestpayroll::className(), ['osdv_id' => 'osdv_id'])->andOnCondition(['tbl_request_payroll.active' => 1]);
     }
     
     public function getStatus()

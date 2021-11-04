@@ -12,6 +12,7 @@ use common\models\finance\OsdvSearch;
 use common\models\finance\OsdvapprovalSearch;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
+use common\models\finance\RequestpayrollSearch;
 use common\models\finance\RequestSearch;
 use common\models\finance\RequestosdvSearch;
 use common\models\procurement\Expenditureclass;
@@ -125,6 +126,29 @@ class OsdvController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('_report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionReportpayroll()
+    {
+        $searchModel = new RequestpayrollSearch();
+        
+        $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+        
+        /*if(isset($_GET['RequestpayrollSearch'])){
+            
+            $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime($_GET['RequestpayrollSearch']['request_date_s'])));
+            $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime($_GET['RequestpayrollSearch']['request_date_e'])));
+            
+            $searchModel->request_date_s = $request_date_s;
+            $searchModel->request_date_e = $request_date_e;    
+        })*/
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('_reportpayroll', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
