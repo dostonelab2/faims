@@ -72,7 +72,7 @@ class RequestosdvSearch extends Request
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            'obligation_type_id' => $this->obligation_type_id,
+            'tbl_request.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
