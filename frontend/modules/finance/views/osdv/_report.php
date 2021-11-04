@@ -51,7 +51,7 @@ $DateRangePicker = function(){
             'class' => 'form-control',
             'id' => 'date-range'
         ],
-        'bsVersion' => '4.x',
+        //'bsVersion' => '4.x',
         //'bsDependencyEnabled' => false,
         'convertFormat'=>true,
         'useWithAddon'=>true,

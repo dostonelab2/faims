@@ -134,7 +134,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare($builder)
     {
@@ -170,25 +170,13 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             } elseif (is_array($this->via)) {
                 // via relation
                 /* @var $viaQuery ActiveQuery */
-                list($viaName, $viaQuery, $viaCallableUsed) = $this->via;
+                list($viaName, $viaQuery) = $this->via;
                 if ($viaQuery->multiple) {
-                    if ($viaCallableUsed) {
-                        $viaModels = $viaQuery->all();
-                    } elseif ($this->primaryModel->isRelationPopulated($viaName)) {
-                        $viaModels = $this->primaryModel->$viaName;
-                    } else {
-                        $viaModels = $viaQuery->all();
-                        $this->primaryModel->populateRelation($viaName, $viaModels);
-                    }
+                    $viaModels = $viaQuery->all();
+                    $this->primaryModel->populateRelation($viaName, $viaModels);
                 } else {
-                    if ($viaCallableUsed) {
-                        $model = $viaQuery->one();
-                    } elseif ($this->primaryModel->isRelationPopulated($viaName)) {
-                        $model = $this->primaryModel->$viaName;
-                    } else {
-                        $model = $viaQuery->one();
-                        $this->primaryModel->populateRelation($viaName, $model);
-                    }
+                    $model = $viaQuery->one();
+                    $this->primaryModel->populateRelation($viaName, $model);
                     $viaModels = $model === null ? [] : [$model];
                 }
                 $this->filterByModels($viaModels);
@@ -208,7 +196,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function populate($rows)
     {
@@ -234,7 +222,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             }
         }
 
-        return parent::populate($models);
+        return $models;
     }
 
     /**
@@ -331,14 +319,11 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             $params = $this->params;
         }
 
-        $command = $db->createCommand($sql, $params);
-        $this->setCommandCache($command);
-
-        return $command;
+        return $db->createCommand($sql, $params);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function queryScalar($selectExpression, $db)
     {
@@ -352,13 +337,11 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             return parent::queryScalar($selectExpression, $db);
         }
 
-        $command = (new Query())->select([$selectExpression])
+        return (new Query())->select([$selectExpression])
             ->from(['c' => "({$this->sql})"])
             ->params($this->params)
-            ->createCommand($db);
-        $this->setCommandCache($command);
-
-        return $command->queryScalar();
+            ->createCommand($db)
+            ->queryScalar();
     }
 
     /**
@@ -486,16 +469,6 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         }
         $this->join = array_values($uniqueJoins);
 
-        // https://github.com/yiisoft/yii2/issues/16092
-        $uniqueJoinsByTableName = [];
-        foreach ($this->join as $config) {
-            $tableName = serialize($config[1]);
-            if (!array_key_exists($tableName, $uniqueJoinsByTableName)) {
-                $uniqueJoinsByTableName[$tableName] = $config;
-            }
-        }
-        $this->join = array_values($uniqueJoinsByTableName);
-
         if (!empty($join)) {
             // append explicit join to joinWith()
             // https://github.com/yiisoft/yii2/issues/2880
@@ -589,15 +562,14 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     /**
      * Returns the table name and the table alias for [[modelClass]].
      * @return array the table name and the table alias.
-     * @since 2.0.16
+     * @internal
      */
-    protected function getTableNameAndAlias()
+    private function getTableNameAndAlias()
     {
         if (empty($this->from)) {
             $tableName = $this->getPrimaryTableName();
         } else {
             $tableName = '';
-            // if the first entry in "from" is an alias-tablename-pair return it directly
             foreach ($this->from as $alias => $tableName) {
                 if (is_string($alias)) {
                     return [$tableName, $alias];
@@ -781,12 +753,12 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * @param callable $callable a PHP callback for customizing the relation associated with the junction table.
      * Its signature should be `function($query)`, where `$query` is the query to be customized.
      * @return $this the query object itself
-     * @throws InvalidConfigException when query is not initialized properly
      * @see via()
      */
     public function viaTable($tableName, $link, callable $callable = null)
     {
-        $modelClass = $this->primaryModel ? get_class($this->primaryModel) : $this->modelClass;
+        $modelClass = $this->primaryModel !== null ? get_class($this->primaryModel) : get_class();
+
         $relation = new self($modelClass, [
             'from' => [$tableName],
             'link' => $link,
@@ -831,13 +803,13 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 2.0.12
      */
     public function getTablesUsedInFrom()
     {
         if (empty($this->from)) {
-            return $this->cleanUpTableNames([$this->getPrimaryTableName()]);
+            $this->from = [$this->getPrimaryTableName()];
         }
 
         return parent::getTablesUsedInFrom();

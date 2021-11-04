@@ -69,17 +69,6 @@ class ErrorHandler extends \yii\base\ErrorHandler
      * @since 2.0.7
      */
     public $displayVars = ['_GET', '_POST', '_FILES', '_COOKIE', '_SESSION'];
-    /**
-     * @var string trace line with placeholders to be be substituted.
-     * The placeholders are {file}, {line} and {text} and the string should be as follows.
-     *
-     * `File: {file} - Line: {line} - Text: {text}`
-     *
-     * @example <a href="ide://open?file={file}&line={line}">{html}</a>
-     * @see https://github.com/yiisoft/yii2-debug#open-files-in-ide
-     * @since 2.0.14
-     */
-    public $traceLine = '{html}';
 
 
     /**
@@ -105,7 +94,6 @@ class ErrorHandler extends \yii\base\ErrorHandler
         $useErrorView = $response->format === Response::FORMAT_HTML && (!YII_DEBUG || $exception instanceof UserException);
 
         if ($useErrorView && $this->errorAction !== null) {
-            Yii::$app->view->clear();
             $result = Yii::$app->runAction($this->errorAction);
             if ($result instanceof Response) {
                 $response = $result;
@@ -233,7 +221,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     protected function getTypeUrl($class, $method)
     {
-        if (strncmp($class, 'yii\\', 4) !== 0) {
+        if (strpos($class, 'yii\\') !== 0) {
             return null;
         }
 
@@ -264,10 +252,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             return ob_get_clean();
         }
 
-        $view = Yii::$app->getView();
-        $view->clear();
-
-        return $view->renderFile($_file_, $_params_, $this);
+        return Yii::$app->getView()->renderFile($_file_, $_params_, $this);
     }
 
     /**
@@ -401,7 +386,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             'http://lighttpd.net/' => ['lighttpd'],
             'http://gwan.com/' => ['g-wan', 'gwan'],
             'http://iis.net/' => ['iis', 'services'],
-            'https://secure.php.net/manual/en/features.commandline.webserver.php' => ['development'],
+            'http://php.net/manual/en/features.commandline.webserver.php' => ['development'],
         ];
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             foreach ($serverUrls as $url => $keywords) {

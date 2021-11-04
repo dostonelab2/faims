@@ -60,7 +60,7 @@ class MysqlMutex extends DbMutex
             /** @var \yii\db\Connection $db */
             return (bool) $db->createCommand(
                 'SELECT GET_LOCK(:name, :timeout)',
-                [':name' => $this->hashLockName($name), ':timeout' => $timeout]
+                [':name' => $name, ':timeout' => $timeout]
             )->queryScalar();
         });
     }
@@ -77,20 +77,8 @@ class MysqlMutex extends DbMutex
             /** @var \yii\db\Connection $db */
             return (bool) $db->createCommand(
                 'SELECT RELEASE_LOCK(:name)',
-                [':name' => $this->hashLockName($name)]
+                [':name' => $name]
             )->queryScalar();
         });
-    }
-
-    /**
-     * Generate hash for lock name to avoid exceeding lock name length limit.
-     *
-     * @param string $name
-     * @return string
-     * @since 2.0.16
-     * @see https://github.com/yiisoft/yii2/pull/16836
-     */
-    protected function hashLockName($name) {
-        return sha1($name);
     }
 }

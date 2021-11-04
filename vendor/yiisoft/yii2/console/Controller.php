@@ -12,7 +12,6 @@ use yii\base\Action;
 use yii\base\InlineAction;
 use yii\base\InvalidRouteException;
 use yii\helpers\Console;
-use yii\helpers\Inflector;
 
 /**
  * Controller is the base class of console command classes.
@@ -63,27 +62,12 @@ class Controller extends \yii\base\Controller
      * @since 2.0.10
      */
     public $help;
-    /**
-     * @var bool if true - script finish with `ExitCode::OK` in case of exception.
-     * false - `ExitCode::UNSPECIFIED_ERROR`.
-     * Default: `YII_ENV_TEST`
-     * @since 2.0.36
-     */
-    public $silentExitOnException;
 
     /**
      * @var array the options passed during execution.
      */
     private $_passedOptions = [];
 
-
-    public function beforeAction($action)
-    {
-        $silentExit = $this->silentExitOnException !== null ? $this->silentExitOnException : YII_ENV_TEST;
-        Yii::$app->errorHandler->silentExitOnException = $silentExit;
-
-        return parent::beforeAction($action);
-    }
 
     /**
      * Returns a value indicating whether ANSI color is enabled.
@@ -120,32 +104,12 @@ class Controller extends \yii\base\Controller
                     if (array_key_exists($name, $optionAliases)) {
                         $params[$optionAliases[$name]] = $value;
                     } else {
-                        $message = Yii::t('yii', 'Unknown alias: -{name}', ['name' => $name]);
-                        if (!empty($optionAliases)) {
-                            $aliasesAvailable = [];
-                            foreach ($optionAliases as $alias => $option) {
-                                $aliasesAvailable[] = '-' . $alias . ' (--' . $option . ')';
-                            }
-
-                            $message .= '. ' . Yii::t('yii', 'Aliases available: {aliases}', [
-                                'aliases' => implode(', ', $aliasesAvailable)
-                            ]);
-                        }
-                        throw new Exception($message);
+                        throw new Exception(Yii::t('yii', 'Unknown alias: -{name}', ['name' => $name]));
                     }
                 }
                 unset($params['_aliases']);
             }
             foreach ($params as $name => $value) {
-                // Allow camelCase options to be entered in kebab-case
-                if (!in_array($name, $options, true) && strpos($name, '-') !== false) {
-                    $kebabName = $name;
-                    $altName = lcfirst(Inflector::id2camel($kebabName));
-                    if (in_array($altName, $options, true)) {
-                        $name = $altName;
-                    }
-                }
-
                 if (in_array($name, $options, true)) {
                     $default = $this->$name;
                     if (is_array($default)) {
@@ -158,16 +122,8 @@ class Controller extends \yii\base\Controller
                     }
                     $this->_passedOptions[] = $name;
                     unset($params[$name]);
-                    if (isset($kebabName)) {
-                        unset($params[$kebabName]);
-                    }
                 } elseif (!is_int($name)) {
-                    $message = Yii::t('yii', 'Unknown option: --{name}', ['name' => $name]);
-                    if (!empty($options)) {
-                        $message .= '. ' . Yii::t('yii', 'Options available: {options}', ['options' => '--' . implode(', --', $options)]);
-                    }
-
-                    throw new Exception($message);
+                    throw new Exception(Yii::t('yii', 'Unknown option: --{name}', ['name' => $name]));
                 }
             }
         }
@@ -197,35 +153,19 @@ class Controller extends \yii\base\Controller
             $method = new \ReflectionMethod($action, 'run');
         }
 
-        $args = [];
-        $missing = [];
-        $actionParams = [];
-        $requestedParams = [];
-        foreach ($method->getParameters() as $i => $param) {
-            $name = $param->getName();
-            $key = null;
-            if (array_key_exists($i, $params)) {
-                $key = $i;
-            } elseif (array_key_exists($name, $params)) {
-                $key = $name;
-            }
+        $args = array_values($params);
 
-            if ($key !== null) {
-                if ($param->isArray()) {
-                    $params[$key] = $params[$key] === '' ? [] : preg_split('/\s*,\s*/', $params[$key]);
+        $missing = [];
+        foreach ($method->getParameters() as $i => $param) {
+            if ($param->isArray() && isset($args[$i])) {
+                $args[$i] = preg_split('/\s*,\s*/', $args[$i]);
+            }
+            if (!isset($args[$i])) {
+                if ($param->isDefaultValueAvailable()) {
+                    $args[$i] = $param->getDefaultValue();
+                } else {
+                    $missing[] = $param->getName();
                 }
-                $args[] = $actionParams[$key] = $params[$key];
-                unset($params[$key]);
-            } elseif (PHP_VERSION_ID >= 70100 && ($type = $param->getType()) !== null && !$type->isBuiltin()) {
-                try {
-                    $this->bindInjectedParams($type, $name, $args, $requestedParams);
-                } catch (\yii\base\Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
-            } elseif ($param->isDefaultValueAvailable()) {
-                $args[] = $actionParams[$i] = $param->getDefaultValue();
-            } else {
-                $missing[] = $name;
             }
         }
 
@@ -233,12 +173,7 @@ class Controller extends \yii\base\Controller
             throw new Exception(Yii::t('yii', 'Missing required arguments: {params}', ['params' => implode(', ', $missing)]));
         }
 
-        // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
-        if (\Yii::$app->requestedParams === null) {
-            \Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
-        }
-
-        return array_merge($args, $params);
+        return $args;
     }
 
     /**
@@ -279,7 +214,6 @@ class Controller extends \yii\base\Controller
      * ```
      *
      * @param string $string the string to print
-     * @param int ...$args additional parameters to decorate the output
      * @return int|bool Number of bytes printed or false on error
      */
     public function stdout($string)
@@ -411,7 +345,7 @@ class Controller extends \yii\base\Controller
     public function options($actionID)
     {
         // $actionId might be used in subclasses to provide options specific to action id
-        return ['color', 'interactive', 'help', 'silentExitOnException'];
+        return ['color', 'interactive', 'help'];
     }
 
     /**
@@ -506,10 +440,6 @@ class Controller extends \yii\base\Controller
      */
     public function getActionHelpSummary($action)
     {
-        if ($action === null) {
-            return $this->ansiFormat(Yii::t('yii', 'Action not found.'), Console::FG_RED);
-        }
-
         return $this->parseDocCommentSummary($this->getActionMethodReflection($action));
     }
 
@@ -614,10 +544,6 @@ class Controller extends \yii\base\Controller
             }
             $defaultValue = $property->getValue($this);
             $tags = $this->parseDocCommentTags($property);
-
-            // Display camelCase options in kebab-case
-            $name = Inflector::camel2id($name, '-', true);
-
             if (isset($tags['var']) || isset($tags['property'])) {
                 $doc = isset($tags['var']) ? $tags['var'] : $tags['property'];
                 if (is_array($doc)) {

@@ -58,34 +58,22 @@ class InlineValidator extends Validator
      * Please refer to [[clientValidateAttribute()]] for details on how to return client validation code.
      */
     public $clientValidate;
-    /**
-     * @var mixed the value of attribute being currently validated.
-     * @since 2.0.36
-     */
-    public $current;
 
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAttribute($model, $attribute)
     {
         $method = $this->method;
         if (is_string($method)) {
             $method = [$model, $method];
-        } elseif ($method instanceof \Closure) {
-            $method = $this->method->bindTo($model);
         }
-
-        $current = $this->current;
-        if ($current === null) {
-            $current = $model->$attribute;
-        }
-        $method($attribute, $this->params, $this, $current);
+        call_user_func($method, $attribute, $this->params, $this);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
@@ -93,14 +81,9 @@ class InlineValidator extends Validator
             $method = $this->clientValidate;
             if (is_string($method)) {
                 $method = [$model, $method];
-            } elseif ($method instanceof \Closure) {
-                $method = $method->bindTo($model);
             }
-            $current = $this->current;
-            if ($current === null) {
-                $current = $model->$attribute;
-            }
-            return $method($attribute, $this->params, $this, $current);
+
+            return call_user_func($method, $attribute, $this->params, $this);
         }
 
         return null;

@@ -185,12 +185,6 @@ class Sort extends BaseObject
      * the `urlManager` application component will be used.
      */
     public $urlManager;
-    /**
-     * @var int Allow to control a value of the fourth parameter which will be
-     * passed to [[ArrayHelper::multisort()]]
-     * @since 2.0.33
-     */
-    public $sortFlags = SORT_REGULAR;
 
 
     /**
@@ -263,7 +257,8 @@ class Sort extends BaseObject
                 $params = $request instanceof Request ? $request->getQueryParams() : [];
             }
             if (isset($params[$this->sortParam])) {
-                foreach ($this->parseSortParam($params[$this->sortParam]) as $attribute) {
+                $attributes = $this->parseSortParam($params[$this->sortParam]);
+                foreach ($attributes as $attribute) {
                     $descending = false;
                     if (strncmp($attribute, '-', 1) === 0) {
                         $descending = true;
@@ -342,7 +337,7 @@ class Sort extends BaseObject
     /**
      * Returns the sort direction of the specified attribute in the current request.
      * @param string $attribute the attribute name
-     * @return int|null Sort direction of the attribute. Can be either `SORT_ASC`
+     * @return bool|null Sort direction of the attribute. Can be either `SORT_ASC`
      * for ascending order or `SORT_DESC` for descending order. Null is returned
      * if the attribute is invalid or does not need to be sorted.
      */

@@ -89,19 +89,30 @@ abstract class MultiFieldSession extends Session
 
     /**
      * Composes storage field set for session writing.
-     * @param string $id Optional session id
-     * @param string $data Optional session data
+     * @param string $id session id
+     * @param string $data session data
      * @return array storage fields
      */
-    protected function composeFields($id = null, $data = null)
+    protected function composeFields($id, $data)
     {
-        $fields = $this->writeCallback ? call_user_func($this->writeCallback, $this) : [];
-        if ($id !== null) {
-            $fields['id'] = $id;
+        $fields = [
+            'data' => $data,
+        ];
+        if ($this->writeCallback !== null) {
+            $fields = array_merge(
+                $fields,
+                call_user_func($this->writeCallback, $this)
+            );
+            if (!is_string($fields['data'])) {
+                $_SESSION = $fields['data'];
+                $fields['data'] = session_encode();
+            }
         }
-        if ($data !== null) {
-            $fields['data'] = $data;
-        }
+        // ensure 'id' and 'expire' are never affected by [[writeCallback]]
+        $fields = array_merge($fields, [
+            'id' => $id,
+            'expire' => time() + $this->getTimeout(),
+        ]);
         return $fields;
     }
 
