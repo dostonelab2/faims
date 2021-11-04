@@ -52,7 +52,8 @@ $DateRangePicker = function(){
             'id' => 'date-range'
         ],
         'bsVersion' => '4.x',
-        //'bsDependencyEnabled' => false,
+        //'bsDepe
+        ndencyEnabled' => false,
         'convertFormat'=>true,
         'useWithAddon'=>true,
         'pluginOptions'=>[
