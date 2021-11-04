@@ -69,13 +69,17 @@ $DateRangePicker = function(){
 };
 ?>
 <div class="request-index">
-<?php Pjax::begin(); ?>
+<?php //Pjax::begin(); ?>
       <?php
         echo GridView::widget([
             'id' => 'request',
             'filterModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'export'=>[
+                'showConfirmAlert'=>false,
+                'target'=>GridView::TARGET_BLANK
+            ],
             'columns' => [
                             [
                                 'attribute'=>'request_date',
@@ -251,6 +255,7 @@ $DateRangePicker = function(){
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
+            'showPageSummary'=>true,
             'panel' => [
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
@@ -278,7 +283,7 @@ $DateRangePicker = function(){
     
 
         ?>
-        <?php Pjax::end(); ?>
+        <?php //Pjax::end(); ?>
 </div>
 
 <style>
