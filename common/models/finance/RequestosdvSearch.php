@@ -21,7 +21,7 @@ class RequestosdvSearch extends Request
     public function rules()
     {
         return [
-            [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by'], 'integer'],
+            [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by', 'obligation_type_id'], 'integer'],
             [['request_date', 'payee_id', 'particulars'], 'safe'],
             [['amount'], 'number'],
             [['os_id', 'dv_id'], 'safe']
@@ -72,12 +72,12 @@ class RequestosdvSearch extends Request
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            //'fundsource.obligation_type_id' => $this->obligation_type_id,
+            'tbl_request.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
-            'tbl_request.status_id' => $this->status_id,
-            'tbl_request.created_by' => $this->created_by,
+            //'tbl_request.status_id' => $this->status_id,
+            //'tbl_request.created_by' => $this->created_by,
         ]);
 
         $query->andFilterWhere(['>=', 'tbl_request.status_id', 70]);

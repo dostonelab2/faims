@@ -82,7 +82,6 @@ $DateRangePicker = function(){
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'250px',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    //return date('Y-m-d', strtotime($model->osdv->lddapada->batch_date));
                                     return date('Y-m-d', strtotime($model->request_date));
                                 },
                                 'hAlign' => GridView::ALIGN_CENTER,
@@ -108,6 +107,7 @@ $DateRangePicker = function(){
                             ],*/
                             [
                                 'attribute'=>'request_date',
+                                'header'=>'Date',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'250px',
@@ -238,13 +238,13 @@ $DateRangePicker = function(){
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->fundsource->name;
                                 },
-                                /*'filter'=>true,
+                                'filter'=>true,
                                 'filterType' => GridView::FILTER_SELECT2,
-                                'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'obligation_type_id', 'name'), 
-                                'filterWidgetOptions' => [
+                                'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'type_id', 'name'), 
+                                /*'filterWidgetOptions' => [
                                     'pluginOptions' => ['allowClear' => true],
-                                ],  
-                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],*/
+                                ],*/  
+                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],
                             ],
                             
                             [
