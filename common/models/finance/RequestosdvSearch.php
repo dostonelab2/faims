@@ -71,9 +71,7 @@ class RequestosdvSearch extends Request
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            //'request_date' => $this->request_date,
-            //'request_date' => date('Y-m-d h:i:s',strtotime('2021-06-15')),
-            'tbl_request.obligation_type_id' => $this->obligation_type_id,
+            //'fundsource.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
@@ -92,8 +90,7 @@ class RequestosdvSearch extends Request
         
         
         $query->andFilterWhere(['between', 'request_date', $this->request_date_s, $this->request_date_e]);
-        //$query->andFilterWhere(['>=', 'request_date', $this->request_date_s]);
-        //$query->andFilterWhere(['<=', 'request_date', $this->request_date_e]);
+        //$query->andFilterWhere(['=', 'fundsource.obligation_type_id', $this->obligation_type_id]);
 
         //$query->andWhere('request.osdv.os.os_number LIKE "%' . $this->os_id . '%" ');
         return $dataProvider;
