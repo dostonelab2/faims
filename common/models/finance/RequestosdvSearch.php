@@ -76,8 +76,8 @@ class RequestosdvSearch extends Request
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
-            //'tbl_request.status_id' => $this->status_id,
-            //'tbl_request.created_by' => $this->created_by,
+            'tbl_request.status_id' => $this->status_id,
+            'tbl_request.created_by' => $this->created_by,
         ]);
 
         $query->andFilterWhere(['>=', 'tbl_request.status_id', 70]);
