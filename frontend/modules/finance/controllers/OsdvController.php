@@ -5,6 +5,7 @@ namespace frontend\modules\finance\controllers;
 use Yii;
 
 use common\models\cashier\CreditorSearch;
+use common\models\cashier\LddapadaitemSearch;
 use common\models\finance\Dv;
 use common\models\finance\Os;
 use common\models\finance\Osdv;
@@ -154,6 +155,19 @@ class OsdvController extends Controller
         ]);
     }
     
+    public function actionCheckdisbursementjournal()
+    {
+        $searchModel = new LddapadaitemSearch();
+        //$searchModel = new OsdvapprovalSearch();
+        $searchModel->active = 1;
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('_checkdisbursementjournal', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     /**
      * Lists all Osdv models.
      * @return mixed

@@ -18,7 +18,7 @@ class LddapadaitemSearch extends Lddapadaitem
     public function rules()
     {
         return [
-            [['lddapada_item_id', 'lddapada_id', 'creditor_id', 'type', 'alobs_id', 'expenditure_object_id'], 'integer'],
+            [['lddapada_item_id', 'lddapada_id', 'creditor_id', 'creditor_type_id', 'alobs_id', 'expenditure_object_id'], 'integer'],
             [['name', 'bank_name', 'account_number', 'check_number'], 'safe'],
             [['gross_amount'], 'number'],
         ];
@@ -57,13 +57,16 @@ class LddapadaitemSearch extends Lddapadaitem
             // $query->where('0=1');
             return $dataProvider;
         }
+        
+        //$query->joinWith(['expenditureObject']);
+        //$query->joinWith(['creditor as creditor']);
 
         // grid filtering conditions
         $query->andFilterWhere([
             'lddapada_item_id' => $this->lddapada_item_id,
             'lddapada_id' => $this->lddapada_id,
             'creditor_id' => $this->creditor_id,
-            'type' => $this->type,
+            'creditor_type_id' => $this->creditor_type_id,
             'gross_amount' => $this->gross_amount,
             'alobs_id' => $this->alobs_id,
             'expenditure_object_id' => $this->expenditure_object_id,

@@ -136,9 +136,15 @@ Modal::end();
                                 'contentOptions' => ['style' => 'vertical-align:middle; text-align: center;'],
                                 'width'=>'120px',
                                 'format'=>'raw',
-                                'value'=>function ($model, $key, $index, $widget) { 
+                                /*'value'=>function ($model, $key, $index, $widget) { 
                                     return '<b>'.$model->request_number.'</b><br/>'.date('Y-m-d', strtotime($model->request_date));
+                                },*/
+                                
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    //return Html::a(Yii::t('app','label'), ['lddapada/view', 'id'=>$model->lddapada_id], ['class'=>'pull-right', 'style' => 'padding-right:10px;']);
+                                    return '<b>'.Html::a($model->request_number, ['request/view', 'id'=>$model->request_id], ['style' => 'font-size: medium;', 'target' => '_blank', 'data-pjax'=>0]).'</b><br/>'.date('Y-m-d',strtotime($model->request_date));
                                 },
+                                
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Request::find()->where(['>', 'status_id', 40])->orderBy(['request_id' => SORT_DESC])->asArray()->all(), 'request_id', 'request_number'), 
                                 'filterWidgetOptions' => [
@@ -155,15 +161,20 @@ Modal::end();
                                     'style'=>'max-width:300px; overflow: auto; white-space: normal; word-wrap: break-word;'
                                 ],
                                 'format' => 'raw',
-                                'value'=>function ($model, $key, $index, $widget) { 
+                                /*'value'=>function ($model, $key, $index, $widget) { 
                                     return Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
-                                        'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
+                                        //'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
                                         //'data-toggle'=>'tooltip',
                                         //'data-content'=>Profile::find($model->created_by)->one()->fullname,
                                         //'data-toggle'=>'popover',
                                         'style'=>'text-decoration: underline; cursor:pointer;'
                                     ]).'<br>' .$model->particulars;
+                                },*/
+                                
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return '<b>'.Html::a(Creditor::findOne($model->payee_id)->name, ['osdv/view', 'id'=>$model->osdv->osdv_id], ['style' => 'font-size: medium;', 'target' => '_blank', 'data-pjax'=>0]).'</b><br/>'.$model->particulars;
                                 },
+                                
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
                                                                 function($model) {
@@ -229,7 +240,7 @@ Modal::end();
                                 'headerOptions' => ['style' => 'background-color: #fff;'],
                                 'buttons' => [
                                     'view' => function ($url, $model){
-                                        return $model->osdv ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View Request")]) : '';
+                                        return $model->osdv ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View OSDV")]) : '';
                                     },
                                     'printos' => function ($url, $model){
                                         return ($model->obligation_type_id == 1) ? ($model->osdv ? ($model->osdv->isObligated() ? Html::button('<span class="glyphicon glyphicon-print"></span>', ['value' => '/finance/request/printos?id=' . $model->request_id,'onclick'=>'window.open(this.value)', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "Print OS")]) : '') : '') : '';
