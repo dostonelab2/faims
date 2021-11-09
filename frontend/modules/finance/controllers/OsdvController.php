@@ -17,6 +17,7 @@ use common\models\finance\Requestpayroll;
 use common\models\finance\RequestpayrollSearch;
 use common\models\finance\RequestSearch;
 use common\models\finance\RequestosdvSearch;
+use common\models\finance\OsdvreportSearch;
 use common\models\procurement\Expenditureclass;
 use common\models\sec\Blockchain;
 
@@ -111,15 +112,14 @@ class OsdvController extends Controller
      */
     public function actionReport()
     {
-        $searchModel = new RequestosdvSearch();
+        $searchModel = new OsdvreportSearch();
         
         $status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
         
-        if(isset($_GET['RequestosdvSearch'])){
+        if(isset($_GET['OsdvreportSearch'])){
             
-            $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime($_GET['RequestosdvSearch']['request_date_s'])));
-            //$request_date_s = date('Y-m-d', strtotime($_GET['RequestosdvSearch']['request_date_s']));
-            $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime($_GET['RequestosdvSearch']['request_date_e'])));
+            $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime($_GET['OsdvreportSearch']['request_date_s'])));
+            $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime($_GET['OsdvreportSearch']['request_date_e'])));
             
             $searchModel->request_date_s = $request_date_s;
             $searchModel->request_date_e = $request_date_e;    

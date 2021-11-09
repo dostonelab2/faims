@@ -13,15 +13,23 @@ use common\models\finance\Requestpayroll;
 /**
  * RequestSearch represents the model behind the search form about `common\models\finance\Request`.
  */
-class RequestosdvSearch extends Request
+class OsdvreportSearch extends Request
 {
+    public $request_date_s;
+    public $request_date_e;
+    
+    public $payee_id;
+    public $os_id;
+    public $dv_id;
+    public $obligation_type_id;
     /**
      * @inheritdoc
      */ 
     public function rules()
     {
         return [
-            [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by'], 'integer'],
+            //[['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by'], 'integer'],
+            [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by', 'obligation_type_id', ], 'integer'],
             [['request_date', 'payee_id', 'particulars'], 'safe'],
             [['amount'], 'number'],
             [['os_id', 'dv_id'], 'safe']
@@ -47,7 +55,7 @@ class RequestosdvSearch extends Request
     public function search($params)
     {
         $query = Request::find();
-        $query2 = Requestpayroll::find();
+        //$query2 = Requestpayroll::find();
         
 
         // add conditions that should always apply here
@@ -57,7 +65,7 @@ class RequestosdvSearch extends Request
             'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
         
-        $dataProvider2 = new ActiveDataProvider([
+        /*$dataProvider2 = new ActiveDataProvider([
             'query' => $query2,
             'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
@@ -66,7 +74,7 @@ class RequestosdvSearch extends Request
         
         $dataProvider = new ArrayDataProvider([
           'allModels' => $data
-        ]);
+        ]);*/
         
         /*$dataProvider = new ActiveDataProvider([
             'query' => $data,
@@ -81,13 +89,15 @@ class RequestosdvSearch extends Request
             return $dataProvider;
         }
 
+        //$query->joinWith(['osdv']);
         $query->joinWith(['osdv.os as os']);
         $query->joinWith(['osdv.dv as dv']);
-
+        $query->joinWith(['osdv.lddapadaitem.lddapada as lddapada']);
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            'request_date' => $this->request_date,
+            'tbl_request.obligation_type_id' => $this->obligation_type_id,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
@@ -95,14 +105,16 @@ class RequestosdvSearch extends Request
             'tbl_request.created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['>=', 'tbl_request.status_id', 50]);
+        $query->andFilterWhere(['>=', 'tbl_request.status_id', 70]);
         
-        $query->andFilterWhere(['like', 'request_number', $this->request_number]);
+        //$query->andFilterWhere(['like', 'request_number', $this->request_number]);
 
         $query->andFilterWhere(['like', 'os.os_id', $this->os_id]);
         $query->andFilterWhere(['like', 'dv.dv_id', $this->dv_id]);
         //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
-
+        
+        $query->andFilterWhere(['between', 'lddapada.batch_date', $this->request_date_s, $this->request_date_e]);
+        //$query->andFilterWhere(['between', 'request_date', $this->request_date_s, $this->request_date_e]);
         //$query->andWhere('request.osdv.os.os_number LIKE "%' . $this->os_id . '%" ');
         return $dataProvider;
     }

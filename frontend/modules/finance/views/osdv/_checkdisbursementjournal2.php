@@ -68,7 +68,8 @@ $gridColumns = [
                 return [
                     'mergeColumns' => [[1,9]], // columns to merge in summary
                     'content' => [             // content to show in each summary cell
-                        1 => 'Summary (' . Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name . ')',
+                        1 => 'Summary',
+                        //1 => 'Summary (' . Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name . ')',
                         //4 => GridView::F_AVG,
                         //5 => GridView::F_SUM,
                         10 => GridView::F_SUM,
@@ -105,7 +106,6 @@ $gridColumns = [
             },
             'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
-            
         ],
         [
             'attribute' => 'dv_id',
@@ -131,7 +131,6 @@ $gridColumns = [
                 return 'CHECK Number';
                 //return (isset($model->osdv->dv) ? $model->osdv->dv->dv_number : '');
             },
-            
             'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
         ],

@@ -5,6 +5,8 @@ namespace common\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
 
@@ -13,8 +15,7 @@ use common\models\finance\Requestpayroll;
  */
 class RequestosdvSearch extends Request
 {
-    public $request_date_s;
-    public $request_date_e;
+    
     /**
      * @inheritdoc
      */ 
