@@ -9,6 +9,7 @@ use common\models\cashier\LddapadaitemSearch;
 use common\models\finance\Dv;
 use common\models\finance\Os;
 use common\models\finance\Osdv;
+use common\models\finance\AccounttransactionSearch;
 use common\models\finance\OsdvSearch;
 use common\models\finance\OsdvapprovalSearch;
 use common\models\finance\Request;
@@ -157,17 +158,18 @@ class OsdvController extends Controller
     
     public function actionCheckdisbursementjournal()
     {
-        $searchModel = new LddapadaitemSearch();
-        //$searchModel = new OsdvapprovalSearch();
+        //$searchModel = new LddapadaitemSearch();
+        $searchModel = new AccounttransactionSearch();
         $searchModel->active = 1;
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        return $this->render('_checkdisbursementjournal', [
+        return $this->render('_checkdisbursementjournal2', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * Lists all Osdv models.
      * @return mixed
