@@ -67,7 +67,7 @@ class RequestosdvSearch extends Request
         $query->joinWith(['osdv']);
         $query->joinWith(['osdv.os as os']);
         $query->joinWith(['osdv.dv as dv']);
-        $query->joinWith(['osdv.lddapadaitem.lddapada as lddapada']);
+        //$query->joinWith(['osdv.lddapadaitem.lddapada as lddapada']);
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -80,7 +80,7 @@ class RequestosdvSearch extends Request
             'tbl_request.created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['>=', 'tbl_request.status_id', 70]);
+        $query->andFilterWhere(['>=', 'tbl_request.status_id', 50]);
         
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);
         //$query->andFilterWhere(['>=', 'request_date', '2021-06-16']);
@@ -90,7 +90,7 @@ class RequestosdvSearch extends Request
         //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
         
         //model->osdv->lddapadaitem->lddapada->batch_date
-        $query->andFilterWhere(['between', 'lddapada.batch_date', $this->request_date_s, $this->request_date_e]);
+        //$query->andFilterWhere(['between', 'lddapada.batch_date', $this->request_date_s, $this->request_date_e]);
         //$query->andFilterWhere(['between', 'request_date', $this->request_date_s, $this->request_date_e]);
         //$query->andFilterWhere(['=', 'fundsource.obligation_type_id', $this->obligation_type_id]);
 
