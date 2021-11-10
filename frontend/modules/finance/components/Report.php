@@ -626,7 +626,7 @@ $content .= '
     </tr>
     <tr>
         <td colspan="4">Official Receipt No. & Date/Other Documents</td>
-        <td></td>
+        <td style="text-align: right; font-size: 50%; font-weight: bold; padding-right:2px;">'.$model->request_number.'</td>
     </tr>
     </tbody>
 </table>';
