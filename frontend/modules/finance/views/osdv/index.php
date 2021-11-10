@@ -172,7 +172,14 @@ Modal::end();
                                 },*/
                                 
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<b>'.Html::a(Creditor::findOne($model->payee_id)->name, ['osdv/view', 'id'=>$model->osdv->osdv_id], ['style' => 'font-size: medium;', 'target' => '_blank', 'data-pjax'=>0]).'</b><br/>'.$model->particulars;
+                                    //return Creditor::findOne($model->payee_id)->name. '-' . ($model->osdv ? $model->osdv->osdv_id : 'hahaha');
+                                    
+                                    return ($model->osdv ? 
+                                    '<b>'.Html::a(Creditor::findOne($model->payee_id)->name, ['osdv/view', 'id'=>$model->osdv->osdv_id], ['style' => 'font-size: medium;', 'target' => '_blank', 'data-pjax'=>0]).'</b><br/>' :
+                                    
+                                    '<b>'.Creditor::findOne($model->payee_id)->name).'</b><br/>'
+                                        
+                                    .$model->particulars;
                                 },
                                 
                                 'filterType' => GridView::FILTER_SELECT2,
