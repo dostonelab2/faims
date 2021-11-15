@@ -91,8 +91,8 @@ class CheckdisbursementjournalSearch extends Accounttransaction
             'amount' => $this->amount,
         ]);
         
-        $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime('2021-06-01')));
-        $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime('2021-06-15')));
+        $request_date_s = date('Y-m-d', strtotime("-1 day", strtotime('2021-10-01')));
+        $request_date_e = date('Y-m-d', strtotime("+1 day", strtotime('2021-10-31')));
         
         $query->andFilterWhere(['between', 'lddapada.batch_date', $request_date_s, $request_date_e]);
 
