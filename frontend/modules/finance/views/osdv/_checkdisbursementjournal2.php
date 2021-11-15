@@ -47,7 +47,44 @@ $gridColumns = [
             'contentOptions'=>['style'=>'background-color: #fee082; font-weight: bold;'],
             'width' => '310px',
             'value' => function ($model, $key, $index, $widget) { 
-                return Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name;
+                //return $model->osdv->lddapadaitem->lddapada->batch_date;
+                //return date('j F Y', strtotime($model->osdv->lddapadaitem->lddapada->batch_date));
+                return isset($model->osdv->lddapadaitem->lddapada->batch_date) ? date('Y-m-d', strtotime($model->osdv->lddapadaitem->lddapada->batch_date)) : date('Y-m-d');
+                return isset($model->osdv->lddapadaitem->lddapada->batch_date) ? date('Y-m-d', strtotime($model->osdv->lddapadaitem->lddapada->batch_date)) : date('Y-m-d');
+            },
+            'contentOptions'=>['style'=>'background-color: #fee082; font-weight: bold;'],
+            'group' => true,  // enable grouping,
+            'groupedRow' => true,                    // move grouped column to a single grouped row
+            'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
+            'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
+            'groupFooter' => function ($model, $key, $index, $widget) { // Closure method
+                return [
+                    'mergeColumns' => [[1,10]], // columns to merge in summary
+                    'content' => [             // content to show in each summary cell
+                        1 => 'Summary',
+                        //1 => 'Summary (' . Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name . ')',
+                        11 => GridView::F_SUM,
+                    ],
+                    'contentFormats' => [      // content reformatting for each summary cell
+                        11 => ['format' => 'number', 'decimals' => 2],
+                    ],
+                    'contentOptions' => [      // content html attributes for each summary cell
+                        1 => ['style' => 'font-variant:small-caps'],
+                        11 => ['style' => 'text-align:right'],
+                    ],
+                    // html attributes for group summary row
+                    'options' => ['class' => 'info table-info','style' => 'font-weight:bold; text-align: right;']
+                ];
+            }
+        ],
+        /*[
+            'attribute' => 'supplier_id', 
+            'headerOptions' => ['style' => 'background-color: #fee082;'],
+            'contentOptions'=>['style'=>'background-color: #fee082; font-weight: bold;'],
+            'width' => '310px',
+            'value' => function ($model, $key, $index, $widget) { 
+                $creditor = $model->osdv->lddapadaitem ? Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name : '';
+                return $creditor;
             },
             'filterType' => GridView::FILTER_SELECT2,
             'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
@@ -66,33 +103,42 @@ $gridColumns = [
             'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
             'groupFooter' => function ($model, $key, $index, $widget) { // Closure method
                 return [
-                    'mergeColumns' => [[1,9]], // columns to merge in summary
+                    'mergeColumns' => [[0,9]], // columns to merge in summary
                     'content' => [             // content to show in each summary cell
-                        1 => 'Summary',
+                        0 => 'Summary',
                         //1 => 'Summary (' . Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name . ')',
-                        //4 => GridView::F_AVG,
-                        //5 => GridView::F_SUM,
-                        10 => GridView::F_SUM,
+                        11 => GridView::F_SUM,
                     ],
                     'contentFormats' => [      // content reformatting for each summary cell
-                        //4 => ['format' => 'number', 'decimals' => 2],
-                        //5 => ['format' => 'number', 'decimals' => 0],
-                        10 => ['format' => 'number', 'decimals' => 2],
+                        11 => ['format' => 'number', 'decimals' => 2],
                     ],
                     'contentOptions' => [      // content html attributes for each summary cell
                         0 => ['style' => 'font-variant:small-caps'],
-                        //4 => ['style' => 'text-align:right'],
-                        //5 => ['style' => 'text-align:right'],
-                        10 => ['style' => 'text-align:right'],
+                        11 => ['style' => 'text-align:right'],
                     ],
                     // html attributes for group summary row
                     'options' => ['class' => 'info table-info','style' => 'font-weight:bold; text-align: right;']
                 ];
             }
-        ],
+        ],*/
         [
             'class' => 'kartik\grid\SerialColumn',
             //'headerOptions' => ['style' => 'display: none;'],
+        ],
+        [
+            'attribute' => 'supplier_id',
+            'header'=>'Supplier',
+            'headerOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: left; padding-left: 5px; font-face: bold;'],
+            'width' => '450px',
+            'hAlign' => 'center',
+            'format'=>'raw',
+            'value'=>function ($model, $key, $index, $widget) { 
+                $creditor = $model->osdv->lddapadaitem ? Creditor::findOne($model->osdv->lddapadaitem->creditor_id)->name : '';
+                return $creditor;
+            },
+            //'group' => true,  // enable grouping
+            'subGroupOf' => 1, // supplier column index is the parent group,
         ],
         [
             'attribute' => 'os_id',
@@ -104,7 +150,7 @@ $gridColumns = [
             'value'=>function ($model, $key, $index, $widget) { 
                 return (isset($model->osdv->os) ? $model->osdv->os->os_number : '');
             },
-            'group' => true,  // enable grouping
+            //'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
         ],
         [
@@ -117,7 +163,7 @@ $gridColumns = [
             'value'=>function ($model, $key, $index, $widget) { 
                 return (isset($model->osdv->dv) ? $model->osdv->dv->dv_number : '');
             },
-            'group' => true,  // enable grouping
+            //'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
         ],
         [
@@ -128,28 +174,30 @@ $gridColumns = [
             'hAlign' => 'center',
             'format'=>'raw',
             'value'=>function ($model, $key, $index, $widget) { 
-                return 'CHECK Number';
-                //return (isset($model->osdv->dv) ? $model->osdv->dv->dv_number : '');
+                //return $model->account_transaction_id;
+                return isset($model->osdv->lddapadaitem->check_number) ? $model->osdv->lddapadaitem->check_number : '';
             },
-            'group' => true,  // enable grouping
+            //'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
         ],
         [
             'attribute' => 'dv_id',
             'header'=>'1-01-04-040',
             'headerOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
             'width' => '150px',
             'hAlign' => 'center',
-            'format'=>'raw',
+            'format'=>['decimal',2],
             'value'=>function ($model, $key, $index, $widget) { 
-                return ( ($model->debitcreditflag == 2) && ($model->account_id != 31) ) ? $model->amount : '0.00';
+                //return ( ($model->debitcreditflag == 2) && ($model->account_id != 31) ) ? $model->amount : '0.00';
+                return ( ($model->debitcreditflag == 2) && ($model->account_id != 31) ) ? $model->osdv->getNetamount() : '0.00';
             },
         ],
         [
             'attribute'=>'gross_amount',
             'header'=>'2-02-01-010',
             'headerOptions' => ['style' => 'text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            'contentOptions' => ['style' => 'text-align: right; padding-right: 5px;'],
             'width'=>'250px',
             'format'=>['decimal',2],
             'value'=>function ($model, $key, $index, $widget) { 
@@ -170,7 +218,7 @@ $gridColumns = [
             'value'=>function ($model, $key, $index, $widget) { 
                 return '';
             },
-            'group' => true,  // enable grouping
+            //'group' => true,  // enable grouping
             'subGroupOf' => 1, // supplier column index is the parent group,
         ],
         [
@@ -204,7 +252,7 @@ $gridColumns = [
             'attribute'=>'gross_amount',
             'header'=>'Gross Amount',
             'headerOptions' => ['style' => 'text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: right; padding-right: 25px;'],
+            'contentOptions' => ['style' => 'text-align: right; padding-right: 5px;'],
             'width'=>'150px',
             'format'=>['decimal',2],
             'value'=>function ($model, $key, $index, $widget) {

@@ -42,7 +42,6 @@ class AccounttransactionSearch extends Accounttransaction
     public function search($params)
     {
         $query = Accounttransaction::find();
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
