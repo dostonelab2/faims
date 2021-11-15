@@ -57,6 +57,7 @@ class CheckdisbursementjournalSearch extends Accounttransaction
         $query = Accounttransaction::find()
                     ->where(['tbl_account_transaction.active' => 1]);
                     //->all();
+                                        //->orderBy(['osdv.lddapadaitem.lddapada.batch_date ASC'])
         //$query->groupBy(['DATE(tbl_osdv.lddapadaitem.lddapada.batch_date)']);
         //$query->join('LEFT JOIN', 'tbl_request as request', 'request.request_id = tbl_account_transaction.request_id');
         $query->join('LEFT JOIN', 'tbl_osdv as osdv', 'osdv.request_id = tbl_account_transaction.request_id');
@@ -70,7 +71,8 @@ class CheckdisbursementjournalSearch extends Accounttransaction
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['osdv.lddapadaitem.lddapada.batch_date'=>SORT_DESC, 'account_transaction_id'=>SORT_DESC]],
+            //'sort'=> ['defaultOrder' => ['osdv.lddapadaitem.lddapada.batch_date'=>SORT_DESC, 'account_transaction_id'=>SORT_DESC]],
+            //->orderBy(['housingType.occupant.first_name ASC']),
             'pagination' => false,
         ]);
 
