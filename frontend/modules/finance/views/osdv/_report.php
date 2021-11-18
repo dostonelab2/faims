@@ -253,8 +253,8 @@ $DateRangePicker = function(){
                                 'width'=>'150px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    return 0;
-                                    //return $model->osdv->getNetamount();
+                                    //return 0;
+                                    return $model->osdv->getNetamount();
                                 },
                                 'xlFormat'=>'0\.00E+00', // scientific
                                 'pageSummary'=>true
@@ -267,8 +267,8 @@ $DateRangePicker = function(){
                                 'width'=>'250px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return 0;
-                                    //return $model->osdv->getTax();
+                                    //return 0;
+                                    return $model->osdv->getTax();
                                 },
                                 'xlFormat'=>'0\.00E+00', // scientific
                                 'pageSummary'=>true
@@ -281,8 +281,8 @@ $DateRangePicker = function(){
                                 'width'=>'150px',
                                 'format'=>['decimal',2],
                                 'value'=>function ($model, $key, $index, $widget) {
-                                    return 0;
-                                    //return $model->osdv->getGrossamount();
+                                    //return 0;
+                                    return $model->osdv->getGrossamount();
                                 },
                                 'xlFormat'=>'0\.00E+00', // scientific
                                 'pageSummary'=>true
