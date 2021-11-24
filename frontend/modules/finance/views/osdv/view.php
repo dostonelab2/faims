@@ -585,9 +585,9 @@ Modal::end();
                 },
                 'pageSummary' => false,
             ],
-            /*[   
+            [   
                 'attribute'=>'request_id',
-                'header' => 'DV Number',
+                'header' => 'Action',
                 'headerOptions' => ['style' => 'text-align: center;'],
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle; font-weight: bold;'],
                 'format' => 'raw',
@@ -599,7 +599,7 @@ Modal::end();
                     );
                 },
                 'pageSummary' => false,
-            ],*/
+            ],
             [   
                     'attribute'=>'gross_amount',
                     'header' => 'Print',
