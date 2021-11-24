@@ -585,7 +585,7 @@ Modal::end();
                 },
                 'pageSummary' => false,
             ],
-            [   
+            /*[   
                 'attribute'=>'request_id',
                 'header' => 'DV Number',
                 'headerOptions' => ['style' => 'text-align: center;'],
@@ -599,7 +599,25 @@ Modal::end();
                     );
                 },
                 'pageSummary' => false,
-            ],
+            ],*/
+            [   
+                    'attribute'=>'gross_amount',
+                    'header' => 'Print',
+                    'headerOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                    'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                    'format' => 'raw',
+                    'width'=>'150px',
+                    'value'=>function ($model, $key, $index, $widget) {
+                        return $model->request_payroll_id ? 
+                        
+                        Html::a('<i class="glyphicon glyphicon-print"></i>', Url::to(['/finance/request/printdvpayroll', 'id'=>$model->request_payroll_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) 
+                            : 
+                        Html::a('<i class="glyphicon glyphicon-print"></i>', Url::to(['/finance/request/printdv', 'id'=>$model->osdv->request->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']);
+                    },
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_AVG,
+                    'footer' => true
+                ],
         ];
 ?>
     
