@@ -99,6 +99,8 @@ class OsdvController extends Controller
         
         if(Yii::$app->user->can('access-finance-disbursement'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        else    
+            $numberOfRequests = 0;
         
         return $this->render('index', [
             'searchModel' => $searchModel,
