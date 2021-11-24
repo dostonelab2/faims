@@ -195,7 +195,7 @@ $request_for_approval = Request::find()
                                 'label' => 'Obligation and Disbursement', 
                                 'icon' => 'ruble text-aqua', 
                                 'url' => ['/finance/osdv/index'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || (Yii::$app->user->identity->username == 'access-dv')
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-dv')
                             ],
                             [
                                 'label' => 'For Approval' , 
