@@ -177,7 +177,7 @@ foreach($blocks as $block){
         'container' => ['id'=>'kv-demo'],
         //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
         
-        'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() ) ? '{update}' : '', //hides buttons on detail view
+        'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() || Yii::$app->user->can('access-finance-verification')) ? '{update}' : '', //hides buttons on detail view
         'attributes' => $attributes,
         'condensed' => true,
         'responsive' => true,
