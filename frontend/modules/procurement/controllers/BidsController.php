@@ -270,8 +270,37 @@ class BidsController extends Controller
             }
         return $mstat;
     }
+    
     public function actionCancelpo(){
-        
+        if(Yii::$app->request->isPost){
+            $po_num = $_POST['po_num'];
+            $con = Yii::$app->procurementdb;
+            $purchase_order = Purchaseorder::find()->where(['purchase_order_number' => $po_num])->one();
+            $purchase_order->purchase_order_status = 2;
+    
+            $po_details = Purchaseorderdetails::find()->where(['purchase_order_id' => $purchase_order->purchase_order_id])->all();
+            $sql_update_bids_detail_string = '';
+            $sql_update_pr_deatail_string = '';
+            foreach ($po_details as $po_detail){
+                $bids_detail = Bidsdetails::find()->where(['bids_details_id' => $po_detail->bids_details_id])->one();
+                $sql_update_bids_detail = 'UPDATE tbl_bids_details SET bids_details_status = 0 WHERE purchase_request_details_id  = ' . $bids_detail->purchase_request_details_id . ';';
+                $sql_update_bids_detail_string .= $sql_update_bids_detail;
+    
+                $sql_update_pr_deatail ='UPDATE tbl_purchase_request_details SET purchase_request_details_status = 0 WHERE purchase_request_details_id = ' . $bids_detail->purchase_request_details_id . ';';
+                $sql_update_pr_deatail_string .= $sql_update_pr_deatail;
+            }
+            $purchase_order->save(false);
+            $con->createCommand($sql_update_pr_deatail_string)->execute();
+            $con->createCommand($sql_update_bids_detail_string)->execute();
+            $response['id'] = $po_num;
+            $response['success'] = true;
+            $response['message'] = 'PO Canceled...';
+            
+    
+            return json_encode($response);
+        }else{
+           throw new yii\web\ForbiddenHttpException('You are not allowed to perform this action...');
+        }
     }
 
     public function actionCheckselected()

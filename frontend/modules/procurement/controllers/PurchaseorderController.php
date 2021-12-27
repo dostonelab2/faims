@@ -120,6 +120,7 @@ class PurchaseorderController extends \yii\web\Controller
  `tbl_purchase_order`.`purchase_order_id`,
  `tbl_purchase_order_details`.`delivered`,
  `tbl_purchase_order`.`purchase_order_date`,
+ `tbl_purchase_order`.`purchase_order_status`,
  `tbl_purchase_request`.`purchase_request_number`,
  `tbl_purchase_request`.`purchase_request_date`
          FROM `fais-procurement`.`tbl_purchase_order`
@@ -147,7 +148,8 @@ class PurchaseorderController extends \yii\web\Controller
                  'bids_item_description' => $pr["bids_item_description"],
                  'bids_quantity' => $pr["bids_quantity"],
                  'bids_price' => $pr["bids_price"],
-                 'purchase_order_id' => $pr["purchase_order_id"]
+                 'purchase_order_id' => $pr["purchase_order_id"],
+                 'purchase_order_status' => $pr["purchase_order_status"]
              ];
          }
          if ($x == 0) {
@@ -158,7 +160,8 @@ class PurchaseorderController extends \yii\web\Controller
                  'bids_item_description' => '',
                  'bids_quantity' => '',
                  'bids_price' => '',
-                 'purchase_order_id' => ''
+                 'purchase_order_id' => '',
+                 'purchase_order_status' => ''
              ];
          }
 

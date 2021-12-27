@@ -192,13 +192,28 @@ $this->registerJsFile($BaseURL.'js/custom.js');
         ],
         [
 
+            'label'=>'Status',
+            'headerOptions' => ['class' => 'kartik-sheet-style'],
+            'group'=>true,  // enable grouping
+            'subGroupOf'=>1, // supplier column index is the parent group
+            'format'=>'raw',
+            'value' => function ($data) use ($func) {
+                if ($data['purchase_order_status'] == 2){
+                    return '<span class="badge" style="background:#FF0000;">Canceled <i class="fa fa-remove"></i></span>';
+                } 
+                if ($data['purchase_order_status'] == 1){
+                    return '<span class="badge" style="background:#005cf0;">Active <i class="fa fa-check"></i></span>';
+                }    
+            },
+        ],
+        [
+
             'label'=>'Modify',
             'headerOptions' => ['class' => 'kartik-sheet-style'],
             'format'=>'raw',
             'value' => function ($data) use ($func) {
                 $btn ="<h5 style='text-align:center;display: inline-block;margin:0px;' data-step='2' data-intro='Click here to view Obligation Request'><span>". Html::button('<span class=\'glyphicon glyphicon-pencil\'></span>', ['value' => Url::to(['viewpo?id='.$data["bids_details_id"].'&&'.'mid='.$data["purchase_order_id"]]), 'title' => 'Modify Purchase Order', 'tab-index'=>0 , 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddObligation'])."</span></h5>";
-                return $btn;
-                
+                return $btn;     
             },
         ],
         [
@@ -209,12 +224,25 @@ $this->registerJsFile($BaseURL.'js/custom.js');
             'subGroupOf'=>1, // supplier column index is the parent group
             'format'=>'raw',
             'value' => function ($data) use ($func) {
-                return Html::a('<span class="glyphicon glyphicon-print"></span>', ['reportpofull?id='.$data["purchase_order_number"].'&&'.'mid='.$data["purchase_order_id"]], [
-                    'class'=>'btn-pdfprint btn btn-primary',
-                    'data-pjax'=>"0",
-                    'pjax'=>"0",
-                    'title'=>'Will open the generated PDF file in a new window'
-                ]);
+                if ($data['purchase_order_status'] == 1){
+                    return Html::button(
+                        '<span class="glyphicon glyphicon-remove-sign"></span>',
+                        [
+                            'title' => 'Cancel PO',
+                            'value' => $data['purchase_order_number'],
+                            'class' => 'btn btn-danger btncancelpo',
+                            'id' => 'btncancelpo'
+                        ]
+                    ) .
+                     Html::a('<span class="glyphicon glyphicon-print"></span>', ['reportpofull?id='.$data["purchase_order_number"].'&&'.'mid='.$data["purchase_order_id"]], [
+                        'class'=>'btn-pdfprint btn btn-primary',
+                        'data-pjax'=>"0",
+                        'pjax'=>"0",
+                        'title'=>'Will open the generated PDF file in a new window'
+                    ]);
+                }else{
+                    return '';
+                }
             },
         ],
 
