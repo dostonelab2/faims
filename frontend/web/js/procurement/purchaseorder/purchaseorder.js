@@ -28,26 +28,40 @@ jQuery(document).ready(function ($) {
     });
 */
 
+
 $(document).on('click','#btncancelpo', function(){
-    var txt;
-    var r = confirm("Are you sure you want to cancel this PO?");
-    if (r == true) {
-        var po_num = $("#btncancelpo").val();
-        //pr_id = atob(atob(pr_id.toUpperCase()));
-        jQuery.ajax( {
-            type: "POST",
-            url: frontendURI + "procurement/bids/cancelpo",
-            data:{po_num:po_num},
-            dataType:'JSON',
-            success: function ( response ) {
-                location.reload();
-                //console.log(response);
-            },
-            error: function ( xhr, ajaxOptions, thrownError ) {
-                alert( thrownError );
-            }
-        } );
-    } 
+    var po_num = $(this).val();
+    swal({
+        title: "Are you sure you want to cancel " + po_num  + "?",
+        text: "Once cancelled, it cannot be undone!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willCancel) => {
+        if (willCancel) {
+            //pr_id = atob(atob(pr_id.toUpperCase()));
+            jQuery.ajax( {
+                type: "POST",
+                url: frontendURI + "procurement/bids/cancelpo",
+                data:{po_num:po_num},
+                dataType:'JSON',
+                success: function ( response ) {
+                    
+                    swal(po_num  + " cancelled successfully!", {
+                        icon: "success",
+                    }).then(() =>{
+                        location.reload();
+                    });
+                    //console.log(response);
+                },
+                error: function ( xhr, ajaxOptions, thrownError ) {
+                    alert( thrownError );
+                }
+            } );
+
+        }
+      });
 });
 
 
