@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = '';
 $this->registerJsFile($BaseURL.'js/jquery.tabletojson.js');
 $this->registerJsFile($BaseURL.'js/procurement/purchaseorder/purchaseorder.js');
 $this->registerJsFile($BaseURL.'js/custom.js');
-
+$this->registerJsFile($BaseURL.'js/sweetalert.min.js');
 ?>
 
 <div class="request-index">
