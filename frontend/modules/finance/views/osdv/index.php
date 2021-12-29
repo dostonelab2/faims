@@ -274,25 +274,27 @@ Modal::end();
                     'heading' => '',
                     'type' => GridView::TYPE_PRIMARY,
                     'before'=>Html::button('Validated Requests  &nbsp;&nbsp;<span class="badge badge-light">'.$numberOfRequests.'</span>', ['value' => Url::to(['osdv/create']), 'title' => 'Request', 'class' => 'btn btn-success', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateOsdv']),
-                    'after'=>false,
+                    //'after'=>false,
                 ],
             // set your toolbar
-            'toolbar' => 
+            /*'toolbar' => 
                         [
                             [
                                 'content'=>'',
-                                    /*Html::button('PENDING', ['title' => 'Approved', 'class' => 'btn btn-warning', 'style'=>'width: 90px; margin-right: 6px;']) .    
+                                    Html::button('PENDING', ['title' => 'Approved', 'class' => 'btn btn-warning', 'style'=>'width: 90px; margin-right: 6px;']) .    
                                     Html::button('SUBMITTED', ['title' => 'Approved', 'class' => 'btn btn-primary', 'style'=>'width: 90px; margin-right: 6px;']) .
-                                    Html::button('APPROVED', ['title' => 'Approved', 'class' => 'btn btn-success', 'style'=>'width: 90px; margin-right: 6px;'])*/
+                                    Html::button('APPROVED', ['title' => 'Approved', 'class' => 'btn btn-success', 'style'=>'width: 90px; margin-right: 6px;'])
                             ],
-                            //'{export}',
-                            //'{toggleData}'
-                        ],
+                            '{export}',
+                            '{toggleData}'
+                        ],*/
             
-            'toggleDataOptions' => ['minCount' => 10],
+            //'toggleDataOptions' => ['minCount' => 10],
+            //'panel' => ['type' => 'primary', 'heading' => 'Obligation and Disbursement'],
+            'toggleDataContainer' => ['class' => 'btn-group mr-2 me-2'],
             //'exportConfig' => $exportConfig,
-            'itemLabelSingle' => 'item',
-            'itemLabelPlural' => 'items'
+            //'itemLabelSingle' => 'item',
+            //'itemLabelPlural' => 'items'
         ]);
     
 
