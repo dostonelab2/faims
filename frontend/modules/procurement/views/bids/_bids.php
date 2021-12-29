@@ -32,8 +32,6 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
 
 
 //$this->registerJsFile($BaseURL.'js/custom.js');
-//echo base64_encode('854');
-//echo base64_decode(base64_decode(strtoupper('tve9pq==')));
 ?>
 
 <div class="bids-form">
@@ -232,7 +230,7 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                             'formOptions'=>['action' => ['bids/editPrice']], // point to the new action
                                                         ];
                                                     },
-                                                    ],
+                                                ],
 
 
                                                 [
@@ -768,8 +766,8 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                         'Cancel PO',
                                                         [
                                                             'title' => 'Cancel PO',
-                                                            'value' => strtolower(base64_encode(base64_encode($model['purchase_request_id']))),
-                                                            'class' => 'btn btn-danger btncancelpo',
+                                                            'value' => $model['purchase_order_number'],
+                                                            'class' => 'btn btn-primary btncancelpo',
                                                             'style' => 'width: 110px; margin-right: 6px;',
                                                             'id' => 'btncancelpo'
                                                         ]
@@ -855,12 +853,16 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                             'subGroupOf'=>1, // supplier column index is the parent group
                                             'format'=>'raw',
                                             'value' => function ($data) use ($func) {
-                                                return Html::a('<span class="glyphicon glyphicon-print"></span>', ['../procurement/purchaseorder/reportpo?id='.$data["purchase_order_number"]], [
-                                                    'class'=>'btn-pdfprint btn btn-warning',
-                                                    'data-pjax'=>"0",
-                                                    'pjax'=>"0",
-                                                    'title'=>'Will open the generated PDF file in a new window'
-                                                ]);
+                                                if ($data['purchase_order_status'] == 1){
+                                                    return Html::a('<span class="glyphicon glyphicon-print"></span>', ['../procurement/purchaseorder/reportpo?id='.$data["purchase_order_number"]], [
+                                                        'class'=>'btn-pdfprint btn btn-warning',
+                                                        'data-pjax'=>"0",
+                                                        'pjax'=>"0",
+                                                        'title'=>'Will open the generated PDF file in a new window'
+                                                    ]);
+                                                }else{
+                                                    return '';
+                                                }
                                             },
                                         ],
 
@@ -879,7 +881,6 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                 'enablePushState' => false,
                                             ],
                                         ],
-
                                         'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
                                         'headerRowOptions' => ['class' => 'kartik-sheet-style'],
                                         'filterRowOptions' => ['class' => 'kartik-sheet-style'],
