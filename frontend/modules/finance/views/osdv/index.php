@@ -13,6 +13,7 @@ use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Dv;
+use common\models\finance\Obligationtype;
 use common\models\finance\Os;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
@@ -192,6 +193,24 @@ Modal::end();
                                     'pluginOptions' => ['allowClear' => true],
                                 ],  
                                 'filterInputOptions' => ['placeholder' => 'Select Payee']
+                            ],
+                            [
+                                'attribute'=>'obligation_type_id',
+                                'header'=>'Fund Source',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->fundsource->name;
+                                },
+                                'filter'=>true,
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'type_id', 'name'), 
+                                /*'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],*/  
+                                'filterInputOptions' => ['placeholder' => 'Select Obligation'],
                             ],
                             [
                                 'attribute'=>'amount',
