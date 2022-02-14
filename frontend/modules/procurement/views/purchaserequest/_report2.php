@@ -26,7 +26,18 @@
         $append = $append . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;'>" . $price . "</td>";
         $append = $append . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;'>" . $totalcost . "</td>";
         $append = $append . "</tr>";
-        $fin = $fin . $append;
+
+        
+        $append2 = "<tr style='vertical-align: middle;'>";
+        $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;'></td>";
+        $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;'></td>";
+        $append2 = $append2 . "<td width='50%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;padding-right:5px;overflow:none;'></td>";
+        $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:center;'></td>";
+        $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:right;'><b>Total:</b></td>";
+        $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;text-decoration:underline;'><b>" . $totalcost . "</b></td>";
+        $append2 = $append2 . "</tr>";
+
+        $fin = $fin . $append . $append2;
         
     }   
 
