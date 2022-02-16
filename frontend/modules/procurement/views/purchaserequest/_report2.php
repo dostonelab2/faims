@@ -2,7 +2,7 @@
     <?php
     $fin="";
     $x=0;
-    $subtotal  = 0;
+    //$subtotal  = 0;
     foreach ($prdetails as $pr) {
         $x++;
         if ($x==1) { $unit = $pr["name_short"]; } else { $unit = $pr["name_long"]; }
@@ -11,7 +11,7 @@
         $quantity = $pr["purchase_request_details_quantity"];
         $price = $pr["purchase_request_details_price"];
         $totalcost =  $quantity * $price;
-        $subtotal = $subtotal + $totalcost;
+        //$subtotal = $subtotal + $totalcost;
         if ($price=='0.00' || $price == null) {
             $price = "";
             $totalcost = "";
@@ -34,16 +34,16 @@
         
     }   
 
-    $subtotal = number_format($subtotal,2);
+    // $subtotal = number_format($subtotal,2);
 
-    $append2 = "<tr style='vertical-align: middle;'>";
-    $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;'></td>";
-    $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;'></td>";
-    $append2 = $append2 . "<td width='50%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;padding-right:5px;overflow:none;'></td>";
-    $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:center;'></td>";
-    $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:right;'><b>Total:</b></td>";
-    $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;text-decoration:underline;'><b>" . $subtotal . "</b></td>";
-    $append2 = $append2 . "</tr>";
+    // $append2 = "<tr style='vertical-align: middle;'>";
+    // $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;'></td>";
+    // $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;'></td>";
+    // $append2 = $append2 . "<td width='50%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:5px;padding-right:5px;overflow:none;'></td>";
+    // $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:center;'></td>";
+    // $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;padding-right:0px;text-align:right;'><b>Total:</b></td>";
+    // $append2 = $append2 . "<td width='10%' style='vertical-align: top;padding:10px;font-size:11px;padding-left:0px;text-decoration:underline;'><b>" . $subtotal . "</b></td>";
+    // $append2 = $append2 . "</tr>";
     ?>
 
     
@@ -51,7 +51,7 @@
     <table width="100%">
         <tbody>
         <?php   
-        echo $fin . $append2;
+        echo $fin;
         ?>
         </tbody>
     </table>
