@@ -322,7 +322,7 @@ SCRIPT;
 
                   'pluginEvents' => [
                       "change" => "function() {
-                                             var supplierid=$(this).val();
+                                             var supplierid = $(this).val();
                                              var pID = $(\"#pID\").val();
                                              jQuery.ajax( {
                                                 type: \"POST\",
