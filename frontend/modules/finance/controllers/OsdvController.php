@@ -109,6 +109,19 @@ class OsdvController extends Controller
         ]);
     }
     
+    public function actionCoaindex()
+    {
+        $searchModel = new RequestosdvSearch();
+        $searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('coaindex', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     /**
      * Lists all Osdv models.
      * @return mixed
@@ -200,6 +213,74 @@ class OsdvController extends Controller
      * @param integer $id
      * @return mixed
      */
+    public function actionCoaview($id)
+    {
+        $model = $this->findModel($id);
+        
+        $attachmentsDataProvider = new ActiveDataProvider([
+            'query' => $model->request->getAttachments(),
+            'pagination' => false,
+            /*'sort' => [
+                'defaultOrder' => [
+                    'availability' => SORT_ASC,
+                    'item_category_id' => SORT_ASC,
+                    //'title' => SORT_ASC, 
+                ]
+            ],*/
+        ]);
+
+        $allotmentsDataProvider = new ActiveDataProvider([
+            'query' => $model->getAllotments(),
+            'pagination' => false,
+            /*'sort' => [
+                'defaultOrder' => [
+                    'availability' => SORT_ASC,
+                    'item_category_id' => SORT_ASC,
+                    //'title' => SORT_ASC, 
+                ]
+            ],*/
+        ]);
+        
+        $payrollDataprovider = new ActiveDataProvider([
+            'query' => $model->getPayrollitems(),
+            'pagination' => false,
+        ]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if($model->save()){ 
+                $model->request->amount = $_POST['Osdv']['grossamount'];
+                $model->request->save();
+                Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
+            }
+            
+        }
+
+        $accountTransactionsDataProvider = new ActiveDataProvider([
+            'query' => $model->getAccounttransactions(),
+            'pagination' => false,
+            'sort' => [
+                'defaultOrder' => [
+                    'debitcreditflag' => SORT_ASC,
+                    'tax_category_id' => SORT_DESC,
+                ]
+            ],
+        ]);
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
+        }
+        
+        return $this->render('coaview', [
+            'model' => $model,
+            'payrollDataprovider' => $payrollDataprovider,
+            'attachmentsDataProvider' => $attachmentsDataProvider,
+            'allotmentsDataProvider' => $allotmentsDataProvider,
+            'accountTransactionsDataProvider' => $accountTransactionsDataProvider,
+            'year' => date('Y', strtotime($model->request->request_date)),
+        ]);
+    }
+    
     public function actionView($id)
     {
         $model = $this->findModel($id);

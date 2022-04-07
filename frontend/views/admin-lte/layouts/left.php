@@ -155,6 +155,23 @@ $request_for_approval = Request::find()
                     [
                         'label' => 'Financial Request', 
                         'icon' => 'folder-open text-aqua', 
+                        'visible' => (Yii::$app->user->can('access-osdv') || (Yii::$app->user->identity->username == 'Admin') ),
+                        'items' => [
+                            [
+                                'label' => 'Dashboard' , 
+                                'icon' => 'dashboard text-aqua', 
+                                'url' => ['/finance/default/index'], 
+                            ],
+                            [
+                                'label' => 'Obligation and Disbursement', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/coaindex'], 
+                            ],
+                        ]
+                    ],
+                    [
+                        'label' => 'Financial Request', 
+                        'icon' => 'folder-open text-aqua', 
                         
                         'visible'=> Yii::$app->user->can('access-finance'),
                         //'visible'=> false,
