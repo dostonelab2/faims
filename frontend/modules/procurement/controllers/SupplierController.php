@@ -65,7 +65,9 @@ class SupplierController extends Controller
     {
         $model = new Supplier();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->supplier_code = $this->generateSupplierCode();
+            $model->save();
             return $this->redirect(['view', 'id' => $model->supplier_id]);
         } else {
             return $this->render('create', [
@@ -105,6 +107,22 @@ class SupplierController extends Controller
 
         return $this->redirect(['index']);
     }
+    public function generateSupplierCode(){
+        $random = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+        $model = Supplier::find()->select([ 'supplier_id' => 'MAX(supplier_id)'])->one();
+        $supplier_id = $model->supplier_id + 1;
+        return $supplier_id . $random;
+    }
+    // public function actionGenerate(){
+    //     $model  = Supplier::find()->all();
+    //     foreach ($model as $supplier){
+    //         $random = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+    //         $supp = Supplier::find()->where(['supplier_id' => $supplier->supplier_id])->one();
+    //         $supp->supplier_code = $supplier->supplier_id . $random;
+    //         $supp->save();
+    //     }
+    //     echo 'success!!!';
+    // }
 
     /**
      * Finds the Supplier model based on its primary key value.
