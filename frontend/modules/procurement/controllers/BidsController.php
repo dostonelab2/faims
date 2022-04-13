@@ -49,14 +49,14 @@ class BidsController extends Controller
                     // your attribute value
                     $mystatus = $model->purchase_request_details_status;
                     if ($mystatus==2) {
-                        if ($attribute === 'purchase_request_details_price') {           // selective validation by attribute
+                        if ($attribute === 'purchase_request_details_bid_price') {           // selective validation by attribute
                             return $fmt->asDecimal('0.00', 2);       // return formatted value if desired
                         }
                         return '';
                     }else{
                         $model->purchase_request_details_status = 1;
                         $model->save();
-                        if ($attribute === 'purchase_request_details_price') {           // selective validation by attribute
+                        if ($attribute === 'purchase_request_details_bid_price') {           // selective validation by attribute
                             return $fmt->asDecimal($value, 2);       // return formatted value if desired
                         }
                         return '';
@@ -66,11 +66,7 @@ class BidsController extends Controller
                 'outputMessage' => function ($model, $attribute, $key, $index) {
                     return ''; // any custom error after model save
                 },
-            ]
-
-            ,
-
-
+            ],
             'editRemarks' => [                                       // identifier for your editable action
                 'class' => EditableColumnAction::className(),     // action class name
                 'modelClass' => Bidsdetails::className(),                // the update model class
@@ -176,7 +172,7 @@ class BidsController extends Controller
                 $unit = "Units";
                 $itemdescription = $pr["purchase_request_details_item_description"];
                 $quantity = $pr["purchase_request_details_quantity"];
-                $price = $pr["purchase_request_details_price"];
+                $price = $pr["purchase_request_details_bid_price"];
                 $stats = $pr["purchase_request_details_status"];
                 $requestID = $pr["purchase_request_id"];
                 $prdetailID = $pr["purchase_request_details_id"];
@@ -184,7 +180,7 @@ class BidsController extends Controller
                     $data[] = [$bids->bids_id, $unit, $itemdescription, $quantity, $price, $requestID, $prdetailID];
                 }
             }
-            $updateStatus = "UPDATE tbl_purchase_request_details SET purchase_request_details_status=0 , purchase_request_details_price=0 WHERE `purchase_request_id`=" . $pID ." AND purchase_request_details_status<>2";
+            $updateStatus = "UPDATE tbl_purchase_request_details SET purchase_request_details_status=0 , purchase_request_details_bid_price=0 WHERE `purchase_request_id`=" . $pID ." AND purchase_request_details_status<>2";
             $procCon->createCommand($updateStatus)->query();
             $procCon->createCommand()->batchInsert
             ('tbl_bids_details', ['bids_id', 'bids_unit', 'bids_item_description', 'bids_quantity', 'bids_price', 'purchase_request_id', 'purchase_request_details_id'], $data)
