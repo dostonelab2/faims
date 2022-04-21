@@ -62,6 +62,10 @@ $("body").on("click","#buttonUploadAttachments",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonAddFinancialSubsidy",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonUploadAttachmentstest",function () {
     loadModal($(this).attr('value'));
 });

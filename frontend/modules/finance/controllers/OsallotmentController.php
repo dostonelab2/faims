@@ -7,6 +7,8 @@ use common\models\finance\Osallotment;
 use common\models\finance\OsallotmentSearch;
 use common\models\procurement\Expenditureobject;
 use common\models\procurement\ExpenditureobjectSearch;
+use common\models\procurement\Expenditureobjecttype;
+use common\models\procurement\Expenditureobjectsubtype;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -224,5 +226,73 @@ class OsallotmentController extends Controller
            else
                return false;
        }
+    }
+    
+    public function actionAddfinancialsubsidy()
+    {
+        $id = $_GET['id'];
+        $model = $this->findModel($id);
+        
+        if($model->load(Yii::$app->request->post())) {
+            
+            $data = Yii::$app->request->post();
+            $model->object_type_id = $data['Osallotment']['object_type_id'];
+            $model->object_sub_type_id = !isset($data['Osallotment']['object_sub_type_id']) ? 0 : $data['Osallotment']['object_sub_type_id'];
+            if($model->save(false)){
+ 
+                Yii::$app->session->setFlash('success', 'Financial Subsidy Successfully Applied!');
+                return $this->redirect(['/finance/osdv/view', 'id' => $model->osdv_id]);
+            }else{
+                Yii::$app->session->setFlash('warning', $model->getErrors());                 
+            }
+        }
+        
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_financialsubsidy', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('_financialsubsidy', [ 'model' => $model, ]);
+        }
+    }
+    
+    public function actionListobjects() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $id = end($_POST['depdrop_parents']);
+            $list = Expenditureobjectsubtype::find()->andWhere(['expenditure_object_type_id'=>$id])->asArray()->all();
+            $selected  = null;
+            if ($id != null && count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $unit) {
+                    $out[] = ['id' => $unit['expenditure_object_sub_type_id'], 'name' => $unit['name']];
+                    if ($i == 0) {
+                        $selected = $unit['expenditure_object_sub_type_id'];
+                    }
+                }
+                // Shows how you can preselect a value
+                echo Json::encode(['output' => $out, 'selected'=>$selected]);
+                return;
+            }
+        }
+        echo Json::encode(['output' => '', 'selected'=>'']);
+    }
+    
+    public function actionUpdateuacsforobjecttype()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $response = Expenditureobjecttype::findOne($_POST['objectTypeId']);
+        if($response)
+            return $response;
+    }
+    
+    public function actionUpdateuacsforobjectsubtype()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $response = Expenditureobjectsubtype::findOne($_POST['objectSubTypeId']);
+        if($response)
+            return $response;
     }
 }

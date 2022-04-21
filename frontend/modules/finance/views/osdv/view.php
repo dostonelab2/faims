@@ -20,6 +20,7 @@ use common\models\finance\Requestattachment;
 use common\models\finance\Requesttype;
 use common\models\finance\Taxcategory;
 use common\models\procurement\Expenditureclass;
+
 use common\models\system\Comment;
 
 /* @var $this yii\web\View */
@@ -283,9 +284,17 @@ Modal::end();
                     'headerOptions' => ['style' => 'padding-left: 25px;'],
                     'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle;     font-weight: bold;'],
                     'width'=>'200px',
+                    'format' => 'raw',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        //return $model->expenditure_object_id;
-                        return $model->expenditureobject->name;
+                        $btnCss = 'btn btn-info ';
+                        $expendidureObject = $model->expenditureobject->name;
+                        
+                        if(($model->expenditure_object_id == 46) || ($model->expenditure_object_id == 47) || ($model->expenditure_object_id == 48)){
+                            return Html::button('<i class="glyphicon glyphicon-tasks"></i>', ['value' => Url::to(['osallotment/addfinancialsubsidy', 'id'=>$model->os_allotment_id]), 'title' => Yii::t('app', "Financial Subsidy"), 'class' => $btnCss, 'style'=>'margin-right: 6px; display: "";', 'id'=>'buttonUploadAttachments']) . ' '
+                            . $expendidureObject;
+                        }else{
+                            return $expendidureObject;
+                        }
                     },
                 ],
                 [
@@ -296,9 +305,33 @@ Modal::end();
                     'width'=>'200px',
                     'value'=>function ($model, $key, $index, $widget) { 
                         //return $model->expenditure_class_id;
+                        //if(($model->expenditure_object_id == 46) || ($model->expenditure_object_id == 47) || ($model->expenditure_object_id == 48)){
                         return $model->expenditureclass->name;
                     },
                 ],
+                // Financial Subsidy: Start
+                [
+                    'attribute'=>'expenditure_object_id',
+                    'header' => '-',
+                    'headerOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle; text-align: center;'],
+                    'width'=>'100px',
+                    'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->object_type_id ? $model->expenditureobjecttype->name : '-';
+                        //return $model->expenditureobjecttype->name;
+                    },
+                ],
+                [
+                    'attribute'=>'expenditure_object_id',
+                    'header' => '-',
+                    'headerOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle; text-align: center;'],
+                    'width'=>'100px',
+                    'value'=>function ($model, $key, $index, $widget) { 
+                        return $model->object_sub_type_id ? $model->expenditureobjectsubtype->name : '-';
+                    },
+                ],    
+                // Financial Subsidy: End
                 [
                     'attribute'=>'expenditure_object_id',
                     'header' => 'UACS Code',
@@ -306,10 +339,17 @@ Modal::end();
                     'contentOptions' => ['style' => 'padding-left: 25px; vertical-align: middle; text-align: center;'],
                     'width'=>'100px',
                     'value'=>function ($model, $key, $index, $widget) { 
-                        //return $model->expenditure_object_id;
-                        return $model->expenditureobject->object_code;
+                        
+                        if($model->object_sub_type_id){
+                            return $model->expenditureobjectsubtype->object_code;
+                        }elseif($model->object_type_id){
+                            return $model->expenditureobjecttype->object_code;
+                        }else{
+                            return $model->expenditureobject->object_code;
+                        }
                     },
                 ],
+
                 [
                     'class'=>'kartik\grid\EditableColumn',
                     'attribute'=>'amount',
