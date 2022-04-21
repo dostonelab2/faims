@@ -206,17 +206,52 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                  'contentOptions'=> ['style'=>''],
                                                 ],
 
+                                                // [
+                                                //     'class' => 'kartik\grid\EditableColumn',
+                                                //     'label'=> 'Original Price',
+                                                //     'attribute' => 'purchase_request_details_price',
+                                                //     'refreshGrid'=>true,
+                                                //     'readonly' => function($model, $key, $index, $widget) {
+                                                //         return ($model->purchase_request_details_status==2); // do not allow editing of inactive record
+                                                //     },
+                                                //    'editableOptions' =>function ($model, $key, $index) {
+                                                //         return [
+                                                //             'header'=>'Price',
+                                                //             'format' => ['decimal', 2],
+                                                //             'convertFormat'=>false,
+                                                //             'size'=>'sm',
+                                                //             'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                                                //             'options' => [
+                                                //                 'pluginOptions' => ['min' => 0, 'max' => 999999999,['decimal', 2]],
+                                                //                 'pluginEvents' => [
+                                                //                     "editableSuccess"=>"function(event, val, form, data) { alert('Successful submission of value ' + val); }",
+                                                //                 ]
+                                                //             ],
+                                                //             'formOptions'=>['action' => ['bids/editPrice']], // point to the new action
+                                                //         ];
+                                                //     },
+                                                // ],
+                                                
+                                                ['attribute'=>'purchase_request_details_price',
+                                                'label'=> 'Original Price',
+                                                'vAlign' => 'top',
+                                                'format' => ['decimal', 2],
+                                                'headerOptions' => ['class' => '','style'=>'color:#337ab7!important;'],
+                                                'hAlign' => 'right',
+                                                'width' => '10%',
+                                                'pageSummary' => true,
+                                                ],
                                                 [
                                                     'class' => 'kartik\grid\EditableColumn',
-                                                    'label'=> 'Price',
-                                                    'attribute' => 'purchase_request_details_price',
+                                                    'label'=> 'Bid Price',
+                                                    'attribute' => 'purchase_request_details_bid_price',
                                                     'refreshGrid'=>true,
                                                     'readonly' => function($model, $key, $index, $widget) {
                                                         return ($model->purchase_request_details_status==2); // do not allow editing of inactive record
                                                     },
                                                    'editableOptions' =>function ($model, $key, $index) {
                                                         return [
-                                                            'header'=>'Price',
+                                                            'header'=>'Bid Price',
                                                             'format' => ['decimal', 2],
                                                             'convertFormat'=>false,
                                                             'size'=>'sm',
@@ -241,7 +276,7 @@ $this->registerJsFile($BaseURL.'js/procurement/bids/bids.js');
                                                     'attribute'=> 'purchase_request_details_total',
                                                     'value' => function ($model, $key, $index, $widget) {
                                                         $p = compact('model', 'key', 'index');
-                                                       return $widget->col(4, $p) * $widget->col(5, $p);
+                                                       return $widget->col(4, $p) * $widget->col(6, $p);
                                                     },
                                                     'headerOptions' => ['class' => '','style'=>'color:#337ab7!important;'],
                                                     'hAlign' => 'right',

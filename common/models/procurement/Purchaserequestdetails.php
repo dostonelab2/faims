@@ -42,7 +42,7 @@ class PurchaseRequestDetails extends \yii\db\ActiveRecord
     {
         return [
             [['purchase_request_id', 'unit_id', 'purchase_request_details_quantity', 'purchase_request_details_status'], 'integer'],
-            [['purchase_request_details_price'], 'number'],
+            [['purchase_request_details_price','purchase_request_details_bid_price'], 'number'],
             [['purchase_request_details_item_description', 'item_description', 'purchase_request_details_unit'], 'string'],
         ];
     }
@@ -61,6 +61,7 @@ class PurchaseRequestDetails extends \yii\db\ActiveRecord
             'item_description' => 'Item Description',
             'purchase_request_details_quantity' => 'Purchase Request Details Quantity',
             'purchase_request_details_price' => 'Purchase Request Details Price',
+            'purchase_request_details_bid_price' => 'Purchase Request Details Bid Price',
             'purchase_request_details_total' => 'Total Cost',
             'purchase_request_details_status' => 'Status',
         ];
