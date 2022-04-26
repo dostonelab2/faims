@@ -18,6 +18,10 @@ class Purchaseorderdetails extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    
+    public $unit_of_measurement;
+    public $quantity;
+    public $price;
     public static function tableName()
     {
         return 'tbl_purchase_order_details';
@@ -38,6 +42,7 @@ class Purchaseorderdetails extends \yii\db\ActiveRecord
     {
         return [
             [['purchase_order_id', 'bids_details_id', 'purchase_request_details_status','delivered'], 'integer'],
+            [['unit_of_measurement','quantity','price'], 'safe']
         ];
     }
 
@@ -52,6 +57,31 @@ class Purchaseorderdetails extends \yii\db\ActiveRecord
             'bids_details_id' => 'Bids Details ID',
             'purchase_request_details_status' => 'Purchase Request Details Status',
             'delivered' => 'Delivered',
+            'unit_of_measurement' => 'Unit',
+            'quantity' => 'Quantity',
+            'price' => 'Price'
         ];
+    }
+    public function getPurchaseorder()
+    {
+        return $this->hasOne(Purchaseorder::className(), ['purchase_order_id' => 'purchase_order_id']);
+    }
+    public function getBidsdetails(){
+        return $this->hasOne(BidsDetails::className(),['bids_details_id' => 'bids_details_id']);
+    }
+    public function getPurchaseordernumber(){
+        return $this->purchaseorder->purchase_order_number;
+    }
+    public function getItemdescription(){
+        return $this->bidsdetails->bids_item_description;
+    }
+    public function getSuppliername(){
+        return $this->bidsdetails->bid->supplier->supplier_name;
+    }
+    public function getSupplier_id(){
+        return $this->bidsdetails->bid->supplier->supplier_id;
+    }
+    public function getQuantity(){
+        return $this->bidsdetails->bid->supplier->supplier_id;
     }
 }
