@@ -6,6 +6,9 @@ use Yii;
 
 use common\models\procurement\Expenditureclass;
 use common\models\procurement\Expenditureobject;
+
+use common\models\procurement\Expenditureobjecttype;
+use common\models\procurement\Expenditureobjectsubtype;
 /**
  * This is the model class for table "tbl_os_allotment".
  *
@@ -17,6 +20,7 @@ use common\models\procurement\Expenditureobject;
  */
 class Osallotment extends \yii\db\ActiveRecord
 {
+    public $uacs_code;
     /**
      * @inheritdoc
      */
@@ -40,7 +44,7 @@ class Osallotment extends \yii\db\ActiveRecord
     {
         return [
             [['osdv_id', 'expenditure_class_id', 'expenditure_object_id', 'amount'], 'required'],
-            [['osdv_id', 'expenditure_class_id', 'expenditure_object_id'], 'integer'],
+            [['osdv_id', 'expenditure_class_id', 'expenditure_object_id', 'object_type_id', 'object_sub_type_id'], 'integer'],
             [['amount'], 'number'],
             [['name'], 'string', 'max' => 100],
         ];
@@ -56,6 +60,8 @@ class Osallotment extends \yii\db\ActiveRecord
             'osdv_id' => 'Osdv ID',
             'expenditure_class_id' => 'Expenditure Class ID',
             'expenditure_object_id' => 'Expenditure Object ID',
+            'object_type_id' => 'Expenditure Object Type ID',
+            'object_sub_type_id' => 'Expenditure Object SubType ID',
             'name' => 'Name',
             'amount' => 'Amount',
             'active' => 'Active',
@@ -70,5 +76,15 @@ class Osallotment extends \yii\db\ActiveRecord
     public function getExpenditureobject()  
     {  
       return $this->hasOne(Expenditureobject::className(), ['expenditure_object_id' => 'expenditure_object_id']);  
+    }
+    
+    public function getExpenditureobjecttype()  
+    {  
+      return $this->hasOne(Expenditureobjecttype::className(), ['expenditure_object_type_id' => 'object_type_id']);  
+    }
+    
+    public function getExpenditureobjectsubtype()  
+    {  
+      return $this->hasOne(Expenditureobjectsubtype::className(), ['expenditure_object_sub_type_id' => 'object_sub_type_id']);  
     }
 }
