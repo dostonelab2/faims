@@ -133,20 +133,27 @@ Modal::end();
 
             // ['class' => 'kartik\grid\ActionColumn'],
             [
-                'label' => 'Action',
+                'label' => 'Modify',
+                'format' => 'raw',
+                'value' => function($model){
+                    return
+                    Html::button(
+                        '<span class=\'glyphicon glyphicon-pencil\'></span>',
+                        [
+                            'value' => Url::to(['/procurement/purchaseorder/viewpo?id=' . $model->bidsdetails->bids_details_id . '&&' . 'mid=' . $model->purchase_order_id]),
+                            'title' => 'Modify Purchase Order', 'tab-index' => 0, 'class' => 'btn btn-success', 'id' => 'buttonAddObligation'
+                        ]
+                );
+                }
+            ],
+            [
+                'label' => 'Actions',
                 'group' => true,  // enable grouping
                 'subGroupOf' => 1, // supplier column index is the parent group
                 'format' => 'raw',
                 'value' => function ($model) {
                     if ($model->purchaseorder->purchase_order_status == 1) {
                         return
-                            Html::button(
-                                '<span class=\'glyphicon glyphicon-pencil\'></span>',
-                                [
-                                    'value' => Url::to(['/procurement/purchaseorder/viewpo?id=' . $model->bidsdetails->bids_details_id . '&&' . 'mid=' . $model->purchase_order_id]),
-                                    'title' => 'Modify Purchase Order', 'tab-index' => 0, 'class' => 'btn btn-success', 'id' => 'buttonAddObligation'
-                                ]
-                            ) .
                             Html::a('<span class="glyphicon glyphicon-print"></span>', ['/procurement/purchaseorder/reportpofull?id=' . $model->Purchaseordernumber . '&&' . 'mid=' . $model->purchase_order_id], [
                                 'class' => 'btn-pdfprint btn btn-primary',
                                 'data-pjax' => "0",
@@ -163,14 +170,7 @@ Modal::end();
                                 ]
                             );
                     }else{
-                        return
-                            Html::button(
-                                '<span class=\'glyphicon glyphicon-pencil\'></span>',
-                                [
-                                    'value' => Url::to(['/procurement/purchaseorder/viewpo?id=' . $model->bidsdetails->bids_details_id . '&&' . 'mid=' . $model->purchase_order_id]),
-                                    'title' => 'Modify Purchase Order', 'tab-index' => 0, 'class' => 'btn btn-success', 'id' => 'buttonAddObligation'
-                                ]
-                            );
+                        return '';  
                     }
                 }
                 //'class' => 'kartik\grid\ActionColumn'
