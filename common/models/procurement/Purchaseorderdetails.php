@@ -67,7 +67,7 @@ class Purchaseorderdetails extends \yii\db\ActiveRecord
         return $this->hasOne(Purchaseorder::className(), ['purchase_order_id' => 'purchase_order_id']);
     }
     public function getBidsdetails(){
-        return $this->hasOne(BidsDetails::className(),['bids_details_id' => 'bids_details_id']);
+        return $this->hasOne(Bidsdetails::className(),['bids_details_id' => 'bids_details_id']);
     }
     public function getPurchaseordernumber(){
         return $this->purchaseorder->purchase_order_number;
