@@ -55,6 +55,8 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <?= $func->GridHeader('Division ', 'division_name'); ?>
     <?= $func->GridHeader('Requested By ', 'requested_by'); ?>
     <?= $func->GridHeader('PO # ', 'PONum'); ?>
+    <?= $func->GridHeader('PAP Code', 'pap_code'); ?>
+    <!-- <th class="kartik-sheet-style">PAP Code<a ng-click="sort_by(pap_code);"><i class="glyphicon glyphicon-sort"></i></a></th> -->
     <?= $func->GridHeader('Status', 'default'); ?>
     <?= $func->GridHeader('Action', ''); ?>
     <?= //Close The AngularJS Header
@@ -70,6 +72,7 @@ $this->registerJsFile($BaseURL . 'js/custom.js');
     <?= $func->GridDetails('division_name');  ?>
     <?= $func->GridDetails('requested_by');  ?>
     <?= $func->GridDetails('PONum');  ?>
+    <?= $func->GridDetails('pap_code');  ?>
     <td width="20%">
         <div ng-if="data.status == 0">
             <span class="label label-warning">Created</span>

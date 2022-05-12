@@ -45,6 +45,13 @@ use yii\helpers\Url;
         ],
     ]) ?>
 
+<div class="row">
+<div class="col-xs-4">
+<?= Html::label('PAP Code:', 'pap', ['class' => 'control-label text-primary']) ?>
+<?= Html::input('text', 'pap', '', ['class' => 'form-control', 'placeholder' => 'type your PAP Code here...','id' => 'papcode']) ?>
+</div>
+</div>
+
     <?php
     $fin = "";
     $x = 0;
@@ -86,7 +93,7 @@ use yii\helpers\Url;
 </div>
 
 <?php
-if(Yii::$app->user->can('approve-pr')){
+if (Yii::$app->user->can('approve-pr')) {
     if ($model->status == 3) {
         echo Html::button('Approve  <i class="fa fa-thumbs-up"></i>', [
             'value' => $model->purchase_request_id,
@@ -98,7 +105,7 @@ if(Yii::$app->user->can('approve-pr')){
     }
 }
 
-if(Yii::$app->user->can('review-pr')){
+if (Yii::$app->user->can('review-pr')) {
     if ($model->status == 0) {
         echo Html::button('Review  <i class="fa fa-eye"></i>', [
             'value' => $model->purchase_request_id,
@@ -110,7 +117,7 @@ if(Yii::$app->user->can('review-pr')){
     }
 }
 
-if(Yii::$app->user->can('disapprove-pr')){
+if (Yii::$app->user->can('disapprove-pr')) {
     echo Html::button('Disapprove  <i class="fa fa-thumbs-down"></i>', [
         'value' => $model->purchase_request_id,
         'title' => 'Disapprove',
