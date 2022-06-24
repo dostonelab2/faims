@@ -71,12 +71,12 @@ class BidsDetails extends \yii\db\ActiveRecord
         return $this->hasOne(Bids::className(), ['bids_id'=>'bids_id']);
     }
 
-    public function getPurchasedetailid() {
+    public function getPurchaserequestdetail() {
         return $this->hasOne(Purchaserequestdetails::className(), ['purchase_request_details_id'=>'purchase_request_details_id']);
     }
 
     public  function  getPurchaserequest() {
-        return $this->hasMany(Bids::className(),['purchase_request_id'=>'purchase_request_id']);
+        return $this->hasMany(Purchaserequest::className(),['purchase_request_id'=>'purchase_request_id']);
     }
 
     public function getSupplier() {

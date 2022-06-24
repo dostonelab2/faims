@@ -59,7 +59,7 @@ $this->registerJsFile($BaseURL.'js/sweetalert.min.js');
 
     function filter($item) {
  
-        $supplierfilter =Yii::$app->request->getQueryParam('filtersupplier', '');
+        $supplierfilter = Yii::$app->request->getQueryParam('filtersupplier', '');
         $pofilter = Yii::$app->request->getQueryParam('filterpo', '');
         $bidsdescriptionfilter = Yii::$app->request->getQueryParam('filterbidsdescription', '');
         if (strlen($pofilter) > 0) {
@@ -316,6 +316,7 @@ $this->registerJsFile($BaseURL.'js/sweetalert.min.js');
     -->
 
     <?php //$BaseURL; ?>
+
 </div>
 
 

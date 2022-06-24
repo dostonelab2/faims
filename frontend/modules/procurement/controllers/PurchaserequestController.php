@@ -114,6 +114,7 @@ class PurchaserequestController extends Controller
             $id = Yii::$app->request->get('id');
             $model = $this->findModel($id);
             $model->status = 3;
+            $model->pap_code = $_POST['pap'];
             $model->tag_user_id = Yii::$app->user->id;
             $model->date_tag = date("Y-m-d H:i:s");
             $model->save();
@@ -363,23 +364,25 @@ class PurchaserequestController extends Controller
 </table>';
         $LeftFooterContent = '
         <div style="height:0px;"></div>
-<table style="width: 100%;font-size:9px; ">
+<table style="width: 118%;font-size:7px;">
                                 <tbody>
                                 <tr>
                                 <td style="padding-left:10px;"><h6>Purpose : ' . $model->purchase_request_purpose . '</h6></td>
                                 <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                <td style="padding-left:10px;"><h6>Project Reference No. : ' . $model->purchase_request_referrence_no . '</h6>
-                                </td>
-                                <td>&nbsp;</td>
+                                <td style="padding-left:10px;"><h6>Project Reference No. : ' . $model->purchase_request_referrence_no . '</h6></td>
                                 </tr>
-                                <tr>5
+                                <tr>
                                 <td style="padding-left:10px;"><h6>Project Name : ' . $model->purchase_request_project_name . '</h6></td>
                                 <td>&nbsp;</td>
                                 </tr>
                                 <tr>
                                 <td style="padding-left:10px;"><h6>Project Location : ' . $model->purchase_request_location_project . '</h6></td>
+                                <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                <td style="padding-left:10px;"><h6>PAP Code : ' . $model->pap_code . '</h6></td>
                                 <td>&nbsp;</td>
                                 </tr>
                                 </tbody>    

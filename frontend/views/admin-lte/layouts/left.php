@@ -138,7 +138,8 @@ $request_for_approval = Request::find()
                             ['label' => 'Purchase Request V2', 'icon' => 'cart-plus', 'url' => ['/procurement/purchaserequest2/index']],
                             /*['label' => 'Obligation Request', 'icon' => 'object-ungroup', 'url' => ['/procurement/obligationrequest/index']],*/
                             ['label' => 'Quotations, Bids and Awards', 'icon' => 'object-ungroup', 'url' => ['/procurement/bids/index'],'visible'=> Yii::$app->user->can('access-bidsquotation')],
-                            ['label' => 'Purchase Order', 'icon' => 'tags', 'url' => ['/procurement/purchaseorder/index'],'visible'=> Yii::$app->user->can('access-purchaseorder')],
+                            // ['label' => 'Purchase Order', 'icon' => 'tags', 'url' => ['/procurement/purchaseorder/index'],'visible'=> Yii::$app->user->can('access-purchaseorder')],
+                            ['label' => 'Purchase Order', 'icon' => 'tags', 'url' => ['/procurement/purchaseorder2/index'],'visible'=> Yii::$app->user->can('access-purchaseorder')],
                             ['label' => 'Inspection and Acceptance', 'icon' => 'search', 'url' => ['/procurement/inspection'],'visible'=> Yii::$app->user->can('access-inspection')],
                             /*['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],*/
                         ]

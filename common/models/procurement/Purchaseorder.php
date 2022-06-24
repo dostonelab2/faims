@@ -50,7 +50,7 @@ class Purchaseorder extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'purchase_order_id' => 'Purchase Order ID',
+            'purchase_order_id' => 'purchase_order_id',
             'purchase_order_number' => 'Purchase Order Number',
             'supplier_id' => 'Supplier ID',
             'purchase_order_status' => 'Purchase Order Status',
@@ -61,5 +61,9 @@ class Purchaseorder extends \yii\db\ActiveRecord
             'payment_term'=> 'Payment Term',
             'mode_of_procurement'=> 'Mode of Procurement',
         ];
+    }
+    public function getPurchaseorderdetails()
+    {
+        return $this->hasMany(Purchaseorderdetails::className(), ['purchase_order_id' => 'purchase_order_id']);
     }
 }

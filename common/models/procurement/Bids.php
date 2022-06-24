@@ -53,7 +53,7 @@ class Bids extends \yii\db\ActiveRecord
         ];
     }
 
-
+    
 
     public function getSupplier() {
         return $this->hasOne(Supplier::className(), ['supplier_id'=>'supplier_id']);

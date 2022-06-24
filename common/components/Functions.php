@@ -187,7 +187,7 @@ class Functions extends Component
      */
 
     function GridDetails($datavalue="") {
-        $grd='<td width="20%">{{data.'.$datavalue.'}}</td>';
+        $grd='<td width="18%">{{data.'.$datavalue.'}}</td>';
         return $grd;
     }
 

@@ -1,22 +1,22 @@
 /*
  * Project Name: fais *
  * Copyright(C)2018 Department of Science & Technology -IX *
- * Developer: Larry Mark B. Somocor , Aris Moratalla  *
+ * Developer: Larry Mark B. Somocor , Aris Moratalla , Eduardo R. Zaragoza Jr. *
  * 04 16, 2018 , 10:10:00 AM *
  * Module: main *
  */
 
 
 jQuery(document).ready(function ($) {
-    
+
     // --- Create Button
-    $('#modalButton').click(function(){
+    $('#modalButton').click(function () {
         $('#modal').modal('show')
             .find('#modalContent')
             .load($(this).attr('value'));
         $('#modalHeader').html($(this).attr('header'));
     });
-    
+
     // --- Delete action (bootbox) ---
     yii.confirm = function (message, ok, cancel) {
         var title = $(this).data("title");
@@ -51,135 +51,144 @@ jQuery(document).ready(function ($) {
         return false;
     }
 
+    // check if empty
+    function isEmptyOrSpaces(str) {
+        return str === null || str.match(/^ *$/) !== null;
+    }
 
     // This JS file is exclusively for CRUD Method
 
-    $('body').on('click','.myAdd' , function() {
+    $('body').on('click', '.myAdd', function () {
         $(".loadpartial").fadeIn(300);
         $(".loadpartial").show();
-      jQuery.ajax( {
+        jQuery.ajax({
             type: "POST",
             url: "create?id=''&view=add",
             dataType: "text",
-            success: function ( response ) {
+            success: function (response) {
                 $("#mycreate").html(response);
                 $(".loadpartial").hide();
             },
-            error: function ( xhr, ajaxOptions, thrownError ) {
-                alert( thrownError );
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
-        } );
+        });
     });
 
-    $('body').on('click','.myEdit' , function() {
+    $('body').on('click', '.myEdit', function () {
         $(".loadpartial").fadeIn(300);
         $(".loadpartial").show();
         var x = $(this).data('id');
-        jQuery.ajax( {
+        jQuery.ajax({
             type: "POST",
             url: "update?id=" + x + "&view=edit",
             dataType: "text",
-            success: function ( response ) {
+            success: function (response) {
                 $("#mycontent").html(response);
                 $(".loadpartial").hide();
             },
-            error: function ( xhr, ajaxOptions, thrownError ) {
-                alert( thrownError );
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
-        } );
+        });
     });
 
-    $('body').on('click','.myView' , function() {
+    $('body').on('click', '.myView', function () {
         $(".loadpartial").fadeIn(300);
         $(".loadpartial").show();
         var x = $(this).data('id');
-        jQuery.ajax( {
+        jQuery.ajax({
             type: "POST",
-            url:  "view?id=" + x + "&view=view",
+            url: "view?id=" + x + "&view=view",
             dataType: "text",
-            success: function ( response ) {
+            success: function (response) {
                 //console.log(response);
                 $("#mycontentview").html(response);
                 $(".loadpartial").hide();
             },
-            error: function ( xhr, ajaxOptions, thrownError ) {
-                alert( thrownError );
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
-        } );
+        });
     });
 
-    $('body').on('click','.myTagging' , function() {
+    $('body').on('click', '.myTagging', function () {
         $(".loadpartial").fadeIn(300);
         $(".loadpartial").show();
         var x = $(this).data('id');
-        jQuery.ajax( {
+        jQuery.ajax({
             type: "POST",
-            url:  "tag?id=" + x + "&view=tag",
+            url: "tag?id=" + x + "&view=tag",
             dataType: "text",
-            success: function ( response ) {
+            success: function (response) {
                 //console.log(response);
                 $("#mycontenttag").html(response);
                 $(".loadpartial").hide();
             },
-            error: function ( xhr, ajaxOptions, thrownError ) {
-                alert( thrownError );
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
-        } );
+        });
     });
-    
-    $('body').on('click','.btn-approve' , function() {
-       var r = confirm("Are you sure you want to approve this request?");
-       if(r == true){
-        var x = $(this).val();
-            jQuery.ajax( {
+
+    $('body').on('click', '.btn-approve', function () {
+        var r = confirm("Are you sure you want to approve this request?");
+        if (r == true) {
+            var x = $(this).val();
+            jQuery.ajax({
                 type: "POST",
-                url:  "approve?id=" + x,
+                url: "approve?id=" + x,
                 //data: {},
-                success: function ( response ) {                    
+                success: function (response) {
                     location.reload();
                 },
-                error: function ( xhr, ajaxOptions, thrownError ) {
-                    alert( thrownError );
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
                 }
-            } );
-       }
+            });
+        }
     });
 
-    $('body').on('click','.btn-disapprove' , function() {
+    $('body').on('click', '.btn-disapprove', function () {
         var r = confirm("Are you sure you want to disapprove this request?");
-        if(r == true){
-         var x = $(this).val();
-             jQuery.ajax( {
-                 type: "POST",
-                 url:  "disapprove?id=" + x,
-                 //data: {},
-                 success: function ( response ) {                    
-                     location.reload();
-                 },
-                 error: function ( xhr, ajaxOptions, thrownError ) {
-                     alert( thrownError );
-                 }
-             } );
+        if (r == true) {
+            var x = $(this).val();
+            jQuery.ajax({
+                type: "POST",
+                url: "disapprove?id=" + x,
+                //data: {},
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            });
         }
-     });
+    });
 
-     $('body').on('click','.btn-review' , function() {
-        var r = confirm("Are you sure you want to tag this request as reviewed?");
-        if(r == true){
-         var x = $(this).val();
-             jQuery.ajax( {
-                 type: "POST",
-                 url:  "review?id=" + x,
-                 //data: {},
-                 success: function ( response ) {                    
-                     location.reload();
-                 },
-                 error: function ( xhr, ajaxOptions, thrownError ) {
-                     alert( thrownError );
-                 }
-             } );
+    $('body').on('click', '.btn-review', function () {
+        if (isEmptyOrSpaces($('#papcode').val())) {
+            alert('Please enter PAP Code..');
+        } else {
+            var r = confirm("Are you sure you want to tag this request as reviewed?");
+            if (r == true) {
+                var x = $(this).val();
+                jQuery.ajax({
+                    type: "POST",
+                    url: "review?id=" + x,
+                    //dataType: "json",
+                    data: { pap: $('#papcode').val() },
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    }
+                });
+            }
         }
-     });
+    });
 
     $('#myAdd').on('hidden.bs.modal', function () {
         location.reload();

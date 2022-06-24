@@ -27,6 +27,7 @@ class AjaxController extends \yii\web\Controller
             $sql = "SELECT tbl_purchase_request.purchase_request_id,
                 tbl_purchase_request.purchase_request_sai_number,
                 tbl_purchase_request.purchase_request_number,
+                tbl_purchase_request.pap_code,
                 tbl_division.name AS division_name,
                 tbl_section.name AS section_name,
                 tbl_purchase_request.purchase_request_purpose,
