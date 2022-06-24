@@ -795,7 +795,16 @@ class RequestController extends Controller
                     $content .= 'Particulars: '.PHP_EOL.$model->particulars;
                     $recipient = Notificationrecipient::find()->where(['status_id' => $model->status_id])->one();
                     
-                    Yii::$app->Notification->sendSMS('', 2, $recipient->primary->sms.','.$recipient->secondary->sms, 'Request for Verification', $content, 'FAIMS', $this->module->id, $this->action->id);
+                    Yii::$app->Notification->sendSMS(
+                        '', 
+                        2, 
+                        $recipient->primary->sms.','
+                        .$recipient->secondary->sms, 
+                        'Request for Verification', 
+                        $content, 
+                        'FAIMS', 
+                        $this->module->id, 
+                    $this->action->id);
                     
                     Yii::$app->Notification->sendEmail('', 2, $recipient->primary->email.','.$recipient->secondary->email, 'Request for Verification', $content, 'FAIMS', $this->module->id, $this->action->id);
                     
