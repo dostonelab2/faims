@@ -196,10 +196,13 @@ Modal::end();
                     '<h4><span class="label label-warning">'.Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s")).'</span></h4>'.Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generateosnumber') ? Url::to(['osdv/generateosnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),     
                                                                         'title' => 'Generate OS', 'class' => 'btn btn-md btn-success '
                                                                         .(Yii::$app->user->can('access-finance-generateosnumber') ? '': 'disabled'),
-                                                                   'id'=>'buttonGenerateOSNumber'])) .
+                                                                   'id'=>'buttonGenerateOSNumber']) ) .
                     
                     Html::button('Obligate', ['value' => Url::to(['osdv/obligate', 'id'=>$model->osdv_id]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id >= Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate']),
+                                                                'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id >= Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate']) .
+                
+                    Html::button('Reassign', ['value' => Url::to(['osdv/reassign', 'id'=>$model->osdv_id]),     
+                                                                'title' => 'Allotment', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px; '.(( (Yii::$app->user->can('access-finance-obligate')  || (Yii::$app->user->identity->username == 'Admin') ) ? '' : 'display: none;') ), 'id'=>'buttonReassign']),
             ],
             [
                 'attribute'=>'request_id',

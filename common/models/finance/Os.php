@@ -16,6 +16,9 @@ use common\models\procurement\Expenditureclass;
 class Os extends \yii\db\ActiveRecord
 {
     public $classId;
+    public $_os_number;
+    public $_osdv_id;
+    public $_request_id;
     /**
      * @inheritdoc
      */
@@ -40,7 +43,7 @@ class Os extends \yii\db\ActiveRecord
         return [
             [['osdv_id', 'request_id', 'os_number', 'os_date'], 'required'],
             [['osdv_id', 'request_id'], 'integer'],
-            [['os_date'], 'safe'],
+            [['os_date', '_os_number', '_osdv_id', '_request_id'], 'safe'],
             [['os_number'], 'string', 'max' => 20],
         ];
     }

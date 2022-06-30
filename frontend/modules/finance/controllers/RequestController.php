@@ -806,7 +806,16 @@ class RequestController extends Controller
                         $this->module->id, 
                     $this->action->id);
                     
-                    Yii::$app->Notification->sendEmail('', 2, $recipient->primary->email.','.$recipient->secondary->email, 'Request for Verification', $content, 'FAIMS', $this->module->id, $this->action->id);
+                    Yii::$app->Notification->sendEmail(
+                        '', 
+                        2, 
+                        $recipient->primary->email.','
+                        .$recipient->secondary->email, 
+                        'Request for Verification', 
+                        $content, 
+                        'FAIMS', 
+                        $this->module->id, 
+                        $this->action->id);
                     
                     Yii::$app->session->setFlash('success', 'Request submitted for Verification!');
                 }else{

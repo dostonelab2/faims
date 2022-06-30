@@ -702,6 +702,53 @@ class OsdvController extends Controller
         }
     }
     
+    public function actionReassign()
+    {
+        $modelOsdv = $this->findModel($_GET['id']);
+        $model = new Os();
+        
+        if(Yii::$app->user->can('access-finance-obligate')){
+            if (Yii::$app->request->post()) {
+                $old_OS = $modelOsdv->os->os_number;
+                $modelOsdv->os->deleted = 1;
+                
+                if($modelOsdv->os->save(false)){
+                    
+                    if($modelOsdv->type_id == 1){
+                            $os = new Os();
+                            $os->osdv_id = $_POST['Os']['_osdv_id'];
+                            $os->request_id = $_POST['Os']['_request_id'];
+                            $os->os_number = $_POST['Os']['os_number']; //Os::generateOsNumber($_model->expenditure_class_id, date("Y-m-d H:i:s"));
+                            $os->os_date = date("Y-m-d", strtotime($_POST['Os']['os_date']));
+                            //$os->os_date = date("Y-m-d H:i:s");
+                            $os->save(false);
+                        }
+                    
+                    $index = $modelOsdv->osdv_id;
+                    $scope = 'Osdv';
+                    $data = $modelOsdv->osdv_id.':'.$modelOsdv->request_id.': OS number - '.$old_OS.' to '.$os->os_number;
+                    Blockchain::createBlock($index, $scope, $data);
+                    
+                    Yii::$app->session->setFlash('success', 'Obligation Successfully Reassigned!');
+                    return $this->redirect(['view', 'id' => $modelOsdv->osdv_id]);
+                }else{
+                    Yii::$app->session->setFlash('warning', $model->getErrors());                 
+                }
+                
+            }
+            
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_reassign', ['model' => $model, 'modelOsdv' => $modelOsdv]);
+            } else {
+                return $this->render('_reassign', ['model' => $model, 'modelOsdv' => $modelOsdv]);
+            }
+        }else{
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_notallowed', ['model'=>$model]);   
+            }
+        }
+    }
+    
     public function actionCertifycashavailable()
     {
         $model = $this->findModel($_GET['id']);
