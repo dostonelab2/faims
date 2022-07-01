@@ -202,7 +202,7 @@ Modal::end();
                                                                 'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id >= Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate']) .
                 
                     Html::button('Reassign', ['value' => Url::to(['osdv/reassign', 'id'=>$model->osdv_id]),     
-                                                                'title' => 'Allotment', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px; '.(( (Yii::$app->user->can('access-finance-obligate')  || (Yii::$app->user->identity->username == 'Admin') ) ? '' : 'display: none;') ), 'id'=>'buttonReassign']),
+                                                                'title' => 'Allotment', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px; '.(( (Yii::$app->user->can('access-finance-generateosnumber')  || (Yii::$app->user->identity->username == 'Admin') ) ? '' : 'display: none;') ), 'id'=>'buttonReassign']),
             ],
             [
                 'attribute'=>'request_id',
