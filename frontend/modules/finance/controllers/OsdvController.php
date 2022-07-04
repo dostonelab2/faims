@@ -707,7 +707,7 @@ class OsdvController extends Controller
         $modelOsdv = $this->findModel($_GET['id']);
         $model = new Os();
         
-        if(Yii::$app->user->can('access-finance-obligate')){
+        if(Yii::$app->user->can('access-finance-generateosnumber')){
             if (Yii::$app->request->post()) {
                 $old_OS = $modelOsdv->os->os_number;
                 $modelOsdv->os->deleted = 1;
