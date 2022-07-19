@@ -50,15 +50,6 @@ echo "<div id='modalContent'><div style='text-align:center'><img src='/images/lo
 Modal::end();
 ?>
 
-<pre>
-<?php //print_r($blocks);
-
-foreach($blocks as $block){
-    
-}
-?>
-</pre>
-
 <?php //echo $this->render('_stepper'); ?>
 <?php $attributes = [
         /*[
