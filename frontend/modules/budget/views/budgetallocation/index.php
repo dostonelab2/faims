@@ -110,7 +110,7 @@ Modal::end();
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     //return $model->name;
-                                    return Html::a($model->name, ['budgetallocation/view?id='.$model->budgetallocation->budget_allocation_id], ['data-pjax' => 0, 'target'=>'_blank']);
+                                    //return Html::a($model->name, ['budgetallocation/view?id='.$model->budgetallocation->budget_allocation_id], ['data-pjax' => 0, 'target'=>'_blank']);
                                 },
                             ],
                             [
@@ -179,7 +179,7 @@ Modal::end();
                             'format'=>'raw',
                             'value'=>function ($model, $key, $index, $widget) { 
                                 //return $model->name;
-                                return Html::a($model->code, ['budgetallocation/view?id='.$model->budgetallocation->budget_allocation_id], ['data-pjax' => 0, 'target'=>'_blank']);
+                                //return Html::a($model->code, ['budgetallocation/view?id='.$model->budgetallocation->budget_allocation_id], ['data-pjax' => 0, 'target'=>'_blank']);
                             },
                         ],
                     ],

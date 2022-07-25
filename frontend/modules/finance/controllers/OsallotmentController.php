@@ -52,6 +52,32 @@ class OsallotmentController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionIndex2()
+    {
+//        $id = $_GET['id'];
+//        $year = $_GET['year'];
+//        $id = $_GET['id'];
+//        $year = $_GET['year'];
+        $searchModel = new ExpenditureobjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('index2', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        //'id' => $id,
+                        //'year' => $year,
+            ]);
+        } else {
+            return $this->render('index2', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        //'id' => $id,
+                        //'year' => $year,
+            ]);
+        }
+    }
 
     /**
      * Displays a single Osallotment model.

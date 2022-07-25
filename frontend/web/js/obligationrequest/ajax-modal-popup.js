@@ -22,6 +22,8 @@ $("body").on("click","#buttonAddDetails",function () {
 })
 
 
+
+
 $("#modalObject").on('hidden.bs.modal', function () {
     $('form#objectdetails-form').html('');
 });

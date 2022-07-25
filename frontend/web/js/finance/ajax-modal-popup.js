@@ -94,6 +94,10 @@ $("body").on("click","#buttonObligate",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonReassign",function () {
+    loadModal($(this).attr('value'));
+});
+
 $("body").on("click","#buttonCertifyfundsavailable",function () {
     loadModal($(this).attr('value'));
 });
@@ -113,7 +117,6 @@ $("body").on("click","#buttonGenerateOSNumber",function () {
 $("body").on("click","#buttonGenerateDVNumber",function () {
     loadModal($(this).attr('value'));
 });
-
 
 $("body").on("click","#buttonAddAccounttransaction",function () {
     loadModal($(this).attr('value'));

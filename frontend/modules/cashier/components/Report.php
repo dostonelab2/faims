@@ -278,12 +278,12 @@ class Report {
         
         //SIGNATORIES
         $template .= "<tr>";
-        $template .= "<td colspan='3'>ROBERTO B. ABELLA</td>";
+        $template .= "<td colspan='3'>INGRID T. ABELLA-COLCOL</td>";
         $template .= "<td colspan='5'>MARTIN A. WEE</td>";
         $template .= "</tr>";
         
         $template .= "<tr>";
-        $template .= "<td colspan='3'>Accountant III</td>";
+        $template .= "<td colspan='3'>OIC - Accountant III</td>";
         $template .= "<td colspan='5'>Regional Director</td>";
         $template .= "</tr>";
         
