@@ -117,7 +117,7 @@ jQuery(document).ready(function ($) {
                 $(".three").addClass('visible');
                 $("#txtqty").focus();
             }
-            else if ($("#txtcost").val() == "") {
+            else if ($("#txtcost").val() == 0.00) {
                 $(".four").addClass('visible');
                 $("#txtcost").focus();
         }else{
@@ -169,6 +169,7 @@ jQuery(document).ready(function ($) {
             }
             $("#txtitemdesc").val('');
             $("#txtqty").val('');
+            $("#txtcost").val('');
         }
     });
     
