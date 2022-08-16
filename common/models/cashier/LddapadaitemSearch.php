@@ -48,7 +48,7 @@ class LddapadaitemSearch extends Lddapadaitem
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['lddapada_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
