@@ -12,6 +12,7 @@ use common\models\cashier\Lddapada;
  */
 class LddapadaSearch extends Lddapada
 {
+//    public $payee_id;
     /**
      * @inheritdoc
      */
@@ -41,6 +42,7 @@ class LddapadaSearch extends Lddapada
      */
     public function search($params)
     {
+        
         $query = Lddapada::find();
 
         // add conditions that should always apply here
@@ -72,9 +74,10 @@ class LddapadaSearch extends Lddapada
             'validated1_id' => $this->validated1_id,
             'validated2_id' => $this->validated2_id,
         ]);
-
-        $query->andFilterWhere(['like', 'batch_number', $this->batch_number])
-            ->andFilterWhere(['like', 'created_by', $this->created_by]);
+        
+//        $query->andFilterWhere(['like', 'tbl_creditor.lddapadaItems.payee_id', 3]);
+//        $query->andFilterWhere(['like', 'batch_number', $this->batch_number])
+//            ->andFilterWhere(['like', 'created_by', $this->created_by]);
 
         return $dataProvider;
     }

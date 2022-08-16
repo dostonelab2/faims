@@ -173,7 +173,6 @@ Modal::end();
                                         </div>';
                                     return $percent;
                                 },
-
                             ],*/
                             [
                                 'attribute'=>'created_by',

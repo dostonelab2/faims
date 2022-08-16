@@ -12,6 +12,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 use common\models\cashier\Lddapada;
+use common\models\cashier\Creditor;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\cashier\LddapadaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -46,6 +47,10 @@ Modal::end();
         echo GridView::widget([
             'id' => 'lddap-ada',
             'dataProvider' => $dataProvider,
+//            'filterModel' => $searchModel,
+//            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+//            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+//            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'columns' => [
                             [
                                 'attribute'=>'batch_number',
@@ -82,7 +87,17 @@ Modal::end();
                                         $html .= $item->name.' (<b>'.number_format($amount,2).'</b>)<br/>';
                                     }
                                     return $html;
-                                }
+                                },
+//                                'filterType' => GridView::FILTER_SELECT2,
+//                                'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
+//                                                                function($model) {
+//                                                                    return $model['name'].' | '.$model['address'];
+//                                                                }
+//                                                            ), 
+//                                'filterWidgetOptions' => [
+//                                    'pluginOptions' => ['allowClear' => true],
+//                                ],  
+//                                'filterInputOptions' => ['placeholder' => 'Select Payee']
                             ],
                             [
                                 'attribute'=>'type_id',
@@ -107,8 +122,8 @@ Modal::end();
                             ],
                     ],
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
-            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
-            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+//            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+//            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'panel' => [
                     'heading' => '',

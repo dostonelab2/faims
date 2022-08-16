@@ -105,6 +105,7 @@ $request_for_approval = Request::find()
                         'visible'=> Yii::$app->user->can('access-cashiering'),
                         'items' => [
                             ['label' => 'LDDAP-ADA', 'icon' => 'money', 'url' => ['/cashier/lddapada/index']],
+                            ['label' => 'LDDAP-ADA (Beta)', 'icon' => 'money', 'url' => ['/cashier/lddapadaitem/index']],
                             ['label' => 'Creditors', 'icon' => 'clipboard', 'url' => ['/cashier/creditor/index']],
                             [
                                 'label' => 'Report of Disbursement', 
@@ -115,6 +116,26 @@ $request_for_approval = Request::find()
                             ['label' => 'Update Counters', 'icon' => 'gear', 'url' => ['/cashier/creditor/index']],
                         ]
                     ],
+                    /*[
+                        'label' => 'Document Management', 
+                        'icon' => 'archive', 
+                        'visible'=> Yii::$app->user->can('access-document-management'),
+                        'items' => [
+                            [
+                                'label' => 'ISO 9001', 
+                                'icon' => 'folder text-aqua', 
+                                'url' => ['/docman/document/index', 'qms_type_id'=>1], 
+                                'visible'=> Yii::$app->user->can('access-document-management')
+                            ],
+                            [
+                                'label' => 'ISO 17025', 
+                                'icon' => 'folder-open text-aqua', 
+                                'url' => ['/docman/document/index', 'qms_type_id'=>2], 
+                                'visible'=> Yii::$app->user->can('access-document-management')
+                            ],
+                            ['label' => 'FORMS', 'icon' => 'file text-aqua', 'url' => ['/docman/document/index']],
+                        ]
+                    ],*/
                     [
                         'label' => 'Budget', 
                         'icon' => 'archive', 

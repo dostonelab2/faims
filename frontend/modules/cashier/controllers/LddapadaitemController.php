@@ -7,6 +7,7 @@ use common\models\cashier\Lddapada;
 use common\models\cashier\Lddapadaitem;
 use common\models\cashier\LddapadaitemSearch;
 use common\models\cashier\CreditorSearch;
+use common\models\finance\Osdv;
 use common\models\cashier\OsdvSearch;
 use common\models\cashier\OsdvlddapitemSearch;
 use common\models\finance\Request;
@@ -38,7 +39,7 @@ class LddapadaitemController extends Controller
      * Lists all Lddapadaitem models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex2()
     {
         $searchModel = new LddapadaitemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -48,7 +49,43 @@ class LddapadaitemController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+    
+    public function actionIndex()
+    {
+//        $searchModel = new LddapadaSearch();
+        $searchModel = new LddapadaitemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $items = Lddapadaitem::find()->select('osdv_id')->asArray()->all();
+        $count = Osdv::find()
+            ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->count();
+        
+        $new_items = Osdv::find()
+            //->select('osdv_id')
+            ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            ->all();
+        
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'count' => $count,
+            'new_items' => $this->getNewItems($new_items),
+        ]);
+    }
+    
+    public function getNewItems($new_items)
+    {
+        $items = '';
+        foreach($new_items as $item){
+            $items .= $item->request->creditor->name .' - '.number_format($item->request->amount, 2). ', ';
+        }
+        return $items;
+    }
     /**
      * Displays a single Lddapadaitem model.
      * @param integer $id
