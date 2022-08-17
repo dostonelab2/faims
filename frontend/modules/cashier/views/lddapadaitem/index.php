@@ -144,12 +144,29 @@ Modal::end();
                                 'header'=>'Request # | OS Number | DV Number',
                                 'headerOptions' => ['style' => 'text-align: center; vertical-align: middle; font-size: medium;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
-                                'width'=>'25%',
+                                'width'=>'30%',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return $model->osdv->request->request_number .' | '
-                                        .($model->osdv->os ? $model->osdv->os->os_number : "-").' | '
-                                        .($model->osdv->dv ? $model->osdv->dv->dv_number : "-");
+                                    return 
+                                        
+                                        Html::a($model->osdv->request->request_number, ['/finance/request/view', 'id'=>$model->osdv->request->request_id], ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary'])
+                                            
+                                        .'  ' //space between buttons
+                                            
+//                                        .($model->osdv->os ? $model->osdv->os->os_number : "-")
+                                        .($model->osdv->os ? Html::a($model->osdv->os->os_number, Url::to(['/finance/request/printos', 'id'=>$model->osdv->request->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) : "")
+                                        
+                                        
+                                        .'  ' //space between buttons
+                                        
+                                        
+                                        .($model->osdv->dv ?  
+                                        ($model->request_payroll_id ? 
+                        
+                        Html::a($model->osdv->dv->dv_number, Url::to(['/finance/request/printdvpayroll', 'id'=>$model->request_payroll_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) 
+                            : 
+                        Html::a($model->osdv->dv->dv_number, Url::to(['/finance/request/printdv', 'id'=>$model->osdv->request->request_id]), ['target' => '_blank', 'data-pjax'=>0, 'class'=>'btn btn-primary']) ) : "-")
+                                        ;
                                 },
                             ],
                     ],
