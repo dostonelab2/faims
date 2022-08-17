@@ -225,4 +225,22 @@ class LddapadaitemController extends Controller
         }
     }
     
+    public function actionReassignitem() 
+    {
+       if (Yii::$app->request->post('hasEditable')) {
+           $ids = Yii::$app->request->post('editableKey');
+           
+           $index = Yii::$app->request->post('editableIndex');
+           $attr = Yii::$app->request->post('editableAttribute');
+           $qty = $_POST['Lddapadaitem'][$index][$attr];
+           $model = Lddapadaitem::findOne($ids);
+           $model->$attr = $qty;
+           $model->active = 1;
+           if($model->save(false))
+               return true;
+           else
+               return false;
+       }
+    }
+    
 }
