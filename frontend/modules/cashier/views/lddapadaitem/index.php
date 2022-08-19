@@ -149,7 +149,7 @@ Modal::end();
                                 'header' => 'Actions',
                                 'format' => 'raw',
                                 'refreshGrid'=>true,
-                                'visible' => (Yii::$app->user->identity->username == 'Admin'),
+//                                'visible' => (Yii::$app->user->identity->username == 'Admin'),
                                 'headerOptions' => ['style' => 'text-align: center;'],
 //                                'contentOptions' => ['style' => 'text-align: center; vertical-align: top;'],
                                 'value'=>function ($model, $key, $index, $widget) { 
