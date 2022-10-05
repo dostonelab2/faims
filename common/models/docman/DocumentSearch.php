@@ -60,6 +60,7 @@ class DocumentSearch extends Document
         // grid filtering conditions
         $query->andFilterWhere([
             'document_id' => $this->document_id,
+            'qms_type_id' => $this->qms_type_id,
             'category_id' => $this->category_id,
             'functional_unit_id' => $this->functional_unit_id,
             'revision_number' => $this->revision_number,

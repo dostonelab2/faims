@@ -80,16 +80,10 @@ use common\models\docman\Functionalunit;
     <div class="row">
         
         <div class="col-md-12">
-            <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'subject')->textInput(['maxlength' => true])->label('Document Name') ?>
         </div>
         
-    </div>
-    
-    <div class="row">
 
-        <div class="col-md-12">
-            <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
-        </div>
         
     </div>
     
@@ -101,15 +95,30 @@ use common\models\docman\Functionalunit;
         
     </div>
     
+    
     <div class="row">
-
-        <div class="col-md-12">
+        <div class="col-md-6">
             <?= $form->field($model, 'revision_number')->textInput() ?>
         </div>
         
+        <div class="col-md-6">
+            <?= $form->field($model, 'effectivity_date')->widget(DatePicker::classname(), [
+                'readonly' => false,
+                'disabled' => false,
+                'options' => ['placeholder' => 'Select Date'],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Effectivity Date');?>
+        </div>
     </div>
     
-
+    <div class="row">
+        <div class="col-md-6">
+            <!--?= $form->field($model, 'is_form')->checkBox(['label' => '  This is a Form', 'uncheck' => true]); ?-->
+        </div>
+    </div>
     
 
 

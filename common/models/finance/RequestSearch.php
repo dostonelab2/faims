@@ -18,7 +18,7 @@ class RequestSearch extends Request
     public function rules()
     {
         return [
-            [['request_id', 'request_number', 'request_type_id', 'status_id', 'created_by'], 'integer'],
+            [['request_id', 'request_number', 'request_type_id', 'obligation_type_id', 'status_id', 'created_by'], 'integer'],
             [['request_date', 'payee_id', 'particulars'], 'safe'],
             [['amount'], 'number'],
         ];
@@ -44,14 +44,19 @@ class RequestSearch extends Request
     {
         $query = Request::find();
 
+        $this->load($params);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                // this $params['pagesize'] is an id of dropdown list that we set in view file
+                'pagesize' => (isset($params['pagesize']) ? $params['pagesize'] :  '10'),
+            ],
             'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
 
-        $this->load($params);
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -62,7 +67,7 @@ class RequestSearch extends Request
         // grid filtering conditions
         $query->andFilterWhere([
             'request_id' => $this->request_id,
-            //'request_number' => $this->request_number,
+            'obligation_type_id' => $this->obligation_type_id,
             'request_date' => $this->request_date,
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,

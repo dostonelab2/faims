@@ -5,20 +5,19 @@ namespace common\models\docman;
 use Yii;
 
 /**
- * This is the model class for table "tbl_category".
+ * This is the model class for table "tbl_document_type".
  *
- * @property integer $category_id
+ * @property integer $document_type_id
  * @property string $name
- * @property string $code
  */
-class Category extends \yii\db\ActiveRecord
+class Documenttype extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'tbl_category';
+        return 'tbl_document_type';
     }
 
     /**
@@ -26,7 +25,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        // return Yii::$app->get('db');
+        // return Yii::$app->get('dmsdb');
         return \Yii::$app->db; 
     }
 
@@ -36,9 +35,8 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'code'], 'required'],
-            [['name'], 'string', 'max' => 100],
-            [['code'], 'string', 'max' => 50],
+            [['name'], 'required'],
+            [['name'], 'string', 'max' => 25],
         ];
     }
 
@@ -48,9 +46,8 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'category_id' => 'Category ID',
+            'document_type_id' => 'Document Type ID',
             'name' => 'Name',
-            'code' => 'Code',
         ];
     }
 }

@@ -19,34 +19,9 @@ use common\models\sec\Blockchain;
 /* @var $searchModel common\models\finance\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = $qmstype->code;
+$this->title = 'FORMS';
 $this->params['breadcrumbs'][] = $this->title;
 
-// Modal Create Request
-Modal::begin([
-    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
-    'id' => 'modalRequest',
-    'size' => 'modal-md',
-    'options'=> [
-             'tabindex'=>false,
-        ],
-]);
-
-echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
-Modal::end();
-
-// Modal Create New Creditor
-Modal::begin([
-    'header' => '<h4 id="modalCreditorHeader" style="color: #ffffff"></h4>',
-    'id' => 'modalCreditor',
-    'size' => 'modal-md',
-    'options'=> [
-             'tabindex'=>false,
-        ],
-]);
-
-echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
-Modal::end();
 ?>
 
 <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -119,7 +94,7 @@ Modal::end();
             'pjax' => true, // pjax is set to always true for this demo
             'panel' => [
 //                    'heading' => $this->title,
-                    'heading' => '<h2 class="panel-title"><i class="fas fa-'.(($qmstype->qms_type_id == 1) ? 'folder' : 'folder-open').'"></i> '.$this->title.'</h2>',
+                    'heading' => 'FORMS',
                     'type' => GridView::TYPE_PRIMARY,
                     'before'=>  Html::button('<i class="fas fa-plus"></i> Add', ['value' => Url::to(['document/create']), 'title' => 'Add Document', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']),
                     'after'=>false,
@@ -128,7 +103,8 @@ Modal::end();
             'toolbar' => 
                         [
                             [
-                                'content'=> $category_menus.$toolbars,
+                                'content'=> '',
+                                //'content'=> $category_menus.$toolbars,
                             ],
                             //'{export}',
                             //'{toggleData}'

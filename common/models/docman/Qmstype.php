@@ -26,7 +26,8 @@ class Qmstype extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('dmsdb');
+        // return Yii::$app->get('dmsdb');
+        return \Yii::$app->db; 
     }
 
     /**

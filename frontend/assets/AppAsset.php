@@ -17,8 +17,11 @@ class AppAsset extends AssetBundle
         'css/custom.css',
         'css/introjs.css',
        // 'css/bootstrap-responsive.min.css',
+//        'css/bootstrap.min.css',
         'css/demo.css',
-        'css/animate.min.css'
+        'css/animate.min.css',
+        'css/steps.css'
+//        'css/style.bundle.css'
     ];
     public $js = [
         'js/bootbox.min.js',
@@ -28,11 +31,13 @@ class AppAsset extends AssetBundle
         'js/ppmp/ajax-modal-popup.js',
         'js/budget/ajax-modal-popup.js',
         'js/cashier/ajax-modal-popup.js',
+        'js/docman/ajax-modal-popup.js',
         'js/employeecompensation/ajax-modal-popup.js',
         'js/finance/ajax-modal-popup.js',
         'js/finance/fileinput.min.js',
         'js/finance/sortable.min.js',
         'js/intro.js',
+//        'js/scripts.bundle.js',
         //'js/dashboard/dashboard.js',
         //'js/dashboard/jquery.knob.min.js',
         //'js/supplemental/ajax-modal-popup.js',

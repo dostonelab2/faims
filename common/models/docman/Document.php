@@ -34,7 +34,8 @@ class Document extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('dmsdb');
+        // return Yii::$app->get('db');
+        return \Yii::$app->db; 
     }
 
     /**
@@ -43,7 +44,7 @@ class Document extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['subject', 'filename', 'document_code', 'category_id', 'functional_unit_id', 'content', 'revision_number', 'effectivity_date', 'user_id'], 'required'],
+            [['qms_type_id', 'subject', 'filename', 'document_code', 'category_id', 'content', 'revision_number', 'effectivity_date'], 'required'],
             [['category_id', 'functional_unit_id', 'revision_number', 'user_id', 'active'], 'integer'],
             [['content'], 'string'],
             [['effectivity_date'], 'safe'],
@@ -60,6 +61,7 @@ class Document extends \yii\db\ActiveRecord
     {
         return [
             'document_id' => 'Document ID',
+            'qms_type_id' => 'QMS Type',
             'subject' => 'Subject',
             'filename' => 'Filename',
             'document_code' => 'Document Code',
@@ -71,5 +73,18 @@ class Document extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'active' => 'Active',
         ];
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttachments()
+    {
+        return $this->hasMany(Documentattachment::className(), ['document_id' => 'document_id']);
+    }
+    
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
 }
