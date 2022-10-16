@@ -116,26 +116,6 @@ $request_for_approval = Request::find()
                             ['label' => 'Update Counters', 'icon' => 'gear', 'url' => ['/cashier/creditor/index']],
                         ]
                     ],
-                    /*[
-                        'label' => 'Document Management', 
-                        'icon' => 'archive', 
-                        'visible'=> Yii::$app->user->can('access-document-management'),
-                        'items' => [
-                            [
-                                'label' => 'ISO 9001', 
-                                'icon' => 'folder text-aqua', 
-                                'url' => ['/docman/document/index', 'qms_type_id'=>1], 
-                                'visible'=> Yii::$app->user->can('access-document-management')
-                            ],
-                            [
-                                'label' => 'ISO 17025', 
-                                'icon' => 'folder-open text-aqua', 
-                                'url' => ['/docman/document/index', 'qms_type_id'=>2], 
-                                'visible'=> Yii::$app->user->can('access-document-management')
-                            ],
-                            ['label' => 'FORMS', 'icon' => 'file text-aqua', 'url' => ['/docman/document/index']],
-                        ]
-                    ],*/
                     [
                         'label' => 'Budget', 
                         'icon' => 'archive', 

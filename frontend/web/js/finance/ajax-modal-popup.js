@@ -126,6 +126,14 @@ $("body").on("click","#buttonSkipOS",function () {
     loadModal($(this).attr('value'));
 });
 
+$("body").on("click","#buttonUploadDocument",function () {
+    loadModal($(this).attr('value'));
+});
+
+$("body").on("click","#buttonTrackProgress",function () {
+    loadModal2($(this).attr('value'));
+});
+
 $("body").on("click","#buttonSkipDV",function () {
     loadModal($(this).attr('value'));
 });

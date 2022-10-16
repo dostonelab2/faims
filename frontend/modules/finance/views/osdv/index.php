@@ -263,7 +263,7 @@ Modal::end();
                                 'class' => kartik\grid\ActionColumn::className(),
                                 //'class' => kartik\grid\ActionColumn::className(),
                                 'template' => '{view}{printos}{printdv}',
-                                'headerOptions' => ['style' => 'background-color: #fff;'],
+                                'headerOptions' => ['style' => 'background-color: #f5f5f5;'],
                                 'buttons' => [
                                     'view' => function ($url, $model){
                                         return $model->osdv ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>', ['value' => '/finance/osdv/view?id=' . $model->osdv->osdv_id,'onclick'=>'location.href=this.value', 'class' => 'btn btn-primary', 'title' => Yii::t('app', "View OSDV")]) : '';

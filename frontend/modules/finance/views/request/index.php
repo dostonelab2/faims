@@ -1,9 +1,11 @@
+<!--
 <script type="text/javascript">
     $(function() {
         $(".knob").knob();
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+-->
 
 <?php
 use kartik\helpers\Html;
@@ -19,6 +21,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
+use common\models\finance\Obligationtype;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
@@ -58,12 +61,26 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+
+// Modal Status
+Modal::begin([
+    'header' => '<h4 id="modalHeader" style="color: #ffffff"></h4>',
+    'id' => 'modalContainer',
+    'size' => 'modal-lg',
+    'options'=> [
+             'tabindex'=>false,
+        ],
+]);
+
+echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
+Modal::end();
 ?>
 
 <div class="request-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 <?php Pjax::begin(); ?>
+     
       <?php
         echo GridView::widget([
             'id' => 'request',
@@ -93,13 +110,11 @@ Modal::end();
                                 ],
                                 'format' => 'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return (($model->payroll != 0) ? "" : Html::tag('span', '<b>'.Creditor::findOne($model->payee_id)->name.'</b>', [
-                                        'title'=>'Created by: '.Profile::find($model->created_by)->one()->fullname,
-                                        //'data-toggle'=>'tooltip',
-                                        //'data-content'=>Profile::find($model->created_by)->one()->fullname,
-                                        //'data-toggle'=>'popover',
-                                        'style'=>'text-decoration: underline; cursor:pointer;'
-                                    ])).'<br>' .$model->particulars;
+                                    
+                                    return (($model->payroll != 0) ? "" : Html::a(Creditor::findOne($model->payee_id)->name, ['request/view', 'id'=>$model->request_id], 
+                                            ['style' => 'cursor:pointer; font-size: medium; font-weight: bold;', 'target' => '_blank', 'data-pjax'=>0])
+                                        ).'<br>' .$model->particulars;
+
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
@@ -124,13 +139,14 @@ Modal::end();
                                 },
                             ],
                             [
-                                'attribute'=>'divsion_id',
+                                'attribute'=>'division_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
-                                'width'=>'250px',
+                                'width'=>'100px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return '<span class="label label-success">'.$model->division->code.'</span>';
+                                    
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Division::find()->asArray()->all(), 'division_id', 'code'), 
@@ -140,13 +156,33 @@ Modal::end();
                                 'filterInputOptions' => ['placeholder' => 'Select Division'],
                             ],
                             [
+                                'attribute'=>'obligation_type_id',
+                                'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
+                                'width'=>'250px',
+                                'format'=>'raw',
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return '<span class="label label-info">'.$model->fundsource->name.'</span>';
+                                    
+                                },
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'type_id', 'name'), 
+                                'filterWidgetOptions' => [
+                                    'pluginOptions' => ['allowClear' => true],
+                                ],  
+                                'filterInputOptions' => ['placeholder' => 'Select Fund Source'],
+                            ],
+                            [
                                 'attribute'=>'status_id',
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align:middle;'],
                                 'width'=>'250px',
                                 'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return '<span class="label label-info">'.($model->status ? $model->status->name : "").'</span>';
+                                    //return '<span class="label label-info">'.($model->status ? $model->status->name : "").'</span>';
+                                    //return Html::button($model->status ? $model->status->name : "", ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-sm btn-success', 'id'=>'buttonTrackProgress']);buttonUploadAttachments
+                                    
+                                    return Html::button('<i class="glyphicon glyphicon-time"></i> '.($model->status ? $model->status->name : ""), ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => Yii::t('app', "Track Request"), 'class' => 'btn btn-md btn-success', 'id'=>'buttonUploadAttachments']);
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
                                 'filter' => ArrayHelper::map(Requeststatus::find()->asArray()->all(), 'request_status_id', 'name'), 
@@ -181,6 +217,7 @@ Modal::end();
                                 'width'=>'250px',
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     //return Profile::find($model->created_by)->one()->fullname;
+                                    
                                     return $model->profile->fullname;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
@@ -196,7 +233,9 @@ Modal::end();
                             ],
                             [
                                 'class' => kartik\grid\ActionColumn::className(),
+//                                'class' => 'kartik-sheet-style',
                                 'template' => '{view}',
+                                'headerOptions' => ['style' => 'background-color: #f5f5f5;'],
                                 'buttons' => [
 
                                     'view' => function ($url, $model){
@@ -220,10 +259,7 @@ Modal::end();
             'toolbar' => 
                         [
                             [
-                                'content'=>'',
-                                    /*Html::button('PENDING', ['title' => 'Approved', 'class' => 'btn btn-warning', 'style'=>'width: 90px; margin-right: 6px;']) .    
-                                    Html::button('SUBMITTED', ['title' => 'Approved', 'class' => 'btn btn-primary', 'style'=>'width: 90px; margin-right: 6px;']) .
-                                    Html::button('APPROVED', ['title' => 'Approved', 'class' => 'btn btn-success', 'style'=>'width: 90px; margin-right: 6px;'])*/
+                                'content'=> '',
                             ],
                             //'{export}',
                             //'{toggleData}'

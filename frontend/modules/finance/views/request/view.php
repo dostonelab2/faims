@@ -9,6 +9,7 @@ use kartik\editable\Editable;
 use kartik\grid\GridView;
 use kartik\widgets\SwitchInput;
 
+
 use yii\bootstrap\Modal;
 
 use common\models\cashier\Creditor;
@@ -20,6 +21,9 @@ use common\models\procurement\Division;
 use common\models\system\Comment;
 /* @var $this yii\web\View */
 /* @var $model common\models\finance\Request */
+
+
+//$this->registerCssFile("@web/css/style.bundle.css");
 
 $this->title = $model->request_number;
 $this->params['breadcrumbs'][] = ['label' => 'Request', 'url' => ['index']];
@@ -50,7 +54,6 @@ echo "<div id='modalContent'><div style='text-align:center'><img src='/images/lo
 Modal::end();
 ?>
 
-<?php //echo $this->render('_stepper'); ?>
 <?php $attributes = [
         /*[
             'group'=>true,
@@ -150,7 +153,7 @@ Modal::end();
             'label'=>'Status',
             'rowOptions'=>['class'=>'table-success']
         ],
-        [
+        /*[
             'attribute'=>'remarks',
             'label'=>'Remarks',
             'format'=>'raw',
@@ -158,6 +161,15 @@ Modal::end();
             //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
             'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
         ],
+        [
+                'attribute'=>'request_id',
+                'label'=>'',
+                'inputContainer' => ['class'=>'col-sm-2'],
+                'format' => 'raw',
+//                'visible' => ($model->type_id == 1) ? true : false,
+//                'displayOnly'=>true, //$model->os 
+                'value' => Html::button('Track Progress', ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-md btn-success', 'id'=>'buttonTrackProgress'])
+            ],*/
     ];?>
 <?= DetailView::widget([
         'model' => $model,
@@ -459,7 +471,7 @@ Modal::end();
                 //},
             ],
             
-            [
+            /*[
                 'class' => 'kartik\grid\EditableColumn',
                 'attribute' => 'require_signed',
                 'header' => 'Required Signed?',
@@ -507,7 +519,7 @@ Modal::end();
                 },
                 'editableOptions'=> function ($model , $key , $index) {
                                     return [
-                                        'options' => ['id' => $index . '_10_' . $model->status_id],
+                                        'options' => ['id' => $index . '_11_' . $model->status_id],
                                         'contentOptions' => ['style' => 'text-align: center;  vertical-align:middle;'],
                                         'placement'=>'left',
                                         'disabled'=>!$model->status_id,
@@ -526,7 +538,7 @@ Modal::end();
                 'width' => '7%',
                 //'format' => ['decimal', 2],
                 'pageSummary' => true
-            ],
+            ],*/
         ];
     ?>
     

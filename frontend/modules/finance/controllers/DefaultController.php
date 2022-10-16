@@ -47,8 +47,7 @@ class DefaultController extends Controller
         $forPayment = Request::find()->where('status_id =:status_id AND cancelled =0',[':status_id'=>Request::STATUS_APPROVED_FOR_DISBURSEMENT])->count();
         
         
-        
-        
+        $recentActions = Blockchain::find()->orderBy(['blockchain_id' => SORT_DESC])->limit(6)->all();
         
         return $this->render('index',[
             'forVerification' => $forVerification,
@@ -62,7 +61,7 @@ class DefaultController extends Controller
             'forDisbursement' => $forDisbursement,
             'forApproval' => $forApproval,
             'forPayment' => $forPayment,
-            //'approved' => $approved,
+            'recentActions' => $recentActions,
         ]);
     }
     
@@ -70,4 +69,6 @@ class DefaultController extends Controller
     {
         return $this->render('dashboard');
     }
+    
+    
 }

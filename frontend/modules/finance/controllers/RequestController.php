@@ -80,6 +80,8 @@ class RequestController extends Controller
         if(Yii::$app->user->identity->username != 'Admin')
             $searchModel->created_by =  Yii::$app->user->identity->user_id;
         //$searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
+        
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('index', [
@@ -225,6 +227,7 @@ class RequestController extends Controller
                 ]
             ],*/
         ]);
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
         }
@@ -1156,5 +1159,123 @@ class RequestController extends Controller
         
         $data = $model->request_number.':'.$model->request_date.':'.$model->request_type_id.':'.$model->payee_id.':'.$model->particulars.':'.$model->amount.':'.$model->status_id;
         Blockchain::createBlock($index, $scope, $data);
+    }
+    
+    public function actionTracking()
+    {
+        $model = Request::find()
+            ->where(['request_id' => $_GET['id']])
+            ->one();
+        
+        /* Tracking will differ through the ff use cases:  
+         * 1. by payroll (boolean)
+         * 2. obligation_type_id (regular fund, scholarship fund, trust fund, mds - trust fund)
+         *    also know as FundSource
+        */
+        
+        switch ($model->obligation_type_id) {
+          case 1:
+
+            $status = [
+                'submitted' => Request::submitted($model->request_id, $model->payroll, $model->status_id),
+                'verified' => Request::verified($model->request_id, $model->payroll, $model->status_id),
+                'validated' =>  Request::validated($model->request_id, $model->status_id),
+                'certified_allotment' => Request::certified_allotment(
+                    $model->request_id, 
+                    $model->osdv ? $model->osdv->osdv_id : NULL, 
+                    $model->status_id),
+                'allotted' => Request::allotted($model->osdv ? $model->osdv->osdv_id : NULL, $model->status_id),
+                'certified_funds' => Request::certified_funds($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->obligation_type_id, $model->status_id),
+                'charged' => Request::charged($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+                'approved' => Request::approved($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+                'completed' => Request::completed($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+            ];  
+            break;
+                
+          case 2:
+            
+            $status = [
+                'submitted' => Request::submitted($model->request_id, $model->payroll, $model->status_id),
+                'verified' => Request::verified($model->request_id, $model->payroll, $model->status_id),
+                'validated' =>  Request::for_disbursement($model->request_id, $model->status_id),
+                'certified_funds' => Request::certified_funds($model->request_id, 'Request', $model->obligation_type_id, $model->status_id),
+                'charged' => Request::charged(
+                    $model->osdv ? $model->osdv->osdv_id : NULL, 
+                    'Osdv', 
+                    $model->status_id
+                ),
+                'approved' => Request::approved($model->osdv->osdv_id, 'Osdv', $model->status_id),
+                'completed' => Request::completed($model->osdv->osdv_id, 'Osdv', $model->status_id),
+            ];   
+            break;
+                
+          case 3:
+            
+            $status = [
+                'submitted' => Request::submitted($model->request_id, $model->payroll, $model->status_id),
+                'verified' => Request::verified($model->request_id, $model->payroll, $model->status_id),
+                'validated' =>  Request::for_disbursement($model->request_id, $model->status_id),
+                'certified_funds' => Request::certified_funds($model->request_id, 'Request', $model->obligation_type_id, $model->status_id),
+                'charged' => Request::charged(
+                    $model->osdv ? $model->osdv->osdv_id : NULL, 
+                    'Osdv', 
+                    $model->status_id
+                ),
+                'approved' => Request::approved($model->osdv->osdv_id, 'Osdv', $model->status_id),
+                'completed' => Request::completed($model->osdv->osdv_id, 'Osdv', $model->status_id),
+            ]; 
+            break;
+                
+          default:
+            //code to be executed if n is different from all labels;
+        }
+        
+        
+
+        /*
+            STATUS_CREATED = 10;   
+            STATUS_SUBMITTED = 20; // end user
+            STATUS_VERIFIED = 30;  // finance verification team
+            STATUS_VALIDATED = 40;  // Head of the Requesting Unit (ARD)
+            STATUS_CERTIFIED_ALLOTMENT_AVAILABLE = 50; // Head of Budget Unit (Budget Officer)
+            STATUS_ALLOTTED = 55; // finance processing team / budgetting staff
+            STATUS_FOR_DISBURSEMENT = 58; // finance processing team / budgetting staff
+            STATUS_CERTIFIED_FUNDS_AVAILABLE = 60; // Head of the Accounting Unit (Accountant)
+            STATUS_CHARGED = 65; // finance processing team / accounting staff
+            STATUS_APPROVED_PARTIAL = 67;  // Head of Agency (Regional Director / OIC)
+            STATUS_APPROVED_FOR_DISBURSEMENT = 70;  // Head of Agency (Regional Director / OIC)
+            STATUS_COMPLETED = 80; // 
+            STATUS_RATED = 90;     // end user
+        */
+        
+        /*
+        $status = [
+            'submitted' => Request::submitted($model->request_id, $model->payroll, $model->status_id),
+            'verified' => Request::verified($model->request_id, $model->payroll, $model->status_id),
+            'validated' => ($model->obligation_type_id == 1) ? Request::validated($model->request_id, $model->status_id) : Request::for_disbursement($model->request_id, $model->osdv->osdv_id, $model->status_id),
+            'certified_allotment' => ($model->obligation_type_id == 1) ? Request::certified_allotment($model->request_id, $model->osdv->osdv_id, $model->status_id) : null,
+            'allotted' => ($model->obligation_type_id == 1) ? Request::allotted($model->osdv->osdv_id, $model->status_id) : null,
+//            'disbursed' => ($model->obligation_type_id == 1) ? null : Request::for_disbursement($model->osdv->osdv_id, $model->status_id),
+//            'obligated' => Request::obligated($model->osdv->osdv_id, $model->status_id),
+            'certified_funds' => Request::certified_funds($model->request_id, $model->osdv->osdv_id, $model->obligation_type_id, $model->status_id),
+//            'disbursed' => ($model->status_id >= 60) ? 'bg-aqua' : 'bg-gray',
+            'charged' => ($model->status_id >= 65) ? 'bg-aqua' : 'bg-gray',
+            'approved_partial' => ($model->status_id >= 67) ? 'bg-aqua' : 'bg-gray',
+            'approved' => ($model->status_id >= 70) ? 'bg-aqua' : 'bg-gray',
+            'completed' => ($model->status_id >= 80) ? 'bg-aqua' : 'bg-gray',
+        ];
+        */
+        
+        if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('_tracking2', [
+                    'model' => $model,
+                    'status' => $status,
+                ]);   
+        }else {
+            return $this->render('_tracking2', [
+                    'model' => $model,
+            ]);
+        }
+        
     }
 }

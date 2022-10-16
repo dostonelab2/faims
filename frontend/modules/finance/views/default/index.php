@@ -1,5 +1,7 @@
 <?php 
 use common\models\finance\Request;
+use common\models\finance\Requeststatus;
+use common\models\sec\Blockchain;
 use yii\bootstrap\Modal;
 
 $this->title = 'Dashboard';
@@ -163,13 +165,13 @@ Modal::end();
       <div class="row">
         <!-- Left col -->
         <section class="col-lg-7 connectedSortable">
-         
+
           <!-- TO DO List -->
           <div class="box box-primary">
             <div class="box-header">
               <i class="ion ion-clipboard"></i>
 
-              <h3 class="box-title">FOR IMMEDIATE ACTION</h3>
+              <h3 class="box-title">RECENT ACTIONS</h3>
 
               <div class="box-tools pull-right">
                 <ul class="pagination pagination-sm inline">
@@ -184,6 +186,8 @@ Modal::end();
             <!-- /.box-header -->
             <div class="box-body">
               <ul class="todo-list">
+                
+                <?php foreach($recentActions as $action) {?>
                 <li>
                   <!-- drag handle -->
                       <span class="handle">
@@ -191,82 +195,31 @@ Modal::end();
                         <i class="fa fa-ellipsis-v"></i>
                       </span>
                   <!-- checkbox -->
-                  <input type="checkbox" value="" name="">
+<!--                  <input type="checkbox" value="" name="">-->
                   <!-- todo text -->
-                  <span class="text">Design a nice theme</span>
+                  <?php 
+                        $actionStatus = (int)substr($action->data, -2); 
+
+                        $date1 = new DateTime( date("Y-m-d H:i:s",$action->timestamp) );
+                        $date2 = new DateTime( date("Y-m-d H:i:s") );
+                                                          
+                        $difference = $date1->diff($date2);
+                    ?>
+                  <span class="text"><?php echo $action->scope?></span>
+<!--                  <span class="text"><?php //echo Requeststatus::findOne($actionStatus)->name ?></span>-->
                   <!-- Emphasis label -->
-                  <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                  <small class="label label-success"><i class="fa fa-clock-o"></i> <?php echo Blockchain::format_interval($difference) ?></small>
                   <!-- General tools such as edit or delete-->
+<!--
                   <div class="tools">
                     <i class="fa fa-edit"></i>
                     <i class="fa fa-trash-o"></i>
                   </div>
+-->
                 </li>
-                <li>
-                      <span class="handle">
-                        <i class="fa fa-ellipsis-v"></i>
-                        <i class="fa fa-ellipsis-v"></i>
-                      </span>
-                  <input type="checkbox" value="" name="">
-                  <span class="text">Make the theme responsive</span>
-                  <small class="label label-info"><i class="fa fa-clock-o"></i> 4 hours</small>
-                  <div class="tools">
-                    <i class="fa fa-edit"></i>
-                    <i class="fa fa-trash-o"></i>
-                  </div>
-                </li>
-                <li>
-                      <span class="handle">
-                        <i class="fa fa-ellipsis-v"></i>
-                        <i class="fa fa-ellipsis-v"></i>
-                      </span>
-                  <input type="checkbox" value="" name="">
-                  <span class="text">Let theme shine like a star</span>
-                  <small class="label label-warning"><i class="fa fa-clock-o"></i> 1 day</small>
-                  <div class="tools">
-                    <i class="fa fa-edit"></i>
-                    <i class="fa fa-trash-o"></i>
-                  </div>
-                </li>
-                <li>
-                      <span class="handle">
-                        <i class="fa fa-ellipsis-v"></i>
-                        <i class="fa fa-ellipsis-v"></i>
-                      </span>
-                  <input type="checkbox" value="" name="">
-                  <span class="text">Let theme shine like a star</span>
-                  <small class="label label-success"><i class="fa fa-clock-o"></i> 3 days</small>
-                  <div class="tools">
-                    <i class="fa fa-edit"></i>
-                    <i class="fa fa-trash-o"></i>
-                  </div>
-                </li>
-                <li>
-                      <span class="handle">
-                        <i class="fa fa-ellipsis-v"></i>
-                        <i class="fa fa-ellipsis-v"></i>
-                      </span>
-                  <input type="checkbox" value="" name="">
-                  <span class="text">Check your messages and notifications</span>
-                  <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 week</small>
-                  <div class="tools">
-                    <i class="fa fa-edit"></i>
-                    <i class="fa fa-trash-o"></i>
-                  </div>
-                </li>
-                <li>
-                      <span class="handle">
-                        <i class="fa fa-ellipsis-v"></i>
-                        <i class="fa fa-ellipsis-v"></i>
-                      </span>
-                  <input type="checkbox" value="" name="">
-                  <span class="text">Let theme shine like a star</span>
-                  <small class="label label-default"><i class="fa fa-clock-o"></i> 1 month</small>
-                  <div class="tools">
-                    <i class="fa fa-edit"></i>
-                    <i class="fa fa-trash-o"></i>
-                  </div>
-                </li>
+                
+                <?php }?>
+                
               </ul>
             </div>
             <!-- /.box-body -->
