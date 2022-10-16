@@ -29,6 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getDb()
     {
         return \Yii::$app->db;  
+        // return Yii::$app->get('dmsdb');
     }
     /**
      * @inheritdoc
