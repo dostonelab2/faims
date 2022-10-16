@@ -65,11 +65,11 @@ return [
           '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
        ),
     ],
-    /*'Notification' => [
+    'Notification' => [
         'class' => 'common\components\Notification'
     ],
     'NumbersToWords' => [
         'class' => 'common\components\NumbersToWords'
-    ],*/
+    ],
 ];
  

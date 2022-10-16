@@ -14,7 +14,7 @@ class RequestSearch extends Request
 {
     /**
      * @inheritdoc
-     */
+     */ 
     public function rules()
     {
         return [
@@ -53,7 +53,7 @@ class RequestSearch extends Request
                 // this $params['pagesize'] is an id of dropdown list that we set in view file
                 'pagesize' => (isset($params['pagesize']) ? $params['pagesize'] :  '10'),
             ],
-            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['request_id'=>SORT_ASC]]
         ]);
 
 
@@ -78,9 +78,9 @@ class RequestSearch extends Request
             'cancelled' => 0,
         ]);
         /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 **/
-
+        
         /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
-
+        
         if((Yii::$app->user->identity->user_id == 2)){
             //$query->andFilterWhere(['in', 'payee_id', $this->payee_id])
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
@@ -118,15 +118,15 @@ class RequestSearch extends Request
         }else{
              $query->andFilterWhere(['like', 'payee_id', $this->payee_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id])
-                ->andFilterWhere(['like', 'particulars', $this->particulars]);
+                ->andFilterWhere(['like', 'particulars', $this->particulars]);    
         }*/
-
+        
         /*if(isset($this->status_id)){
             $query->andFilterWhere(['>', 'status_id', $this->status_id]);
         }*/
-
+        
         $query->andFilterWhere(['like', 'request_number', $this->request_number]);
-
+        
         return $dataProvider;
     }
 }
