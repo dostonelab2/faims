@@ -117,13 +117,13 @@ class OsdvController extends Controller
         $searchModel->status_ids = [Request::STATUS_VALIDATED, Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->can('access-finance-obligation'))
+        //if(Yii::$app->user->can('access-finance-obligation'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
         
-        if(Yii::$app->user->can('access-finance-disbursement'))
-            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
-        else    
-            $numberOfRequests = 0;
+        // if(Yii::$app->user->can('access-finance-disbursement'))
+        //     $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        // else    
+        //     $numberOfRequests = 0;
         
         return $this->render('obligationindex', [
             'searchModel' => $searchModel,
@@ -138,18 +138,18 @@ class OsdvController extends Controller
         $searchModel->status_ids = [Request::STATUS_ALLOTTED];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->can('access-finance-obligation'))
+        /*if(Yii::$app->user->can('access-finance-obligation'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
         
         if(Yii::$app->user->can('access-finance-disbursement'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
         else    
-            $numberOfRequests = 0;
+            $numberOfRequests = 0;*/
         
         return $this->render('obligatedindex', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'numberOfRequests' => $numberOfRequests,
+            // 'numberOfRequests' => $numberOfRequests,
         ]);
     }
 
@@ -159,13 +159,13 @@ class OsdvController extends Controller
         $searchModel->status_ids = [Request::STATUS_ALLOTTED, Request::STATUS_CERTIFIED_FUNDS_AVAILABLE];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->can('access-finance-obligation'))
-            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        // if(Yii::$app->user->can('access-finance-obligation'))
+            // $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
         
-        if(Yii::$app->user->can('access-finance-disbursement'))
+        // if(Yii::$app->user->can('access-finance-disbursement'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
-        else    
-            $numberOfRequests = 0;
+        // else    
+        //     $numberOfRequests = 0;
         
         return $this->render('disbursementindex', [
             'searchModel' => $searchModel,
@@ -180,18 +180,19 @@ class OsdvController extends Controller
         $searchModel->status_ids = [Request::STATUS_CHARGED];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->can('access-finance-obligation'))
+        /*if(Yii::$app->user->can('access-finance-obligation'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
         
         if(Yii::$app->user->can('access-finance-disbursement'))
             $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        
         else    
-            $numberOfRequests = 0;
+            $numberOfRequests = 0;*/
         
         return $this->render('disbursedindex', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'numberOfRequests' => $numberOfRequests,
+            // 'numberOfRequests' => $numberOfRequests,
         ]);
     }
     
