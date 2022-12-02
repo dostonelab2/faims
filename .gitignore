@@ -360,3 +360,10 @@ frontend/web/uploads/finance/request/2021-05-0481/index.php
 faims_vendor.rar
 vendor/autoload.php
 common/config/db_.php
+frontend/views/dmstr/layouts/content.php
+frontend/views/dmstr/layouts/header.php
+frontend/views/dmstr/layouts/left.php
+frontend/views/dmstr/layouts/main-login.php
+frontend/views/dmstr/layouts/main.php
+frontend/views/dmstr/site/error.php
+frontend/views/dmstr/site/login.php

@@ -53,7 +53,7 @@ class RequestSearch extends Request
                 // this $params['pagesize'] is an id of dropdown list that we set in view file
                 'pagesize' => (isset($params['pagesize']) ? $params['pagesize'] :  '10'),
             ],
-            'sort'=> ['defaultOrder' => ['request_id'=>SORT_ASC]]
+            'sort'=> ['defaultOrder' => ['request_id'=>SORT_DESC]]
         ]);
 
 

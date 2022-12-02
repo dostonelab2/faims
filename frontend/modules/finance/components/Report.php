@@ -665,7 +665,7 @@ $content .= '
             break;  
           case 6:
             $DVboxASignatory = 'NUHMAN M. ALJANI';
-            $DVboxAPosition = 'OIC, PSTD-ZDN';  
+            $DVboxAPosition = 'PSTD-ZDN';  
             break;
           case 7:
             $DVboxASignatory = 'JENNIFER A. PIDOR';
@@ -673,7 +673,7 @@ $content .= '
             break; 
           case 8:
             $DVboxASignatory = 'RICARDO J. APOLINARIO, III';
-            $DVboxAPosition = 'CSTD-ZC/ISA';  
+            $DVboxAPosition = 'CSTC-ZC/ISA';  
             break; 
                 
           default:

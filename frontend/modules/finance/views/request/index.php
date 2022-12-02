@@ -77,8 +77,6 @@ Modal::end();
 ?>
 
 <div class="request-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 <?php Pjax::begin(); ?>
      
       <?php
@@ -248,7 +246,7 @@ Modal::end();
             
             'pjax' => true, // pjax is set to always true for this demo
             'panel' => [
-                    'heading' => '',
+                    'heading' => Html::encode($this->title),
                     'type' => GridView::TYPE_PRIMARY,
                     'before'=>  Html::button('New Request', ['value' => Url::to(['request/create']), 'title' => 'Create Request', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonCreateRequest']) 
                                 .' '. 

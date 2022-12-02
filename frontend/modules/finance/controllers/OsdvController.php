@@ -11,6 +11,7 @@ use common\models\finance\Os;
 use common\models\finance\Osdv;
 use common\models\finance\AccounttransactionSearch;
 use common\models\finance\CheckdisbursementjournalSearch;
+use common\models\finance\ObligationSearch;
 use common\models\finance\OsdvSearch;
 use common\models\finance\OsdvapprovalSearch;
 use common\models\finance\Request;
@@ -23,6 +24,7 @@ use common\models\procurement\Expenditureclass;
 use common\models\sec\Blockchain;
 
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
@@ -103,6 +105,90 @@ class OsdvController extends Controller
             $numberOfRequests = 0;
         
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'numberOfRequests' => $numberOfRequests,
+        ]);
+    }
+
+    public function actionObligationindex()
+    {
+        $searchModel = new ObligationSearch();
+        $searchModel->status_ids = [Request::STATUS_VALIDATED, Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->user->can('access-finance-obligation'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        
+        if(Yii::$app->user->can('access-finance-disbursement'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        else    
+            $numberOfRequests = 0;
+        
+        return $this->render('obligationindex', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'numberOfRequests' => $numberOfRequests,
+        ]);
+    }
+
+    public function actionObligatedindex()
+    {
+        $searchModel = new ObligationSearch();
+        $searchModel->status_ids = [Request::STATUS_ALLOTTED];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->user->can('access-finance-obligation'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        
+        if(Yii::$app->user->can('access-finance-disbursement'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        else    
+            $numberOfRequests = 0;
+        
+        return $this->render('obligatedindex', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'numberOfRequests' => $numberOfRequests,
+        ]);
+    }
+
+    public function actionDisbursementindex()
+    {
+        $searchModel = new ObligationSearch();
+        $searchModel->status_ids = [Request::STATUS_ALLOTTED, Request::STATUS_CERTIFIED_FUNDS_AVAILABLE];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->user->can('access-finance-obligation'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        
+        if(Yii::$app->user->can('access-finance-disbursement'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        else    
+            $numberOfRequests = 0;
+        
+        return $this->render('disbursementindex', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'numberOfRequests' => $numberOfRequests,
+        ]);
+    }
+
+    public function actionDisbursedindex()
+    {
+        $searchModel = new ObligationSearch();
+        $searchModel->status_ids = [Request::STATUS_CHARGED];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->user->can('access-finance-obligation'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_VALIDATED])->count();
+        
+        if(Yii::$app->user->can('access-finance-disbursement'))
+            $numberOfRequests = Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->count();
+        else    
+            $numberOfRequests = 0;
+        
+        return $this->render('disbursedindex', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'numberOfRequests' => $numberOfRequests,

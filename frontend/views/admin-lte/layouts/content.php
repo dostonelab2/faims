@@ -40,6 +40,8 @@ $Host= "//".Yii::$app->getRequest()->serverName;
     <strong>Copyright &copy; <?= $CopyrightYear ?> <a href="//region9.dost.gov.ph" target="_blank">DOST-IX</a>.</strong> All rights
     reserved. | <a href="<?= $Host ?>">frontend</a>.
 </footer>
+
+
 <script>
 $(document).ready(function () {
     //fix bug for select2 mozilla firefox

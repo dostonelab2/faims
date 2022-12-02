@@ -145,7 +145,7 @@ $request_for_approval = Request::find()
                             /*['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],*/
                         ]
                     ],
-                    [
+                    /*[
                         'label' => 'Finance', 
                         'icon' => 'line-chart', 
                         'visible'=> Yii::$app->user->can('access-procurement'),
@@ -170,7 +170,7 @@ $request_for_approval = Request::find()
                                 'url' => ['/finance/osdv/coaindex'], 
                             ],
                         ]
-                    ],
+                    ],*/
                     [
                         'label' => 'Financial Request', 
                         'icon' => 'folder-open text-aqua', 
@@ -183,38 +183,58 @@ $request_for_approval = Request::find()
                                 'label' => 'Dashboard' , 
                                 'icon' => 'dashboard text-aqua', 
                                 'url' => ['/finance/default/index'], 
-                                //'badge' => '<span class="fa fa-angle-left pull-right">dry-run</span>',
-                                //'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Skip OS/DV', 
-                                'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/skip'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval') 
+                                'label' => 'Requests', 
+                                'icon' => 'paperclip text-aqua', 
+                                'url' => ['/finance/request/index']
                             ],
                             [
-                                'label' => 'Report of Disbursement', 
-                                'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/report'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'Verification', 
+                                'icon' => 'check text-aqua', 
+                                'url' => ['/finance/request/verifyindex'], 
+                                'visible'=> Yii::$app->user->can('access-finance-verification') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Report of Disbursement (Payroll)', 
-                                'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/reportpayroll'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'Validation', 
+                                'icon' => 'search text-aqua', 
+                                'url' => ['/finance/request/validateindex'], 
+                                'visible'=> Yii::$app->user->can('access-finance-validation') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Check Disbursement Journal', 
+                                'label' => 'Obligation', 
                                 'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/checkdisbursementjournal'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
+                                'visible'=> Yii::$app->user->can('access-finance-obligation') || (Yii::$app->user->identity->username == 'Admin'),
+                                'items' => [
+                                    [
+                                        'label' => 'Pending', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/obligationindex'], 
+                                    ],
+                                    [
+                                        'label' => 'Obligated', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/obligatedindex'], 
+                                    ],
+                                ]
                             ],
                             [
-                                'label' => 'Obligation and Disbursement', 
+                                'label' => 'Disbursement', 
                                 'icon' => 'ruble text-aqua', 
-                                'url' => ['/finance/osdv/index'], 
-                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-dv')
+                                'url' => ['/finance/osdv/disbursementindex'], 
+                                'visible'=> Yii::$app->user->can('access-finance-disbursement') || (Yii::$app->user->identity->username == 'Admin'),
+                                'items' => [
+                                    [
+                                        'label' => 'Pending', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/disbursementindex'], 
+                                    ],
+                                    [
+                                        'label' => 'Disbursed', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/disbursedindex'], 
+                                    ],
+                                ]
                             ],
                             [
                                 'label' => 'For Approval' , 
@@ -233,17 +253,54 @@ $request_for_approval = Request::find()
                                 'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Validate Requests', 
-                                'icon' => 'search text-aqua', 
-                                'url' => ['/finance/request/validateindex'], 
-                                'visible'=> Yii::$app->user->can('access-finance-validation') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'Reports', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/reportpayroll'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval'),
+                                'items' => [
+                                    [
+                                        'label' => 'Report of Disbursement', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/report'], 
+                                    ],
+                                    [
+                                        'label' => 'Report of Disbursement (P)', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/reportpayroll'], 
+                                    ],
+                                    [
+                                        'label' => 'Check Disbursement Journal', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/checkdisbursementjournal'],
+                                    ],
+                                    [
+                                        'label' => 'Skip OS/DV', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/skip'], 
+                                    ],
+                                ],
+                            ],
+                            /*[
+                                'label' => 'Report of Disbursement', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/reportpayroll'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
                             ],
                             [
-                                'label' => 'Verify Requests', 
-                                'icon' => 'check text-aqua', 
-                                'url' => ['/finance/request/verifyindex'], 
-                                'visible'=> Yii::$app->user->can('access-finance-verification') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'label' => 'Check Disbursement Journal', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/checkdisbursementjournal'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-finance-approval')//|| (Yii::$app->user->identity->username == 'Admin')
+                            ],*/
+                            [
+                                'label' => 'Obligation and Disbursement', 
+                                'icon' => 'ruble text-aqua', 
+                                'url' => ['/finance/osdv/index'], 
+                                'visible'=> Yii::$app->user->can('access-finance-processing') || Yii::$app->user->can('access-dv')
                             ],
+                            
+                            
+                            
                             [
                                 'label' => 'Approved Requests', 
                                 'icon' => 'check text-aqua', 
@@ -256,11 +313,7 @@ $request_for_approval = Request::find()
                                 'url' => ['/finance/request/signeduploadindex'], 
                                 'visible'=> Yii::$app->user->can('access-finance-documentcollation') //|| (Yii::$app->user->identity->username == 'Admin')
                             ],
-                            [
-                                'label' => 'Requests', 
-                                'icon' => 'paperclip text-aqua', 
-                                'url' => ['/finance/request/index']
-                            ],
+                            
                             [
                                 'label' => 'Request Types', 
                                 'icon' => 'object-ungroup text-aqua', 

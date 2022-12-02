@@ -283,7 +283,7 @@ class Report {
         $template .= "</tr>";
         
         $template .= "<tr>";
-        $template .= "<td colspan='3'>OIC - Accountant III</td>";
+        $template .= "<td colspan='3'>Accountant III</td>";
         $template .= "<td colspan='5'>Regional Director</td>";
         $template .= "</tr>";
         

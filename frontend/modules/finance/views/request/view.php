@@ -160,7 +160,7 @@ Modal::end();
             'inputContainer' => ['class'=>'col-sm-6'],
             //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
             'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
-        ],
+        ],*/
         [
                 'attribute'=>'request_id',
                 'label'=>'',
@@ -169,7 +169,7 @@ Modal::end();
 //                'visible' => ($model->type_id == 1) ? true : false,
 //                'displayOnly'=>true, //$model->os 
                 'value' => Html::button('Track Progress', ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-md btn-success', 'id'=>'buttonTrackProgress'])
-            ],*/
+            ],
     ];?>
 <?= DetailView::widget([
         'model' => $model,
@@ -367,6 +367,8 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
+                'visible' => ( $model->owner() || Yii::$app->user->can('access-finance-verification') || Yii::$app->user->can('access-finance-validation') || Yii::$app->user->can('access-finance-processing')),
+                //'visible' => (Yii::$app->user->can('access-finance-verification') ),
                 'value'=>function ($model, $key, $index, $widget) { 
                     $btnCss = [];
                     $status = Requestattachment::hasAttachment($model->request_attachment_id);
@@ -393,6 +395,7 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
+                'visible' => ( $model->owner() || Yii::$app->user->can('access-finance-verification') || Yii::$app->user->can('access-finance-validation') || Yii::$app->user->can('access-finance-processing')),
                 'value'=>function ($model, $key, $index, $widget){ 
 
                     $link = "/uploads/finance/request/" . $model->request->request_number. "/" . $model->filename.'.pdf';
@@ -425,6 +428,7 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
+                'visible' => ( $model->owner() || Yii::$app->user->can('access-finance-verification') || Yii::$app->user->can('access-finance-validation') || Yii::$app->user->can('access-finance-processing')),
                 /*'value'=> function ($model, $key, $index, $widget) { 
                     return Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->request_attachment_signed_id : '';
                 },*/
