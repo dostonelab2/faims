@@ -508,7 +508,7 @@ Modal::end();
                 'width' => '7%',
                 //'format' => ['decimal', 2],
                 'pageSummary' => true
-            ],
+            ],*/
             [
                 'class' => 'kartik\grid\EditableColumn',
                 'attribute' => 'status_id',
@@ -542,7 +542,7 @@ Modal::end();
                 'width' => '7%',
                 //'format' => ['decimal', 2],
                 'pageSummary' => true
-            ],*/
+            ],
         ];
     ?>
     
