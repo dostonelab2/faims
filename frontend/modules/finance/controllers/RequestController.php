@@ -647,6 +647,22 @@ class RequestController extends Controller
                return false;
        }
     }
+
+    public function actionTogglecancel() {
+        if (Yii::$app->request->post('hasEditable')) {
+            $ids = Yii::$app->request->post('editableKey');
+            
+            $index = Yii::$app->request->post('editableIndex');
+            $attr = Yii::$app->request->post('editableAttribute');
+            $qty = $_POST['Request'][$index][$attr];
+            $model = Request::findOne($ids);
+            $model->$attr = $qty ? 1 : 0; //$fmt->asDecimal($amt,2);
+            if($model->save(false))
+                return true;
+            else
+                return false;
+        }
+     }
     
     public function actionDeleteattachment(){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

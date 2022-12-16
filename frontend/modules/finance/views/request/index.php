@@ -242,6 +242,40 @@ Modal::end();
                                     },
                                 ],
                             ],
+                            [
+                                'class' => 'kartik\grid\EditableColumn',
+                                'attribute' => 'cancelled',
+                                'header' => 'Cancel',
+                                'format' => 'raw',
+                                'refreshGrid'=>true,
+                                //'visible' => Yii::$app->user->can('access-finance-verification'),
+                                //'headerOptions' => ['style' => 'text-align: center;'],
+                                'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
+                                'value'=>function ($model, $key, $index, $widget) { 
+                                    return $model->cancelled ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove text-red"></i>';
+                                },
+                                'editableOptions'=> function ($model , $key , $index) {
+                                                    return [
+                                                        'options' => ['id' => $index . '_11_' . $model->cancelled],
+                                                        // 'contentOptions' => ['style' => 'text-align: center;  vertical-align:middle;'],
+                                                        'placement'=>'left',
+                                                        // 'disabled'=>$model->cancelled,
+                                                        'name'=>'district',
+                                                        'asPopover' => true,
+                                                        'value'=>function ($model, $key, $index, $widget) {
+                                                            return $model->cancelled ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove text-red"></i>';
+                                                        },
+                                                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                                                        'data'=>['0'=>'Revert','1'=>'Cancel'],
+                                                        'formOptions'=>['action' => ['/finance/request/togglecancel']], // point to the new action
+                                                    ];
+                                                },
+                                'hAlign' => 'right', 
+                                'vAlign' => 'middle',
+                                'width' => '7%',
+                                //'format' => ['decimal', 2],
+                                // 'pageSummary' => true
+                            ],
                     ],
             
             'pjax' => true, // pjax is set to always true for this demo
