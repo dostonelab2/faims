@@ -248,7 +248,7 @@ Modal::end();
                                 'header' => 'Cancel',
                                 'format' => 'raw',
                                 'refreshGrid'=>true,
-                                //'visible' => Yii::$app->user->can('access-finance-verification'),
+                                'visible' => Yii::$app->user->can('access-finance-verification'),
                                 //'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                                 'value'=>function ($model, $key, $index, $widget) { 
