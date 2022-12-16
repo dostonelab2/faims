@@ -249,7 +249,7 @@ Modal::end();
                                 'format' => 'raw',
                                 'refreshGrid'=>true,
                                 'visible' => Yii::$app->user->can('access-finance-verification'),
-                                //'headerOptions' => ['style' => 'text-align: center;'],
+                                'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                                 'value'=>function ($model, $key, $index, $widget) { 
                                     return $model->cancelled ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove text-red"></i>';
