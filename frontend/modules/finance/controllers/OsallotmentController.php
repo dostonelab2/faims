@@ -359,6 +359,7 @@ class OsallotmentController extends Controller
                     '4' => $os->request->particulars, //Particulars
                     '5' => '', 
                     '6' => '', 
+                    '7' => $os->request->amount, 
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
