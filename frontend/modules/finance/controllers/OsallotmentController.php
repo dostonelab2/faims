@@ -358,15 +358,19 @@ class OsallotmentController extends Controller
                     'Particulars' => $os->request->particulars,
                 ]
             );
-            /*$alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
+            $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
             foreach($alloments as $alloment){
-                $os_allotment[$os_index] = $alloment->amount;
+                // $os_allotment[$os_index] = $alloment->amount;
+                array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
+                // array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
+                // array_merge($response[$index], ['711' => $alloment->amount]);
                 $os_index += 1;
             }
-            array_push($response["response"][$index], $os_allotment);*/
-            // $index += 1;
+            //array_push($response[$index], $os_allotment);
+            //array_merge($response[$index], $os_allotment);
+            $index += 1;
         }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
