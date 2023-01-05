@@ -359,15 +359,31 @@ class OsallotmentController extends Controller
                     '4' => $os->request->particulars, //Particulars
                     '5' => '', 
                     '6' => '', 
-                    '7' => $os->request->amount, 
+                    '7' => $os->request->amount,
+                    '8' => '',
+                    '9' => '', 
+                    '10' => '', 
+                    '11' => '',  
+                    '701' => [],  //PERA
+                    '12' => '', 
+                    '13' => '', 
+                    '711' => [], //PERA
+                    '713' => [], //RA
+                    '714' => [], //TA
+                    '715' => [], //Clothing
+                    '716' => '', 
+                    '725' => [], //Clothing
+                    '724' => [], //Clothing
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
+
+            $obj = [701,711,715,725,724];
             foreach($alloments as $alloment){
                 // $os_allotment[$os_index] = $alloment->amount;
-                array_push($response[$index], $alloment->amount);
+                array_push($response[$index][$obj[$os_index]], $alloment->amount);
                 // array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
                 // array_merge($response[$index], ['711' => $alloment->amount]);
                 $os_index += 1;
