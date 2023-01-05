@@ -356,6 +356,8 @@ class OsallotmentController extends Controller
                     '2' => $os->os_number, //OS Number
                     '3' => $os->request->creditor->name, //Payee
                     '4' => $os->request->particulars, //Particulars
+                    '5' => '', 
+                    '6' => '', 
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
