@@ -343,7 +343,7 @@ class OsallotmentController extends Controller
             ->all();
 
         $index = 0;
-        $response["response"] = [];
+        // $response["response"] = [];
         foreach($oss as $os){
             
 
@@ -351,7 +351,7 @@ class OsallotmentController extends Controller
             //     [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
             // );
             // $response["response"]['date'] = [];
-            array_push($response["response"], ['date' =>$os->os_date]);
+            array_push($response, ['date' =>$os->os_date]);
             /*$alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
