@@ -362,11 +362,10 @@ class OsallotmentController extends Controller
                     '7' => $os->request->amount,
                     '8' => '',
                     '9' => '', 
-                    '10' => '', 
-                    '11' => '',  
+ 
                     '701' => [],  //PERA
-                    '12' => '', 
-                    '13' => '', 
+                    '10' => '', 
+                    '11' => '', 
                     '711' => [], //PERA
                     '713' => [], //RA
                     '714' => [], //TA
