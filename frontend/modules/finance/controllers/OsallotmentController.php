@@ -352,10 +352,10 @@ class OsallotmentController extends Controller
             // );
             // $response["response"]['date'] = [];
             array_push($response, [
-                    'Date' => $os->os_date,
-                    'OS Number' => $os->os_number,
-                    'Payee' => $os->request->creditor->name,
-                    'Particulars' => $os->request->particulars,
+                    '0' => $os->os_date, //Date
+                    '1' => $os->os_number, //OS Number
+                    '2' => $os->request->creditor->name, //Payee
+                    '3' => $os->request->particulars, //Particulars
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
@@ -363,7 +363,7 @@ class OsallotmentController extends Controller
             $os_index = 0;
             foreach($alloments as $alloment){
                 // $os_allotment[$os_index] = $alloment->amount;
-                array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
+                array_push($response[$index], [strval($alloment->expenditureobject->account_code) => $alloment->amount]);
                 // array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
                 // array_merge($response[$index], ['711' => $alloment->amount]);
                 $os_index += 1;
