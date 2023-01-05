@@ -345,7 +345,7 @@ class OsallotmentController extends Controller
         $index = 0;
 
         foreach($oss as $os){
-            array_push($response, 
+            array_push($response["response"], 
                 [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
             );
 
@@ -356,7 +356,7 @@ class OsallotmentController extends Controller
                 $os_allotment[$os_index] = $alloment->amount;
                 $os_index += 1;
             }
-            array_push($response[$index], $os_allotment);
+            array_push($response["response"][$index], $os_allotment);
             $index += 1;
         }
 
