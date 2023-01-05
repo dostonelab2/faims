@@ -345,6 +345,7 @@ class OsallotmentController extends Controller
         $index = 0;
 
         foreach($oss as $os){
+            $response["response"] = [];
             array_push($response["response"], 
                 [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
             );
