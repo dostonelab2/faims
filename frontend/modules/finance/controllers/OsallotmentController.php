@@ -351,7 +351,13 @@ class OsallotmentController extends Controller
             //     [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
             // );
             // $response["response"]['date'] = [];
-            array_push($response, ['date' =>$os->os_date]);
+            array_push($response, [
+                    'Date' =>$os->os_date,
+                    'OS Number' =>$os->os_number,
+                    'Payee' =>$os->request->creditor->name,
+                    'Particulars' =>request->particulars,
+                ]
+            );
             /*$alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
