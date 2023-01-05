@@ -370,7 +370,7 @@ class OsallotmentController extends Controller
     function actionObligationdata2(){
 
         return '{
-            "response":{"numFound":1494,"start":1,"docs":[
+            "date":{"numFound":1494,"start":1,"docs":[
                 {
                   "id":"10.1371/journal.pone.0188133"},
                 {
