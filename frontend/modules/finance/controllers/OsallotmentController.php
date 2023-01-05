@@ -347,10 +347,11 @@ class OsallotmentController extends Controller
         foreach($oss as $os){
             
 
-            array_push($response["response"], 
-                [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
-            );
-
+            // array_push($response["response"], 
+            //     [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
+            // );
+            // $response["response"]['date'] = [];
+            array_push($response["response"], ['date' =>$os->os_date]);
             /*$alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
@@ -359,7 +360,7 @@ class OsallotmentController extends Controller
                 $os_index += 1;
             }
             array_push($response["response"][$index], $os_allotment);*/
-            $index += 1;
+            // $index += 1;
         }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
