@@ -343,21 +343,22 @@ class OsallotmentController extends Controller
             ->all();
 
         $index = 0;
-
+        $response["response"] = [];
         foreach($oss as $os){
-            $response["response"] = [];
+            
+
             array_push($response["response"], 
                 [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
             );
 
-            $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
+            /*$alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
             $os_index = 0;
             foreach($alloments as $alloment){
                 $os_allotment[$os_index] = $alloment->amount;
                 $os_index += 1;
             }
-            array_push($response["response"][$index], $os_allotment);
+            array_push($response["response"][$index], $os_allotment);*/
             $index += 1;
         }
 
@@ -369,17 +370,30 @@ class OsallotmentController extends Controller
 
     function actionObligationdata2(){
 
-        return '{
-            "response":{"Date":1494,"start":1,"docs":[
-                {
-                  "id":"10.1371/journal.pone.0188133"},
-                {
-                  "id":"10.1371/journal.pbio.1000320"},
-                {
-                  "id":"10.1371/journal.pbio.0000060"},
-                {
-                  "id":"10.1371/journal.pbio.3000094"}]
-            }}';
+        // return '{
+        //     "response":{"Date":1494,"start":1,"docs":[
+        //         {
+        //           "id":"10.1371/journal.pone.0188133"},
+        //         {
+        //           "id":"10.1371/journal.pbio.1000320"},
+        //         {
+        //           "id":"10.1371/journal.pbio.0000060"},
+        //         {
+        //           "id":"10.1371/journal.pbio.3000094"}]
+        //     }}';
+
+            return '{
+                "response":{"Date":1494,"start":1,"docs":[
+                    {
+                      "id":"10.1371/journal.pone.0188133"},
+                    {
+                      "id":"10.1371/journal.pbio.1000320"},
+                    {
+                      "id":"10.1371/journal.pbio.0000060"},
+                    {
+                      "id":"10.1371/journal.pbio.3000094"}
+                      ]
+                }}';
     }
     
 }
