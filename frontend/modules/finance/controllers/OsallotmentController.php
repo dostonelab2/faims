@@ -3,8 +3,10 @@
 namespace frontend\modules\finance\controllers;
 
 use Yii;
+use common\models\finance\Os;
 use common\models\finance\Osallotment;
 use common\models\finance\OsallotmentSearch;
+use common\models\finance\Osdv;
 use common\models\procurement\Expenditureobject;
 use common\models\procurement\ExpenditureobjectSearch;
 use common\models\procurement\Expenditureobjecttype;
@@ -318,6 +320,48 @@ class OsallotmentController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         
         $response = Expenditureobjectsubtype::findOne($_POST['objectSubTypeId']);
+        if($response)
+            return $response;
+    }
+
+    public function actionObligationdata()
+    {
+        $response = [];
+
+        /*$osdvs = Osdv::find()
+        ->where(['YEAR(`create_date`)' => 2023])
+        ->andWhere(['type_id' => 1])
+        ->andWhere(['cancelled' => 0])
+        ->andWhere(['>=','status_id', 40])
+        ->limit(100)
+        ->all();*/
+
+        $oss = Os::find()
+            ->where(['YEAR(`os_date`)' => 2023])
+            ->andWhere(['deleted' => 0])
+            ->limit(10)
+            ->all();
+
+        $index = 0;
+
+        foreach($oss as $os){
+            array_push($response, 
+                [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
+            );
+
+            $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
+            $os_allotment = [];
+            $os_index = 0;
+            foreach($alloments as $alloment){
+                $os_allotment[$os_index] = $alloment->amount;
+                $os_index += 1;
+            }
+            array_push($response[$index], $os_allotment);
+            $index += 1;
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
         if($response)
             return $response;
     }

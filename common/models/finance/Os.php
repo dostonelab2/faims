@@ -3,6 +3,7 @@
 namespace common\models\finance;
 
 use Yii;
+use common\models\finance\Request;
 use common\models\procurement\Expenditureclass;
 /**
  * This is the model class for table "tbl_os".
@@ -61,6 +62,16 @@ class Os extends \yii\db\ActiveRecord
             'os_date' => 'Os Date',
             'numberOfOs' => 'Enter Number of Obligations to SKIP',
         ];
+    }
+
+    public function getRequest()  
+    {  
+      return $this->hasOne(Request::className(), ['request_id' => 'request_id']);  
+    }
+
+    public function getOsdv()  
+    {  
+      return $this->hasOne(Osdv::className(), ['request_id' => 'request_id']);  
     }
     
     static function generateOsNumber($expenditureClassId, $createDate)
