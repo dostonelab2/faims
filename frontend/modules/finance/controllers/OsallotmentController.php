@@ -370,7 +370,7 @@ class OsallotmentController extends Controller
                     '713' => [], //RA
                     '714' => [], //TA
                     '715' => [], //Clothing
-                    '716' => '', 
+                    '12' => '', 
                     '725' => [], //Clothing
                     '724' => [], //Clothing
                 ]
