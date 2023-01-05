@@ -337,7 +337,7 @@ class OsallotmentController extends Controller
         ->all();*/
 
         $oss = Os::find()
-            ->where(['YEAR(`os_date`)' => 2023])
+            ->where(['YEAR(`os_date`)' => 2022])
             ->andWhere(['deleted' => 0])
             ->limit(10)
             ->all();
@@ -352,10 +352,10 @@ class OsallotmentController extends Controller
             // );
             // $response["response"]['date'] = [];
             array_push($response, [
-                    '0' => $os->os_date, //Date
-                    '1' => $os->os_number, //OS Number
-                    '2' => $os->request->creditor->name, //Payee
-                    '3' => $os->request->particulars, //Particulars
+                    '1' => $os->os_date, //Date
+                    '2' => $os->os_number, //OS Number
+                    '3' => $os->request->creditor->name, //Payee
+                    '4' => $os->request->particulars, //Particulars
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
@@ -363,7 +363,7 @@ class OsallotmentController extends Controller
             $os_index = 0;
             foreach($alloments as $alloment){
                 // $os_allotment[$os_index] = $alloment->amount;
-                array_push($response[$index], [strval($alloment->expenditureobject->account_code) => $alloment->amount]);
+                array_push($response[$index], $alloment->amount);
                 // array_push($response[$index], [strval($alloment->expenditure_object_id) => $alloment->amount]);
                 // array_merge($response[$index], ['711' => $alloment->amount]);
                 $os_index += 1;
