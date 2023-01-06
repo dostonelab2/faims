@@ -337,10 +337,10 @@ class OsallotmentController extends Controller
         ->all();*/
 
         $oss = Os::find()
-            ->where(['YEAR(`os_date`)' => 2023])
+            ->where(['YEAR(`os_date`)' => 2022])
             ->andWhere(['deleted' => 0])
             // ->offset(10)
-            // ->limit(10)
+            ->limit(100)
             ->all();
 
         $index = 0;
