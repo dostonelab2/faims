@@ -357,7 +357,6 @@ class OsallotmentController extends Controller
                     '2' => $os->os_number, //OS Number
                     '3' => $os->request->creditor->name, //Payee
                     '4' => $os->request->particulars, //Particulars
-                    '5' => '', // extra column
                     '7' => $os->request->amount,
                     '5010101001' => '',
                     '5010201001' => '',
