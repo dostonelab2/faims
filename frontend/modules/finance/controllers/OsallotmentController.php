@@ -357,6 +357,7 @@ class OsallotmentController extends Controller
                     '2' => $os->os_number, //OS Number
                     '3' => $os->request->creditor->name, //Payee
                     '4' => $os->request->particulars, //Particulars
+                    '5' => '', // extra column
                     '7' => $os->request->amount,
                     '5010101001' => '',
                     '5010201001' => '',
@@ -430,7 +431,7 @@ class OsallotmentController extends Controller
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
-            $os_allotment = [];
+            // $os_allotment = [];
 
             foreach($alloments as $alloment){
                 // 5021499000 //Subsidies - Others / Financial Assitance to LGUs / Local GIA / SETUP
