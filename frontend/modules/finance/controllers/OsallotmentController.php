@@ -12,6 +12,7 @@ use common\models\procurement\ExpenditureobjectSearch;
 use common\models\procurement\Expenditureobjecttype;
 use common\models\procurement\Expenditureobjectsubtype;
 
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -324,34 +325,19 @@ class OsallotmentController extends Controller
             return $response;
     }
 
-    public function actionObligationdata()
-    {
+    public function fetchdata(){
         $response = [];
 
-        /*$osdvs = Osdv::find()
-        ->where(['YEAR(`create_date`)' => 2023])
-        ->andWhere(['type_id' => 1])
-        ->andWhere(['cancelled' => 0])
-        ->andWhere(['>=','status_id', 40])
-        ->limit(100)
-        ->all();*/
-
         $oss = Os::find()
-            ->where(['YEAR(`os_date`)' => 2022])
+            ->where(['YEAR(`os_date`)' => 2023])
             ->andWhere(['deleted' => 0])
             // ->offset(10)
-            ->limit(100)
+            ->limit(10)
             ->all();
 
         $index = 0;
-        // $response["response"] = [];
         foreach($oss as $os){
             
-
-            // array_push($response["response"], 
-            //     [$os->osdv_id, $os->os_date, $os->os_number, $os->request->creditor->name, $os->request->particulars, $os->request->amount]
-            // );
-            // $response["response"]['date'] = [];
             array_push($response, [
                     '1' => $os->os_date, //Date
                     '2' => $os->os_number, //OS Number
@@ -374,6 +360,7 @@ class OsallotmentController extends Controller
                     '5010211004' => '',
                     '5010212003' => '',
                     '5010301000' => '',
+                    '5010499000' => '',
                     '5020000000' => '',
                     '5020101000' => '',
                     '5020102000' => '',
@@ -439,75 +426,39 @@ class OsallotmentController extends Controller
             $index += 1;
         }
 
+        return $response;
+    }
+
+    public function actionObligationdata()
+    {
+        $response = $this->fetchdata();
+
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         
         if($response)
             return $response;
     }
 
-    private function getAccountcodes(){
-        return [
-            '701' => 0,
-            '711' => 0,
-            '713' => 0,
-            '714' => 0,
-            '715' => 0,
-            '725' => 0,
-            '724' => 0,
-            '717' => 0,
-            '732' => 0,
-            '733' => 0,
-            '734' => 0,
-            '716' => 0,
-            '716' => 0,
-            '721' => 0,
-            '722' => 0,
-            '731' => 0,
-            '751' => 0,
-            '752' => 0,
-            '753' => 0,
-            '755' => 0,
-            '756' => 0,
-            '760' => 0,
-            '761' => 0,
-            '763' => 0,
-            '765' => 0,
-            '765' => 0,
-            '766' => 0,
-            '767' => 0,
-            '771' => 0,
-            '773' => 0,
-            '772' => 0,
-            '774' => 0,
-            '883' => 0,
-            '884' => 0,
-            '791' => 0,
-            '792' => 0,
-            '793' => 0,
-            '796' => 0,
-            '797' => 0,
-            '795' => 0,
-            '811' => 0,
-            '821' => 0,
-            '836' => 0,
-            '841' => 0,
-            '822' => 0,
-            '878' => 0,
-            '878' => 0,
-            '891' => 0,
-            '892' => 0,
-            '893' => 0,
-            '780' => 0,
-            '781' => 0,
-            '783' => 0,
-            '782' => 0,
-            '782' => 0,
-            '782' => 0,
-            '778' => 0,
-            '786' => 0,
-            '969' => 0,
-        ];
+    public function actionViewobligation()
+    {
+        
+        $dataProvider = $this->fetchdata();
+        
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $dataProvider,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'attributes' => ['id', 'name'],
+            ],
+        ]);
+
+        return $this->render('viewobligation', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
+    
 
     function actionObligationdata2(){
 
