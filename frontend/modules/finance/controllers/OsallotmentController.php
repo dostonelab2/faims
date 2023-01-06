@@ -358,92 +358,84 @@ class OsallotmentController extends Controller
                     '3' => $os->request->creditor->name, //Payee
                     '4' => $os->request->particulars, //Particulars
                     '7' => $os->request->amount,
-                    '8' => $os->request->amount,
-                    '701' => [],
-                    '711' => [],
-                    '713' => [],
-                    '714' => [],
-                    '715' => [],
-                    '725' => [],
-                    '724' => [],
-                    '717' => [],
-                    '732' => [],
-                    '733' => [],
-                    '734' => [],
-                    '716' => [],
-                    '716' => [],
-                    '721' => [],
-                    '722' => [],
-                    '731' => [],
-                    '751' => [],
-                    '752' => [],
-                    '753' => [],
-                    '755' => [],
-                    '756' => [],
-                    '760' => [],
-                    '761' => [],
-                    '763' => [],
-                    '765' => [],
-                    '765' => [],
-                    '766' => [],
-                    '767' => [],
-                    '771' => [],
-                    '773' => [],
-                    '772' => [],
-                    '774' => [],
-                    '883' => [],
-                    '884' => [],
-                    '791' => [],
-                    '792' => [],
-                    '793' => [],
-                    '796' => [],
-                    '797' => [],
-                    '795' => [],
-                    '811' => [],
-                    '821' => [],
-                    '836' => [],
-                    '841' => [],
-                    '822' => [],
-                    '878' => [],
-                    '878' => [],
-                    '891' => [],
-                    '892' => [],
-                    '893' => [],
-                    '780' => [],
-                    '781' => [],
-                    '783' => [],
-                    '782' => [],
-                    '782' => [],
-                    '782' => [],
-                    '778' => [],
-                    '786' => [],
-                    '969' => [],
-                    '970' => [],
+                    '5010101001' => '',
+                    '5010201001' => '',
+                    '5010202000' => '',
+                    '5010203000' => '',
+                    '5010204001' => '',
+                    '5010214001' => '',
+                    '5010215001' => '',
+                    '5010000000' => '',
+                    '5010302001' => '',
+                    '5010303001' => '',
+                    '5010304001' => '',
+                    '5010205002' => '',
+                    '5010206003' => '',
+                    '5010211004' => '',
+                    '5010212003' => '',
+                    '5010301000' => '',
+                    '5020000000' => '',
+                    '5020101000' => '',
+                    '5020102000' => '',
+                    '5020201000' => '',
+                    '5020301000' => '',
+                    '5020302000' => '',
+                    '5020308000' => '',
+                    '5020310000' => '',
+                    '5020311001' => '',
+                    '5020399000' => '',
+                    '5020401000' => '',
+                    '5020402000' => '',
+                    '5020501000' => '',
+                    '5020502002' => '',
+                    '5020502001' => '',
+                    '5020504000' => '',
+                    '5021003000' => '',
+                    '5021101000' => '',
+                    '5021102000' => '',
+                    '5021103000' => '',
+                    '5021202000' => '',
+                    '5021203000' => '',
+                    '5021299000' => '',
+                    '5021304000' => '',
+                    '5021305000' => '',
+                    '5021305000' => '',
+                    '5021306000' => '',
+                    '5021306000' => '',
+                    '5021402000' => '',
+                    '5021403000' => '',
+                    '5021501000' => '',
+                    '5021502000' => '',
+                    '5021503000' => '',
+                    '5029901000' => '',
+                    '5029902000' => '',
+                    '5029903000' => '',
+                    '5029905001' => '',
+                    '5029905003' => '',
+                    '5029905005' => '',
+                    '5029906000' => '',
+                    '5029907000' => '',
+                    '5029999000' => '',
+                    '5060000000' => '',
+                    '1080102000' => '',
+                    // ONE EXPERT 
+                    // IE	
+                    // MetroLab
+                    // ONELAB I	
+                    // CEST
+                    // ONELAB II
+                    // MetroLab
+                    // CBFEWS
+                    // ONELAB II
                 ]
             );
             $alloments = Osallotment::find()->Where(['osdv_id' => $os->osdv_id, 'active' => 1])->all();
             $os_allotment = [];
-            $os_index = 0;
 
-            $obj = [701,711,715,725,724];
             foreach($alloments as $alloment){
-                // $os_allotment[$os_index] = $alloment->amount;
-                array_push($response[$index][$obj[$os_index]], $alloment->amount);
-                /*if( !isset($response[$index][strval($alloment->expenditureobject->account_code)]) )
-                    {
-                        $response[$index][ strval($alloment->expenditureobject->account_code) ] = [];
-                        array_push($response[$index][strval($alloment->expenditureobject->account_code)], $alloment->amount);
-                    }else{
-                        array_push($response[$index][strval($alloment->expenditureobject->account_code)], $alloment->amount);
-                    }*/
-                //$response[$index][strval($alloment->expenditureobject->account_code)] = [];
-                // array_push($response[$index][strval($alloment->expenditureobject->account_code)], $alloment->amount);
-                // array_push($response[$index], [strval($alloment->expenditureobject->account_code) => $alloment->amount]);
-                // array_merge($response[$index], ['711' => $alloment->amount]);
-                $os_index += 1;
+                // 5021499000 //Subsidies - Others / Financial Assitance to LGUs / Local GIA / SETUP
+                $response[$index][strval($alloment->expenditureobject->object_code)] = $alloment->amount;
             }
-            //array_push($response[$index], $os_allotment);
-            //array_merge($response[$index], $os_allotment);
             $index += 1;
         }
 
