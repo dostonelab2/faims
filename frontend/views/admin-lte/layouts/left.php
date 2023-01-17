@@ -193,19 +193,53 @@ $request_for_approval = Request::find()
                                 'label' => 'Verification', 
                                 'icon' => 'check text-aqua', 
                                 'url' => ['/finance/request/verifyindex'], 
-                                'visible'=> Yii::$app->user->can('access-finance-verification') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'visible'=> Yii::$app->user->can('access-finance-verification'), //|| (Yii::$app->user->identity->username == 'Admin')
+                                'items' => [
+                                    [
+                                        'label' => 'Dashboard', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/default/verificationdash'], 
+                                    ],
+                                    [
+                                        'label' => 'Pending', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/request/verifyindex'], 
+                                    ],
+                                ]
                             ],
                             [
                                 'label' => 'Validation', 
                                 'icon' => 'search text-aqua', 
-                                'url' => ['/finance/request/validateindex'], 
-                                'visible'=> Yii::$app->user->can('access-finance-validation') //|| (Yii::$app->user->identity->username == 'Admin')
+                                //'url' => ['/finance/request/validateindex'], 
+                                'visible'=> Yii::$app->user->can('access-finance-validation'), //|| (Yii::$app->user->identity->username == 'Admin')
+                                'items' => [
+                                    [
+                                        'label' => 'Dashboard', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/default/validationdash'], 
+                                    ],
+                                    [
+                                        'label' => 'Pending', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/request/validateindex'], 
+                                    ],
+                                    // [
+                                    //     'label' => 'Obligated', 
+                                    //     'icon' => 'ruble text-aqua', 
+                                    //     'url' => ['/finance/osdv/obligatedindex'], 
+                                    // ],
+                                ]
                             ],
                             [
                                 'label' => 'Obligation', 
                                 'icon' => 'ruble text-aqua', 
                                 'visible'=> Yii::$app->user->can('access-finance-obligation') || (Yii::$app->user->identity->username == 'Admin'),
                                 'items' => [
+                                    [
+                                        'label' => 'Dashboard', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/default/obligationdash'], 
+                                    ],
                                     [
                                         'label' => 'Pending', 
                                         'icon' => 'ruble text-aqua', 
@@ -216,6 +250,11 @@ $request_for_approval = Request::find()
                                         'icon' => 'ruble text-aqua', 
                                         'url' => ['/finance/osdv/obligatedindex'], 
                                     ],
+                                    [
+                                        'label' => 'For SAOB', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osallotment/viewobligation'], 
+                                    ],
                                 ]
                             ],
                             [
@@ -224,6 +263,11 @@ $request_for_approval = Request::find()
                                 'url' => ['/finance/osdv/disbursementindex'], 
                                 'visible'=> Yii::$app->user->can('access-finance-disbursement') || (Yii::$app->user->identity->username == 'Admin'),
                                 'items' => [
+                                    [
+                                        'label' => 'Dashboard', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/default/disbursementdash'], 
+                                    ],
                                     [
                                         'label' => 'Pending', 
                                         'icon' => 'ruble text-aqua', 
@@ -250,7 +294,19 @@ $request_for_approval = Request::find()
                                                     </span>
                                                 </a>',
                                 
-                                'visible'=> Yii::$app->user->can('access-finance-approval') //|| (Yii::$app->user->identity->username == 'Admin')
+                                'visible'=> Yii::$app->user->can('access-finance-approval'), //|| (Yii::$app->user->identity->username == 'Admin')
+                                'items' => [
+                                    [
+                                        'label' => 'Dashboard', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/default/approvaldash'], 
+                                    ],
+                                    [
+                                        'label' => 'Pending', 
+                                        'icon' => 'ruble text-aqua', 
+                                        'url' => ['/finance/osdv/approvalindex'], 
+                                    ],
+                                ]
                             ],
                             [
                                 'label' => 'Reports', 
