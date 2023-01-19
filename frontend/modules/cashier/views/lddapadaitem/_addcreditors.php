@@ -9,7 +9,10 @@ use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 
+use common\models\cashier\Creditor;
 use common\models\cashier\Lddapadaitem;
+use common\models\finance\Obligationtype;
+use common\models\finance\Osdv;
 use common\models\finance\Request;
 use common\models\finance\Requestpayroll;
 /* @var $this yii\web\View */
@@ -56,24 +59,78 @@ use common\models\finance\Requestpayroll;
                 ],
                 [
                     'attribute' => 'request_id',
-                    'label' => 'Name',
+                    'label' => 'Request Number',
+                    'width' => '50px',
+                    'value'=>function ($model, $key, $index, $widget){ 
+                                return $model->request->request_number;
+                            },
+                    'filterType' => GridView::FILTER_SELECT2,
+                    'filter' => ArrayHelper::map(Request::find()
+                                                    ->where('status_id >=:status_id',[':status_id'=> 70])
+                                                    ->orderBy(['request_id' => SORT_DESC])
+                                                    ->asArray()
+                                                    ->all(), 
+                                                    'request_id', 'request_number'), 
+                    'filterWidgetOptions' => [
+                        'pluginOptions' => ['allowClear' => true],
+                    ],  
+                    'filterInputOptions' => ['placeholder' => 'Select Request Number']
+                ],
+                [
+                    'attribute' => 'payee_id',
+                    'label' => 'Payee Name',
                     'value'=>function ($model, $key, $index, $widget){ 
                                 return $model->request->creditor->name;
                             },
+                    'filterType' => GridView::FILTER_SELECT2,
+                    'filter' => ArrayHelper::map(Creditor::find()->asArray()->all(), 'creditor_id', 
+                                                    function($model) {
+                                                        return $model['name'];
+                                                    }
+                                                ), 
+                    'filterWidgetOptions' => [
+                        'pluginOptions' => ['allowClear' => true],
+                    ],  
+                    'filterInputOptions' => ['placeholder' => 'Select Payee']
                 ],
                 [   
-                    'attribute' => 'request_id',
+                    'attribute' => 'type_id',
                     'label' => 'Fund Source',
                     'value'=>function ($model, $key, $index, $widget){ 
                                 return $model->type->name;
                             },
+                    'filter'=>true,
+                    'filterType' => GridView::FILTER_SELECT2,
+                    'filter' => ArrayHelper::map(Obligationtype::find()->asArray()->all(), 'type_id', 'name'), 
+                    'filterWidgetOptions' => [
+                        'pluginOptions' => ['allowClear' => true],
+                    ],  
+                    'filterInputOptions' => ['placeholder' => 'Select Fund Source'],
                 ],
                 [
-                    'attribute' => 'request_id',
+                    'attribute' => 'osdv_id',
                     'label' => 'DV Number',
                     'value'=>function ($model, $key, $index, $widget){ 
                                 return $model->payroll ? '' : $model->dv->dv_number;
                             },
+                            'filterType' => GridView::FILTER_SELECT2,
+                            'filter' => ArrayHelper::map(Osdv::find()
+                                                            ->where('status_id >=:status_id',[':status_id'=> 70])
+                                                            ->with(['dv'])
+                                                            ->orderBy(['request_id' => SORT_DESC])
+                                                            ->asArray()
+                                                            ->all(), 
+                                                            'osdv_id', 
+                                                            //'tbl_osdv.dv.dv_number'), 
+                                                            function($model) {
+                                                                return $model['dv']['dv_number'];
+//                                                                        .' | '.$model['address'];
+                                                            }
+                                                        ), 
+                            'filterWidgetOptions' => [
+                                'pluginOptions' => ['allowClear' => true],
+                            ],  
+                            'filterInputOptions' => ['placeholder' => 'Select DV Number']
                 ],
                 [
                     'attribute' => 'amount',

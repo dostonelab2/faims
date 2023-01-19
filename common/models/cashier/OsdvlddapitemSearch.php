@@ -15,6 +15,7 @@ use common\models\cashier\Lddapadaitem;
 class OsdvlddapitemSearch extends Osdv
 {
     public $lddapadaId;
+    public $payee_id;
     /**
      * @inheritdoc
      */
@@ -22,6 +23,7 @@ class OsdvlddapitemSearch extends Osdv
     {
         return [
             [['osdv_id', 'request_id', 'type_id', 'expenditure_class_id', 'status_id', 'created_by'], 'integer'],
+            [['payee_id'], 'safe'],
         ];
     }
 
@@ -60,24 +62,27 @@ class OsdvlddapitemSearch extends Osdv
             return $dataProvider;
         }
 
+        $query->joinWith(['request']);
+
         // grid filtering conditions
         $query->andFilterWhere([
-            'request_id' => $this->request_id,
+            // 'osdv_id' => $this->request_id,
+            'tbl_osdv.request_id' => $this->request_id,
+            'tbl_osdv.osdv_id' => $this->osdv_id,
+            'tbl_request.payee_id' => $this->payee_id,
             'type_id' => $this->type_id,
             'expenditure_class_id' => $this->expenditure_class_id,
             //'status_id' => $this->status_id,
             'created_by' => $this->created_by,
-            'cancelled' => 0,
+            'tbl_osdv.cancelled' => 0,
         ]);
         
         $items = Lddapadaitem::find()->select('osdv_id')->where(['<>', 'lddapada_id', $this->lddapadaId])->all();
-        //$query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
-        //$query->andFilterWhere(['not in','osdv_id', $items]);
-//        $query->andFilterWhere(['like', 'tbl_creditor.payee_id', $this->payee_id]);
-//        $query->andFilterWhere(['=','tbl_os.osdv_id', $this->os_id]);
+        // $query->andFilterWhere(['like', 'tbl_osdv.osdv_id', $this->osdv_id]);
+        // $query->andFilterWhere(['like', 'request.payee_id', $this->creditor_id]);
         
-        $query->andFilterWhere(['>=', 'status_id', 67]);
-        $query->andFilterWhere(['<=', 'status_id', 70]);
+        $query->andFilterWhere(['>=', 'tbl_osdv.status_id', 67]);
+        $query->andFilterWhere(['<=', 'tbl_osdv.status_id', 70]);
 
         return $dataProvider;
     }
