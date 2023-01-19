@@ -858,12 +858,14 @@ $headers=$headers.'</td>
            $assig4 =  $sg["Assig4"];
            $assig5 =  $sg["Assig5"];
            $assig6 =  $sg["Assig6"];
+           $assig7 =  $sg["Assig7"];
            $Assig1Position =  $sg["Assig1Position"];
            $Assig2Position =  $sg["Assig2Position"];
            $Assig3Position =  $sg["Assig3Position"];
            $Assig4Position =  $sg["Assig4Position"];
            $Assig5Position =  $sg["Assig5Position"];
            $Assig6Position =  $sg["Assig6Position"];
+           $Assig7Position =  $sg["Assig7Position"];
         }
         $LeftFooterContent = '
 <table width="100%">
@@ -881,7 +883,9 @@ $headers=$headers.'</td>
         <td style="height: 100px;"></td>
         <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig5.'</b><br/>Member</td>
         <td style="height: 100px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig6.'</b><br/>'.$Assig6Position.'</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig6.'</b><br/>Member</td>
+        <td style="height: 100px;"></td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig7.'</b><br/>'.$Assig7Position.'</td>
         <td style="height: 100px;"></td>
     </tr>
     <tr>
@@ -1090,7 +1094,9 @@ $headers=$headers.'</td>
 	       `fais-procurement`.`fnGetAssignatoryName`(`tbl_assignatory`.`assignatory_5`) AS Assig5 , 
 	       `fais-procurement`.`fnGetAssignatoryPosition`(`tbl_assignatory`.`assignatory_5`) AS Assig5Position,
 	       `fais-procurement`.`fnGetAssignatoryName`(`tbl_assignatory`.`assignatory_6`) AS Assig6 , 
-	       `fais-procurement`.`fnGetAssignatoryPosition`(`tbl_assignatory`.`assignatory_6`) AS Assig6Position
+	       `fais-procurement`.`fnGetAssignatoryPosition`(`tbl_assignatory`.`assignatory_6`) AS Assig6Position,
+           `fais-procurement`.`fnGetAssignatoryName`(`tbl_assignatory`.`assignatory_7`) AS Assig7 , 
+	       `fais-procurement`.`fnGetAssignatoryPosition`(`tbl_assignatory`.`assignatory_7`) AS Assig7Position
 	FROM `tbl_assignatory`
 	WHERE `tbl_assignatory`.`assignatory_id` = 4
 ";
