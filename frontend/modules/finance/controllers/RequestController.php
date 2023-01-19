@@ -1200,11 +1200,11 @@ class RequestController extends Controller
                     $model->request_id, 
                     $model->osdv ? $model->osdv->osdv_id : NULL, 
                     $model->status_id),
-                'allotted' => Request::allotted($model->osdv ? $model->osdv->osdv_id : NULL, $model->status_id),
-                'certified_funds' => Request::certified_funds($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->obligation_type_id, $model->status_id),
-                'charged' => Request::charged($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
-                'approved' => Request::approved($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
-                'completed' => Request::completed($model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+                'allotted' => Request::allotted($model->request_id, $model->osdv ? $model->osdv->osdv_id : NULL, $model->status_id),
+                'certified_funds' => Request::certified_funds_Reg_Fund($model->request_id, $model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->obligation_type_id, $model->status_id),
+                'charged' => Request::charged($model->request_id, $model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+                'approved' => Request::approved($model->request_id, $model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
+                'completed' => Request::completed($model->request_id, $model->osdv ? $model->osdv->osdv_id : NULL, 'Osdv', $model->status_id),
             ];  
             break;
                 
@@ -1214,14 +1214,15 @@ class RequestController extends Controller
                 'submitted' => Request::submitted($model->request_id, $model->payroll, $model->status_id),
                 'verified' => Request::verified($model->request_id, $model->payroll, $model->status_id),
                 'validated' =>  Request::for_disbursement($model->request_id, $model->status_id),
-                'certified_funds' => Request::certified_funds($model->request_id, 'Request', $model->obligation_type_id, $model->status_id),
+                'certified_funds' => Request::certified_funds($model->request_id, $model->request_id, 'Request', $model->obligation_type_id, $model->status_id),
                 'charged' => Request::charged(
+                    $model->request_id, 
                     $model->osdv ? $model->osdv->osdv_id : NULL, 
                     'Osdv', 
                     $model->status_id
                 ),
-                'approved' => Request::approved($model->osdv->osdv_id, 'Osdv', $model->status_id),
-                'completed' => Request::completed($model->osdv->osdv_id, 'Osdv', $model->status_id),
+                'approved' => Request::approved($model->request_id, $model->osdv->osdv_id, 'Osdv', $model->status_id),
+                'completed' => Request::completed($model->request_id, $model->osdv->osdv_id, 'Osdv', $model->status_id),
             ];   
             break;
                 

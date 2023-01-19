@@ -190,6 +190,11 @@ class Request extends \yii\db\ActiveRecord
     {  
       return $this->hasOne(Os::className(), ['request_id' => 'request_id']);  
     }
+
+    public function getStats()
+    {
+        return $this->hasMany(Requeststat::className(), ['request_id' => 'request_id']);
+    }
     
     static function generateRequestNumber($date = NULL, $count = NULL)
     {
@@ -227,27 +232,38 @@ class Request extends \yii\db\ActiveRecord
       return $this->hasOne(Profile::className(), ['user_id' => 'created_by']);  
     }
     
-    static function submitted($request_id, $payroll = NULL, $status_id)
+    static function submitted($request_id, $payroll = NULL, $status_id, $flag = NULL)
     {
         if($status_id < Request::STATUS_SUBMITTED){ 
             $submitted = [
                 'status' =>'bg-gray',
-                'days' => 'hahhaha',
+                'status_id' => Request::STATUS_SUBMITTED,
+                'days' => '',
                 'date' => date('Y-m-d H:i:s'),
             ];
         }else{
+            $model = Request::find()
+            ->where(['request_id' => $request_id])
+            ->one();
+
             $chain = Request::getChain($request_id, 'Request', ($payroll == 1) ? Request::STATUS_VERIFIED : Request::STATUS_SUBMITTED);
+            // $chain = Request::getChain($request_id, 'Request', Request::STATUS_SUBMITTED);
                 
             if($payroll == 1){
                 $submitted = [
+                    'request_id' =>$request_id,
                     'status' =>'bg-aqua',
-                    'days' => '&nbsp;',
+                    'status_id' => Request::STATUS_SUBMITTED,
+                    'days' => 0,
+                    // 'days' => Request::getDateDiff($model->request_date, $chain->timestamp, $flag),
                     'date' => date('Y-m-d H:i:s', $chain->timestamp),
                 ];
             }else{
                 $submitted = [
+                    'request_id' =>$request_id,
                     'status' =>($status_id >= 20) ? 'bg-aqua' : 'bg-gray',
-                    'days' => 2,
+                    'status_id' => Request::STATUS_SUBMITTED,
+                    'days' => Request::getDateDiff(strtotime($model->request_date), $chain->timestamp, $flag),
                     'date' => date('Y-m-d H:i:s', $chain->timestamp),
                 ];
             }
@@ -256,11 +272,13 @@ class Request extends \yii\db\ActiveRecord
         return $submitted;
     }
     
-    static function verified($request_id, $payroll, $status_id)
+    static function verified($request_id, $payroll, $status_id, $flag = NULL)
     {
         if($status_id < Request::STATUS_VERIFIED){ 
             $verified = [
+                'request_id' =>$request_id,
                 'status' =>'bg-gray',
+                'status_id' => Request::STATUS_VERIFIED,
                 'days' => '',
                 'date' => date('Y-m-d H:i:s'),
             ];
@@ -270,8 +288,10 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($request_id, 'Request', Request::STATUS_VERIFIED);
 
             $verified = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 30) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_VERIFIED,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
@@ -279,7 +299,7 @@ class Request extends \yii\db\ActiveRecord
         return $verified;
     }
     
-    static function validated($request_id, $status_id){
+    static function validated($request_id, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_VALIDATED){ 
             $validated = [
                 'status' =>'bg-gray',
@@ -292,15 +312,17 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($request_id, 'Request', Request::STATUS_VALIDATED);
         
             $validated = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 40) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_VALIDATED,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
         return $validated;
     }
     
-    static function certified_allotment($request_id, $osdv_id = NULL, $status_id){
+    static function certified_allotment($request_id, $osdv_id = NULL, $status_id, $flag = NULL){
         
         if($status_id < Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE){ 
             $certified_allotment = [
@@ -313,15 +335,21 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($osdv_id, 'Osdv', Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE);
 
             $certified_allotment = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 50) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
-                'date' => date('Y-m-d H:i:s', $chain->timestamp),
+                'status_id' => Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE,
+                'days' => Request::getDateDiff(
+                    $old_chain->timestamp, 
+                    $chain ? $chain->timestamp : $old_chain->timestamp, 
+                    $flag
+                ),
+                'date' => date('Y-m-d H:i:s', $chain ? $chain->timestamp : $old_chain->timestamp),
             ];
         }
         return $certified_allotment;
     }
     
-    static function allotted($osdv_id, $status_id){
+    static function allotted($request_id, $osdv_id, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_ALLOTTED){ 
             $allotted = [
                 'status' =>'bg-gray',
@@ -329,20 +357,30 @@ class Request extends \yii\db\ActiveRecord
                 'date' => date('Y-m-d H:i:s'),
             ];
         }else{
-            $old_chain = Request::getChain($osdv_id, 'Osdv', Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE);
+            // $old_chain = Request::getChain($osdv_id, 'Osdv', Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE);
+            $old_chain = Blockchain::find()
+                ->where(['index_id' => $osdv_id, 'scope' => 'Osdv', 'status_id' => Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE])
+                ->one();
+            if(!$old_chain)
+                $old_chain = Request::getChain($osdv_id, 'Osdv', Request::STATUS_ALLOTTED);
             $chain = Request::getChain($osdv_id, 'Osdv', Request::STATUS_ALLOTTED);
 
             $allotted = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 55) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
-                'date' => date('Y-m-d H:i:s', $chain->timestamp),
+                'status_id' => Request::STATUS_ALLOTTED,
+                'days' => Request::getDateDiff(
+                    $old_chain->timestamp, 
+                    $chain ? $chain->timestamp : $old_chain->timestamp, 
+                    $flag),
+                'date' => date('Y-m-d H:i:s', $chain ? $chain->timestamp : $old_chain->timestamp),
             ];
         }
         
         return $allotted;
     }
     
-    static function for_disbursement($request_id, $status_id){
+    static function for_disbursement($request_id, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_FOR_DISBURSEMENT){ 
             $disbursement = [
                 'status' =>'bg-gray',
@@ -354,8 +392,10 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($request_id, 'Request', Request::STATUS_FOR_DISBURSEMENT);
 
             $disbursement = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 58) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_FOR_DISBURSEMENT,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
@@ -363,10 +403,60 @@ class Request extends \yii\db\ActiveRecord
     }
     
     //static function certified_funds($request_id, $osdv_id, $obligation_type_id, $status_id){
-    static function certified_funds($index_id, $scope, $status_id){
+    static function certified_funds_Reg_Fund($request_id, $index_id, $scope, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_CERTIFIED_FUNDS_AVAILABLE){ 
             $certified_funds = [
+                'request_id' =>$request_id,
                 'status' =>'bg-gray',
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
+                'days' => '',
+                'date' => date('Y-m-d H:i:s'),
+            ];
+        }else{
+            $old_chain = Request::getChain($index_id, $scope, Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE);
+            $chain = Request::getChain($index_id, $scope, Request::STATUS_CERTIFIED_FUNDS_AVAILABLE);
+
+            $certified_funds = [
+                'request_id' =>$request_id,
+                'status' =>($status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE) ? 'bg-aqua' : 'bg-gray',
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
+                'date' => date('Y-m-d H:i:s', $chain->timestamp),
+            ];
+        }
+        return $certified_funds;
+    }
+    static function certified_funds($request_id, $index_id, $scope, $obligation_type_id, $status_id, $flag = NULL){
+        if($status_id < Request::STATUS_CERTIFIED_FUNDS_AVAILABLE){ 
+            $certified_funds = [
+                'request_id' =>$request_id,
+                'status' =>'bg-gray',
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
+                'days' => '',
+                'date' => date('Y-m-d H:i:s'),
+            ];
+        }else{
+            $old_chain = Request::getChain($request_id, 'Request', Request::STATUS_FOR_DISBURSEMENT);
+            $chain = Request::getChain($index_id, $scope, Request::STATUS_CERTIFIED_FUNDS_AVAILABLE);
+
+            $certified_funds = [
+                'request_id' =>$request_id,
+                'status' =>($status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE) ? 'bg-aqua' : 'bg-gray',
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
+                'date' => date('Y-m-d H:i:s', $chain->timestamp),
+            ];
+        }
+        return $certified_funds;
+    }
+
+    /* Backup code : working
+    static function certified_funds($request_id, $index_id, $scope, $obligation_type_id, $status_id, $flag = NULL){
+        if($status_id < Request::STATUS_CERTIFIED_FUNDS_AVAILABLE){ 
+            $certified_funds = [
+                'request_id' =>$request_id,
+                'status' =>'bg-gray',
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
                 'days' => '',
                 'date' => date('Y-m-d H:i:s'),
             ];
@@ -376,15 +466,18 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($index_id, $scope, Request::STATUS_CERTIFIED_FUNDS_AVAILABLE);
 
             $certified_funds = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_CERTIFIED_FUNDS_AVAILABLE,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
         return $certified_funds;
     }
+    */
     
-    static function charged($index_id, $scope, $status_id){
+    static function charged($request_id, $index_id, $scope, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_CHARGED){ 
             $charged = [
                 'status' =>'bg-gray',
@@ -396,15 +489,17 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($index_id, $scope, Request::STATUS_CHARGED);
 
             $charged = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= 65) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_CHARGED,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
         return $charged;
     }
     
-    static function approved($index_id, $scope, $status_id){
+    static function approved($request_id, $index_id, $scope, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_APPROVED_FOR_DISBURSEMENT){ 
             $approved = [
                 'status' =>'bg-gray',
@@ -416,15 +511,17 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($index_id, $scope, Request::STATUS_APPROVED_FOR_DISBURSEMENT);
 
             $approved = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= Request::STATUS_APPROVED_FOR_DISBURSEMENT) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_APPROVED_FOR_DISBURSEMENT,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
         return $approved;
     }
     
-    static function completed($index_id, $scope, $status_id){
+    static function completed($request_id, $index_id, $scope, $status_id, $flag = NULL){
         if($status_id < Request::STATUS_COMPLETED){ 
             $completed = [
                 'status' =>'bg-gray',
@@ -436,8 +533,10 @@ class Request extends \yii\db\ActiveRecord
             $chain = Request::getChain($index_id, $scope, Request::STATUS_COMPLETED);
 
             $completed = [
+                'request_id' =>$request_id,
                 'status' =>($status_id >= Request::STATUS_COMPLETED) ? 'bg-aqua' : 'bg-gray',
-                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp),
+                'status_id' => Request::STATUS_COMPLETED,
+                'days' => Request::getDateDiff($old_chain->timestamp, $chain->timestamp, $flag),
                 'date' => date('Y-m-d H:i:s', $chain->timestamp),
             ];
         }
@@ -457,19 +556,45 @@ class Request extends \yii\db\ActiveRecord
             if($blockStatus === $status)
                 $chain = $block;
         }
-        
-        return $chain;
+        if(isset($chain))
+            return $chain;
+        else
+            return [];
     }
     
-    static function getDateDiff($date_1, $date_2)
+    static function getDateDiff($date_1, $date_2, $flag = NULL)
     {
+        if($flag){
+            $date1 = new \DateTime( date('Y-m-d', $date_1) );
+            $date2 = new \DateTime(  date('Y-m-d', $date_2) );
+
+            $difference = $date1->diff($date2);
+            $difference->format('%a');
+
+            return $difference->days;
+        }else{
+            $date1 = new \DateTime( date('Y-m-d H:i:s', $date_1) );
+            $date2 = new \DateTime(  date('Y-m-d H:i:s', $date_2) );
+            
+            $difference = $date1->diff($date2);
+            $difference->format('%a');
+            //$difference->format("%H:%I:%S (Full days: %a)");
+            //$difference=date_diff($date1,$date2);
+            
+            return Blockchain::format_interval($difference);
+        }
         
-        $date1 = new \DateTime( date('Y-m-d H:i:s', $date_1) );
-        $date2 = new \DateTime(  date('Y-m-d H:i:s', $date_2) );
-        
+    }
+
+    static function getNumberOfDays($date_1, $date_2)
+    {
+        $date1 = new \DateTime( date('Y-m-d', $date_1) );
+        $date2 = new \DateTime(  date('Y-m-d', $date_2) );
+
         $difference = $date1->diff($date2);
-        
-        return Blockchain::format_interval($difference);
+        $difference->format('%a');
+
+        return $difference->days;
     }
     
 }

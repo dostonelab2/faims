@@ -7,7 +7,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use common\models\finance\Request;
+use common\models\finance\Requeststat;
 use common\models\sec\Blockchain;
+use common\models\system\User;
+
+use kartik\helpers\Html;
+use yii\helpers\Url;
 
 class DefaultController extends Controller
 {
@@ -69,6 +74,275 @@ class DefaultController extends Controller
     {
         return $this->render('dashboard');
     }
+
+    public function actionVerificationdash()
+    {
+        if(isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = date('Y');
+
+        $year_array = [2022, 2021, 2020];
+
+        $toolbars = '';
+        for($i=0; $i<3; $i++){
+            $toolbars .= Html::a($year_array[$i], ['verificationdash?year='.$year_array[$i]], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'display: inline-block; width:60px; height:40px; font-size: 120%;',
+                'data-pjax' => 0, 
+            ]);
+        }
+
+        $within_3_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VERIFIED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['<=', 'number_of_days', 3])
+            ->count();
+
+        $within_7_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VERIFIED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 3])
+            ->andWhere(['<=', 'number_of_days', 7])
+            ->count();
+
+        $within_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VERIFIED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 7])
+            ->andWhere(['<=', 'number_of_days', 20])
+            ->count();
+
+        $more_than_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VERIFIED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 20])
+            ->count();
+       
+        return $this->render('verificationdash', [
+            'within_3_days'=>$within_3_days,
+            'within_7_days'=>$within_7_days,
+            'within_20_days'=>$within_20_days,
+            'more_than_20_days'=>$more_than_20_days,
+            'toolbars'=>$toolbars,
+        ]);
+    }
+
+    public function actionValidationdash()
+    {
+        if(isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = date('Y');
+
+        $year_array = [2022, 2021, 2020];
+
+        $toolbars = '';
+        for($i=0; $i<3; $i++){
+            $toolbars .= Html::a($year_array[$i], ['validationdash?year='.$year_array[$i]], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'display: inline-block; width:60px; height:40px; font-size: 120%;',
+                'data-pjax' => 0, 
+            ]);
+        }
+        $within_3_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VALIDATED])
+            ->orWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['<=', 'number_of_days', 3])
+            ->count();
+
+        $within_7_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VALIDATED])
+            ->orWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 3])
+            ->andWhere(['<=', 'number_of_days', 7])
+            ->count();
+
+        $within_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VALIDATED])
+            ->orWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 7])
+            ->andWhere(['<=', 'number_of_days', 20])
+            ->count();
+
+        $more_than_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_VALIDATED])
+            ->orWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 20])
+            ->count();
+       
+        return $this->render('validationdash', [
+            'within_3_days'=>$within_3_days,
+            'within_7_days'=>$within_7_days,
+            'within_20_days'=>$within_20_days,
+            'more_than_20_days'=>$more_than_20_days,
+            'toolbars'=>$toolbars,
+        ]);
+    }
+
+    public function actionObligationdash()
+    {
+        if(isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = date('Y');
+
+        $year_array = [2022, 2021, 2020];
+
+        $toolbars = '';
+        for($i=0; $i<3; $i++){
+            $toolbars .= Html::a($year_array[$i], ['obligationdash?year='.$year_array[$i]], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'display: inline-block; width:60px; height:40px; font-size: 120%;',
+                'data-pjax' => 0, 
+            ]);
+        }
+        $within_3_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_ALLOTTED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['<=', 'number_of_days', 3])
+            ->count();
+
+        $within_7_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_ALLOTTED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 3])
+            ->andWhere(['<=', 'number_of_days', 7])
+            ->count();
+
+        $within_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_ALLOTTED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 7])
+            ->andWhere(['<=', 'number_of_days', 20])
+            ->count();
+
+        $more_than_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_ALLOTTED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 20])
+            ->count();
+       
+        return $this->render('obligationdash', [
+            'within_3_days'=>$within_3_days,
+            'within_7_days'=>$within_7_days,
+            'within_20_days'=>$within_20_days,
+            'more_than_20_days'=>$more_than_20_days,
+            'toolbars'=>$toolbars,
+        ]);
+    }
+
+    public function actionDisbursementdash()
+    {
+        if(isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = date('Y');
+
+        $year_array = [2022, 2021, 2020];
+
+        $toolbars = '';
+        for($i=0; $i<3; $i++){
+            $toolbars .= Html::a($year_array[$i], ['disbursementdash?year='.$year_array[$i]], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'display: inline-block; width:60px; height:40px; font-size: 120%;',
+                'data-pjax' => 0, 
+            ]);
+        }
+        $within_3_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_CHARGED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['<=', 'number_of_days', 3])
+            ->count();
+
+        $within_7_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_CHARGED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 3])
+            ->andWhere(['<=', 'number_of_days', 7])
+            ->count();
+
+        $within_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_CHARGED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 7])
+            ->andWhere(['<=', 'number_of_days', 20])
+            ->count();
+
+        $more_than_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_CHARGED])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 20])
+            ->count();
+       
+        return $this->render('disbursementdash', [
+            'within_3_days'=>$within_3_days,
+            'within_7_days'=>$within_7_days,
+            'within_20_days'=>$within_20_days,
+            'more_than_20_days'=>$more_than_20_days,
+            'toolbars'=>$toolbars,
+        ]);
+    }
     
+    public function actionApprovaldash()
+    {
+        if(isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = date('Y');
+
+        $year_array = [2022, 2021, 2020];
+
+        $toolbars = '';
+        for($i=0; $i<3; $i++){
+            $toolbars .= Html::a($year_array[$i], ['approvaldash?year='.$year_array[$i]], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'display: inline-block; width:60px; height:40px; font-size: 120%;',
+                'data-pjax' => 0, 
+            ]);
+        }
+
+        $within_3_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            // ->orWhere(['status_id' => Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['<=', 'number_of_days', 3])
+            ->count();
+
+        $within_7_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            // ->orWhere(['status_id' => Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 3])
+            ->andWhere(['<=', 'number_of_days', 7])
+            ->count();
+
+        $within_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            // ->orWhere(['status_id' => Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 7])
+            ->andWhere(['<=', 'number_of_days', 20])
+            ->count();
+
+        $more_than_20_days = Requeststat::find()
+            ->where(['status_id' => Request::STATUS_APPROVED_FOR_DISBURSEMENT])
+            // ->orWhere(['status_id' => Request::STATUS_APPROVED_PARTIAL])
+            ->andWhere(['YEAR(`stat_date`)' => $year])
+            ->andWhere(['>', 'number_of_days', 20])
+            ->count();
+       
+        return $this->render('approvaldash', [
+            'within_3_days'=>$within_3_days,
+            'within_7_days'=>$within_7_days,
+            'within_20_days'=>$within_20_days,
+            'more_than_20_days'=>$more_than_20_days,
+            'toolbars'=>$toolbars,
+        ]);
+    }
     
 }
