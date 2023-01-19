@@ -145,7 +145,7 @@ $request_for_approval = Request::find()
                             /*['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],*/
                         ]
                     ],
-                    /*[
+                    [
                         'label' => 'Finance', 
                         'icon' => 'line-chart', 
                         'visible'=> Yii::$app->user->can('access-procurement'),
@@ -154,7 +154,7 @@ $request_for_approval = Request::find()
                             ['label' => 'Disbursement and Payment', 'icon' => 'ruble ', 'url' => ['/procurement/disbursement']],
                         ]
                     ],
-                    [
+                    /*[
                         'label' => 'Financial Request', 
                         'icon' => 'folder-open text-aqua', 
                         'visible' => (Yii::$app->user->can('access-osdv') || (Yii::$app->user->identity->username == 'Admin') ),
