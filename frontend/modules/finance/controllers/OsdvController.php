@@ -94,8 +94,10 @@ class OsdvController extends Controller
         //if(Yii::$app->user->identity->username != 'Admin')
             //$searchModel->created_by =  Yii::$app->user->identity->user_id;
         if(isset($_GET['year']))
-            $searchModel->year = [$_GET['year']];
-
+            $searchModel->year = $_GET['year'];
+        else
+            $searchModel->year = date('Y');
+            
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         if(Yii::$app->user->can('access-finance-obligation'))
