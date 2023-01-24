@@ -15,7 +15,7 @@ use common\models\finance\Requestpayroll;
  */
 class RequestosdvSearch extends Request
 {
-    
+    public $year;
     /**
      * @inheritdoc
      */ 
@@ -89,7 +89,7 @@ class RequestosdvSearch extends Request
         $query->andFilterWhere(['like', 'os.os_id', $this->os_id]);
         $query->andFilterWhere(['like', 'dv.dv_id', $this->dv_id]);
         //$query->andFilterWhere(['tbl_request.osdv.os.os_id' => $this->os_id]);
-        
+        $query->andWhere(['YEAR(`request_date`)' => $this->year]);
         //model->osdv->lddapadaitem->lddapada->batch_date
         //$query->andFilterWhere(['between', 'lddapada.batch_date', $this->request_date_s, $this->request_date_e]);
         //$query->andFilterWhere(['between', 'request_date', $this->request_date_s, $this->request_date_e]);

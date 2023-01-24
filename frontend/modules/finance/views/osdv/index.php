@@ -10,11 +10,13 @@ use kartik\editable\Editable;
 use kartik\grid\GridView;
 
 use yii\bootstrap\Modal;
+use yii\widgets\ActiveForm;
 
 use common\models\cashier\Creditor;
 use common\models\finance\Dv;
 use common\models\finance\Obligationtype;
 use common\models\finance\Os;
+use common\models\finance\Osdv;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requeststatus;
@@ -53,6 +55,40 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+    $year_array = [
+        ['year' => '2023'],
+        ['year' => '2022'],
+        ['year' => '2021'],
+        ['year' => '2020'],
+        ['year' => '2019'],
+    ];
+
+    $form = ActiveForm::begin([
+        'action' => ['index'],
+        'method' => 'get',
+    ]);
+
+    echo $form->field($searchModel, 'year')->dropDownList(
+        ArrayHelper::map($year_array, 'year', 'year'),
+    [
+        'class' => 'form-control',
+        // 'prompt' => 'Select Year...',
+        'name' => 'year',
+        //'onchange' => 'selectMonth(this.value)',
+        'id' => 'dropdown',
+        'onchange' => 'this.form.submit()',
+        'style'=>'width:250px; font-weight:bold;'
+    ]
+    )->label(false);
+
+
+    ActiveForm::end();
+
+    // if(isset($_GET['year'])){
+    //     $year = $_GET['year'];
+    // }else{
+    //     $year = date('Y');
+    // }
 ?>
 
 <div class="request-index">
