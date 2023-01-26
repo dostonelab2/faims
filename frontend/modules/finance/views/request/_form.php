@@ -84,9 +84,8 @@ use common\models\procurement\Division;
                 ])->label('Division'); ?>
                 </h5>
         </div>
-        
     </div>
-    
+
     <div  style="background-color: #AFEEEE; padding-left: 10px; padding-right: 10px;">
         <div class="row">
             <div class="col-md-6"> 
@@ -106,25 +105,21 @@ use common\models\procurement\Division;
 
             <div class="col-md-6"> 
                 <h5 data-step="2" data-intro="Select Project Type.">
-                <!--?= $form->field($model, 'project_type_id')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(Projecttype::find()->all(),'project_type_id','code'),
-                    'language' => 'en',
-                    //'theme' => Select2::THEME_DEFAULT,`
-                    'options' => ['placeholder' => 'Select Project Type'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ])->label('Project Type'); ?-->
-                
-                <?= $form->field($model, 'project_type_id')->widget(DepDrop::classname(), [
-                    'type'=>DepDrop::TYPE_SELECT2,
-                    'options'=>['id'=>'project_type_id'],
-                    'pluginOptions'=>[
-                        'depends'=>['fund_source_id'],
-                        'placeholder'=>'Select Functional Unit',
-                        'url'=>Url::to(['request/listprojecttype'])
-                    ]
-                ]); ?>
+                <div class="input-group">
+                    <?= $form->field($model, 'project_type_id')->widget(DepDrop::classname(), [
+                        'type'=>DepDrop::TYPE_SELECT2,
+                        'options'=>['id'=>'project_type_id'],
+                        'pluginOptions'=>[
+                            'depends'=>['fund_source_id'],
+                            'placeholder'=>'Select Functional Unit',
+                            'url'=>Url::to(['request/listprojecttype'])
+                        ]
+                    ]); ?>
+                    
+                    <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
+                        <?= Html::button('<i class="fas fa-info-circle"></i>', ['value' => Url::to(['/finance/project/info']), 'title' => 'Select the appropriate project type where this Request will be charged. Under Regular Fund select OTHERS if the project is not listed below.', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonInfo']) ?>
+                    </span>
+                </div>
                 </h5>
             </div>
             
@@ -134,29 +129,21 @@ use common\models\procurement\Division;
             <div class="col-md-12">
                 <h5 data-step="5" data-intro="Assign Project.">
                     <div class="input-group">
-                        <!--?= $form->field($model, 'project_id')->widget(Select2::classname(), [
-                            'data' => ArrayHelper::map(Project::find()->all(),'project_id','name'),
-                            'language' => 'en',
-                            //'theme' => Select2::THEME_DEFAULT,`
-                            'options' => ['placeholder' => 'Select Project'],
-                            'pluginOptions' => [
-                                'allowClear' => false
-                            ],
-                        ])->label('Project'); ?-->
-
                         <?= $form->field($model, 'project_id')->widget(DepDrop::classname(), [
                             'type'=>DepDrop::TYPE_SELECT2,
                             'options'=>['id'=>'project_id'],
                             'pluginOptions'=>[
                                 'depends'=>['project_type_id'],
-                                'placeholder'=>'Select Functional Unit',
+                                'placeholder'=>'Select Project',
                                 'url'=>Url::to(['request/listproject'])
                             ]
                         ]); ?>
+                        
                         <?php if(Yii::$app->user->can('access-finance-verification')) {?>
                             <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
                                 <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddCreditor']) ?>
                             </span>
+
                         <?php }?>
                     </div>   
                 </h5>
@@ -214,4 +201,8 @@ use common\models\procurement\Division;
             window.location.href = 'index?multipage=true';
         });
     };
+
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
 </script>
