@@ -153,9 +153,11 @@ use common\models\procurement\Division;
                                 'url'=>Url::to(['request/listproject'])
                             ]
                         ]); ?>
-                        <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
-                            <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddCreditor']) ?>
-                        </span>
+                        <?php if(Yii::$app->user->can('access-finance-verification')) {?>
+                            <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
+                                <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddCreditor']) ?>
+                            </span>
+                        <?php }?>
                     </div>   
                 </h5>
             </div>
