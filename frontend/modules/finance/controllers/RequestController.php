@@ -8,6 +8,8 @@ use frontend\modules\finance\components\Report;
 
 use common\models\cashier\Creditortmp;
 use common\models\cashier\CreditorSearch;
+use common\models\finance\Project;
+use common\models\finance\Projecttype;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
 use common\models\finance\Requestattachment;
@@ -227,6 +229,18 @@ class RequestController extends Controller
                 ]
             ],*/
         ]);
+
+        $budgetallocationassignmentDataProvider = new ActiveDataProvider([
+            'query' => $model->getBudgetallocationassignments(),
+            'pagination' => false,
+            /*'sort' => [
+                'defaultOrder' => [
+                    'availability' => SORT_ASC,
+                    'item_category_id' => SORT_ASC,
+                    //'title' => SORT_ASC, 
+                ]
+            ],*/
+        ]);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
@@ -236,6 +250,7 @@ class RequestController extends Controller
         return $this->render('view', [
             'model' => $model,
             'attachmentsDataProvider' => $attachmentsDataProvider,
+            'budgetallocationassignmentDataProvider' => $budgetallocationassignmentDataProvider,
             'request_status' => $request_status,
             'params' => $params,
             'user' => $CurrentUser,
@@ -1294,5 +1309,49 @@ class RequestController extends Controller
             ]);
         }
         
+    }
+
+    public function actionListprojecttype() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $id = end($_POST['depdrop_parents']);
+            $list = Projecttype::find()->andWhere(['type_id'=>$id])->asArray()->all();
+            $selected  = null;
+            if ($id != null && count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $projecttype) {
+                    $out[] = ['id' => $projecttype['project_type_id'], 'name' => $projecttype['name']];
+                    if ($i == 0) {
+                        $selected = $projecttype['project_type_id'];
+                    }
+                }
+                // Shows how you can preselect a value
+                echo Json::encode(['output' => $out, 'selected'=>$selected]);
+                return;
+            }
+        }
+        echo Json::encode(['output' => '', 'selected'=>'']);
+    }
+
+    public function actionListproject() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $id = end($_POST['depdrop_parents']);
+            $list = Project::find()->andWhere(['project_type_id'=>$id])->asArray()->all();
+            $selected  = null;
+            if ($id != null && count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $project) {
+                    $out[] = ['id' => $project['project_id'], 'name' => $project['name']];
+                    if ($i == 0) {
+                        $selected = $project['project_id'];
+                    }
+                }
+                // Shows how you can preselect a value
+                echo Json::encode(['output' => $out, 'selected'=>$selected]);
+                return;
+            }
+        }
+        echo Json::encode(['output' => '', 'selected'=>'']);
     }
 }

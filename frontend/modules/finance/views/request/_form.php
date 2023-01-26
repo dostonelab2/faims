@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\widgets\DatePicker;
+use kartik\widgets\DepDrop;
 use kartik\editable\Editable; ;
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Url;
@@ -14,6 +15,8 @@ use yii\helpers\Url;
 use common\models\cashier\Creditor;
 use common\models\finance\Requesttype;
 use common\models\finance\Obligationtype;
+use common\models\finance\Project;
+use common\models\finance\Projecttype;
 use common\models\procurement\Division;
 /* @var $this yii\web\View */
 /* @var $model common\models\finance\Request */
@@ -24,6 +27,20 @@ use common\models\procurement\Division;
 
     <?php $form = ActiveForm::begin(); ?>
     
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'request_date')->widget(DateTimePicker::classname(), [
+                'readonly' => true,
+                'disabled' => true,
+                'options' => ['placeholder' => 'Select Date'],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd hh:ii:ss'
+                ]
+            ])->label('Request Date');?>
+        </div>
+    </div>    
+
     <div class="row">
         
         <div class="col-md-6"> 
@@ -56,44 +73,11 @@ use common\models\procurement\Division;
         </div>
         
         <div class="col-md-6">
-            <?= $form->field($model, 'request_date')->widget(DateTimePicker::classname(), [
-                'readonly' => true,
-                'disabled' => true,
-                'options' => ['placeholder' => 'Select Date'],
-                'pluginOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss'
-                ]
-            ])->label('Request Date');?>
-        </div>
-        
-    </div>
-    
-    
-    <div class="row">
-        
-        <div class="col-md-6"> 
-                <h5 data-step="2" data-intro="Specify Source of Fund.">
-                <?= $form->field($model, 'obligation_type_id')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
-                    'language' => 'en',
-                    //'theme' => Select2::THEME_DEFAULT,`
-                    //'options' => ['placeholder' => 'Select Request Type','readonly'=>'readonly'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ])->label('Fund Source'); ?>
-                
-                </h5>
-        </div>
-        
-         
-        
-        <div class="col-md-6">
-               <h5 data-step="4" data-intro="Select Division.">
+            <h5 data-step="4" data-intro="Select Division.">
                 <?= $form->field($model, 'division_id')->widget(Select2::classname(), [
                     'data' => ArrayHelper::map(Division::find()->all(),'division_id','name'),
                     'language' => 'en',
+                    'options' => ['placeholder' => 'Select Division'],
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
@@ -103,17 +87,91 @@ use common\models\procurement\Division;
         
     </div>
     
-    
+    <div  style="background-color: #AFEEEE; padding-left: 10px; padding-right: 10px;">
+        <div class="row">
+            <div class="col-md-6"> 
+                <h5 data-step="2" data-intro="Specify Source of Fund.">
+                <?= $form->field($model, 'obligation_type_id')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
+                    'language' => 'en',
+                    //'theme' => Select2::THEME_DEFAULT,`
+                    'options' => ['placeholder' => 'Select Fund Source', 'id'=>'fund_source_id'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ])->label('Fund Source'); ?>
+                
+                </h5>
+            </div>
+
+            <div class="col-md-6"> 
+                <h5 data-step="2" data-intro="Select Project Type.">
+                <!--?= $form->field($model, 'project_type_id')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(Projecttype::find()->all(),'project_type_id','code'),
+                    'language' => 'en',
+                    //'theme' => Select2::THEME_DEFAULT,`
+                    'options' => ['placeholder' => 'Select Project Type'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ])->label('Project Type'); ?-->
+                
+                <?= $form->field($model, 'project_type_id')->widget(DepDrop::classname(), [
+                    'type'=>DepDrop::TYPE_SELECT2,
+                    'options'=>['id'=>'project_type_id'],
+                    'pluginOptions'=>[
+                        'depends'=>['fund_source_id'],
+                        'placeholder'=>'Select Functional Unit',
+                        'url'=>Url::to(['request/listprojecttype'])
+                    ]
+                ]); ?>
+                </h5>
+            </div>
+            
+        </div>
+                
+        <div class="row">
+            <div class="col-md-12">
+                <h5 data-step="5" data-intro="Assign Project.">
+                    <div class="input-group">
+                        <!--?= $form->field($model, 'project_id')->widget(Select2::classname(), [
+                            'data' => ArrayHelper::map(Project::find()->all(),'project_id','name'),
+                            'language' => 'en',
+                            //'theme' => Select2::THEME_DEFAULT,`
+                            'options' => ['placeholder' => 'Select Project'],
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                        ])->label('Project'); ?-->
+
+                        <?= $form->field($model, 'project_id')->widget(DepDrop::classname(), [
+                            'type'=>DepDrop::TYPE_SELECT2,
+                            'options'=>['id'=>'project_id'],
+                            'pluginOptions'=>[
+                                'depends'=>['project_type_id'],
+                                'placeholder'=>'Select Functional Unit',
+                                'url'=>Url::to(['request/listproject'])
+                            ]
+                        ]); ?>
+                        <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
+                            <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddCreditor']) ?>
+                        </span>
+                    </div>   
+                </h5>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-    <div class="col-md-12">
-        <h5 data-step="5" data-intro="Search Or request to add new Payee / Creditor.">
-        <div class="input-group">
-                       <?= $form->field($model, 'payee_id')->widget(Select2::classname(), [
+        <div class="col-md-12">
+            <h5 data-step="5" data-intro="Search Or request to add new Payee / Creditor.">
+                <div class="input-group">
+                    <?= $form->field($model, 'payee_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id',
                                                     function($model) {
                                                                     return $model['name'].' | '.$model['address'];
                                                                 }
-                                                  ),
+                                                ),
                         'language' => 'en',
                         'options' => ['placeholder' => 'Select Payee','readonly'=>'readonly'],
                         'pluginOptions' => [
@@ -124,13 +182,13 @@ use common\models\procurement\Division;
                         <span class="input-group-btn" style="padding-top: 20px; padding-left: 5px;">
                             <?= Html::button('<i class="fa fa-address-card-o"></i>', ['value' => Url::to(['/cashier/creditortmp/create']), 'title' => 'Create Payee / Creditor', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAddCreditor']) ?>
                         </span>
+                </div>
+            </h5>
         </div>
-        </h5>
-    </div>
     </div>
         
     <h5 data-step="6" data-intro="Indicate the details of this financial request.">
-    <?= $form->field($model, 'particulars')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'particulars')->textarea(['rows' => 3]) ?>
     </h5>
     <h5 data-step="7" data-intro="Enter amount.">
     <?= $form->field($model, 'amount')->textInput() ?>

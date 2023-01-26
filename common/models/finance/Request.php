@@ -195,6 +195,11 @@ class Request extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Requeststat::className(), ['request_id' => 'request_id']);
     }
+
+    public function getBudgetallocationassignments()
+    {
+        return $this->hasMany(Budgetallocationassignment::className(), ['request_id' => 'request_id']);
+    }
     
     static function generateRequestNumber($date = NULL, $count = NULL)
     {

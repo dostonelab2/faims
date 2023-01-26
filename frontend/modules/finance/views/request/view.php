@@ -54,146 +54,241 @@ echo "<div id='modalContent'><div style='text-align:center'><img src='/images/lo
 Modal::end();
 ?>
 
-<?php $attributes = [
-        /*[
-            'group'=>true,
-            //'label'=>'<center>LDDAP-ADA</center>',
-            'rowOptions'=>['class'=>'info'],
-        ],*/
-        [
-            'group'=>true,
-            'label'=>'Details',
-            'rowOptions'=>['class'=>'info']
-        ],
-        [
-            'attribute'=>'request_number',
-            'label'=>'Request Number',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'displayOnly'=>true
-        ],
-        [
-            'attribute'=>'request_type_id',
-            'label'=>'Request Type',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'value' => $model->requesttype->name,
-            'type'=>DetailView::INPUT_SELECT2, 
-            'widgetOptions'=>[
-                'data'=>ArrayHelper::map(Requesttype::find()->orderBy(['name'=>SORT_ASC])->all(),'request_type_id','name'),
-                'options' => ['placeholder' => 'Select Type'],
-                'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
-            ],
-        ],
-        [
-            'attribute'=>'obligation_type_id',
-            'label'=>'Fund Source',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'value' => $model->fundsource->name,
-            'type'=>DetailView::INPUT_SELECT2, 
-            'widgetOptions'=>[
-                'data'=>ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
-                'options' => ['placeholder' => 'Fund Source'],
-                'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
-            ],
-        ],
-        /*$form->field($model, 'obligation_type_id')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
-                    'language' => 'en',
-                    //'theme' => Select2::THEME_DEFAULT,`
-                    //'options' => ['placeholder' => 'Select Request Type','readonly'=>'readonly'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                    ])->label('Fund Source'); */
-        [
-            'attribute'=>'division_id',
-            'label'=>'Division',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'value' => $model->division->name,
-            'type'=>DetailView::INPUT_SELECT2, 
-            'widgetOptions'=>[
-                'data'=>ArrayHelper::map(Division::find()->all(),'division_id','name'),
-                'options' => ['placeholder' => 'Select Type'],
-                'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
-            ],
-        ],
-        [
-            'attribute'=>'payee_id',
-            'label'=>'Payee',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'value' => $model->creditor->name,
-            'type'=>DetailView::INPUT_SELECT2, 
-            'widgetOptions'=>[
-                'data'=>ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
-                'options' => ['placeholder' => 'Select Payee'],
-                'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
-            ],
-        ],
-        [
-            'attribute'=>'particulars',
-            'label'=>'Particulars',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            'type'=>DetailView::INPUT_TEXTAREA, 
-            'options'=>['rows'=>4]
-        ],
+<div class="row">
+    <div class="col-sm-8">
 
-        [
-            'attribute'=>'amount',
-            'label'=>'Amount (P)',
-            'format'=>['decimal', 2],
-            'displayOnly'=>($model->status_id >= Request::STATUS_VALIDATED) ? true : false,
-            'inputContainer' => ['class'=>'col-sm-6'],
-        ],
-        /*[
-            'attribute'=>'status_id',
-            'label'=>'Status',
-            'inputContainer' => ['class'=>'col-sm-6'],
-        ],*/
-        [
-            'group'=>true,
-            'label'=>'Status',
-            'rowOptions'=>['class'=>'table-success']
-        ],
-        /*[
-            'attribute'=>'remarks',
-            'label'=>'Remarks',
-            'format'=>'raw',
-            'inputContainer' => ['class'=>'col-sm-6'],
-            //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
-            'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
-        ],*/
-        [
-                'attribute'=>'request_id',
-                'label'=>'',
-                'inputContainer' => ['class'=>'col-sm-2'],
-                'format' => 'raw',
-//                'visible' => ($model->type_id == 1) ? true : false,
-//                'displayOnly'=>true, //$model->os 
-                'value' => Html::button('Track Progress', ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-md btn-success', 'id'=>'buttonTrackProgress'])
+        <?php $attributes = [
+                /*[
+                    'group'=>true,
+                    //'label'=>'<center>LDDAP-ADA</center>',
+                    'rowOptions'=>['class'=>'info'],
+                ],*/
+                [
+                    'group'=>true,
+                    'label'=>'Details',
+                    'rowOptions'=>['class'=>'info']
+                ],
+                [
+                    'attribute'=>'request_number',
+                    'label'=>'Request Number',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    // 'displayOnly'=>true
+                ],
+                [
+                    'attribute'=>'request_type_id',
+                    'label'=>'Request Type',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'value' => $model->requesttype->name,
+                    'type'=>DetailView::INPUT_SELECT2, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Requesttype::find()->orderBy(['name'=>SORT_ASC])->all(),'request_type_id','name'),
+                        'options' => ['placeholder' => 'Select Type'],
+                        'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                    ],
+                ],
+                [
+                    'attribute'=>'obligation_type_id',
+                    'label'=>'Fund Source',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'value' => $model->fundsource->name,
+                    'type'=>DetailView::INPUT_SELECT2, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
+                        'options' => ['placeholder' => 'Fund Source'],
+                        'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                    ],
+                ],
+                /*$form->field($model, 'obligation_type_id')->widget(Select2::classname(), [
+                            'data' => ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
+                            'language' => 'en',
+                            //'theme' => Select2::THEME_DEFAULT,`
+                            //'options' => ['placeholder' => 'Select Request Type','readonly'=>'readonly'],
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                            ])->label('Fund Source'); */
+                [
+                    'attribute'=>'division_id',
+                    'label'=>'Division',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'value' => $model->division->name,
+                    'type'=>DetailView::INPUT_SELECT2, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Division::find()->all(),'division_id','name'),
+                        'options' => ['placeholder' => 'Select Type'],
+                        'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                    ],
+                ],
+                [
+                    'attribute'=>'payee_id',
+                    'label'=>'Payee',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'value' => $model->creditor->name,
+                    'type'=>DetailView::INPUT_SELECT2, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
+                        'options' => ['placeholder' => 'Select Payee'],
+                        'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                    ],
+                ],
+                [
+                    'attribute'=>'particulars',
+                    'label'=>'Particulars',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'type'=>DetailView::INPUT_TEXTAREA, 
+                    'options'=>['rows'=>4]
+                ],
+
+                [
+                    'attribute'=>'amount',
+                    'label'=>'Amount (P)',
+                    'format'=>['decimal', 2],
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                ],
+                /*[
+                    'attribute'=>'status_id',
+                    'label'=>'Status',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                ],*/
+                [
+                    'group'=>true,
+                    'label'=>'Status',
+                    'rowOptions'=>['class'=>'table-success']
+                ],
+                /*[
+                    'attribute'=>'remarks',
+                    'label'=>'Remarks',
+                    'format'=>'raw',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
+                    'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
+                ],*/
+                [
+                        'attribute'=>'request_id',
+                        'label'=>'',
+                        'inputContainer' => ['class'=>'col-sm-2'],
+                        'format' => 'raw',
+
+                        'value' => Html::button('Track Progress', ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-md btn-success', 'id'=>'buttonTrackProgress'])
+                    ],
+            ];?>
+
+
+        <?= DetailView::widget([
+            'model' => $model,
+            'mode'=>DetailView::MODE_VIEW,
+            /*'deleteOptions'=>[ // your ajax delete parameters
+                'params' => ['id' => 1000, 'kvdelete'=>true],
+            ],*/
+            'container' => ['id'=>'kv-demo'],
+            //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
+            
+            'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() || Yii::$app->user->can('access-finance-verification')) ? '{update}' : '', //hides buttons on detail view
+            'attributes' => $attributes,
+            'condensed' => true,
+            'responsive' => true,
+            'hover' => true,
+            'formOptions' => ['action' => ['request/view', 'id' => $model->request_id]],
+            'panel' => [
+                //'type' => 'Primary', 
+                'heading'=>'<i class="fas fa-newspaper-o"></i>  FINANCIAL REQUEST',
+                'type'=>DetailView::TYPE_PRIMARY,
+                //'footer' => '<div class="text-center text-muted">This is a sample footer message for the detail view.</div>'
             ],
-    ];?>
-<?= DetailView::widget([
-        'model' => $model,
-        'mode'=>DetailView::MODE_VIEW,
-        /*'deleteOptions'=>[ // your ajax delete parameters
-            'params' => ['id' => 1000, 'kvdelete'=>true],
-        ],*/
-        'container' => ['id'=>'kv-demo'],
-        //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
+        ]); ?>
+    </div>
+
+    <div class="col-sm-4">
+    <?php $gridColumnsBudgetAllocationAssigment = [
+                // [
+                //     'attribute'=>'amount',
+                //     'label'=>'Amount (P)',
+                //     'format'=>['decimal', 2],
+                //     // 'displayOnly'=>($model->status_id >= Request::STATUS_VALIDATED) ? true : false,
+                //     'inputContainer' => ['class'=>'col-sm-6'],
+                // ],
+                [
+                        'attribute'=>'request_id',
+                        'label'=>'',
+                        // 'inputContainer' => ['class'=>'col-sm-2'],
+                        'format' => 'raw',
+
+                        'value' => Html::button('Track Progress', ['value' => Url::to(['request/tracking', 'id'=>$model->request_id]), 'title' => 'Track Request', 'class' => 'btn btn-md btn-success', 'id'=>'buttonTrackProgress'])
+                ],
+            ];?>
+
         
-        'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || $model->owner() || Yii::$app->user->can('access-finance-verification')) ? '{update}' : '', //hides buttons on detail view
-        'attributes' => $attributes,
-        'condensed' => true,
-        'responsive' => true,
-        'hover' => true,
-        'formOptions' => ['action' => ['request/view', 'id' => $model->request_id]],
-        'panel' => [
-            //'type' => 'Primary', 
-            'heading'=>'FINANCIAL REQUEST',
-            'type'=>DetailView::TYPE_PRIMARY,
-            //'footer' => '<div class="text-center text-muted">This is a sample footer message for the detail view.</div>'
-        ],
-    ]); ?>
+        <?= /*GridView::widget([
+            'id' => 'budget-allocation-assignment',
+            'dataProvider' => $budgetallocationassignmentDataProvider,
+            //'filterModel' => $searchModel,
+            // 'showFooter' => true,
+            // 'showPageSummary' => true,
+            'columns' => $gridColumnsBudgetAllocationAssigment, // check the configuration for grid columns by clicking button above
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            // set left panel buttons
+            'panel' => [
+                'heading' => '<h3 class="panel-title">Attachments</h3>',
+                'type' => GridView::TYPE_PRIMARY,
+                'before'=> '',    
+                //Html::button('Submit', ['value' => Url::to(['request/submit', 'id'=>$model->request_id]), 'title' => 'Submit', 'class' => $params['btnClass'], 'style'=>'margin-right: 6px;'.((($model->status_id < Request::STATUS_SUBMITTED)) ? '' : 'display: none;'), 'id'=>'buttonSubmit']),
+                'after'=>false,
+            ],
+            'persistResize' => false,
+            'toggleDataOptions' => ['minCount' => 10],
+        ]);*/
+        GridView::widget([
+            'id' => 'budget-allocation',
+            'dataProvider' => $budgetallocationassignmentDataProvider,
+            // 'filterModel' => $searchModel,
+            'columns' => $gridColumnsBudgetAllocationAssigment, // check this value by clicking GRID COLUMNS SETUP button at top of the page
+            //'headerContainer' => ['style' => 'top:50px', 'class' => 'kv-table-header'], // offset from top
+            'floatHeader' => true, // table header floats when you scroll
+            //'floatPageSummary' => true, // table page summary floats when you scroll
+            //'floatFooter' => false, // disable floating of table footer
+            'pjax' => false, // pjax is set to always false for this demo
+            // parameters from the demo form
+            'responsive' => false,
+            'bordered' => true,
+            'striped' => false,
+            'condensed' => true,
+            'hover' => true,
+            //'showPageSummary' => true,
+            'panel' => [
+                'after' => '',//<div class="float-right float-end"><button type="button" class="btn btn-primary" onclick="var keys = $("#kv-grid-demo").yiiGridView("getSelectedRows").length; alert(keys > 0 ? "Downloaded " + keys + " selected books to your account." : "No rows selected for download.");"><i class="fas fa-download"></i> Download Selected</button></div><div style="padding-top: 5px;"><em>* The page summary displays SUM for first 3 amount columns and AVG for the last.</em></div><div class="clearfix"></div>',
+                'heading' => '<i class="fas fa-tasks"></i>  LIB Assignment',
+                'type' => 'primary',
+                'before' => '',//<div style="padding-top: 7px;"><em>* Resize table columns just like a spreadsheet by dragging the column edges.</em></div>',
+            ],
+            // set export properties
+            // set your toolbar
+            'toolbar' =>  [
+                [
+                    'content' =>
+                        Html::button('<i class="fas fa-plus"></i>', [
+                            'class' => 'btn btn-success',
+                            'title' => 'Add Assignment',
+                            'onclick' => 'alert("This should launch the book creation form.\n\nDisabled for this demo!");'
+                        ]) , 
+                    'options' => ['class' => 'btn-group mr-2 me-2']
+                ],
+                //'{export}',
+                //'{toggleData}',
+            ],
+            'toggleDataContainer' => ['class' => 'btn-group mr-2 me-2'],
+            'persistResize' => false,
+            'toggleDataOptions' => ['minCount' => 10],
+            'itemLabelSingle' => 'Assignment',
+            'itemLabelPlural' => 'Assignments'
+        ]);
+        
     
+        ?>    
+    </div>
+</div>
     <?php //if( ($model->payroll == 1 && Yii::$app->user->can('access-finance-disbursement')) || (Yii::$app->user->identity->username == 'Admin')) { ?>
     <?php //if($model->payroll == 1) { ?>
     <!--?php
@@ -561,7 +656,7 @@ Modal::end();
                 'type'=>'primary',
             ],*/    
             'panel' => [
-                'heading' => '<h3 class="panel-title">Attachments</h3>',
+                'heading' => '<i class="fas fa-files-o"></i>  Attachments',
                 'type' => GridView::TYPE_PRIMARY,
                 //'before'=> (($model->status_id == Request::STATUS_VALIDATED) || ($model->status_id == Request::STATUS_VERIFIED)) ? 
                 'before'=> (Yii::$app->user->can('access-finance-validation') || Yii::$app->user->can('access-finance-verification')) ? 
