@@ -114,7 +114,7 @@ use common\models\procurement\Division;
                             'placeholder'=>'Select Functional Unit',
                             'url'=>Url::to(['request/listprojecttype'])
                         ]
-                    ]); ?>
+                    ])->label('Project Type'); ?>
                     
                     <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
                         <?= Html::button('<i class="fas fa-info-circle"></i>', ['value' => Url::to(['/finance/project/info']), 'title' => "Select the appropriate project type where this Request is intended be charged. \nUnder Regular Fund select OTHERS if the project is not listed below.", 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonInfo']) ?>
@@ -141,7 +141,7 @@ use common\models\procurement\Division;
                         
                         <?php if(Yii::$app->user->can('access-finance-verification')) {?>
                             <span class="input-group-btn" style="padding-top: 20px; padding-left: 8px;">
-                                <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddCreditor']) ?>
+                                <?= Html::button('<i class="fa fa-truck"></i>', ['value' => Url::to(['/finance/project/create']), 'title' => 'Add Project', 'class' => 'btn btn-info', 'style'=>'margin-right: 0px;', 'id'=>'buttonAddProject']) ?>
                             </span>
 
                         <?php }?>

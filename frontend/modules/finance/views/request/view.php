@@ -16,6 +16,8 @@ use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestattachment;
 use common\models\finance\Requesttype;
+use common\models\finance\Project;
+use common\models\finance\Projecttype;
 use common\models\finance\Obligationtype;
 use common\models\procurement\Division;
 use common\models\system\Comment;
@@ -94,19 +96,44 @@ Modal::end();
                     'type'=>DetailView::INPUT_SELECT2, 
                     'widgetOptions'=>[
                         'data'=>ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
-                        'options' => ['placeholder' => 'Fund Source'],
+                        'options' => ['placeholder' => 'Fund Source', 'id'=>'fund_source_id'],
                         'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
                     ],
                 ],
-                /*$form->field($model, 'obligation_type_id')->widget(Select2::classname(), [
-                            'data' => ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
-                            'language' => 'en',
-                            //'theme' => Select2::THEME_DEFAULT,`
-                            //'options' => ['placeholder' => 'Select Request Type','readonly'=>'readonly'],
-                            'pluginOptions' => [
-                                'allowClear' => false
-                            ],
-                            ])->label('Fund Source'); */
+                [
+                    'attribute'=>'project_type_id',
+                    'label'=>'Project Type',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    'value' => $model->project_type_id ? $model->projecttype->name : '-',
+                    'type'=>DetailView::INPUT_DEPDROP, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Projecttype::find()->all(),'project_type_id','name'),
+                        'options' => ['placeholder' => 'Select Project Type', 'id'=>'project_type_id'],
+                        'pluginOptions' => [
+                            'depends'=>['fund_source_id'],
+                            'allowClear'=>true, 
+                            'width'=>'100%',
+                            'url'=>Url::to(['request/listprojecttype'])
+                        ],
+                    ],
+                ],
+                [
+                    'attribute'=>'project_id',
+                    'label'=>'Project Name',
+                    'inputContainer' => ['class'=>'col-sm-6'],
+                    //'value' => $model->fundsource->name,
+                    'type'=>DetailView::INPUT_DEPDROP, 
+                    'widgetOptions'=>[
+                        'data'=>ArrayHelper::map(Project::find()->all(),'project_id','name'),
+                        //'options' => ['placeholder' => 'Select Project Type'],
+                        'pluginOptions' => [
+                            'depends'=>['project_type_id'],
+                            'allowClear'=>true, 
+                            'width'=>'100%',
+                            'url'=>Url::to(['request/listproject'])
+                        ],
+                    ],
+                ],
                 [
                     'attribute'=>'division_id',
                     'label'=>'Division',

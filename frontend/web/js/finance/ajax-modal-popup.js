@@ -158,6 +158,16 @@ $("body").on("click","#buttonAddCreditor",function () {
     },1500);
 });
 
+$("body").on("click","#buttonAddProject",function () {
+    $('#modalCreditor').modal('show')
+        .find('#modalContent')
+        .load($(this).attr('value'));
+    $('#modalCreditorHeader').html($(this).attr('title'));
+    setTimeout(function () {
+        $("#btnrefresh").click();
+    },1500);
+});
+
 //code
 $("body").on("click","#buttonCreateOsdv",function () {
     $('#modalRequest').modal('show')
