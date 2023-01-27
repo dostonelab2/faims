@@ -125,7 +125,7 @@ Modal::end();
                     'type'=>DetailView::INPUT_DEPDROP, 
                     'widgetOptions'=>[
                         'data'=>ArrayHelper::map(Project::find()->all(),'project_id','name'),
-                        //'options' => ['placeholder' => 'Select Project Type'],
+                        'options' => ['placeholder' => 'Select Project'],
                         'pluginOptions' => [
                             'depends'=>['project_type_id'],
                             'allowClear'=>true, 
