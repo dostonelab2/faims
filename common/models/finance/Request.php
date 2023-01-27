@@ -98,7 +98,7 @@ class Request extends \yii\db\ActiveRecord
         return [
             [['request_number', 'request_date', 'division_id', 'request_type_id', 'obligation_type_id', 'payee_id', 'particulars', 'amount'], 'required'],
             [['request_date'], 'safe'],
-            [['request_type_id', 'payee_id', 'status_id', 'district_id', 'created_by'], 'integer'],
+            [['request_type_id', 'project_type_id','payee_id', 'status_id', 'district_id', 'created_by'], 'integer'],
             [['particulars'], 'string'],
             [['amount'], 'number'],
             [['request_number'], 'string', 'max' => 20],
