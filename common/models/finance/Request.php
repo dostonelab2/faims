@@ -164,7 +164,7 @@ class Request extends \yii\db\ActiveRecord
 
     public function getProjecttype()
     {
-        return $this->hasOne(getProjecttype::className(), ['project_type_id' => 'project_type_id']);
+        return $this->hasOne(Projecttype::className(), ['project_type_id' => 'project_type_id']);
     }
 
     public function getRequesttype()
