@@ -3,6 +3,7 @@
 namespace common\models\finance;
 
 use Yii;
+use common\models\budget\Budgetallocationassignment;
 use common\models\cashier\Creditor;
 use common\models\finance\Request;
 use common\models\finance\Requestdistrict;
