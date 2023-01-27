@@ -108,10 +108,11 @@ use common\models\procurement\Division;
                 <div class="input-group">
                     <?= $form->field($model, 'project_type_id')->widget(DepDrop::classname(), [
                         'type'=>DepDrop::TYPE_SELECT2,
-                        'options'=>['id'=>'project_type_id'],
+                        'options'=>['placeholder' => 'Select Project Type', 'id'=>'project_type_id'],
                         'pluginOptions'=>[
                             'depends'=>['fund_source_id'],
-                            'placeholder'=>'Select Functional Unit',
+                            // 'placeholder'=>'Select Functional Unit',
+                            'allowClear' => true,
                             'url'=>Url::to(['request/listprojecttype'])
                         ]
                     ])->label('Project Type'); ?>
@@ -131,10 +132,10 @@ use common\models\procurement\Division;
                     <div class="input-group">
                         <?= $form->field($model, 'project_id')->widget(DepDrop::classname(), [
                             'type'=>DepDrop::TYPE_SELECT2,
-                            'options'=>['id'=>'project_id'],
+                            'options'=>['placeholder' => 'Select Project', 'id'=>'project_id'],
                             'pluginOptions'=>[
                                 'depends'=>['project_type_id'],
-                                'placeholder'=>'Select Project',
+                                //'placeholder'=>'Select Project',
                                 'url'=>Url::to(['request/listproject'])
                             ]
                         ]); ?>

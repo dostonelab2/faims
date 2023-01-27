@@ -124,7 +124,7 @@ Modal::end();
                     'value' => $model->project_id ? $model->project->name : '-',
                     'type'=>DetailView::INPUT_DEPDROP, 
                     'widgetOptions'=>[
-                        'data'=>ArrayHelper::map(Project::find()->all(),'project_id','name'),
+                        'data'=>ArrayHelper::map(Project::find(0),'project_id','name'),
                         'options' => ['placeholder' => 'Select Project'],
                         'pluginOptions' => [
                             'depends'=>['project_type_id'],
