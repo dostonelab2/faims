@@ -121,7 +121,7 @@ Modal::end();
                     'attribute'=>'project_id',
                     'label'=>'Project Name',
                     'inputContainer' => ['class'=>'col-sm-6'],
-                    //'value' => $model->fundsource->name,
+                    'value' => $model->project_id ? $model->project->name : '-',
                     'type'=>DetailView::INPUT_DEPDROP, 
                     'widgetOptions'=>[
                         'data'=>ArrayHelper::map(Project::find()->all(),'project_id','name'),
