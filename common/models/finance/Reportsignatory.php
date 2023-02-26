@@ -23,6 +23,9 @@ use common\models\system\User;
  * @property User $user30
  * @property User $activeUser
  */
+
+ use common\models\procurement\Division;
+ 
 class Reportsignatory extends \yii\db\ActiveRecord
 {
     /**

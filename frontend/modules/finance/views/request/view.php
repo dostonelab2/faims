@@ -74,7 +74,6 @@ Modal::end();
                     'attribute'=>'request_number',
                     'label'=>'Request Number',
                     'inputContainer' => ['class'=>'col-sm-6'],
-                    // 'displayOnly'=>true
                 ],
                 [
                     'attribute'=>'request_type_id',
@@ -165,31 +164,17 @@ Modal::end();
                     'type'=>DetailView::INPUT_TEXTAREA, 
                     'options'=>['rows'=>4]
                 ],
-
                 [
                     'attribute'=>'amount',
                     'label'=>'Amount (P)',
                     'format'=>['decimal', 2],
                     'inputContainer' => ['class'=>'col-sm-6'],
                 ],
-                /*[
-                    'attribute'=>'status_id',
-                    'label'=>'Status',
-                    'inputContainer' => ['class'=>'col-sm-6'],
-                ],*/
                 [
                     'group'=>true,
                     'label'=>'Status',
                     'rowOptions'=>['class'=>'table-success']
                 ],
-                /*[
-                    'attribute'=>'remarks',
-                    'label'=>'Remarks',
-                    'format'=>'raw',
-                    'inputContainer' => ['class'=>'col-sm-6'],
-                    //'value' => '<span class="label label-info">'.$model->status->name.'</span>',
-                    'value' => ($model->cancelled ? '<span class="label label-danger">CANCELLED</span>' : '<span class="label label-info">'.$model->status->name.'</span>').'<br/>'.$model->remarks,
-                ],*/
                 [
                         'attribute'=>'request_id',
                         'label'=>'',
@@ -286,20 +271,21 @@ Modal::end();
             //'showPageSummary' => true,
             'panel' => [
                 'after' => '',//<div class="float-right float-end"><button type="button" class="btn btn-primary" onclick="var keys = $("#kv-grid-demo").yiiGridView("getSelectedRows").length; alert(keys > 0 ? "Downloaded " + keys + " selected books to your account." : "No rows selected for download.");"><i class="fas fa-download"></i> Download Selected</button></div><div style="padding-top: 5px;"><em>* The page summary displays SUM for first 3 amount columns and AVG for the last.</em></div><div class="clearfix"></div>',
-                'heading' => '<i class="fas fa-tasks"></i>  LIB Assignment',
+                // 'heading' => '<i class="fas fa-tasks"></i>  LIB Assignment '.Html::button('<i class="fas fa-plus" style="float: right;"></i>', ['value' => Url::to(['budgetallocationassignment/create', 'id'=>$model->request_id]), 'title' => 'Assign', 'class' => 'btn-sm btn-success', 'style'=>'float:right;', 'id'=>'buttonAssign']),
+                'heading' => '<i class="fas fa-tasks"></i> LIB Assignment '.Html::a('<i class="fas fa-plus" style="float: right;"></i>', ['/budget/budgetallocationassignment/create', 'id' => $model->request_id], ['id'=>'buttonAssign', 'onclick'=>"$('#modalCreditor').modal('show')"]),
                 'type' => 'primary',
-                'before' => '',//<div style="padding-top: 7px;"><em>* Resize table columns just like a spreadsheet by dragging the column edges.</em></div>',
+                'before' => '',//Html::button('Assign', ['value' => Url::to(['budgetallocationassignment/create', 'id' => $model->request_id]), 'title' => 'Assign', 'class' => 'btn-sm btn-info', 'style'=>'margin-right: 6px;', 'id'=>'buttonAssign']),
             ],
             // set export properties
             // set your toolbar
             'toolbar' =>  [
                 [
-                    'content' =>
-                        Html::button('<i class="fas fa-plus"></i>', [
+                    'content' => '',
+                        /*Html::button('<i class="fas fa-plus"></i>', [
                             'class' => 'btn btn-success',
                             'title' => 'Add Assignment',
                             'onclick' => 'alert("This should launch the book creation form.\n\nDisabled for this demo!");'
-                        ]) , 
+                        ]) , */
                     'options' => ['class' => 'btn-group mr-2 me-2']
                 ],
                 //'{export}',

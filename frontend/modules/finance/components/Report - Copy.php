@@ -12,7 +12,6 @@ use common\models\finance\Requestpayroll;
 use common\models\finance\Osdv;
 use common\models\procurement\Divisionhead;
 use common\models\sec\Blockchain;
-use common\models\system\Appsettings;
 
 
 class Report {
@@ -314,17 +313,8 @@ class Report {
                                <td style="width:50%;padding:5px;">Signature   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span>__________________________________</span></td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">
-                                    Printed Name : 
-                                    <span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'
-                                        .
-                                        $this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['name']
-                                        .'</b>
-                                    </span></td>
-                                <td style="width:50%;padding:5px;">
-                                    Printed Name :<span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'
-                                        .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['name'].'</b>
-                                    </span><td>
+                                <td style="border-right:1px solid black;padding:5px;">Printed Name : <span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['name'].'</b></span></td>
+                                <td style="width:50%;padding:5px;">Printed Name :<span style="text-decoration:underline;text-align:center;text-transform: uppercase;"><b>'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['name'].'</b></span><td>
                             </tr>
                             <tr>
                                 <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['position'].'</span></td>
@@ -964,9 +954,7 @@ $content .= '
     function getBlockchain($index_id, $scope, $status)
     {
         try{
-            return Blockchain::find()
-                    ->where('scope =:scope AND index_id =:index_id AND SUBSTR(`data`, -2, 2) =:status',
-                        [':scope'=>$scope, ':index_id'=>$index_id, ':status'=>$status])->one();
+            return Blockchain::find()->where('scope =:scope AND index_id =:index_id AND SUBSTR(`data`, -2, 2) =:status',[':scope'=>$scope, ':index_id'=>$index_id, ':status'=>$status])->one();
         }catch (\yii\db\Exception $exception){
             return $exception;
         }
@@ -978,9 +966,7 @@ $content .= '
         $url = "/images/user/signature/";
         
         // get Signatory for division
-        $signatory = Reportsignatory::find()
-                        ->where('division_id =:division_id AND scope =:form AND box =:box',
-                        [':division_id'=>$division_id, ':form'=>$form, ':box'=>$box])->one();
+        $signatory = Reportsignatory::find()->where('division_id =:division_id AND scope =:form AND box =:box',[':division_id'=>$division_id, ':form'=>$form, ':box'=>$box])->one();
         //var_dump($signatory);
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
@@ -992,35 +978,14 @@ $content .= '
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
             'position' => $signatory->activeUser->profile->designation,
+            //'test' => $index_id.' : '.$scope.' : '.$status,
+            //'date' => date("d-M-Y"),
+            //'details' => $index_id.' : '.$scope.' : '.$status.' | ',
+            //'details' => $details2->timestamp,
             'date' => date("d-M-Y", $details->timestamp),
-            'details' => '<div class="'.$form.'-box-'.$box.'">'
-                            .Html::img($url.$signatory->activeUser->profile->esig, 
-                            ["class"=>$form."-box-".$box."-sig"])
-                            .'<div class="'.$form.'-box-'.$box.'-sig-details">
-                                Digitally Signed by '
-                                .$signatory->activeUser->profile->getFullname()
-                                .'<br/>'.date("d-M-Y", $details->timestamp)
-                                .'<br/>'.substr($details->hash,0,64)
-                            .'</div>
-                        </div>'
-        ];
-
-        $signatureDetails2 = [
-            'name' => $details->profile->fullname,
-            'position' => $details->profile->designation,
-            'date' => date("d-M-Y", $details->timestamp),
-            'details' => '<div class="'.$form.'-box-'.$box.'">'
-                            .Html::img($url.$details->profile->esig, 
-                            ["class"=>$form."-box-".$box."-sig"])
-                            .'<div class="'.$form.'-box-'.$box.'-sig-details">
-                                Digitally Signed by '
-                                .$details->profile->getFullname()
-                                .'<br/>'.date("d-M-Y", $details->timestamp)
-                                .'<br/>'.substr($details->hash,0,64)
-                            .'</div>
-                        </div>'
+            'details' => '<div class="'.$form.'-box-'.$box.'">'.Html::img($url.$signatory->activeUser->profile->esig, ["class"=>$form."-box-".$box."-sig"]).'<div class="'.$form.'-box-'.$box.'-sig-details">Digitally Signed by '.$signatory->activeUser->profile->getFullname().'<br/>'.date("d-M-Y", $details->timestamp).'<br/>'.substr($details->hash,0,64).'</div></div>'
         ];
         
-        return $signatureDetails2;
+        return $signatureDetails;
     }
 }

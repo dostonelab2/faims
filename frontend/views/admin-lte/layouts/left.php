@@ -413,7 +413,7 @@ $request_for_approval = Request::find()
                             //['label' => 'Request', 'icon' => 'object-ungroup', 'url' => ['/finance/request/index']],
                         ]
                     ],
-                    [
+                    /*[
                         'label' => 'Employee Compensation', 
                         'icon' => 'ruble green', 
                         'url' => ['/employeecompensation/payroll/index'],
@@ -423,7 +423,7 @@ $request_for_approval = Request::find()
                             ['label' => 'Payroll Contractual', 'icon' => 'commenting', 'url' => ['/employeecompensation/payroll']],
                         ]
                     ],
-                    /*[
+                    [
                         'label' => 'Evaluation', 
                         'icon' => 'line-chart', 
                         'url' => ['/settings'],
@@ -439,6 +439,8 @@ $request_for_approval = Request::find()
                         'icon' => 'book', 
                         'visible'=> Yii::$app->user->can('access-book'),
                         'items' => [
+                            ['label' => 'App Settings', 'icon' => 'cogs text-blue', 'url' => ['/system/appsettings/index'],'visible'=> Yii::$app->user->can('access-gii')],
+                            ['label' => 'Signatories', 'icon' => 'edit text-blue', 'url' => ['/finance/reportsignatory/index'],'visible'=> Yii::$app->user->can('access-gii')],
                             ['label' => 'Suppliers', 'icon' => 'truck', 'url' => ['/procurement/supplier']],
                             ['label' => 'Items', 'icon' => 'tag', 'url' => ['/procurementplan/item']],
                             ['label' => 'Unit Type', 'icon' => 'cog', 'url' => ['/procurement/unittype']],

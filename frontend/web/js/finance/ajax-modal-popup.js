@@ -134,6 +134,10 @@ $("body").on("click","#buttonTrackProgress",function () {
     loadModal2($(this).attr('value'));
 });
 
+$("body").on("click","#buttonAssign",function () {
+    loadModal2($(this).attr('value'));
+});
+
 $("body").on("click","#buttonSkipDV",function () {
     loadModal($(this).attr('value'));
 });
@@ -167,6 +171,16 @@ $("body").on("click","#buttonAddProject",function () {
         $("#btnrefresh").click();
     },1500);
 });
+
+// $("body").on("click","#buttonAssign",function () {
+//     $('#modalCreditor').modal('show')
+//         .find('#modalContent')
+//         .load($(this).attr('value'));
+//     $('#modalCreditorHeader').html($(this).attr('title'));
+//     setTimeout(function () {
+//         $("#btnrefresh").click();
+//     },1500);
+// });
 
 //code
 $("body").on("click","#buttonCreateOsdv",function () {

@@ -163,5 +163,5 @@ class Blockchain extends \yii\db\ActiveRecord
         //if ($interval->s) { $result .= $interval->format("%s seconds "); }
 
         return $result;
-    }
+    }    
 }
