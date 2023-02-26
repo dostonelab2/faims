@@ -4,6 +4,7 @@ namespace common\models\finance;
 
 use Yii;
 use common\models\system\User;
+use common\models\finance\Officerincharge;
 
 /**
  * This is the model class for table "tbl_report_signatory".
@@ -109,5 +110,15 @@ class Reportsignatory extends \yii\db\ActiveRecord
     public function getActiveUser()
     {
         return $this->hasOne(User::className(), ['user_id' => 'active_user']);
+    }
+
+    //$division_id, $scope, $box, $date
+    static function hasOIC($division_id, $scope, $box, $date)
+    {
+        $oic = false;
+        $oic = Officerincharge::find()->where(['division_id'=>$division_id, 'scope'=>$scope, 'box'=>$box])
+                ->andWhere(':date BETWEEN `start_date` AND `end_date`', [':date'=>$date])
+                ->one();
+        return $oic ? true : false;
     }
 }

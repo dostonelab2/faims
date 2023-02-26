@@ -981,6 +981,8 @@ $content .= '
         $signatory = Reportsignatory::find()
                         ->where('division_id =:division_id AND scope =:form AND box =:box',
                         [':division_id'=>$division_id, ':form'=>$form, ':box'=>$box])->one();
+
+        
         //var_dump($signatory);
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
@@ -989,6 +991,10 @@ $content .= '
         $box = strtolower($box);
         $form = strtolower($form);
         
+        //$division_id, $scope, $box, $date
+        $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, date("Y-m-d", $details->timestamp));
+        // $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, '2023-02-23');
+
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
             'position' => $signatory->activeUser->profile->designation,
@@ -1007,7 +1013,7 @@ $content .= '
 
         $signatureDetails2 = [
             'name' => $details->profile->fullname,
-            'position' => $details->profile->designation,
+            'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'
                             .Html::img($url.$details->profile->esig, 
