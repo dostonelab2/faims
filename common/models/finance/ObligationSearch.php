@@ -75,6 +75,7 @@ class ObligationSearch extends Request
             'request_type_id' => $this->request_type_id,
             'payee_id' => $this->payee_id,
             'amount' => $this->amount,
+            'tbl_osdv.cancelled' => 0,
             'tbl_request.status_id' => $this->status_id,
             'tbl_request.created_by' => $this->created_by,
         ]);
