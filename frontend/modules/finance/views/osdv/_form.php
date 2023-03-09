@@ -114,8 +114,18 @@ use common\models\finance\Obligationtype;
     <?= $form->field($model, 'payroll')->hiddenInput()->label(false) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style'=>'text-align: center;']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 
+                                'id'=>'submitOsdv',
+                                'style'=>'text-align: center;', 
+                                ]) ?>
+            <button class="btn btn-success" type="button" disabled style="display: none;" id="spinner">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Saving. Please wait . . . 
+            </button>
+
     </div>
+
+
 
     <?php ActiveForm::end(); ?>
 
@@ -127,4 +137,11 @@ $( document ).ready(function() {
     //$('#Osdv-expenditure_class_id').select2({disabled:readonly});
     //$('.field-osdv-expenditure_class_id').hide();
 });
+
+$(".osdv-form").on("beforeSubmit",function(e){
+    e.preventDefault();
+    $("#submitOsdv").css({pointerEvents:'none'});
+    return true;
+});
+
 </script>
