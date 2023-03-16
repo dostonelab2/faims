@@ -58,6 +58,7 @@ class LddapadaController extends Controller
         $items = Lddapadaitem::find()->select('osdv_id')->asArray()->all();
         $count = Osdv::find()
             ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['=', 'cancelled', 0])
             ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
             ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
             ->count();
@@ -65,6 +66,7 @@ class LddapadaController extends Controller
         $new_items = Osdv::find()
             //->select('osdv_id')
             ->where(['not in', 'osdv_id', $items])
+            ->andWhere(['=', 'cancelled', 0])
             ->andWhere(['>=', 'status_id', Request::STATUS_APPROVED_PARTIAL])
             ->andWhere(['<=', 'status_id', Request::STATUS_APPROVED_FOR_DISBURSEMENT])
             ->all();
