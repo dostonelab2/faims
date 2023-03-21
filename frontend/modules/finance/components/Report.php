@@ -992,7 +992,12 @@ $content .= '
         $form = strtolower($form);
         
         //$division_id, $scope, $box, $date
-        $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, date("Y-m-d", $details->timestamp));
+        $hasOIC = Reportsignatory::hasOIC(
+                    $division_id, 
+                    $form, 
+                    $box, 
+                    date("Y-m-d", $details->timestamp)
+                );
         // $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, '2023-02-23');
 
         $signatureDetails = [

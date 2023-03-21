@@ -65,13 +65,30 @@ class BudgetallocationassignmentController extends Controller
     {
         $model = new Budgetallocationassignment();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'Request assigned!');
+                return $this->redirect(['/finance/request/index']);
+            }
+                
+        }elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('_form', [
+                        'model' => $model,
+            ]);
+        }
+
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->budget_allocation_assignment_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
-        }
+        }*/
     }
 
     /**
