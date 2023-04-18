@@ -472,7 +472,8 @@ class PurchaseorderController extends \yii\web\Controller
 </tr>
 <tr style="height: 12px;">  
 <td style="width: 70%; height: 20px;">&nbsp;Address : <span style="text-decoration:underline;">' . $supplier_address . '</span></td>
-<td style="width: 30%; height: 20px;font-size:11px;">Date : ' . $pdate . '</td>
+<td style="width: 30%; height: 20px;font-size:11px;">Date : ' . //$pdate . 
+'</td>
 </tr>
 <tr style="height: 12px;">
 <td style="width: 70%; height: 34px; vertical-align: top;" rowspan="3">
