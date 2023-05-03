@@ -91,7 +91,7 @@ class Os extends \yii\db\ActiveRecord
             $count = 1;
         }
         
-        return 'OS-'.$os_type.'-'.$year.'-'.$month.'-'.str_pad($count, 4, '0', STR_PAD_LEFT);
+        return 'ORS-'.$os_type.'-'.$year.'-'.$month.'-'.str_pad($count, 4, '0', STR_PAD_LEFT);
     }
     
     static function getLastOS()
