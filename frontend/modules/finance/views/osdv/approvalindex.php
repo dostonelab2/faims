@@ -75,8 +75,9 @@ Modal::end();
                                 'headerOptions' => ['style' => 'text-align: center;'],
                                 'contentOptions' => ['style' => 'text-align: center;'],
                                 'width'=>'150px',
+                                'format'=>'raw',
                                 'value'=>function ($model, $key, $index, $widget) { 
-                                    return isset($model->dv->dv_id) ? $model->dv->dv_number : '';
+                                    return isset($model->dv->dv_id) ? $model->dv->dv_number.'<br/>'.$model->dv->dv_date : '';
                                 },
                             ],
                             [
