@@ -89,9 +89,9 @@ class RequestSearch extends Request
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
                 //->andFilterWhere(['', 'payee_id', 129]);
-        }elseif((Yii::$app->user->identity->user_id == 3)){
-            $query->andFilterWhere(['in', 'division_id', $this->division_id])
-                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        //}elseif((Yii::$app->user->identity->user_id == 3)){
+        //    $query->andFilterWhere(['in', 'division_id', $this->division_id])
+        //        ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }elseif((Yii::$app->user->identity->user_id == 62)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
