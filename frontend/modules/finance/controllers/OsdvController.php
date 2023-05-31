@@ -12,6 +12,8 @@ use common\models\finance\Osdv;
 use common\models\finance\AccounttransactionSearch;
 use common\models\finance\CheckdisbursementjournalSearch;
 use common\models\finance\ObligationSearch;
+use common\models\finance\Obligationtype;
+use common\models\finance\OsallotmentSearch;
 use common\models\finance\OsdvSearch;
 use common\models\finance\OsdvapprovalSearch;
 use common\models\finance\Request;
@@ -29,6 +31,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
 
 /**
  * OsdvController implements the CRUD actions for Osdv model.
@@ -260,6 +263,53 @@ class OsdvController extends Controller
         return $this->render('_reportpayroll', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionObligationreport()
+    {
+        $searchModel = new OsallotmentSearch();
+        
+        // if(!isset($_GET['OsallotmentSearch'])){
+        if(!isset($_GET['OsallotmentSearch']['dv_date_s']) && !isset($_GET['OsallotmentSearch']['dv_date_s'])){
+            $dv_date_s = date('Y-m-d', strtotime("-1 day", strtotime(date('Y-m-01'))));
+            $dv_date_e = date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-t'))));
+        }else{
+            $dv_date_s = date('Y-m-d', strtotime("-1 day", strtotime($_GET['OsallotmentSearch']['dv_date_s'])));
+            $dv_date_e = date('Y-m-d', strtotime("+1 day", strtotime($_GET['OsallotmentSearch']['dv_date_e'])));
+        }
+        $searchModel->dv_date_s = $dv_date_s;
+        $searchModel->dv_date_e = $dv_date_e;
+        //if(isset($_GET['obligation_type_id']))
+            //$searchModel->obligation_type_id = $_GET['obligation_type_id'];  
+            
+        // $searchModel->obligation_type_id = 1; 
+        $toolbars = '';
+        $obligation_types = Obligationtype::find()->all();
+        // Blockchain::find()->where(['index_id' => $id, 'scope' => 'Request'])->all();
+
+        foreach($obligation_types as $obligation_type){
+            $toolbars .= Html::a($obligation_type->name, ['obligationreport?OsallotmentSearch[dv_date]='.$dv_date_s.' - '.$dv_date_e.'&OsallotmentSearch[obligation_type_id]='.$obligation_type->type_id], 
+                            [   
+                                'class' => 'btn btn-success',
+                                'data-pjax' => 0,
+                            ]
+                        ).' ';
+
+            /*$toolbars .= Html::a($obligation_type->name, [
+                    'obligationreport?OsallotmentSearch[dv_date]='.$dv_date_s.' - '.$dv_date_e.'&OsallotmentSearch[unit_id]='.$obligation_type->type_id], [
+                'class' => 'btn btn-outline-secondary',
+                'style' => 'color: B76E79; font-weight: bold;',
+                'data-pjax' => 0, 
+            ]);*/
+        }
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('_obligationreport', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'toolbars' => $toolbars,
         ]);
     }
     
@@ -915,7 +965,8 @@ class OsdvController extends Controller
                             $os->request_id = $model->request->request_id;
                             $os->os_number = Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s"));
                             //$os->os_date = date("Y-m-d", strtotime($model->create_date));
-                            $os->os_date = date("Y-m-d H:i:s");
+                            // $os->os_date = date("Y-m-d H:i:s");
+                            $os->os_date = "2023-06-01";
                             $os->save(false);
                         }
                         
