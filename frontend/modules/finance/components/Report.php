@@ -1030,6 +1030,9 @@ $content .= '
             'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
             // adjust margin-top and margin bottom to move esig box @ DV box A
+            // finance/request/printdv?id=7834&boxA=245&boxCD=-595
+            // 245px for Box A
+            // -595px for Box CD
             'details' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: '.$margin.'px;">'
                             .Html::img($url.$details->profile->esig, 
                             ["class"=>$form."-box-".$box."-sig"])
@@ -1040,18 +1043,6 @@ $content .= '
                                 .'<br/>'.substr($details->hash,0,64)
                             .'</div>
                         </div>',
-            // 'details2' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: -595px;">' 
-            //             // style="margin-top: 245px;" Box A
-            //             // style="margin-top: -595px;" Box B & C
-            //             .Html::img($url.$details->profile->esig, 
-            //             ["class"=>$form."-box-".$box."-sig"])
-            //             .'<div class="'.$form.'-box-'.$box.'-sig-details">
-            //                 Digitally Signed by '
-            //                 .$details->profile->getFullname()
-            //                 .'<br/>'.date("d-M-Y", $details->timestamp)
-            //                 .'<br/>'.substr($details->hash,0,64)
-            //             .'</div>
-            //         </div>',
         ];
         
         return $signatureDetails2;
