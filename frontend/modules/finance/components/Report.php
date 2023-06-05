@@ -454,13 +454,14 @@ class Report {
         
         //work for TF
         //$content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
-        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        $content .= $this->getSignatory($model->request_id, $model->division_id, 'Request', 'DV','A', $statusValidate, (isset($_GET['boxA']) ? $_GET['boxA'] :0))['details'];
         
         //Box C
-        $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        // $content .='<div>&nbps;<div/>';
+        // $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details2'];
         
         //Box D
-        $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
+        // $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details2'];
         
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
@@ -640,6 +641,13 @@ $content .= '
     </tr>
     </tbody>
 </table>';
+
+    //Box C
+    $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65, (isset($_GET['boxCD']) ? $_GET['boxCD'] :0) )['details'];
+        
+    //Box D
+    $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70, (isset($_GET['boxCD']) ? $_GET['boxCD'] :0) )['details'];
+
         return $content;
     }
     
@@ -798,7 +806,7 @@ $content .= '
 <td style="width: 25%; height: 14px;text-align:right;padding:5px; font-weight: bold;" colspan="2">'.number_format($model->amount - $model->tax,2).'</td>
 </tr>
 <tr style="height: 14px;">
-<td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cash Advance necessary, lawful and incurred under my direct supervision.</span></td>
+<td style="width: 100%; height: 0px; text-align: left;border-bottom:none;" colspan="7"><span style="vertical-align:top;"><span style="border:1px solid black;">A.</span> Certified: Expenses/Cashe Advance necessary, lawful and incurred under my direct supervision.</span></td>
 </tr>
 <tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
 <tr style="height: 20px;"><td style="border-top:none;border-bottom:none;" colspan="7">&nbsp;&nbsp;</td></tr>
@@ -806,6 +814,7 @@ $content .= '
 
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
 <span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
+            .'<p style="margin-top: 100px;"></p>'
             .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
             .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['position']
             .'</td>';
@@ -973,7 +982,7 @@ $content .= '
         
     }
     
-    function getSignatory($index_id, $division_id, $scope, $form, $box, $status)
+    function getSignatory($index_id, $division_id, $scope, $form, $box, $status, $margin = null)
     {
         $url = "/images/user/signature/";
         
@@ -1008,7 +1017,7 @@ $content .= '
                             .Html::img($url.$signatory->activeUser->profile->esig, 
                             ["class"=>$form."-box-".$box."-sig"])
                             .'<div class="'.$form.'-box-'.$box.'-sig-details">
-                                Digitally Signed by '
+                                Digitally Signed by'
                                 .$signatory->activeUser->profile->getFullname()
                                 .'<br/>'.date("d-M-Y", $details->timestamp)
                                 .'<br/>'.substr($details->hash,0,64)
@@ -1020,7 +1029,8 @@ $content .= '
             'name' => $details->profile->fullname,
             'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
-            'details' => '<div class="'.$form.'-box-'.$box.'">'
+            // adjust margin-top and margin bottom to move esig box @ DV box A
+            'details' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: '.$margin.'px;">'
                             .Html::img($url.$details->profile->esig, 
                             ["class"=>$form."-box-".$box."-sig"])
                             .'<div class="'.$form.'-box-'.$box.'-sig-details">
@@ -1029,7 +1039,19 @@ $content .= '
                                 .'<br/>'.date("d-M-Y", $details->timestamp)
                                 .'<br/>'.substr($details->hash,0,64)
                             .'</div>
-                        </div>'
+                        </div>',
+            // 'details2' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: -595px;">' 
+            //             // style="margin-top: 245px;" Box A
+            //             // style="margin-top: -595px;" Box B & C
+            //             .Html::img($url.$details->profile->esig, 
+            //             ["class"=>$form."-box-".$box."-sig"])
+            //             .'<div class="'.$form.'-box-'.$box.'-sig-details">
+            //                 Digitally Signed by '
+            //                 .$details->profile->getFullname()
+            //                 .'<br/>'.date("d-M-Y", $details->timestamp)
+            //                 .'<br/>'.substr($details->hash,0,64)
+            //             .'</div>
+            //         </div>',
         ];
         
         return $signatureDetails2;
