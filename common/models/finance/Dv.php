@@ -68,8 +68,8 @@ class Dv extends \yii\db\ActiveRecord
     {
         //OS-200-20-02-1516
         $year = date("y", strtotime($createDate));
-        // $month = date("m", strtotime($createDate));
-        $month = "06";
+        $month = date("m", strtotime($createDate));
+        // $month = "06";
         
         if($obligationTypeId == 1){
             $dv_type = Expenditureclass::findOne($expenditureClassId)->account_code;
@@ -103,8 +103,8 @@ class Dv extends \yii\db\ActiveRecord
     {
         //OS-200-20-02-1516
         $year = date("y", strtotime($createDate));
-        // $month = date("m", strtotime($createDate));
-        $month = "06";
+        $month = date("m", strtotime($createDate));
+        // $month = "06";
         
         $dv_type = Expenditureclass::findOne($expenditureClassId);
         $dv_type = $dv_type->account_code;
