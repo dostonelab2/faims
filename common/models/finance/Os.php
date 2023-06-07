@@ -78,8 +78,8 @@ class Os extends \yii\db\ActiveRecord
     {
         //OS-200-20-02-1516
         $year = date("y", strtotime($createDate));
-        // $month = date("m", strtotime($createDate));
-        $month = '06';
+        $month = date("m", strtotime($createDate));
+        // $month = '06';
 
         $os_type = Expenditureclass::findOne($expenditureClassId);
         $os_type = $os_type->account_code;
@@ -99,8 +99,8 @@ class Os extends \yii\db\ActiveRecord
     {
         //OS-200-20-02-1516
         $year = date("y");
-        // $month = date("m");
-        $month = "06";
+        $month = date("m");
+        // $month = "06";
         
         $os_type = Expenditureclass::findOne(1);
         $os_type = $os_type->account_code;
