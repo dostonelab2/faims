@@ -211,7 +211,8 @@ class RequestController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id); 
-        
+        $_obligationType = $model->obligation_type_id;
+
         $params = $this->checkAttachments($model);
         
         $request_status = $this->checkStatus($model->status_id);
@@ -243,7 +244,23 @@ class RequestController extends Controller
         ]);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
+            /* Bug #001 : Error when printing DV */
+            if($model->status_id >= 40){
+                if($_obligationType != $_POST['Request']['obligation_type_id']){
+                    $chain = Blockchain::find()
+                        ->where(['index_id' => $model->request_id, 'scope' => 'Request'])
+                        ->orderBy(['blockchain_id' => SORT_DESC])
+                        ->one();
+                    if($_POST['Request']['obligation_type_id'] == 1)
+                        $status = '40';
+                    else
+                        $status = '58';
+                    $chain->data = substr($chain->data, 0, -2).$status;
+                    $chain->save();
+                }
+            }
+            /* End */
+            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated! - ');
         }
         
         $CurrentUser= User::findOne(['user_id'=> Yii::$app->user->identity->user_id]);
@@ -1044,10 +1061,10 @@ class RequestController extends Controller
         $report->obligationrequest($id);
     }
     
-    function actionPrintdv($id)
+    function actionPrintdv($id, $boxA = null, $boxCD = null)
     {
         $report = new Report();
-        $report->disbursementvoucher($id);
+        $report->disbursementvoucher($id, $boxA, $boxCD);
     }
     
     function actionPrintdvpayroll($id)
