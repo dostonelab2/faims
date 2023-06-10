@@ -82,6 +82,31 @@ Modal::end();
                 ],
             ],
             [
+                'attribute'=>'type_id',
+                'label'=>'Fund Source',
+                'inputContainer' => ['class'=>'col-sm-6'],
+                'value' => $model->type->name,
+                'type'=>DetailView::INPUT_SELECT2, 
+                'widgetOptions'=>[
+                    'data'=>ArrayHelper::map(Obligationtype::find()->all(),'type_id','name'),
+                    'options' => ['placeholder' => 'Fund Source', 'id'=>'fund_source_id'],
+                    'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                ],
+            ],
+            [
+                'attribute'=>'expenditure_class_id',
+                'label'=>'Expenditure Class',
+                'inputContainer' => ['class'=>'col-md-12'],
+                'value' => $model->expenditure_class_id ? $model->expenditureClass->name : '-',
+                'type'=>DetailView::INPUT_SELECT2, 
+                'widgetOptions'=>[
+                    //'data'=>ArrayHelper::map(Creditor::find()->orderBy(['name'=>SORT_ASC])->all(),'creditor_id','name'),
+                    'data' => ArrayHelper::map(Expenditureclass::find()->orderBy(['expenditure_class_id'=>SORT_ASC])->all(),'expenditure_class_id','name'),
+                    'options' => ['placeholder' => 'Select Expenditure Class'],
+                    'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                ],
+            ], 
+            [
                 'attribute'=>'request_id',
                 'label'=>'Payee',
                 'inputContainer' => ['class'=>'col-sm-6'],
@@ -158,7 +183,7 @@ Modal::end();
     <?php if(!$model->cancelled){ ?>
     <div class="col-sm-4">
         <?php $attributes = [
-                [
+                /*[
                     'attribute'=>'type_id',
                     'label'=>'Fund Source',
                     'labelColOptions'=>['style'=>'width:35%; text-align: right;'],
@@ -183,7 +208,7 @@ Modal::end();
                         'options' => ['placeholder' => 'Select Expenditure Class'],
                         'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
                     ],
-                ],    
+                ],*/
                 [
                     'attribute'=>'request_id',
                     'label'=>'OS Number',
@@ -233,7 +258,7 @@ Modal::end();
                 //'formOptions' => ['action' => Url::current(['#' => 'kv-demo'])] // your action to delete
                 
                 //'buttons1' => ( (Yii::$app->user->identity->username == 'Admin') || (Yii::$app->user->can('access-finance-generateosnumber') ) ) ? '{update}' : '', //hides buttons on detail view
-                'buttons1' => '{update}',
+                'buttons1' => '',
                 'attributes' => $attributes,
                 'condensed' => true,
                 'responsive' => true,
