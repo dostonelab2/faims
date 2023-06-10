@@ -425,7 +425,8 @@ class OsdvController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        
+        $_obligationType = $model->
+        type_id;
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
@@ -459,7 +460,24 @@ class OsdvController extends Controller
             
             if($model->save()){ 
                 $model->request->amount = $_POST['Osdv']['grossamount'];
+                $model->request->obligation_type_id = $_POST['Osdv']['type_id'];
                 $model->request->save();
+
+                /* Bug #001 : Error when printing DV */
+                if($_obligationType != $_POST['Osdv']['type_id']){
+                    $chain = Blockchain::find()
+                        ->where(['index_id' => $model->request_id, 'scope' => 'Request'])
+                        ->orderBy(['blockchain_id' => SORT_DESC])
+                        ->one();
+                    if($_POST['Osdv']['type_id'] == 1)
+                        $status = '40';
+                    else
+                        $status = '58';
+                    $chain->data = substr($chain->data, 0, -2).$status;
+                    $chain->save();
+                }
+                /* End */
+
                 Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
             }
             
@@ -476,9 +494,9 @@ class OsdvController extends Controller
             ],
         ]);
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
-        }
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //    Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
+        //}
         
         return $this->render('view', [
             'model' => $model,
