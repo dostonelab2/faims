@@ -260,6 +260,13 @@ class RequestController extends Controller
                 }
             }
             /* End */
+
+            /* Update related OSDV */
+            if($model->osdv){
+                $model->osdv->type_id = $_POST['Request']['obligation_type_id'];
+                $model->osdv->save();
+            }
+
             Yii::$app->session->setFlash('kv-detail-success', 'Request Updated! - ');
         }
         
