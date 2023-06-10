@@ -222,25 +222,11 @@ class RequestController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $budgetallocationassignmentDataProvider = new ActiveDataProvider([
             'query' => $model->getBudgetallocationassignments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -267,7 +253,7 @@ class RequestController extends Controller
                 $model->osdv->save();
             }
 
-            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated! - ');
+            Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
         }
         
         $CurrentUser= User::findOne(['user_id'=> Yii::$app->user->identity->user_id]);
@@ -370,44 +356,7 @@ class RequestController extends Controller
                         'model' => $model,
             ]);
         }
-    }
-    
-    /*public function actionPayrollitems()
-    {
-        $id = $_GET['id'];
-        $model = $this->findModel($id);
-        
-        $searchModel = new CreditorSearch();
-        
-        //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
-        if($model->request_type_id == 13 || $model->request_type_id == 15){
-            $searchModel->creditor_type_id = 1;
-        }elseif($model->request_type_id == 14 || $model->request_type_id == 16){
-            $searchModel->creditor_type_id = 2;
-        }elseif($model->request_type_id == 33){
-            $searchModel->creditor_type_id = [1,2];
-        }elseif($model->request_type_id == 34){
-            $searchModel->creditor_type_id = 5;
-        }        
-        
-        $searchModel->payroll = 1;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_payrollitems', [
-                        'searchModel' => $searchModel,
-                        'dataProvider' => $dataProvider,
-                        'id' => $id,
-            ]);
-        } else {
-            return $this->render('_payrollitems', [
-                        'searchModel' => $searchModel,
-                        'dataProvider' => $dataProvider,
-                        'id' => $id,
-            ]);
-        }
-    }*/
+    }    
     
     public function actionViewattachments()
     {
@@ -442,13 +391,6 @@ class RequestController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         if (Yii::$app->request->post()) {

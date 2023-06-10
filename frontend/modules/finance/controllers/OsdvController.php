@@ -430,25 +430,11 @@ class OsdvController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $allotmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAllotments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         $payrollDataprovider = new ActiveDataProvider([
@@ -515,25 +501,11 @@ class OsdvController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $allotmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAllotments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         $payrollDataprovider = new ActiveDataProvider([
@@ -584,14 +556,14 @@ class OsdvController extends Controller
             $model->remarks = '';
             $model->payroll = $_POST['Osdv']['payroll'];
             if($model->save(false)){
-                if($model->type_id == 1){
+                // if($model->type_id == 1){
                     /*$os = new Os();
                     $os->osdv_id = $model->osdv_id;
                     $os->request_id = $model->request_id;
                     $os->os_number = Os::generateOsNumber($model->expenditure_class_id, $model->create_date);
                     $os->os_date = date("Y-m-d", strtotime($model->create_date));
                     $os->save(false);*/
-                }
+                // }
                 //$request = Request::findOne($model->request_id);
                 //$request->status_id = Request::STATUS_ALLOTTED;
                 //$request->save(false);
@@ -621,7 +593,13 @@ class OsdvController extends Controller
         
         $model->osdv_id = $id;
         //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        /* 
+        Payroll Regular(13), 
+        Payroll COntractual(14), 
+        MC Benefits(15), 
+        Hazard Contractual(16), 
+        Cash Award / Special Award(33)
+        */
         if ($model->load(Yii::$app->request->post())) {
             
             $model->creditor_id = $_POST['Requestpayroll']['creditor_id'];
@@ -653,7 +631,13 @@ class OsdvController extends Controller
         $searchModel = new CreditorSearch();
         
         //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        /* 
+        Payroll Regular(13), 
+        Payroll COntractual(14), 
+        MC Benefits(15), 
+        Hazard Contractual(16), 
+        Cash Award / Special Award(33)
+        */
         if($model->request->request_type_id == 13 || $model->request->request_type_id == 15){
             $searchModel->creditor_type_id = 5;
         }elseif($model->request->request_type_id == 14 || $model->request->request_type_id == 16){
@@ -1120,4 +1104,3 @@ class OsdvController extends Controller
         }
         echo $status;
     }
-}
