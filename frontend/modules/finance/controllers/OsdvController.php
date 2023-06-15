@@ -967,8 +967,8 @@ class OsdvController extends Controller
                             $os->request_id = $model->request->request_id;
                             $os->os_number = Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s"));
                             //$os->os_date = date("Y-m-d", strtotime($model->create_date));
-                            // $os->os_date = date("Y-m-d H:i:s");
-                            $os->os_date = "2023-06-01";
+                            $os->os_date = date("Y-m-d H:i:s");
+                            // $os->os_date = "2023-06-01";
                             $os->save(false);
                         }
                         
