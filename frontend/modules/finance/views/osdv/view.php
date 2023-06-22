@@ -218,39 +218,72 @@ Modal::end();
                     'displayOnly'=>true, //$model->os 
                     'value' =>  
                         ($model->os ? '<h4><span class="label label-success">'.$model->os->os_number.'</span></h4>' : 
-                        '<h4><span class="label label-warning">'.Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s")).'</span></h4>'.Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generateosnumber') ? Url::to(['osdv/generateosnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),     
-                                                                            'title' => 'Generate OS', 'class' => 'btn btn-md btn-success '
-                                                                            .(Yii::$app->user->can('access-finance-generateosnumber') ? '': 'disabled'),
-                                                                    'id'=>'buttonGenerateOSNumber']) ) .
+                        '<h4><span class="label label-warning">'
+                                .Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s"))
+                            .'</span></h4>'.Html::button('Generate',
+                                                ['value' => Yii::$app->user->can('access-finance-generateosnumber') ? Url::to(['osdv/generateosnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),     
+                                                'title' => 'Generate OS', 
+                                                'class' => 'btn btn-md btn-success '
+                                                    .(Yii::$app->user->can('access-finance-generateosnumber') ? '': 'disabled'),
+                                                'style'=>'margin-right: 6px; '
+                                                    .(Yii::$app->user->can('access-finance-generateosnumber') ? 
+                                                        ($model->status_id >= Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'),
+                                                'id'=>'buttonGenerateOSNumber']) ) .
                         
-                        Html::button('Obligate', ['value' => Url::to(['osdv/obligate', 'id'=>$model->osdv_id]),     
-                                                                    'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id >= Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate']) .
+                        Html::button('Obligate',
+                            ['value' => Url::to(['osdv/obligate', 'id'=>$model->osdv_id]),     
+                                                'title' => 'Allotment', 
+                                                'class' => 'btn btn-info', 
+                                                'style'=>'margin-right: 6px; '
+                                                    .(Yii::$app->user->can('access-finance-obligate') ?
+                                                        // ( ($model->status_id >= Request::STATUS_ALLOTTED) ? 'display: none;' : '')
+                                                        ( ( ($model->status_id >= Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE) && ($model->status_id < Request::STATUS_ALLOTTED)) ? '' : 'display: none;')
+                                                        : 'display: none;'),
+                                                'id'=>'buttonObligate']) .
                     
                         Html::button('Reassign', ['value' => Url::to(['osdv/reassign', 'id'=>$model->osdv_id]),     
-                                                                    'title' => 'Allotment', 'class' => 'btn btn-info', 'style'=>'margin-right: 6px; '.(( (Yii::$app->user->can('access-finance-generateosnumber')  || (Yii::$app->user->identity->username == 'Admin') ) ? '' : 'display: none;') ), 'id'=>'buttonReassign']),
+                                                'title' => 'Allotment', 
+                                                'class' => 'btn btn-info', 
+                                                'style'=>'margin-right: 6px; '
+                                                    .(( ( (Yii::$app->user->can('access-finance-generateosnumber') && ($model->status_id >= Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE) ) || (Yii::$app->user->identity->username == 'Admin') ) ?
+                                                        '' : 'display: none;') ), 
+                                                'id'=>'buttonReassign']),
                 ],
                 [
                     'attribute'=>'request_id',
                     'label'=>'DV Number',
                     'inputContainer' => ['class'=>'col-sm-2'],
                     'format' => 'raw',
+                    'visible' => (($model->status_id >= Request::STATUS_ALLOTTED) ? true : false),
                     'displayOnly'=>true, //$model->os 
                     'value' =>  
                         $model->payroll ? "" : (
                     
                         ($model->dv ? '<h4><span class="label label-success">'.$model->dv->dv_number.'</span></h4>' : 
-                        '<h4><span class="label label-warning">'.Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s")).'</span></h4>'.Html::button('Generate', ['value' => Yii::$app->user->can('access-finance-generatedvnumber') ? Url::to(['osdv/generatedvnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),
-                                                                            'title' => 'Generate DV', 'class' => 'btn btn-md btn-success '
-                                                                            .(Yii::$app->user->can('access-finance-generatedvnumber') ? '' : 'disabled'),
-                                                                    'id'=>'buttonGenerateDVNumber'])).
+                        '<h4><span class="label label-warning">'
+                                .Dv::generateDvNumber($model->request->obligation_type_id, $model->expenditure_class_id, date("Y-m-d H:i:s"))
+                            .'</span></h4>'.Html::button('Generate', 
+                                                ['value' => Yii::$app->user->can('access-finance-generatedvnumber') ? Url::to(['osdv/generatedvnumber', 'id'=>$model->osdv_id]) : Url::to(['osdv/notallowed', 'id'=>$model->osdv_id]),
+                                                'title' => 'Generate DV', 
+                                                'class' => 'btn btn-md btn-success ',
+                                                    // .(Yii::$app->user->can('access-finance-generatedvnumber') ? '' : 'disabled'),
+                                                'style'=>'margin-right: 6px; '
+                                                    .(Yii::$app->user->can('access-finance-generatedvnumber') ? 
+                                                        ($model->status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'display: none;' : '') : 'display: none;'),
+                                                'id'=>'buttonGenerateDVNumber'])).
                         
                         Html::button('Certify Funds Available', ['value' => Url::to(['osdv/certifycashavailable', 'id'=>$model->osdv_id]),     
-                                                                    'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id >= Request::STATUS_CHARGED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-certifycashavailable') ? ($model->status_id >= Request::STATUS_CHARGED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonCertifyfundsavailable'])
+                                                'title' => 'Allotment', 
+                                                'class' => 'btn btn-info ',
+                                                'style'=>'margin-right: 6px; '
+                                                    .(Yii::$app->user->can('access-finance-certifycashavailable') ?
+                                                        ( ( ($model->status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE) && ($model->status_id < Request::STATUS_CHARGED)) ? '' : 'display: none;')
+                                                        : 'display: none;'), 
+                                                'id'=>'buttonCertifyfundsavailable'])
                         ),
                 ],
-
-
             ];?>
+
         <?= DetailView::widget([
                 'model' => $model,
                 'mode'=>DetailView::MODE_VIEW,
@@ -432,7 +465,7 @@ Modal::end();
                 'panel' => [
                     'heading' => '<h3 class="panel-title">OBLIGATION</h3>',
                     'type' => GridView::TYPE_INFO,
-                    'before'=>Html::button('Add', ['value' => Url::to(['osallotment/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
+                    'before'=>Html::button('Add Allotment', ['value' => Url::to(['osallotment/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
                                                                 'title' => 'Allotment', 'class' => 'btn btn-success '.($model->status_id == Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligation') ? ($model->status_id == Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonAddAllotment']) /*. 
                               Html::button('Obligate', ['value' => Url::to(['osdv/obligate', 'id'=>$model->osdv_id]),     
                                                                 'title' => 'Allotment', 'class' => 'btn btn-info '.($model->status_id == Request::STATUS_ALLOTTED ? 'disabled' : ''), 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-obligate') ? ($model->status_id == Request::STATUS_ALLOTTED ? 'display: none;' : '') : 'display: none;'), 'id'=>'buttonObligate'])*/,
@@ -1110,8 +1143,20 @@ Modal::end();
                 'panel' => [
                     'heading' => '<h3 class="panel-title">DISBURSEMENT</h3>',
                     'type' => GridView::TYPE_WARNING,
-                    'before'=>Html::button('Add', ['value' => Url::to(['accounttransaction/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
-                                                                'title' => 'Account Transactions', 'class' => 'btn btn-success'.($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 'style'=>'margin-right: 6px;'.(Yii::$app->user->can('access-finance-disbursement') ? '' : 'display: none;'), 'id'=>'buttonAddAccounttransaction']),
+                    // 'before'=>Html::button('Add', ['value' => Url::to(['accounttransaction/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
+                    //                                             'title' => 'Account Transactions', 'class' => 'btn btn-success'.($model->status_id == Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 'style'=>'margin-right: 6px;'.(Yii::$app->user->can('access-finance-disbursement') ? '' : 'display: none;'), 'id'=>'buttonAddAccounttransaction']),
+                    'before'=>Html::button('Add Disbursement', 
+                        ['value' => Url::to(['accounttransaction/additems', 'id'=>$model->osdv_id, 'year'=>$year]),     
+                                'title' => 'Account Transactions', 
+                                'class' => 'btn btn-success', 
+                                // 'class' => 'btn btn-success '.($model->status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE ? 'disabled' : ''), 
+                                // 'style'=>'margin-right: 6px; '.(Yii::$app->user->can('access-finance-disbursement') ? '' : 'display: none;'), 
+                                'style'=>'margin-right: 6px; '
+                                    .(Yii::$app->user->can('access-finance-disbursement') ? '' : 'display: none;')
+                                    .( ($model->type_id == 1) ? (($model->status_id >= Request::STATUS_ALLOTTED) ? '' : 'display: none;') : '')
+                                    .( ($model->type_id != 1) ? (($model->status_id >= Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE) ? '' : 'display: none;') : ''), 
+                                'id'=>'buttonAddAccounttransaction']),
+                    //STATUS_ALLOTTED            
                     'after'=>false,
                 ],
                 // set right toolbar buttons
