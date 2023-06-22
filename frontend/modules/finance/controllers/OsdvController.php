@@ -548,11 +548,20 @@ class OsdvController extends Controller
         if(Yii::$app->user->can('access-finance-disbursement'))
             $requests = ArrayHelper::map(Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->all(),'request_id','request_number');
         
+        if( (Yii::$app->user->identity->username == 'Admin') )
+            $requests = ArrayHelper::map(
+                Request::find()
+                    ->where(['status_id' => Request::STATUS_VALIDATED])
+                    ->andWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+                    ->andWhere(['cancelled' => 0])
+                    ->all(),'request_id','request_number');
+        
         date_default_timezone_set('Asia/Manila');
         $model->create_date = date("Y-m-d H:i:s");
         if ($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->identity->user_id;
-            $model->status_id = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
+            // $model->status_id = ($model->type_id == 1) ? Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE : Request::STATUS_FOR_DISBURSEMENT;
+            $model->status_id = ($model->type_id == 1) ? Request::STATUS_FOR_ALLOTMENT : Request::STATUS_FOR_DISBURSEMENT;
             $model->remarks = '';
             $model->payroll = $_POST['Osdv']['payroll'];
             if($model->save(false)){
@@ -1104,3 +1113,4 @@ class OsdvController extends Controller
         }
         echo $status;
     }
+}
