@@ -16,8 +16,7 @@
         $price = $pr["bids_price"];
         $units = $pr["bids_unit"];
         $totalcost =  $quantity * $price;
-        $append = "
-        <tr>";
+        $append = "<tr>";
         $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>".$x.".</td>";
         $append = $append . "<td width='10%' style='vertical-align: top;padding-left:25px;text-align:center;'>".$units."</td>";
         $append = $append . "<td autosize='0' width='40%' style='vertical-align: top;padding:20px;padding-top:0px;font-size:11px;word-wrap: break-word;'>" . $itemdescription . "</td>";
