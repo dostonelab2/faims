@@ -50,8 +50,9 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_SUBMITTED = 20; // end user
     const STATUS_VERIFIED = 30;  // finance verification team
     const STATUS_VALIDATED = 40;  // Head of the Requesting Unit (ARD)
+    const STATUS_FOR_ALLOTMENT = 45;  // Head of the Requesting Unit (ARD)
     const STATUS_CERTIFIED_ALLOTMENT_AVAILABLE = 50; // Head of Budget Unit (Budget Officer)
-    const STATUS_ALLOTTED = 55; // finance processing team / budgetting staff
+    const STATUS_ALLOTTED = 55; // finance processing team / budgetting staff //Obligated
     const STATUS_FOR_DISBURSEMENT = 58; // finance processing team / budgetting staff
     const STATUS_CERTIFIED_FUNDS_AVAILABLE = 60; // Head of the Accounting Unit (Accountant)
     const STATUS_CHARGED = 65; // finance processing team / accounting staff

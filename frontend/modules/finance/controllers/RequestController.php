@@ -211,7 +211,8 @@ class RequestController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id); 
-        
+        $_obligationType = $model->obligation_type_id;
+
         $params = $this->checkAttachments($model);
         
         $request_status = $this->checkStatus($model->status_id);
@@ -221,28 +222,37 @@ class RequestController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $budgetallocationassignmentDataProvider = new ActiveDataProvider([
             'query' => $model->getBudgetallocationassignments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            /* Bug #001 : Error when printing DV */
+            if($model->status_id >= 40){
+                if($_obligationType != $_POST['Request']['obligation_type_id']){
+                    $chain = Blockchain::find()
+                        ->where(['index_id' => $model->request_id, 'scope' => 'Request'])
+                        ->orderBy(['blockchain_id' => SORT_DESC])
+                        ->one();
+                    if($_POST['Request']['obligation_type_id'] == 1)
+                        $status = '40';
+                    else
+                        $status = '58';
+                    $chain->data = substr($chain->data, 0, -2).$status;
+                    $chain->save();
+                }
+            }
+            /* End */
+
+            /* Update related OSDV */
+            if($model->osdv){
+                $model->osdv->type_id = $_POST['Request']['obligation_type_id'];
+                $model->osdv->save();
+            }
+
             Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
         }
         
@@ -346,44 +356,7 @@ class RequestController extends Controller
                         'model' => $model,
             ]);
         }
-    }
-    
-    /*public function actionPayrollitems()
-    {
-        $id = $_GET['id'];
-        $model = $this->findModel($id);
-        
-        $searchModel = new CreditorSearch();
-        
-        //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
-        if($model->request_type_id == 13 || $model->request_type_id == 15){
-            $searchModel->creditor_type_id = 1;
-        }elseif($model->request_type_id == 14 || $model->request_type_id == 16){
-            $searchModel->creditor_type_id = 2;
-        }elseif($model->request_type_id == 33){
-            $searchModel->creditor_type_id = [1,2];
-        }elseif($model->request_type_id == 34){
-            $searchModel->creditor_type_id = 5;
-        }        
-        
-        $searchModel->payroll = 1;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_payrollitems', [
-                        'searchModel' => $searchModel,
-                        'dataProvider' => $dataProvider,
-                        'id' => $id,
-            ]);
-        } else {
-            return $this->render('_payrollitems', [
-                        'searchModel' => $searchModel,
-                        'dataProvider' => $dataProvider,
-                        'id' => $id,
-            ]);
-        }
-    }*/
+    }    
     
     public function actionViewattachments()
     {
@@ -418,13 +391,6 @@ class RequestController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         if (Yii::$app->request->post()) {
@@ -1044,10 +1010,10 @@ class RequestController extends Controller
         $report->obligationrequest($id);
     }
     
-    function actionPrintdv($id)
+    function actionPrintdv($id, $boxA = null, $boxCD = null)
     {
         $report = new Report();
-        $report->disbursementvoucher($id);
+        $report->disbursementvoucher($id, $boxA, $boxCD);
     }
     
     function actionPrintdvpayroll($id)

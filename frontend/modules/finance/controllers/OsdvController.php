@@ -425,29 +425,16 @@ class OsdvController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        
+        $_obligationType = $model->
+        type_id;
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $allotmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAllotments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         $payrollDataprovider = new ActiveDataProvider([
@@ -459,7 +446,24 @@ class OsdvController extends Controller
             
             if($model->save()){ 
                 $model->request->amount = $_POST['Osdv']['grossamount'];
+                $model->request->obligation_type_id = $_POST['Osdv']['type_id'];
                 $model->request->save();
+
+                /* Bug #001 : Error when printing DV */
+                if($_obligationType != $_POST['Osdv']['type_id']){
+                    $chain = Blockchain::find()
+                        ->where(['index_id' => $model->request_id, 'scope' => 'Request'])
+                        ->orderBy(['blockchain_id' => SORT_DESC])
+                        ->one();
+                    if($_POST['Osdv']['type_id'] == 1)
+                        $status = '40';
+                    else
+                        $status = '58';
+                    $chain->data = substr($chain->data, 0, -2).$status;
+                    $chain->save();
+                }
+                /* End */
+
                 Yii::$app->session->setFlash('kv-detail-success', 'Request Updated!');
             }
             
@@ -476,9 +480,9 @@ class OsdvController extends Controller
             ],
         ]);
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
-        }
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //    Yii::$app->session->setFlash('kv-detail-success', 'Obligation Updated!');
+        //}
         
         return $this->render('view', [
             'model' => $model,
@@ -497,25 +501,11 @@ class OsdvController extends Controller
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
 
         $allotmentsDataProvider = new ActiveDataProvider([
             'query' => $model->getAllotments(),
             'pagination' => false,
-            /*'sort' => [
-                'defaultOrder' => [
-                    'availability' => SORT_ASC,
-                    'item_category_id' => SORT_ASC,
-                    //'title' => SORT_ASC, 
-                ]
-            ],*/
         ]);
         
         $payrollDataprovider = new ActiveDataProvider([
@@ -558,22 +548,31 @@ class OsdvController extends Controller
         if(Yii::$app->user->can('access-finance-disbursement'))
             $requests = ArrayHelper::map(Request::find()->where('status_id =:status_id AND cancelled = 0',[':status_id'=>Request::STATUS_FOR_DISBURSEMENT])->all(),'request_id','request_number');
         
+        if( (Yii::$app->user->identity->username == 'Admin') )
+            $requests = ArrayHelper::map(
+                Request::find()
+                    ->where(['status_id' => Request::STATUS_VALIDATED])
+                    ->andWhere(['status_id' => Request::STATUS_FOR_DISBURSEMENT])
+                    ->andWhere(['cancelled' => 0])
+                    ->all(),'request_id','request_number');
+        
         date_default_timezone_set('Asia/Manila');
         $model->create_date = date("Y-m-d H:i:s");
         if ($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->identity->user_id;
-            $model->status_id = Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE;
+            // $model->status_id = ($model->type_id == 1) ? Request::STATUS_CERTIFIED_ALLOTMENT_AVAILABLE : Request::STATUS_FOR_DISBURSEMENT;
+            $model->status_id = ($model->type_id == 1) ? Request::STATUS_FOR_ALLOTMENT : Request::STATUS_FOR_DISBURSEMENT;
             $model->remarks = '';
             $model->payroll = $_POST['Osdv']['payroll'];
             if($model->save(false)){
-                if($model->type_id == 1){
+                // if($model->type_id == 1){
                     /*$os = new Os();
                     $os->osdv_id = $model->osdv_id;
                     $os->request_id = $model->request_id;
                     $os->os_number = Os::generateOsNumber($model->expenditure_class_id, $model->create_date);
                     $os->os_date = date("Y-m-d", strtotime($model->create_date));
                     $os->save(false);*/
-                }
+                // }
                 //$request = Request::findOne($model->request_id);
                 //$request->status_id = Request::STATUS_ALLOTTED;
                 //$request->save(false);
@@ -603,7 +602,13 @@ class OsdvController extends Controller
         
         $model->osdv_id = $id;
         //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        /* 
+        Payroll Regular(13), 
+        Payroll COntractual(14), 
+        MC Benefits(15), 
+        Hazard Contractual(16), 
+        Cash Award / Special Award(33)
+        */
         if ($model->load(Yii::$app->request->post())) {
             
             $model->creditor_id = $_POST['Requestpayroll']['creditor_id'];
@@ -635,7 +640,13 @@ class OsdvController extends Controller
         $searchModel = new CreditorSearch();
         
         //creditor_type_id
-        //Payroll Regular(13), Payroll COntractual(14), MC Benefits(15), Hazard Contractual(16), Cash Award / Special Award(33)
+        /* 
+        Payroll Regular(13), 
+        Payroll COntractual(14), 
+        MC Benefits(15), 
+        Hazard Contractual(16), 
+        Cash Award / Special Award(33)
+        */
         if($model->request->request_type_id == 13 || $model->request->request_type_id == 15){
             $searchModel->creditor_type_id = 5;
         }elseif($model->request->request_type_id == 14 || $model->request->request_type_id == 16){
@@ -965,8 +976,8 @@ class OsdvController extends Controller
                             $os->request_id = $model->request->request_id;
                             $os->os_number = Os::generateOsNumber($model->expenditure_class_id, date("Y-m-d H:i:s"));
                             //$os->os_date = date("Y-m-d", strtotime($model->create_date));
-                            // $os->os_date = date("Y-m-d H:i:s");
-                            $os->os_date = "2023-06-01";
+                            $os->os_date = date("Y-m-d H:i:s");
+                            // $os->os_date = "2023-06-01";
                             $os->save(false);
                         }
                         
