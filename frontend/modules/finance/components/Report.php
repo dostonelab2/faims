@@ -328,11 +328,16 @@ class Report {
                             </tr>
                             <tr>
                                 <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['position'].'</span></td>
-                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['position'].'</span></td>
+                                <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
+                                    .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['position']
+                                    .'</span></td>
                             </tr>
                             <tr>
                                <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date'].'</span></td>
-                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['date'].'</span></td>
+                               <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
+                                    // .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['date']
+                                    .$model->osdv->os->os_date
+                                    .'</span></td>
                             </tr>
                             <tr>
                                 <td style="with:50%;background:black;"></td>
@@ -1011,7 +1016,7 @@ $content .= '
 
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
-            'position' => $signatory->activeUser->profile->designation,
+            'position' => $signatory->activeUser->profile->designation."hahahhaha",
             'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'
                             .Html::img($url.$signatory->activeUser->profile->esig, 
