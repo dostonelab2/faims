@@ -273,11 +273,11 @@ $ss='<table width="100%">
 <td style="width: 10.8075%; height: 20px; font-size: 11px;">P.O. No. :</td>
 <td style="width: 19.2701%; height: 20px; font-size: 11px;" class="underline">'.$ponum.'</td>
 <td style="width: 7.14033%; height: 20px; font-size: 11px;">Date :</td>
-<td style="width: 16.8723%; height: 20px; font-size: 11px;" class="underline">'.$pdate.'</td>
+<td style="width: 16.8723%; height: 20px; font-size: 11px;" class="underline"></td>
 <td style="width: 10.5254%; height: 20px; font-size: 11px;">Invoice No. :</td>
 <td style="width: 14.4746%; height: 20px; font-size: 11px;" class="underline"></td>
 <td style="width: 5.44782%; height: 20px; font-size: 11px;">Date :</td>
-<td style="width: 15.4619%; height: 20px; font-size: 11px;" class="underline">'.$pdate.'</td>
+<td style="width: 15.4619%; height: 20px; font-size: 11px;" class="underline"></td>
 </tr>
 
 

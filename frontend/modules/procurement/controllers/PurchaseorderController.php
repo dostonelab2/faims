@@ -424,143 +424,153 @@ class PurchaseorderController extends \yii\web\Controller
         $pdf->marginTop = 96;
         //$pdf->marginHeader = 40;
         $pdf->marginBottom = 100;
-        $headers = '
-        <table width="100%">
-        <tbody>
-        <tr style="height: 43.6667px;">
-        <td style="width: 82.4103%; height: 43.6667px;">
-        <p>&nbsp;</p>
-        </td>
-        <td style="width: 12.5897%; height: 43.6667px;">
-        <table border="1" width="100%" style="border-collapse: collapse;">
-        <tbody>
-        <tr>
-        <td>
-        <p><h6 style-P><strong>FASS-PUR F08</strong>&nbsp; Rev. 1/12-24-07</h6></p>
-        </td>
-        </tr>
-        </tbody>
-        </table>
-        </td>
-        </tr>
-        </tbody>
-        </table>
-        
-        <table width="100%" style="border-collapse: collapse;" border="1">
-        <tbody>
-        <tr>
-        <td style="text-align: center;border-bottom:none;">Republic of the Philippines</td>
-        </tr>
-        <tr>        
-        <td style="text-align: center;border-bottom:none;border-top:none;"><strong>DEPARTMENT OF SCIENCE AND TECHNOLOGY</strong></td>
-        </tr>
-        <tr>
-        <td style="text-align: center;border-bottom:none;border-top:none;">Regional Office No. IX</td>
-        </tr>
-        <tr>
-        <td style="text-align: center;border-bottom:none;border-top:none;">Pettit Barracks, Zamboanga City</td></tr>
-        <tr>
-        <td style="text-align: center;font-family:Arial;font-size:15px;border-top:none;"><b>PURCHASE ORDER</b></td>
-        </tr>
-        </tbody>                                                                                                                                                                                                                                                                                                                                                             
-        </table>
-<table style="width: 100%; border-collapse: collapse;" border="1">
-<tbody>
-<tr style="height: 12px;">
-<td style="width: 70%; height: 20px;">&nbsp;Supplier : <span style="text-decoration:underline;">' . $supplier . '</span></td>
-<td style="width: 30%; height: 20px;font-size:11px;">P.O No. : <span style="text-decoration:underline;">' . $ponum . '</span></td>
-</tr>
-<tr style="height: 12px;">  
-<td style="width: 70%; height: 20px;">&nbsp;Address : <span style="text-decoration:underline;">' . $supplier_address . '</span></td>
-<td style="width: 30%; height: 20px;font-size:11px;">Date : ' . //$pdate . 
-'</td>
-</tr>
-<tr style="height: 12px;">
-<td style="width: 70%; height: 34px; vertical-align: top;" rowspan="3">
-<h5>Gentlemen:</h5>
-<p>Please furnish this office the following articles subject to the terms and conditions contained them</p>
-</td>
-<td style="width: 30%; height: 12px;font-size:11px;">Mode of Proc. : ' . $model->mode_of_procurement . '</td>
-</tr>
-<tr style="height: 10px;">
-<td style="width: 30%; height: 10px;font-size:11px;">P.R. No. : <span style="text-decoration:underline;">' . $prno . '</span></td>
-</tr>
-<tr style="height: 12px;">
-<td style="width: 30%; height: 12px;font-size:11px;">P.R Date : <span style="text-decoration:underline;">' . $prdate . '</span> </td>
-</tr>
-<tr style="height: 12px;">
-<td style="width: 70%; height: 15px;">Place of Delivery : ' . $model->place_of_delivery . '</td>
-<td style="width: 30%; height: 15px;font-size:11px;">Delivery Term : ' . $model->delivery_term . '</td>
-</tr>
-<tr style="height: 12px;">
-<td style="width: 70%; height: 15px;">Date of Delivery : ' . $model->date_of_delivery . '</td>
-<td style="width: 30%; height: 15px;font-size:11px;">Payment Term : ' . $model->payment_term . '</td>
-</tr>
-</tbody>
-</table>
 
-<table style="width: 100%; border-collapse: collapse;" border="1">
-<tbody>
-<tr>
-<td style="width: 10%; height: 5px; text-align: center;">Stock No.</td>
-<td style="width: 10%; height: 5px; text-align: center;">Unit</td>
-<td style="width: 40%; height: 5px; text-align: center;">Description</td>
-<td style="width: 13%; height: 5px; text-align: center;">Quantity</td>
-<td style="width: 13%; height: 5px; text-align: center;">Unit Cost</td>
-<td style="width: 13%; height: 5px; text-align: center;">Amount</td>
-</tr>
-<tr>
-<td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
-<td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
-<td style="width: 40%; height: 400px; text-align: center;">&nbsp;</td>
-<td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
-<td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
-<td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
-</tr>
-</tbody>
-<tfoot>
-    <tr>
-        <td style="width: 87%; text-align: left;border:none;border:1px solid black;background:white;" colspan="5">' . strtoupper((fmod($summary, 1) !== 0.00) ?  Yii::$app->formatter->asSpellout(floor($summary)) . " AND " . substr(number_format($summary, 2), strlen(number_format($summary, 2)) - 2, strlen(number_format($summary, 2))) . "/100" : Yii::$app->formatter->asSpellout($summary)) . " PESOS ONLY" . '</td>
-        <td style="width: 13%; text-align: center;border:1px solid black;">' . number_format($summary, 2) . '</td>        
-    </tr>
-    </tfoot>
-</table>
-<table  style="width: 100%; border-collapse: collapse;" border="1"> 
-<tr>
-<td style="border-bottom:none;width: 100%; text-align: left;padding:15px;padding-top:0px;" colspan="6">&nbsp;In case of failure to make the full delivery within the time specified above, 
-a penalty of one-tenth (1/10) of one percent for every day of delay shall be imposed.
-</td>
-</tr>
-<tr>
-<td style=" text-align: left;border-top:none;border-bottom:none;border-right:none;padding:20px;" colspan="4">&nbsp;Conforme:</td>
-<td style=" text-align: left;border-top:none;border-bottom:none;border-left:none;" colspan="2">&nbsp;Very truly yours,</td>
-</tr>
-<tr>
-<td style="border-top:none;padding:3px;border-bottom:none;border-right:none;text-align: center;padding-left: 0px;font-size:11px;" colspan="2">&nbsp;<span style="text-align:center;padding-left:0px;">_____________________________</span><br>Signature over printed name</td>
-<td style="border-top:none;padding:5px;border-bottom:none;border-right:none;border-left:none; text-align: left;" colspan="2">&nbsp;<span style="text-decoration:underline;text-align:center;">____________</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date</td>
-<td style="border-top:none;padding:5px;border-bottom:none;border-left:none; text-align: center;" colspan="2">&nbsp;<span style="text-decoration:underline;text-align:center;"><b>' . $assig2 . '</b></span><br>' . $Assig2Position . '</td>
-</tr>
-<tr>
-<td st yle="border-top:none;padding:5px;border-top:none;border-bottom:none;border-right:none; text-align: center;padding-left: 30px;" colspan="2">Supplier Code: <b>' . $supplier_code . '</b></td>
-<td style="border-top:none;padding:5px;border-top:none;border-bottom:none;border-right:none;border-left:none; text-align: left;" colspan="2">&nbsp;</td>
-<td style="border-top:none;padding:5px;border-top:none;border-bottom:none;border-left:none; text-align: center;" colspan="2">&nbsp;</td>
-</tr>
-<tr>
-<td style=" text-align: left;padding:0px;border-bottom:none;" colspan="4">&nbsp;Funds Available:</td>
-<td style=" text-align: left;padding:20px;border-bottom:none;" colspan="2">&nbsp;O.S. No.&nbsp; __________________</td>
-</tr>
-<tr>
-<td style=" text-align: center;padding:0px;border-top:none;" colspan="4"><span style="text-decoration:underline;text-align:center;"><b>' . $assig1 . '</b></span><br>' . $Assig1Position . '</td>
-<td style=" text-align: left;padding:20px;border-top:none;" colspan="2">&nbsp;Amount&nbsp; __________________</td>
-</tr>
-</table>
-';
+$headers = '<table width="100%">
+            <tbody>
+            <tr style="height: 43.6667px;">
+            <td style="width: 82.4103%; height: 43.6667px;">
+            <p>&nbsp;</p>
+            </td>
+            <td style="width: 12.5897%; height: 43.6667px;">
+            <table border="1" width="100%" style="border-collapse: collapse;">
+            <tbody>
+            <tr>
+            <td>
+            <p><h6 style-P><strong>FASS-PUR F08</strong>&nbsp; Rev. 2/07-01-23</h6></p>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+
+            <table width="100%" style="border-collapse: collapse;" border="0">
+            <tbody>
+            <tr>
+            <td style="text-align: center;font-family:Arial;font-size:15px;border-top:none;"><b>PURCHASE ORDER</b></td>
+            </tr>
+            <tr>
+            <td style="text-align: center;font-family:Arial;font-size:15px;border-top:none;"><br></td>
+            </tr>
+            <tr>        
+            <td style="text-align: center;border-bottom:none;border-top:none;"><strong><u>DEPARTMENT OF SCIENCE AND TECHNOLOGY</u></strong></td>
+            </tr>
+            <tr>
+            <td style="text-align: center;border-bottom:none;border-top:none;">Entity Name</td>
+            </tr>
+            </tbody>                                                                                                                                                                                                                                                                                                                                                             
+            </table>
+            <table style="width: 100%; border-collapse: collapse;" border="1">
+            <tbody>
+            <tr style="height: 12px;">
+            <td style="width: 60%; height: 20px;border-bottom:none;">&nbsp;Supplier : <span style="text-decoration:underline;">' . $supplier . '</span></td>
+            <td style="width: 40%; height: 20px;border-bottom:none;">P.O No. : <span style="text-decoration:underline;">' . $ponum . '</span></td>
+            </tr>
+            <tr style="height: 12px;">  
+            <td style="width: 60%; height: 20px;border-bottom:none;border-top:none;">&nbsp;Address : <span style="text-decoration:underline;">' . $supplier_address . '</span></td>
+            <td style="width: 40%; height: 20px;border-bottom:none;border-top:none">Date : <span style="text-decoration:underline;">' . //$pdate . 
+            '</span></td>
+            </tr>
+            <tr style="height: 12px;">  
+            <td style="width: 60%; height: 20px;border-top:none;">&nbsp;TIN : <span style="text-decoration:underline;"></span></td>
+            <td style="width: 40%; height: 20px;border-top:none;">Mode of Procurement : <span style="text-decoration:underline;">' . //$pdate . 
+            '</span></td>
+            </tr>
+            <tr>
+            <td colspan="6">
+            <b>Gentlemen:</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please furnish this office the following articles subject to the terms and conditions contained them
+            </td>
+            </tr>
+            <tr style="height: 12px;">
+            <td style="width: 50%; height: 15px;border-bottom:none;">Place of Delivery : <span style="text-decoration:underline;">' . $model->place_of_delivery . '</span></td>
+            <td style="width: 50%; height: 15px;border-bottom:none;">Delivery Term : <span style="text-decoration:underline;">' . $model->delivery_term . '</span></td>
+            </tr>
+            <tr style="height: 12px;">
+            <td style="width: 50%; height: 15px;border-top:none;">Date of Delivery : <span style="text-decoration:underline;">' . $model->date_of_delivery . '</span></td>
+            <td style="width: 50%; height: 15px;border-top:none;">Payment Term : <span style="text-decoration:underline;">' . $model->payment_term . '</span></td>
+            </tr>
+            </tbody>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse;" border="1">
+            <tbody>
+            <tr>
+            <td style="width: 10%; height: 5px; text-align: center;">Stock No.</td>
+            <td style="width: 10%; height: 5px; text-align: center;">Unit</td>
+            <td style="width: 40%; height: 5px; text-align: center;">Description</td>
+            <td style="width: 13%; height: 5px; text-align: center;">Quantity</td>
+            <td style="width: 13%; height: 5px; text-align: center;">Unit Cost</td>
+            <td style="width: 13%; height: 5px; text-align: center;">Amount</td>
+            </tr>
+            <tr>
+            <td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 40%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+            <td style="text-align: left;border-right:none;" colspan="4">' . strtoupper((fmod($summary, 1) !== 0.00) ?  Yii::$app->formatter->asSpellout(floor($summary)) . " AND " . substr(number_format($summary, 2), strlen(number_format($summary, 2)) - 2, strlen(number_format($summary, 2))) . "/100" : Yii::$app->formatter->asSpellout($summary)) . " PESOS ONLY" . '</td>
+            <td style="border-left:none;text-align: right;" colspan="2">' . number_format($summary, 2) . '</td>
+            </tr>
+            </tfoot>
+            </table>
+            <table  style="width: 100%; border-collapse: collapse;" border="1"> 
+            <tr>
+            <td style="border-bottom:none;width: 100%; text-align: left;padding:15px;padding-top:0px;" colspan="6">&nbsp;In case of failure to make the full delivery within the time specified above, 
+            a penalty of one-tenth (1/10) of one percent for every day of delay shall be imposed.
+            </td>
+            </tr>
+            <tr>
+            <td style=" text-align: left;border-top:none;border-bottom:none;border-right:none;padding:20px;" colspan="4">&nbsp;Conforme:</td>
+            <td style=" text-align: left;border-top:none;border-bottom:none;border-left:none;" colspan="2">&nbsp;Very truly yours,</td>
+            </tr>
+            <tr>
+            <td style="border-top:none;padding:3px;border-bottom:none;border-right:none;text-align: center;padding-left: 0px;" colspan="4">&nbsp;<span style="text-align:center;padding-left:0px;">_____________________________</span><br>Signature over printed name</td>
+
+            <td style="border-top:none;padding:5px;border-bottom:none;border-left:none; text-align: center;" colspan="2">&nbsp;<span style="text-decoration:underline;text-align:center;"><b>' . $assig2 . '</b></span><br>Signature over Printed Name of Authorized Official</td>
+
+            </tr>
+
+            <tr>
+            <td style="border-top:none;padding:3px;border-bottom:none;border-right:none;text-align: center;padding-left: 0px;" colspan="4">&nbsp;<span style="text-align:center;padding-left:0px;">_____________________________</span><br>Date</td>
+
+            <td style="border-top:none;padding:5px;border-bottom:none;border-left:none; text-align: center;" colspan="2">&nbsp;<span style="text-decoration:underline;text-align:center;"><b>' . $Assig2Position . '</b></span><br>Designation</td>
+
+            </tr>
+
+
+            <tr>
+            <td style=" text-align: left;padding:0px;border-bottom:none;" colspan="3">&nbsp;Funds Cluster: ___________________</td>
+            <td style=" text-align: left;padding:5px;border-bottom:none;" colspan="3">&nbsp;ORS/BURS No. :&nbsp; __________________</td>
+            </tr>
+            <tr>
+            <tr>
+            <td style=" text-align: left;padding:0px;border-top:none;border-bottom:none;" colspan="3">&nbsp;Funds Available: ________________</td>
+            <td style=" text-align: left;padding:5px;border-top:none;border-bottom:none" colspan="3">&nbsp;Date of the ORS/BURS:&nbsp; ___________</td>
+            </tr>
+            <tr>
+            <td style=" text-align: center;padding:0px;border-bottom:none;border-top:none;" colspan="3"></td>
+            <td style=" text-align: left;padding:5px;border-top:none;border-bottom:none;" colspan="3">&nbsp;Amount:&nbsp; __________________</td>
+            </tr>
+            <tr>
+            <td style=" text-align: center;padding:0px;border-top:none;" colspan="3"><span style="text-decoration:underline;text-align:center;"><b>' . $assig1 . '</b></span><br><span style="font-size:11px;">Signature over Printed Name of Chief Accountant/Head of Accounting Division/Unit</span></td>
+            <td style=" text-align: center;padding:0px;border-top:none;" colspan="3"></td>
+
+            </tr>
+
+            </table>';
 
 
         $footerss = '                      
         <table style="width:100%;">
         <tr>
-            <td style="text-align: left;width:50%;">' . date("F j, Y") . '</td>
             <td style="text-align: right;width:50%;">Page {PAGENO} of {nbpg}</td>
         </tr>              
         </table>';
