@@ -495,7 +495,7 @@ $headers = '<table width="100%">
             </tbody>
             </table>
 
-            <table style="width: 100%; border-collapse: collapse;" border="1">
+            <table style="width: 100%; border-collapse: collapse;" border="1";>
             <tbody>
             <tr>
             <td style="width: 10%; height: 5px; text-align: center;">Stock No.</td>
