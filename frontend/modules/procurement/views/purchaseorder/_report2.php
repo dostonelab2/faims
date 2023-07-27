@@ -34,7 +34,7 @@
             $itemdescription2  = substr($input,$space);
 
             $append = "<tr>";
-            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $len .".</td>";
+            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $x .".</td>";
             $append = $append . "<td width='10%' style='vertical-align: top;padding-left:25px;text-align:center;'>".$units."</td>";
             $append = $append . "<td autosize='0' width='40%' style='vertical-align: top;padding:20px;padding-top:0px;font-size:12px;word-wrap: break-word;'>" . $itemdescription1 . "</td>";
             $append = $append . "<td width='13%' style='vertical-align: top;font-size:12px;padding-left:75px;text-align:left;'>" . $quantity . "</td>";
@@ -69,7 +69,7 @@
             $itemdescription2  = substr($input,$space);
 
             $append = "<tr>";
-            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $len .".</td>";
+            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $x .".</td>";
             $append = $append . "<td width='10%' style='vertical-align: top;padding-left:25px;text-align:center;'>".$units."</td>";
             $append = $append . "<td autosize='0' width='40%' style='vertical-align: top;padding:20px;padding-top:0px;font-size:12px;word-wrap: break-word;'>" . $itemdescription1 . "</td>";
             $append = $append . "<td width='13%' style='vertical-align: top;font-size:12px;padding-left:75px;text-align:left;'>" . $quantity . "</td>";
@@ -104,7 +104,7 @@
             $itemdescription2  = substr($input,$space);
 
             $append = "<tr>";
-            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $len .".</td>";
+            $append = $append . "<td width='10%' style='vertical-align: top;padding-left:px;text-align:center;'>". $x .".</td>";
             $append = $append . "<td width='10%' style='vertical-align: top;padding-left:25px;text-align:center;'>".$units."</td>";
             $append = $append . "<td autosize='0' width='40%' style='vertical-align: top;padding:20px;padding-top:0px;font-size:12px;word-wrap: break-word;'>" . $itemdescription1 . "</td>";
             $append = $append . "<td width='13%' style='vertical-align: top;font-size:12px;padding-left:75px;text-align:left;'>" . $quantity . "</td>";
