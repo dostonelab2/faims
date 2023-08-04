@@ -346,13 +346,13 @@ class PurchaserequestController extends Controller
                 </tr>
                 <tr>
                     <td colspan="2" style="border-top:none;border-bottom:none; border-right:none;">Printed Name:</td>
-                    <td style="border-top:none;border-bottom:none; border-left:none; border-right:none;">______________________________</td>
-                    <td colspan="3" style="border-top:none;border-bottom:none; border-left:none;">______________________________</td>
+                    <td style="border-top:none;border-bottom:none; border-left:none; border-right:none;"><u><b>'.$pr['requested_by'].'</b></u></td>
+                    <td colspan="3" style="border-top:none;border-bottom:none; border-left:none;"><u><b>'.$pr['approved_by'].'</b></u></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="border-top:none; border-right:none;">Designation:</td>
-                    <td style="border-top:none; border-left:none; border-right:none;">______________________________</td>
-                    <td colspan="3" style="border-top:none; border-left:none;">______________________________</td>
+                    <td style="border-top:none; border-left:none; border-right:none;"><u>'.$pr['requested_by_position'].'</u></td>
+                    <td colspan="3" style="border-top:none; border-left:none;"><u>'.$pr['approved_by_position'].'</u></td>
                 </tr>   
         </table>';
         //         $LeftFooterContent = '
