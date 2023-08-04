@@ -421,9 +421,10 @@ class PurchaseorderController extends \yii\web\Controller
             $Assig2Position =  $sg["Assig2Position"];
         }
 
+
         $pdf->marginTop = 82;
         //$pdf->marginHeader = 40;
-        $pdf->marginBottom = 100;
+        $pdf->marginBottom = 120;
 
 $headers = '<table width="100%">
             <tbody>
@@ -462,7 +463,7 @@ $headers = '<table width="100%">
             </tr>
             </tbody>                                                                                                                                                                                                                                                                                                                                                             
             </table>
-            <table style="width: 100%; border-collapse: collapse;" border="1">
+            <table style="width: 100%; border-collapse: collapse; font-size:11px" border="1">
             <tbody>
             <tr style="height: 12px;">
             <td style="width: 60%; height: 20px;border-bottom:none;">&nbsp;Supplier : <span style="text-decoration:underline;">' . $supplier . '</span></td>
@@ -485,12 +486,12 @@ $headers = '<table width="100%">
             </td>
             </tr>
             <tr style="height: 12px;">
-            <td style="width: 50%; height: 15px;border-bottom:none;">Place of Delivery : <span style="text-decoration:underline;">' . $model->place_of_delivery . '</span></td>
-            <td style="width: 50%; height: 15px;border-bottom:none;">Delivery Term : <span style="text-decoration:underline;">' . $model->delivery_term . '</span></td>
+            <td style="width: 40%; height: 15px;border-bottom:none;">Place of Delivery : <span style="text-decoration:underline;">' . $model->place_of_delivery . '</span></td>
+            <td style="width: 60%; height: 15px;border-bottom:none;">Delivery Term : <span style="text-decoration:underline;">' . $model->delivery_term . '</span></td>
             </tr>
             <tr style="height: 12px;">
-            <td style="width: 50%; height: 15px;border-top:none;">Date of Delivery : <span style="text-decoration:underline;">' . $model->date_of_delivery . '</span></td>
-            <td style="width: 50%; height: 15px;border-top:none;">Payment Term : <span style="text-decoration:underline;">' . $model->payment_term . '</span></td>
+            <td style="width: 40%; height: 15px;border-top:none;">Date of Delivery : <span style="text-decoration:underline;">' . $model->date_of_delivery . '</span></td>
+            <td style="width: 60%; height: 15px;border-top:none;">Payment Term : <span style="text-decoration:underline;">' . $model->payment_term . '</span></td>
             </tr>
             </tbody>
             </table>
@@ -506,18 +507,18 @@ $headers = '<table width="100%">
             <td style="width: 13%; height: 5px; text-align: center;">Amount</td>
             </tr>
             <tr>
-            <td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
-            <td style="width: 10%; height: 400px; text-align: center;">&nbsp;</td>
-            <td style="width: 40%; height: 400px; text-align: center;">&nbsp;</td>
-            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
-            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
-            <td style="width: 13%; height: 400px; text-align: center;">&nbsp;</td>
+            <td style="width: 10%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
+            <td style="width: 10%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
+            <td style="width: 40%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
+            <td style="width: 13%; height: 400px; text-align: center; font-size:12px">&nbsp;</td>
             </tr>
             </tbody>
             <tfoot>
             <tr>
-            <td style="text-align: left;border-right:none;" colspan="4">' . strtoupper((fmod($summary, 1) !== 0.00) ?  Yii::$app->formatter->asSpellout(floor($summary)) . " AND " . substr(number_format($summary, 2), strlen(number_format($summary, 2)) - 2, strlen(number_format($summary, 2))) . "/100" : Yii::$app->formatter->asSpellout($summary)) . " PESOS ONLY" . '</td>
-            <td style="border-left:none;text-align: right;" colspan="2">' . number_format($summary, 2) . '</td>
+            <td style="text-align: left;border-right:none; font-size:11px;" colspan="4">' . strtoupper((fmod($summary, 1) !== 0.00) ?  Yii::$app->formatter->asSpellout(floor($summary)) . " AND " . substr(number_format($summary, 2), strlen(number_format($summary, 2)) - 2, strlen(number_format($summary, 2))) . "/100" : Yii::$app->formatter->asSpellout($summary)) . " PESOS ONLY" . '</td>
+            <td style="border-left:none;text-align: right; font-size:11px;" colspan="2">' . number_format($summary, 2) . '</td>
             </tr>
             </tfoot>
             </table>
@@ -578,7 +579,7 @@ $headers = '<table width="100%">
             'title' => 'Report Title',
             'defaultheaderline' => 0,
             'defaultfooterline' => 0,
-            'shrink_tables_to_fit' => 1,
+            'shrink_tables_to_fit' => 0,
             'subject' => 'Report Subject'
         ];
         $pdf->methods = [
