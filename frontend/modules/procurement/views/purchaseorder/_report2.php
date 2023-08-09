@@ -143,6 +143,7 @@
         // $append = $append . "<td width='13%' style='font-size:12px;vertical-align: top;padding-left:25px;text-align:center;padding-right:10px;'>" . number_format($totalcost,2) . "</td>";
         // $append = $append . "</tr>";
         // $fin = $fin . $append;
+
     }
 
 
