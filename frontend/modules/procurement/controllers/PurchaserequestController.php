@@ -380,6 +380,12 @@ class PurchaserequestController extends Controller
         //                                 </tr>
         //                                 </tbody>    
         //                                 </table>';
+        $footerss = '                      
+        <table style="width:100%;">
+        <tr>
+            <td style="text-align: right;width:50%;">Page {PAGENO} of {nbpg}</td>
+        </tr>              
+        </table>';
 
         $pdf->options = [
             'title' => 'Report Title',
@@ -389,7 +395,8 @@ class PurchaserequestController extends Controller
         ];
         $pdf->methods = [
             'SetHeader' => [$headers],
-            //'SetFooter' => [$LeftFooterContent],
+            'SetFooter' => [$footerss],
+            // 'SetFooter' => [$LeftFooterContent],
         ];
 
         return $pdf->render();
