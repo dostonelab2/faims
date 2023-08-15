@@ -46,7 +46,6 @@ class Section extends \yii\db\ActiveRecord
             [['division_id', 'code', 'name'], 'required'],
             [['division_id'], 'integer'],
             [['code'], 'string', 'max' => 20],
-            [['responsibility_center_code'], 'string', 'max' => 100],
             [['name'], 'string', 'max' => 200],
         ];
     }
@@ -60,7 +59,6 @@ class Section extends \yii\db\ActiveRecord
             'section_id' => 'Section ID',
             'division_id' => 'Division ID',
             'code' => 'Code',
-            'responsibility_center_code' => 'Responsibility Center Code',
             'name' => 'Name',
         ];
     }

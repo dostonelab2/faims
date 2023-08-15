@@ -62,10 +62,7 @@
     },
     "config": {
         "process-timeout": 1800,
-        "discard-changes": true,
-        "allow-plugins": {
-            "yiisoft/yii2-composer": true
-        }
+        "discard-changes": true
     },
     "repositories": [
        {
