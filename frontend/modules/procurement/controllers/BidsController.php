@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\modules\procurement\controllers;
+
 use common\models\procurement\Bids;
 use common\models\procurement\Bidsdetails;
 use common\models\procurement\BidsdetailSearch;
@@ -12,6 +13,7 @@ use common\models\procurement\Assignatory;
 use common\models\procurement\Purchaserequestdetails;
 use common\models\procurement\Purchaserequestsearchdetails;
 use common\models\procurement\Supplier;
+use common\models\procurement\Rfq;
 use kartik\grid\EditableColumnAction;
 use yii\data\SqlDataProvider;
 use yii\data\ArrayDataProvider;
@@ -48,12 +50,12 @@ class BidsController extends Controller
                     $value = $model->$attribute;
                     // your attribute value
                     $mystatus = $model->purchase_request_details_status;
-                    if ($mystatus==2) {
+                    if ($mystatus == 2) {
                         if ($attribute === 'purchase_request_details_bid_price') {           // selective validation by attribute
                             return $fmt->asDecimal('0.00', 2);       // return formatted value if desired
                         }
                         return '';
-                    }else{
+                    } else {
                         $model->purchase_request_details_status = 1;
                         $model->save();
                         if ($attribute === 'purchase_request_details_bid_price') {           // selective validation by attribute
@@ -61,7 +63,7 @@ class BidsController extends Controller
                         }
                         return '';
                     }
-                                              // empty is same as $value
+                    // empty is same as $value
                 },
                 'outputMessage' => function ($model, $attribute, $key, $index) {
                     return ''; // any custom error after model save
@@ -87,27 +89,25 @@ class BidsController extends Controller
             ],
 
 
-              'editDescription' => [                                       // identifier for your editable action
-            'class' => EditableColumnAction::className(),     // action class name
-            'modelClass' => Bidsdetails::className(),                // the update model class
-            'outputValue' => function ($model, $attribute, $key, $index) {
-                $fmt = Yii::$app->formatter;
-                $value = $model->$attribute;
-                // your attribute value
+            'editDescription' => [                                       // identifier for your editable action
+                'class' => EditableColumnAction::className(),     // action class name
+                'modelClass' => Bidsdetails::className(),                // the update model class
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                    $fmt = Yii::$app->formatter;
+                    $value = $model->$attribute;
+                    // your attribute value
 
-                //$model->save();
-                if ($attribute === 'bids_item_description') {           // selective validation by attribute
-                    return $fmt->asText($value);       // return formatted value if desired
-                }
-                return '';
-                // empty is same as $value
-            },
-            'outputMessage' => function ($model, $attribute, $key, $index) {
-                return ''; // any custom error after model save
-            },
-            ]
-
-            ,
+                    //$model->save();
+                    if ($attribute === 'bids_item_description') {           // selective validation by attribute
+                        return $fmt->asText($value);       // return formatted value if desired
+                    }
+                    return '';
+                    // empty is same as $value
+                },
+                'outputMessage' => function ($model, $attribute, $key, $index) {
+                    return ''; // any custom error after model save
+                },
+            ],
 
 
             'editPrice2' => [                                       // identifier for your editable action
@@ -116,12 +116,12 @@ class BidsController extends Controller
                 'outputValue' => function ($model, $attribute, $key, $index) {
                     $fmt = Yii::$app->formatter;
                     $value = $model->$attribute;
-                        //$model->purchase_request_details_status = 1;
-                        $model->save();
-                        if ($attribute === 'bids_price') {           // selective validation by attribute
-                            return $fmt->asDecimal($value, 2);       // return formatted value if desired
-                        }
-                        return '';
+                    //$model->purchase_request_details_status = 1;
+                    $model->save();
+                    if ($attribute === 'bids_price') {           // selective validation by attribute
+                        return $fmt->asDecimal($value, 2);       // return formatted value if desired
+                    }
+                    return '';
                     // empty is same as $value
                 },
                 'outputMessage' => function ($model, $attribute, $key, $index) {
@@ -132,7 +132,6 @@ class BidsController extends Controller
 
 
         ]);
-
     }
 
 
@@ -180,10 +179,9 @@ class BidsController extends Controller
                     $data[] = [$bids->bids_id, $unit, $itemdescription, $quantity, $price, $requestID, $prdetailID];
                 }
             }
-            $updateStatus = "UPDATE tbl_purchase_request_details SET purchase_request_details_status=0 , purchase_request_details_bid_price=0 WHERE `purchase_request_id`=" . $pID ." AND purchase_request_details_status<>2";
+            $updateStatus = "UPDATE tbl_purchase_request_details SET purchase_request_details_status=0 , purchase_request_details_bid_price=0 WHERE `purchase_request_id`=" . $pID . " AND purchase_request_details_status<>2";
             $procCon->createCommand($updateStatus)->query();
-            $procCon->createCommand()->batchInsert
-            ('tbl_bids_details', ['bids_id', 'bids_unit', 'bids_item_description', 'bids_quantity', 'bids_price', 'purchase_request_id', 'purchase_request_details_id'], $data)
+            $procCon->createCommand()->batchInsert('tbl_bids_details', ['bids_id', 'bids_unit', 'bids_item_description', 'bids_quantity', 'bids_price', 'purchase_request_id', 'purchase_request_details_id'], $data)
                 ->execute();
             $transaction->commit();
         } catch (\Exception $e) {
@@ -193,8 +191,6 @@ class BidsController extends Controller
             $transaction->rollBack();
             throw $e;
         }
-
-
     }
 
     public function GeneratePONumber()
@@ -224,7 +220,7 @@ class BidsController extends Controller
         $arr = json_decode($data_table, true);
         $pOrder = new PurchaseOrder();
         $s = 0;
-        $mstat="";
+        $mstat = "";
         $PoID = $this->GeneratePONumber();
         $data = $arr2;
         $sizess = count($data) - 1;
@@ -247,42 +243,42 @@ class BidsController extends Controller
                     foreach ($stats as $stt) {
                         $mstat = $stt["ifexist"];
                     }
-                    if ($mstat==0) {
-                        $procCon->createCommand()->insert
-                        ('tbl_purchase_order_details', ['purchase_order_id' => $pOrder->purchase_order_id, 'bids_details_id' => $mdata])
+                    if ($mstat == 0) {
+                        $procCon->createCommand()->insert('tbl_purchase_order_details', ['purchase_order_id' => $pOrder->purchase_order_id, 'bids_details_id' => $mdata])
                             ->execute();
                     }
                 }
                 Bidsdetails::updateAll(['bids_details_status' => 1], 'bids_details_id = ' . $mdata);
-                    $s++;
+                $s++;
             } while ($s <= $sizess);
             $transaction->commit();
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            } catch (\Throwable $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
         return $mstat;
     }
-    
-    public function actionCancelpo(){
-        if(Yii::$app->request->isPost){
+
+    public function actionCancelpo()
+    {
+        if (Yii::$app->request->isPost) {
             $po_num = $_POST['po_num'];
             $con = Yii::$app->procurementdb;
             $purchase_order = Purchaseorder::find()->where(['purchase_order_number' => $po_num])->one();
             $purchase_order->purchase_order_status = 2;
-    
+
             $po_details = Purchaseorderdetails::find()->where(['purchase_order_id' => $purchase_order->purchase_order_id])->all();
             $sql_update_bids_detail_string = '';
             $sql_update_pr_deatail_string = '';
-            foreach ($po_details as $po_detail){
+            foreach ($po_details as $po_detail) {
                 $bids_detail = Bidsdetails::find()->where(['bids_details_id' => $po_detail->bids_details_id])->one();
                 $sql_update_bids_detail = 'UPDATE tbl_bids_details SET bids_details_status = 0 WHERE purchase_request_details_id  = ' . $bids_detail->purchase_request_details_id . ';';
                 $sql_update_bids_detail_string .= $sql_update_bids_detail;
-    
-                $sql_update_pr_deatail ='UPDATE tbl_purchase_request_details SET purchase_request_details_status = 0 WHERE purchase_request_details_id = ' . $bids_detail->purchase_request_details_id . ';';
+
+                $sql_update_pr_deatail = 'UPDATE tbl_purchase_request_details SET purchase_request_details_status = 0 WHERE purchase_request_details_id = ' . $bids_detail->purchase_request_details_id . ';';
                 $sql_update_pr_deatail_string .= $sql_update_pr_deatail;
             }
             $purchase_order->save(false);
@@ -291,11 +287,11 @@ class BidsController extends Controller
             $response['id'] = $po_num;
             $response['success'] = true;
             $response['message'] = 'PO Canceled...';
-            
-    
+
+
             return json_encode($response);
-        }else{
-           throw new yii\web\ForbiddenHttpException('You are not allowed to perform this action...');
+        } else {
+            throw new yii\web\ForbiddenHttpException('You are not allowed to perform this action...');
         }
     }
 
@@ -362,8 +358,7 @@ class BidsController extends Controller
         foreach ($CheckIfExist as $Exist) {
             $x = $Exist["ifExist"];
         }
-        return $sql ;
-
+        return $sql;
     }
 
     public function actionCheckbidstatus($purchase_id)
@@ -385,24 +380,32 @@ class BidsController extends Controller
         $pid = $request->get('pid');
         $pStatus = $request->get('bid_status');
 
-        if ($pStatus==1) {
-            Bidsdetails::updateAll( 
+        if ($pStatus == 1) {
+            Bidsdetails::updateAll(
                 [
-                'bids_details_status'=> '0' , 
-                ],'bids_id = ' . $bid);
+                    'bids_details_status' => '0',
+                ],
+                'bids_id = ' . $bid
+            );
             Purchaserequestdetails::updateAll(
                 [
-                'purchase_request_details_status'=> '0' , 
-                ],'purchase_request_id = ' . $pid);; 
-        }else{
-            Bidsdetails::updateAll( 
+                    'purchase_request_details_status' => '0',
+                ],
+                'purchase_request_id = ' . $pid
+            );;
+        } else {
+            Bidsdetails::updateAll(
                 [
-                'bids_details_status'=> '0' , 
-                ],'bids_id = ' . $bid);
+                    'bids_details_status' => '0',
+                ],
+                'bids_id = ' . $bid
+            );
             Purchaserequestdetails::updateAll(
                 [
-                'purchase_request_details_status'=> '0' , 
-                ],'purchase_request_id = ' . $pid);
+                    'purchase_request_details_status' => '0',
+                ],
+                'purchase_request_id = ' . $pid
+            );
 
             /* 
             foreach (Bids::find()->where('bids_id='.$bid)->all() as $user) {
@@ -426,9 +429,8 @@ class BidsController extends Controller
 
         return $this->renderAjax('_bids', [
             'model' => $model, 'prdetails' => $prdetails, 'biddetails' => $biddetails, 'searchModel' => $searchModel, 'dataProvider' => $dataProvider,
-            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider , 'supp' => $m
+            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider, 'supp' => $m
         ]);
-
     }
 
 
@@ -440,7 +442,7 @@ class BidsController extends Controller
         $pid = $request->get('pid');
         $pStatus = $request->get('bid_status');
 
-        foreach (Bidsdetails::find()->where('bids_details_id='.$id)->all() as $user) {
+        foreach (Bidsdetails::find()->where('bids_details_id=' . $id)->all() as $user) {
             $user->delete();
         }
 
@@ -457,36 +459,35 @@ class BidsController extends Controller
 
         return $this->renderAjax('_bids', [
             'model' => $model, 'prdetails' => $prdetails, 'biddetails' => $biddetails, 'searchModel' => $searchModel, 'dataProvider' => $dataProvider,
-            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider , 'supp' => $m
+            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider, 'supp' => $m
         ]);
+    }
 
-    } 
-    
     public function actionReport()
-{
-    $request = Yii::$app->request;
-    $id = $request->post('id');
-    $supplier = $request->post('cbosupplier');
-    $address = $request->post('txtaddress');
-    $sub = $request->post('txtsubmission');
-    $employee = $request->post('cboemployees');
-    $employee = explode("|",$employee);
-    $sub = date("F j, Y", strtotime($sub) );
-    $model = $this->findModel($id);
-    $prdetails = $this->getprDetails($model->purchase_request_id);
-    $content = $this->renderPartial('_report', ['prdetails' => $prdetails, 'model' => $model]);
-    $assig =$this->findAssignatory(3);
-    $pdf = new Pdf();
-    $pdf->format = pdf::FORMAT_A4;
-    $pdf->orientation = Pdf::ORIENT_PORTRAIT;
-    $pdf->destination = $pdf::DEST_BROWSER;
-    //$sub = date('F j, Y',$sub);
-    $pdf->content = $content;
-    $pdf->cssFile = '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
-    $pdf->cssInline = '.kv-heading-1{font-size:18px}.nospace-border{border:0px;}.no-padding{ padding:0px;}.print-container{font-size:11px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;} h1 {border-bottom: 2px solid blackfont-weight:normal;margin-bottom:5px;width: 140px;}';
-    $pdf->marginTop = 157;
-    $pdf->marginBottom = 50;
-    $headers = '
+    {
+        $request = Yii::$app->request;
+        $id = $request->post('id');
+        $supplier = $request->post('cbosupplier');
+        $address = $request->post('txtaddress');
+        $sub = $request->post('txtsubmission');
+        $employee = $request->post('cboemployees');
+        $employee = explode("|", $employee);
+        $sub = date("F j, Y", strtotime($sub));
+        $model = $this->findModel($id);
+        $prdetails = $this->getprDetails($model->purchase_request_id);
+        $content = $this->renderPartial('_report', ['prdetails' => $prdetails, 'model' => $model]);
+        $assig = $this->findAssignatory(3);
+        $pdf = new Pdf();
+        $pdf->format = pdf::FORMAT_A4;
+        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
+        $pdf->destination = $pdf::DEST_BROWSER;
+        //$sub = date('F j, Y',$sub);
+        $pdf->content = $content;
+        $pdf->cssFile = '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+        $pdf->cssInline = '.kv-heading-1{font-size:18px}.nospace-border{border:0px;}.no-padding{ padding:0px;}.print-container{font-size:11px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;} h1 {border-bottom: 2px solid blackfont-weight:normal;margin-bottom:5px;width: 140px;}';
+        $pdf->marginTop = 157;
+        $pdf->marginBottom = 50;
+        $headers = '
     <table width="100%">
 <tbody>
 <tr style="height: 43.6667px;">
@@ -514,13 +515,13 @@ class BidsController extends Controller
 <td style="text-align: center;">Republic of the Philippines</td>
 </tr>
 <tr>        
-<td style="text-align: center;"><strong>'.$assig->CompanyTitle.'</strong></td>
+<td style="text-align: center;"><strong>' . $assig->CompanyTitle . '</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">'.$assig->RegionOffice.'</td>
+<td style="text-align: center;">' . $assig->RegionOffice . '</td>
 </tr>
 <tr>
-<td style="text-align: center;">'.$assig->Address.'</td>
+<td style="text-align: center;">' . $assig->Address . '</td>
 </tr>
 <tr>
 <td style="text-align: center;">&nbsp;</td>
@@ -533,35 +534,35 @@ class BidsController extends Controller
 <tr style="height: 12px;">
 <td style="height: 12px; width: 50%;font-size:11px;">Standard Form Number&nbsp;: SF-GOOD-60</td>
 <td style="height: 12px; width: 50%;font-size:11px;">Project Ref.No.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ';
-if($model->purchase_request_referrence_no=='') {
-    $headers=$headers.'_______________________________________';
-}else{
-    $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_referrence_no.'</span>';
-}
+        if ($model->purchase_request_referrence_no == '') {
+            $headers = $headers . '_______________________________________';
+        } else {
+            $headers = $headers . '<span style="text-decoration:underline;">' . $model->purchase_request_referrence_no . '</span>';
+        }
 
-$headers=$headers.'</td>
+        $headers = $headers . '</td>
 </tr>
 <tr style="height: 12.6364px;">
 <td style="height: 12.6364px; width: 50%;font-size:11px;">Revised on&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: May 24, 2004&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
 <td style="height: 12.6364px;font-size:11px;">Name of the Project&nbsp; &nbsp; &nbsp; &nbsp;: ';
-if($model->purchase_request_project_name=='') {
-    $headers=$headers.'_______________________________________';
-}else{
-    $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_project_name.'</span>';
-}
+        if ($model->purchase_request_project_name == '') {
+            $headers = $headers . '_______________________________________';
+        } else {
+            $headers = $headers . '<span style="text-decoration:underline;">' . $model->purchase_request_project_name . '</span>';
+        }
 
-$headers=$headers.'</td>
+        $headers = $headers . '</td>
 </tr>
 <tr style="height: 12px;">
 <td style="width: 50%; height: 12px;font-size:11px;">Standard Form Title&nbsp; &nbsp; &nbsp; &nbsp;: <span style="text-decoration: underline;">REQUEST FOR QUOTATION</span></td>
 <td style="height: 12px;font-size:11px;">Location of the Project&nbsp; &nbsp;: ';
-if($model->purchase_request_location_project=='') {
-    $headers=$headers.'_______________________________________';
-}else{
-    $headers=$headers.'<span style="text-decoration:underline;">'.$model->purchase_request_location_project.'</span>';
-}
+        if ($model->purchase_request_location_project == '') {
+            $headers = $headers . '_______________________________________';
+        } else {
+            $headers = $headers . '<span style="text-decoration:underline;">' . $model->purchase_request_location_project . '</span>';
+        }
 
-$headers=$headers.'</td>
+        $headers = $headers . '</td>
 </tr>
 <tr style="height: 12px;">
 <td style="height: 12px;">&nbsp;</td>
@@ -570,13 +571,13 @@ $headers=$headers.'</td>
 <tr style="height: 12px;">
 <td style="height: 12px;font-size:11px;">';
 
-if($supplier=='') {
-    $headers=$headers.'_______________________________________';
-}else{
-     $headers=$headers.'<span style="text-decoration:underline;">'.strtoupper($supplier).'</span>';
-}
+        if ($supplier == '') {
+            $headers = $headers . '_______________________________________';
+        } else {
+            $headers = $headers . '<span style="text-decoration:underline;">' . strtoupper($supplier) . '</span>';
+        }
 
-$headers=$headers.'</td>
+        $headers = $headers . '</td>
 
 
 <td style="height: 12px;">&nbsp;</td>
@@ -584,19 +585,19 @@ $headers=$headers.'</td>
 <tr style="height: 12px;">
 <td style="height: 12px;font-size:11px;">';
 
-if($address=='') {
-    $headers=$headers.'_______________________________________';
-}else{
-    $headers=$headers.'<span style="text-decoration:underline;">'.$address.'</span>';
-}
+        if ($address == '') {
+            $headers = $headers . '_______________________________________';
+        } else {
+            $headers = $headers . '<span style="text-decoration:underline;">' . $address . '</span>';
+        }
 
-$headers=$headers.'</td>
+        $headers = $headers . '</td>
 
 <td style="height: 12px;">&nbsp;</td>
 </tr>
 <tr style="height: 12px;">
 <td style="height: 12px;font-size:11px;" colspan="2"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please quote  your  lowest   price  on  the   item/s  listed   below,  subject  to  the   General   Conditions   on   the  last page,  stating  the   shortest   time  of   delivery
-  and   submit   your  quotation  duly   signed  by  your  representative   not   later than <span style="text-decoration:underline;">'.$sub.'</span> in an envelope.</p></td>
+  and   submit   your  quotation  duly   signed  by  your  representative   not   later than <span style="text-decoration:underline;">' . $sub . '</span> in an envelope.</p></td>
 </tr>
 </tbody>
 </table>
@@ -683,38 +684,39 @@ $headers=$headers.'</td>
     ';
 
 
-    $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $model->purchase_request_number . '</div><div style="text-align: left;font-size:11px;font-weight: lighter"><span style="font-size:11px;">'.date("F j, Y").'</span></div>';
-    $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
-    $oddEvenConfiguration =
-        [
-            'L' => [ // L for Left part of the header
-                'content' => $LeftFooterContent,
-            ],
-            'C' => [ // C for Center part of the header
-                'content' => '',
-            ],
-            'R' => [
-                'content' => $RightFooterContent,
-            ],
-            'line' => 0, // That's the relevant parameter
+        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $model->purchase_request_number . '</div><div style="text-align: left;font-size:11px;font-weight: lighter"><span style="font-size:11px;">' . date("F j, Y") . '</span></div>';
+        $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
+        $oddEvenConfiguration =
+            [
+                'L' => [ // L for Left part of the header
+                    'content' => $LeftFooterContent,
+                ],
+                'C' => [ // C for Center part of the header
+                    'content' => '',
+                ],
+                'R' => [
+                    'content' => $RightFooterContent,
+                ],
+                'line' => 0, // That's the relevant parameter
+            ];
+        $headerFooterConfiguration = [
+            'odd' => $oddEvenConfiguration,
+            'even' => $oddEvenConfiguration
         ];
-    $headerFooterConfiguration = [
-        'odd' => $oddEvenConfiguration,
-        'even' => $oddEvenConfiguration
-    ];
-    $pdf->options = [
-        'title' => 'Report Title',
-        'defaultheaderline' => 0,
-        'defaultfooterline' => 0,
-        'subject' => 'Report Subject'];
+        $pdf->options = [
+            'title' => 'Report Title',
+            'defaultheaderline' => 0,
+            'defaultfooterline' => 0,
+            'subject' => 'Report Subject'
+        ];
 
-    $pdf->methods = [
-        'SetHeader' => [$headers],
-        'SetFooter' => [$headerFooterConfiguration],
-    ];
+        $pdf->methods = [
+            'SetHeader' => [$headers],
+            'SetFooter' => [$headerFooterConfiguration],
+        ];
 
-    return $pdf->render();
-}
+        return $pdf->render();
+    }
 
 
     public function actionReportabstract()
@@ -729,26 +731,40 @@ $headers=$headers.'</td>
             $columns = $con->getTableSchema('tmpheader')->getColumnNames();
         }
         $assig = $this->getassig();
-        $content = $this->renderPartial('_report_abstract', ['prdetails' => $prdetails, 'model' => $model , 'columns' => $columns]);
+        $content = $this->renderPartial('_report_abstract', ['prdetails' => $prdetails, 'model' => $model, 'columns' => $columns]);
         $pdf = new Pdf();
-        $pdf->format = [216,330];
+        $pdf->format = [216, 330];
         $pdf->orientation = Pdf::ORIENT_LANDSCAPE;
         //$pdf->format = Pdf::FORMAT_LEGAL;
         $pdf->destination = Pdf::DEST_BROWSER;
-        $pdf->marginLeft=10;
-        $pdf->marginHeader=5;
-        $pdf->marginTop=55;
-        $pdf->marginBottom=65;
-        $pdf->defaultFontSize=11;
+        $pdf->marginLeft = 10;
+        $pdf->marginHeader = 5;
+        $pdf->marginTop = 55;
+        $pdf->marginBottom = 65;
+        $pdf->defaultFontSize = 11;
         $pdf->content = $content;
         $pdf->cssFile = '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
         $pdf->cssInline = '.kv-heading-1{font-size:18px}.nospace-border{border:0px;}.no-padding{ padding:0px;}.print-container{font-size:11px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif; }';
-       if($model->purchase_request_referrence_no==''){$ref='__________________';}else{$ref=$model->purchase_request_referrence_no;}
-       if($model->purchase_request_project_name==''){$pname='__________________';}else{$pname=$model->purchase_request_project_name;}
-       if($model->purchase_request_location_project==''){$pproject='__________________';}else{$pproject=$model->purchase_request_location_project;}
-       if(strlen($pname) > 40){$pname = '<span style="font-size: 6px;">'.$pname.'</span>';}
-       $assigs = $this->findAssignatory(4);
-       $headers='
+        if ($model->purchase_request_referrence_no == '') {
+            $ref = '__________________';
+        } else {
+            $ref = $model->purchase_request_referrence_no;
+        }
+        if ($model->purchase_request_project_name == '') {
+            $pname = '__________________';
+        } else {
+            $pname = $model->purchase_request_project_name;
+        }
+        if ($model->purchase_request_location_project == '') {
+            $pproject = '__________________';
+        } else {
+            $pproject = $model->purchase_request_location_project;
+        }
+        if (strlen($pname) > 40) {
+            $pname = '<span style="font-size: 6px;">' . $pname . '</span>';
+        }
+        $assigs = $this->findAssignatory(4);
+        $headers = '
        <div style="width: 100px;border: 1px solid black;margin:10px;font-weight:bold;text-align:center;float:right;padding:0px;">FASS-PUR F07 <br> <span style="font-weight:lighter;">Rev. 0/ 08-16-07</span></div>
        <table border="0" style="width: 100%; table-collapsed: collapsed;">
        <tbody>
@@ -760,83 +776,80 @@ $headers=$headers.'</td>
        </tr>
        <tr style="height: 12px;">
        <td style="width: 27%; height: 12px;">&nbsp;</td>
-       <td style="text-align: center; width: 50%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.$assigs->CompanyTitle.'</strong></td>
+       <td style="text-align: center; width: 50%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>' . $assigs->CompanyTitle . '</strong></td>
        <td style="text-align: right; width: 10%; height: 12px;">&nbsp;</td>
        <td style="text-align:right;width: 17%;font-size:11px;padding:2px;padding-right:10px; height: 50px;vertical-align:top;border:none;" rowspan="2"></td>
        </tr>
        <tr style="height: 12px;">
        <td style="width: 27%; height: 12px;">&nbsp;</td>
-       <td style="text-align: left; width: 45%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$assigs->RegionOffice.'</td>
+       <td style="text-align: left; width: 45%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $assigs->RegionOffice . '</td>
        <td style="text-align: center; width: 10%; height: 12px;">&nbsp;</td>
      
        </tr>            
        <tr style="height: 12px;">
        <td style="width: 27%;font-size:11px; height: 12px;">&nbsp;Standard Form Number : SF-GOOD-40</td>
        <td style="text-align: center; width: 40.5332%; height: 12px;">&nbsp;</td>
-       <td style="width: 27%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Project Reference No. : '.$ref.'</td>
+       <td style="width: 27%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Project Reference No. : ' . $ref . '</td>
        </tr>
        <tr style="height: 12px;">
        <td style="width: 27%;font-size:11px; height: 12px;">&nbsp;Revised&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : May 24, 2004</td>
        <td style="text-align: left;font-size:16px; width: 40.5332%; height: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>ABSTRACT OF BIDS</strong></td>
-       <td style="width: 10%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Name of the Project.&nbsp; :'. $pname .'</td>
+       <td style="width: 10%;font-size:11px;  height: 12px; text-align: right;" colspan="2">Name of the Project.&nbsp; :' . $pname . '</td>
        </tr>
        <tr style="height: 12.2727px;">
        <td style="width: 27%; height: 12.2727px;">&nbsp;</td>
        <td style="text-align: center; width: 40.5332%; height: 12.2727px;">&nbsp;</td>
-       <td style="width: 10%;font-size:11px; height: 12.2727px; text-align: right;" colspan="2">Location of The Project : '.$pproject.'</td>
+       <td style="width: 10%;font-size:11px; height: 12.2727px; text-align: right;" colspan="2">Location of The Project : ' . $pproject . '</td>
        </tr>
        </tbody>
        </table>
        <div style="height:0px;"></div>';
-        $fin="";
-        $x=0;
-        $munit="";
-        $tempid ="";
+        $fin = "";
+        $x = 0;
+        $munit = "";
+        $tempid = "";
         $headerd = "";
         $itemno = "";
         $qty = "";
         $unit = "";
         $item_decription = "";
-        $tablecount=count($columns);
-        $headers = $headers.'<table border="1" width=100% style="border-collapse:collapse;"><thead><tr class="">';
-            $max = 13;//$tablecount;
-                $count = $tablecount;
-                $i=3;
-                $h=1;
-                while($i<$max) {
-     
-                    if($i<7) {
-                         //$headers = $headers.'<th></th>';
-                         if ($h==1) {
-                            $headers = $headers.'<th style="font-size:7px;text-align:center;">Item No.</th>';
-                         }
-                         elseif($h==2) {
-                            $headers = $headers.'<th style="font-size:7px;text-align:center;">QTY</th>';
-                         }
-                         elseif($h==3) {
-                            $headers = $headers.'<th style="font-size:7px;text-align:center;">UNIT</th>';
-                         }
-                         elseif($h==4) {
-                            $headers = $headers.'<th style="font-size:7px;text-align:center;">DESCRIPTIONS</th>';
-                         }else{
-                            $headers = $headers.'<th></th>';
-                         }
-                    }else{
-                        if ($i>$count - 1) {
-                            $headers = $headers.'<th style="font-size: 9px;text-align:center">N/A</th>';
-                        }else{
-                            if ($i>6) {
-                                $headers = $headers.'<th style="font-size: 9px;text-align:center;">'.$columns[$i].'</th>';
-                            }else{
-                                $headers = $headers.'<th>'.$columns[$i].'</th>';
-                            }
-                        }
-                    }
-                    $i++;
-                    $h++;
+        $tablecount = count($columns);
+        $headers = $headers . '<table border="1" width=100% style="border-collapse:collapse;"><thead><tr class="">';
+        $max = 13; //$tablecount;
+        $count = $tablecount;
+        $i = 3;
+        $h = 1;
+        while ($i < $max) {
+
+            if ($i < 7) {
+                //$headers = $headers.'<th></th>';
+                if ($h == 1) {
+                    $headers = $headers . '<th style="font-size:7px;text-align:center;">Item No.</th>';
+                } elseif ($h == 2) {
+                    $headers = $headers . '<th style="font-size:7px;text-align:center;">QTY</th>';
+                } elseif ($h == 3) {
+                    $headers = $headers . '<th style="font-size:7px;text-align:center;">UNIT</th>';
+                } elseif ($h == 4) {
+                    $headers = $headers . '<th style="font-size:7px;text-align:center;">DESCRIPTIONS</th>';
+                } else {
+                    $headers = $headers . '<th></th>';
                 }
-                $headers = $headers.'</tr>';
-        $headers = $headers.'</thead>
+            } else {
+                if ($i > $count - 1) {
+                    $headers = $headers . '<th style="font-size: 9px;text-align:center">N/A</th>';
+                } else {
+                    if ($i > 6) {
+                        $headers = $headers . '<th style="font-size: 9px;text-align:center;">' . $columns[$i] . '</th>';
+                    } else {
+                        $headers = $headers . '<th>' . $columns[$i] . '</th>';
+                    }
+                }
+            }
+            $i++;
+            $h++;
+        }
+        $headers = $headers . '</tr>';
+        $headers = $headers . '</thead>
         <tr>
         <td style="height:380px;font-size: 9px; width: 5%; text-align: center;vertical-align: top;"></td>
         <td style="height:380px;font-size: 9px; width: 5%; text-align: center;vertical-align: top;"></td>
@@ -852,20 +865,20 @@ $headers=$headers.'</td>
         </table>';
 
         foreach ($assig as $sg) {
-           $assig1 =  $sg["Assig1"];
-           $assig2 =  $sg["Assig2"];
-           $assig3 =  $sg["Assig3"];
-           $assig4 =  $sg["Assig4"];
-           $assig5 =  $sg["Assig5"];
-           $assig6 =  $sg["Assig6"];
-           $assig7 =  $sg["Assig7"];
-           $Assig1Position =  $sg["Assig1Position"];
-           $Assig2Position =  $sg["Assig2Position"];
-           $Assig3Position =  $sg["Assig3Position"];
-           $Assig4Position =  $sg["Assig4Position"];
-           $Assig5Position =  $sg["Assig5Position"];
-           $Assig6Position =  $sg["Assig6Position"];
-           $Assig7Position =  $sg["Assig7Position"];
+            $assig1 =  $sg["Assig1"];
+            $assig2 =  $sg["Assig2"];
+            $assig3 =  $sg["Assig3"];
+            $assig4 =  $sg["Assig4"];
+            $assig5 =  $sg["Assig5"];
+            $assig6 =  $sg["Assig6"];
+            $assig7 =  $sg["Assig7"];
+            $Assig1Position =  $sg["Assig1Position"];
+            $Assig2Position =  $sg["Assig2Position"];
+            $Assig3Position =  $sg["Assig3Position"];
+            $Assig4Position =  $sg["Assig4Position"];
+            $Assig5Position =  $sg["Assig5Position"];
+            $Assig6Position =  $sg["Assig6Position"];
+            $Assig7Position =  $sg["Assig7Position"];
         }
         $LeftFooterContent = '
 <table width="100%">
@@ -873,26 +886,26 @@ $headers=$headers.'</td>
 <td style="font-size: 11px;text-align: left; width=100%" colspan="12"><b>Awarding Commitee</b></td>
 </tr>
     <tr>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig1.'</b><br/>Chairperson</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig1 . '</b><br/>Chairperson</td>
         <td style="width: 50px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig2.'</b><br/>Member</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig2 . '</b><br/>Member</td>
         <td style="width: 50px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig3.'</b><br/>Member</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig3 . '</b><br/>Member</td>
         <td style="width: 50px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig4.'</b><br/>Member</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig4 . '</b><br/>Member</td>
         <td style="height: 100px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig5.'</b><br/>Member</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig5 . '</b><br/>Member</td>
         <td style="height: 100px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig6.'</b><br/>Member</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig6 . '</b><br/>Member</td>
         <td style="height: 100px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig7.'</b><br/>'.$Assig7Position.'</td>
+        <td style="font-size: 11px;text-align: center; width=16.67"><b>' . $assig7 . '</b><br/>' . $Assig7Position . '</td>
         <td style="height: 100px;"></td>
     </tr>
     <tr>
-<td style="font-size: 11px;text-align: left; width=100%" colspan="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$model->purchase_request_number .'</td>
+<td style="font-size: 11px;text-align: left; width=100%" colspan="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $model->purchase_request_number . '</td>
 </tr>
         <tr>
-        <td style="font-size: 11px;text-align: center; width=16.67">'.date("F j, Y").'</td>
+        <td style="font-size: 11px;text-align: center; width=16.67">' . date("F j, Y") . '</td>
         <td style="width: 50px;"></td>
         <td style="font-size: 11px;text-align: center; width=16.67"></td>
         <td style="width: 50px;"></td>
@@ -911,7 +924,8 @@ $headers=$headers.'</td>
             'title' => 'ABSTRACT OF BIDS',
             'defaultheaderline' => 0,
             'defaultfooterline' => 0,
-            'subject' => 'Report Abstract'];
+            'subject' => 'Report Abstract'
+        ];
         $pdf->methods = [
             'SetHeader' => [$headers],
             'SetFooter' => [$LeftFooterContent],
@@ -936,7 +950,7 @@ $headers=$headers.'</td>
         $request = Yii::$app->request;
         $sup_id = $request->post('sup_id');
         $con = Yii::$app->procurementdb;
-        $sql = "SELECT * FROM `tbl_supplier` WHERE supplier_name= '".$sup_id."';";
+        $sql = "SELECT * FROM `tbl_supplier` WHERE supplier_name= '" . $sup_id . "';";
         $checkxml = $con->createCommand($sql)->queryAll();
         return json_encode($checkxml);
     }
@@ -974,12 +988,12 @@ $headers=$headers.'</td>
                         $dataProvider->sort = false;
                         return $this->renderAjax('_bids', [
                             'model' => $model, 'prdetails' => $prdetails, 'biddetails' => $biddetails, 'searchModel' => $searchModel, 'dataProvider' => $dataProvider,
-                            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider , 'supp' => $m
+                            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider, 'supp' => $m
                         ]);
                     } else {
                         return $this->render('_bids', [
                             'model' => $model, 'prdetails' => $prdetails, 'biddetails' => $biddetails, 'searchModel' => $searchModel, 'dataProvider' => $dataProvider,
-                            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider , 'supp' => $m
+                            'searchModelBid' => $searchModelBid, 'bidsProvider' => $bidsProvider, 'ListPOprovider' => $ListPOprovider, 'supp' => $m
                         ]);
                     }
                     break;
@@ -988,7 +1002,8 @@ $headers=$headers.'</td>
     }
 
 
-    function actionRegeneratesupplier () {
+    function actionRegeneratesupplier()
+    {
         $session = Yii::$app->session;
         $request = Yii::$app->request->post();
         $id = $request["chkRow"];
@@ -1114,7 +1129,8 @@ $headers=$headers.'</td>
         $x = 0;
         foreach ($pordetails as $pr) {
             $x++;
-            $data[] = ['bids_id' => $pr["bids_id"],
+            $data[] = [
+                'bids_id' => $pr["bids_id"],
                 'purchase_request_id' => $pr["purchase_request_id"],
                 'supplier_id' => $pr["supplier_id"],
                 'SupplierName' => $pr["SupplierName"],
@@ -1127,7 +1143,8 @@ $headers=$headers.'</td>
             ];
         }
         if ($x == 0) {
-            $data[] = ['bids_id' => '',
+            $data[] = [
+                'bids_id' => '',
                 'purchase_request_id' => '',
                 'supplier_id' => '',
                 'SupplierName' => '',
@@ -1146,7 +1163,8 @@ $headers=$headers.'</td>
                 'pageSize' => 10,
             ],
             'sort' => [
-                'attributes' => ['bids_id',
+                'attributes' => [
+                    'bids_id',
                     'supplier_id',
                     'SupplierName',
                     'purchase_order_number',
@@ -1162,9 +1180,10 @@ $headers=$headers.'</td>
     }
 
 
-    function checkbidDetailStatus ($id) {
+    function checkbidDetailStatus($id)
+    {
         $con = Yii::$app->procurementdb;
-        $sql = "SELECT count(*) AS ifexist FROM `tbl_bids_details` WHERE `tbl_bids_details`.`bids_details_status` =3 AND `tbl_bids_details`.`bids_details_id`=".$id;
+        $sql = "SELECT count(*) AS ifexist FROM `tbl_bids_details` WHERE `tbl_bids_details`.`bids_details_status` =3 AND `tbl_bids_details`.`bids_details_id`=" . $id;
         $pordetails = $con->createCommand($sql)->queryAll();
         return $pordetails;
     }
@@ -1178,4 +1197,91 @@ $headers=$headers.'</td>
         }
     }
 
+    public function actionReport2()
+    {
+        $request = Yii::$app->request;
+        $id = $request->post('id');
+        $supplier = $request->post('cbosupplier');
+        $address = $request->post('txtaddress');
+        $sub = $request->post('txtsubmission');
+        $employee = $request->post('cboemployees');
+        $employee = explode("|", $employee);
+        $sub = date("F j, Y", strtotime($sub));
+        $model = $this->findModel($id);
+
+        $rfqfind = $this->getRfq($request->post('id'), $request->post('txtsupplierid'));
+        if(!$rfqfind){
+            $rfqnumget = $this->getRfqnum();
+            $rfqnumincrement = $rfqnumget->rfq_id + 1;
+            $year = date("Y");
+            $rfqnumber = $year.'-'.sprintf('%04d',$rfqnumincrement);
+            $rfq = new Rfq;
+            $rfq->rfq_id = $rfqnumincrement;
+            $rfq->purchase_request_id = $request->post('id');
+            $rfq->supplier_id = $request->post('txtsupplierid');
+            $rfq->rfq_number = $rfqnumber;
+            $rfq->save(false);
+        }else{
+            $rfqnumber = $rfqfind->rfq_number;
+        }
+
+
+
+        $prdetails = $this->getprDetails($model->purchase_request_id);
+        $content = $this->renderPartial('_report2', ['prdetails' => $prdetails, 'model' => $model, 'supplier' => $supplier, 'address' => $address,'rfqnumber'=>$rfqnumber]);
+        $assig = $this->findAssignatory(3);
+        $pdf = new Pdf();
+        $pdf->format = pdf::FORMAT_A4;
+        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
+        $pdf->destination = $pdf::DEST_BROWSER;
+        //$sub = date('F j, Y',$sub);
+        $pdf->content = $content;
+        $pdf->cssFile = '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+        $pdf->cssInline = '.kv-heading-1{font-size:18px}.nospace-border{border:0px;}.no-padding{ padding:0px;}.print-container{font-size:11px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;} h1 {border-bottom: 2px solid blackfont-weight:normal;margin-bottom:5px;width: 140px;}';
+        $pdf->marginTop = 10;
+        $pdf->marginBottom = 30;
+
+
+
+
+        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $model->purchase_request_number . '</div>';
+        $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
+        $oddEvenConfiguration =
+            [
+                'L' => [ // L for Left part of the header
+                    'content' => $LeftFooterContent,
+                ],
+                'C' => [ // C for Center part of the header
+                    'content' => '',
+                ],
+                'R' => [
+                    'content' => $RightFooterContent,
+                ],
+                'line' => 0, // That's the relevant parameter
+            ];
+        $headerFooterConfiguration = [
+            'odd' => $oddEvenConfiguration,
+            'even' => $oddEvenConfiguration
+        ];
+        $pdf->options = [
+            'title' => 'Report Title',
+            'defaultheaderline' => 0,
+            'defaultfooterline' => 0,
+            'subject' => 'Report Subject'];
+    
+        $pdf->methods = [
+            //'SetHeader' => [$headers],
+            'SetFooter' => [$headerFooterConfiguration],
+        ];
+
+        return $pdf->render();
+    }
+    public function getRfqnum(){
+        $model = Rfq::find()->orderBy(['rfq_id' => SORT_DESC])->one();
+        return $model;
+    }
+    public function getRfq($purchase_request_id,$supplier_id){
+        $model = Rfq::find()->where(['purchase_request_id'=>$purchase_request_id,'supplier_id'=>$supplier_id])->one();
+        return $model;
+    }
 }
