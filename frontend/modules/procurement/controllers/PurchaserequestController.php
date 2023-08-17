@@ -272,7 +272,7 @@ class PurchaserequestController extends Controller
         <tbody>
         <tr>
         <td>
-        <p><h6 style-P><strong>FASS-PUR F08</strong>&nbsp; Rev. 1/07-01-23</h6></p>
+        <p><h6 style-P><strong>FASS-PUR F05</strong>&nbsp; Rev. 1/07-01-23</h6></p>
         </td>
         </tr>
         </tbody>
