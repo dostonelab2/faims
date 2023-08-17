@@ -426,7 +426,7 @@ class PurchaseorderController extends \yii\web\Controller
         //$pdf->marginHeader = 40;
         $pdf->marginBottom = 120;
 
-$headers = '<table width="100%">
+        $headers = '<table width="100%">
             <tbody>
             <tr style="height: 43.6667px;">
             <td style="width: 82.4103%; height: 43.6667px;">
@@ -569,12 +569,25 @@ $headers = '<table width="100%">
             </table>';
 
 
-        $footerss = '                      
-        <table style="width:100%;">
-        <tr>
-            <td style="text-align: right;width:50%;">Page {PAGENO} of {nbpg}</td>
-        </tr>              
-        </table>';
+        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $pr["purchase_request_date"] . '</div>';
+        $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
+        $oddEvenConfiguration =
+            [
+                'L' => [ // L for Left part of the header
+                    'content' => $LeftFooterContent,
+                ],
+                'C' => [ // C for Center part of the header
+                    'content' => '',
+                ],
+                'R' => [
+                    'content' => $RightFooterContent,
+                ],
+                'line' => 0, // That's the relevant parameter
+            ];
+        $headerFooterConfiguration = [
+            'odd' => $oddEvenConfiguration,
+            'even' => $oddEvenConfiguration
+        ];
         $pdf->options = [
             'title' => 'Report Title',
             'defaultheaderline' => 0,
@@ -584,7 +597,7 @@ $headers = '<table width="100%">
         ];
         $pdf->methods = [
             'SetHeader' => [$headers],
-            'SetFooter' => [$footerss],
+            'SetFooter' => [$headerFooterConfiguration],
         ];
 
         return $pdf->render();
