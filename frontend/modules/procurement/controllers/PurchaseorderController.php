@@ -569,7 +569,7 @@ class PurchaseorderController extends \yii\web\Controller
             </table>';
 
 
-        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $pr["purchase_request_date"] . '</div>';
+        $LeftFooterContent = '<div style="text-align: left;font-weight: bold;font-size:11px;">' . $pr["purchase_request_number"] . '</div>';
         $RightFooterContent = '<div style="text-align: right;padding-top:-50px;font-size:11px;">Page {PAGENO} of {nbpg}</div>';
         $oddEvenConfiguration =
             [
