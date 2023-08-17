@@ -27,7 +27,7 @@ $listEmployees = ArrayHelper::map($employees, 'employeename', 'employeename');
     <?php //$form = ActiveForm::begin();
 
     ?>
-    <?php $form = ActiveForm::begin(['action' => ['bids/report'],'options' => ['method' => 'post','target'=>'_blank']]);
+    <?php $form = ActiveForm::begin(['action' => ['bids/report2'],'options' => ['method' => 'post','target'=>'_blank']]);
        echo $form->field($model,'purchase_request_id')->hiddenInput(['value'=>$model->purchase_request_id,'id'=>'id','name'=>'id'])->label(false);
     ?>
     <div class="form-group">
@@ -55,7 +55,9 @@ $listEmployees = ArrayHelper::map($employees, 'employeename', 'employeename');
                                                                 data = $.parseJSON(response);
                                                                 $.each(data, function(i, item) {
                                                                     var address = item.supplier_address;
+                                                                    var supplier_id = item.supplier_id;
                                                                     $('#txtaddress').val(address);
+                                                                    $('#txtsupplierid').val(supplier_id);
                                                                 });
                                                             },
                                                             error: function ( xhr, ajaxOptions, thrownError ) {
@@ -78,6 +80,7 @@ $listEmployees = ArrayHelper::map($employees, 'employeename', 'employeename');
                 <div class="col-lg-12-block">
                     <div class="col-lg-6">
                         <label>Address </label>
+                        <?= Html::hiddenInput('txtsupplierid','',['id'=>'txtsupplierid','class'=>'form-control']);?>
                         <?= Html::textarea('txtaddress','',['placeholder'=>'Address','id'=>'txtaddress','class'=>'form-control']);?>
                     </div>
                     <div class="col-lg-6">
