@@ -18,8 +18,8 @@ class Adanumber extends \yii\db\ActiveRecord
 {
     public $ada_number;
     public $selected_keys;
-    const PREP_1 = '99';  //99(const) 21(year) 99 21 1
-    const PREP_4 = '99';  //                       99 21 4
+    const PREP_1 = '00';  //99(const) 21(year) 99 21 1
+    const PREP_4 = '00';  //                       99 21 4
     
     /**
      * @inheritdoc

@@ -16,7 +16,7 @@ use Yii;
  */
 class Checknumber extends \yii\db\ActiveRecord
 {
-    const PREP = 99;   
+    const PREP = 00;   
     const TYPE_ADA = 1;   
     const TYPE_CHECK = 2; 
     
