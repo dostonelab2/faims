@@ -853,10 +853,6 @@ $content .= '
         
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;">';
-        
-        /*foreach($model->osdv->accounttransactions as $transaction){
-                $content .= $transaction->account->object_code.'<br/>';
-            }*/
         $keys = explode(',',$model->dv_accounts);
         $text = "";
         for($i=0; $i<count($keys); $i++){
@@ -874,7 +870,7 @@ $content .= '
         for($i=0; $i<count($keys); $i++){
             $account = Accounttransaction::findOne($keys[$i]);
             if($account){
-                $text .= ($account->debitcreditflag == 1) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
+                $text .= ( ($keys[$i] != 21798) && ($keys[$i] != 21799) ) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
             }
         }
         $content .= $text;
@@ -886,7 +882,7 @@ $content .= '
         for($i=0; $i<count($keys); $i++){
             $account = Accounttransaction::findOne($keys[$i]);
             if($account){
-                $text .= ($account->debitcreditflag == 2) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
+                $text .= ( ($keys[$i] == 21798) || ($keys[$i] == 21799) ) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
             }
         }
         $content .= $text;
