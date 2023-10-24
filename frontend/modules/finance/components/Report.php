@@ -857,7 +857,7 @@ $content .= '
         /*foreach($model->osdv->accounttransactions as $transaction){
                 $content .= $transaction->account->object_code.'<br/>';
             }*/
-         $keys = explode(',',$model->dv_accounts);
+        $keys = explode(',',$model->dv_accounts);
         $text = "";
         for($i=0; $i<count($keys); $i++){
             $account = Accounttransaction::findOne($keys[$i]);
@@ -874,25 +874,23 @@ $content .= '
         for($i=0; $i<count($keys); $i++){
             $account = Accounttransaction::findOne($keys[$i]);
             if($account){
-                //$text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->object_code : $account->account->object_code.'<br/>';
-                //$text .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
+                $text .= ($account->debitcreditflag == 1) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
             }
         }
         $content .= $text;
-        
-        /*foreach($model->osdv->accounttransactions as $transaction){
-                //$content .= ($transaction->debitcreditflag == 1) ? number_format($transaction->getNetAmount(),2).'<br/>' : '-'.'<br/>';
-                $content .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
-        }*/
-        
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">';
         
-        foreach($model->osdv->accounttransactions as $transaction){
-                $content .= ($transaction->debitcreditflag == 2) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
+        $keys = explode(',',$model->dv_accounts);
+        $text = "";
+        for($i=0; $i<count($keys); $i++){
+            $account = Accounttransaction::findOne($keys[$i]);
+            if($account){
+                $text .= ($account->debitcreditflag == 2) ? number_format($model->amount, 2).'<br/>' : '-'.'<br/>';
             }
-        
-        $content .= '</td>
+        }
+        $content .= $text;
+        $content .= '</td>        
 </tr>
 <tr style="height: 10px;">
 <td style="width:50%; height: 0px; text-align: left;" colspan="3"><b><span style="border:1px solid black;">C.</span> Certified</b></td>
