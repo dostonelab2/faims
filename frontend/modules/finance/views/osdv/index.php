@@ -55,13 +55,12 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
-    $year_array = [
-        ['year' => '2023'],
-        ['year' => '2022'],
-        ['year' => '2021'],
-        ['year' => '2020'],
-        ['year' => '2019'],
-    ];
+    $currentYear = date('Y');
+    $year_array = [];
+
+    for ($year = $currentYear; $year >= 2019; $year--) {
+        $year_array[] = ['year' => strval($year)];
+    }
 
     $form = ActiveForm::begin([
         'action' => ['index'],
