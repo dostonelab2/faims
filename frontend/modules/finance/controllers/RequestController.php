@@ -214,7 +214,7 @@ class RequestController extends Controller
         
         $model = $this->findModel($id); 
 
-        if( (Yii::$app->user->identity->username != 'Admin') && (!Yii::$app->user->can('access-finance-verification')) ){
+        if( (Yii::$app->user->identity->username != 'Admin') && (!Yii::$app->user->can('access-finance-verification')) && (!Yii::$app->user->can('access-finance-validation'))){
             if(Yii::$app->user->identity->user_id != $model->created_by)
                 return $this->redirect(['index']);
         }
