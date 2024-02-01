@@ -219,7 +219,15 @@ Modal::end();
                                     return $model->profile->fullname;
                                 },
                                 'filterType' => GridView::FILTER_SELECT2,
-                                'filter' => ArrayHelper::map(Profile::find()->asArray()->all(), 'profile_id', 
+                                'filter' => ArrayHelper::map(
+                                                                // Profile::find()->asArray()->all(), 
+                                                                Profile::find()
+                                                                    ->joinWith('user')
+                                                                    ->where(['tbl_user.status' => 10])
+                                                                    ->orderBy(['tbl_profile.lastname' => SORT_ASC])
+                                                                    ->asArray()
+                                                                    ->all(),
+                                                                'profile_id', 
                                                                 function($model) {
                                                                     return $model['firstname'].' '.$model['lastname'];
                                                                 }

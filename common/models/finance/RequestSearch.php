@@ -74,7 +74,7 @@ class RequestSearch extends Request
             'amount' => $this->amount,
             'status_id' => $this->status_id,
             'division_id' => $this->division_id,
-            'created_by' => $this->created_by,
+            // 'created_by' => Yii::$app->user->identity->user_id,
             'cancelled' => 0,
         ]);
         /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 **/
@@ -104,6 +104,8 @@ class RequestSearch extends Request
         }elseif((Yii::$app->user->identity->user_id == 55)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->username != 'Admin') || (!Yii::$app->user->can('access-finance-verification'))){
+            $query->andFilterWhere(['=', 'created_by', Yii::$app->user->identity->user_id]);
         }
         /*if(($this->user_id == 2)){
             $query->andFilterWhere(['in', 'payee_id', $this->payee_id])
