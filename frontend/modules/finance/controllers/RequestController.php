@@ -210,7 +210,17 @@ class RequestController extends Controller
      */
     public function actionView($id)
     {
+        
         $model = $this->findModel($id); 
+
+        if((Yii::$app->user->identity->username != 'Admin') || (!Yii::$app->user->can('access-finance-verification'))){
+            if(Yii::$app->user->identity->user_id != $model->created_by){
+                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('kv-detail-warning', 'Not Allowed!!!');
+            }
+            
+        }
+        
         $_obligationType = $model->obligation_type_id;
 
         $params = $this->checkAttachments($model);
