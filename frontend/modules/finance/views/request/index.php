@@ -74,6 +74,8 @@ Modal::begin([
 
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
+
+print_r(Yii::$app->user->can('access-finance-verification'));
 ?>
 
 <div class="request-index">

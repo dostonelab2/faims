@@ -12,6 +12,7 @@ use common\models\finance\Request;
  */
 class RequestSearch extends Request
 {
+    public $allowed_view_all = false;
     /**
      * @inheritdoc
      */ 
@@ -104,7 +105,8 @@ class RequestSearch extends Request
         }elseif((Yii::$app->user->identity->user_id == 55)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
-        }elseif((Yii::$app->user->identity->username != 'Admin') || (!Yii::$app->user->can('access-finance-verification'))){
+        // }elseif((Yii::$app->user->identity->username != 'Admin') || (!Yii::$app->user->can('access-finance-verification'))){
+        }elseif(!$this->allowed_view_all){
             $query->andFilterWhere(['=', 'created_by', Yii::$app->user->identity->user_id]);
         }
         /*if(($this->user_id == 2)){
