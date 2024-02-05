@@ -879,8 +879,6 @@ $headers=$headers.'</td>
         <td style="width: 50px;"></td>
         <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig3.'</b><br/>Member</td>
         <td style="width: 50px;"></td>
-        <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig4.'</b><br/>Member</td>
-        <td style="height: 100px;"></td>
         <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig5.'</b><br/>Member</td>
         <td style="height: 100px;"></td>
         <td style="font-size: 11px;text-align: center; width=16.67"><b>'.$assig6.'</b><br/>Member</td>
