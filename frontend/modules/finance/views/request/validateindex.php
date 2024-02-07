@@ -34,9 +34,12 @@ Modal::begin([
 echo "<div id='modalContent'><div style='text-align:center'><img src='/images/loading.gif'></div></div>";
 Modal::end();
 ?>
-<!--pre>
-<?php //print_r($divisions);?>
-</pre-->
+<pre>
+<?php 
+    echo Yii::$app->user->identity->user_id;
+    print_r($divisions);
+    ?>
+</pre>
 <div class="request-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
