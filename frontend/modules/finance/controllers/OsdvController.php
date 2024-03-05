@@ -425,8 +425,7 @@ class OsdvController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $_obligationType = $model->
-        type_id;
+        $_obligationType = $model->type_id;
         $attachmentsDataProvider = new ActiveDataProvider([
             'query' => $model->request->getAttachments(),
             'pagination' => false,
