@@ -612,12 +612,12 @@ $content .= '
     <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['position'].'</td>
     </tr>
 
-<tr style="height: 12.4546px;">
-<td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
-<td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
-<td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-<td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
-</tr>
+    <tr style="height: 12.4546px;">
+    <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
+    <td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
+    <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
+    <td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
+    </tr>
 </tbody>
 </table>
 <table style="width: 100%; border-collapse: collapse;" border="1">
@@ -911,24 +911,24 @@ $content .= '
     </tr>
     <tr style="height: 25px;">
     <td style="width: 1%; height: 25px; text-align: center;padding:10px;">Printed<br />Name</td>
-    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;">ROBERTO B. ABELLA</td>
+    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['name'].'</td>
                                                                                                                          >
     <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name</td>
-    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;">MARTIN A. WEE</td>
+    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['name'].'</td>
     </tr>
     <tr style="height: 16px;">
     <td style="width: 1%; height: 32px; text-align: center;padding:10px;">Position</td>
-    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">Accountant III</td>
+    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['position'].'</td>
     <td style="width: 10%; text-align: center; height: 32px;padding:10px;"><br/>Position<br /><br /></td>
-    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">Regional Director</td>
+    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['position'].'</td>
     </tr>
 
-<tr style="height: 12.4546px;">
-<td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
-<td style="width: 40%; height: 25px;">&nbsp;</td>
-<td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-<td style="width: 40%; height: 12.4546px;">&nbsp;</td>
-</tr>
+    <tr style="height: 12.4546px;">
+    <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
+    <td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
+    <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
+    <td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
+    </tr>
 </tbody>
 </table>
 <table style="width: 100%; border-collapse: collapse;" border="1">
