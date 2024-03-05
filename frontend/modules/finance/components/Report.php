@@ -874,8 +874,8 @@ $content .= '
         for($i=0; $i<count($keys); $i++){
             $account = Accounttransaction::findOne($keys[$i]);
             if($account){
-                // $text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->object_code : $account->account->object_code.'<br/>';
-                $text .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
+                //$text .= ( (count($keys[$i]) - $i) > 1) ? $account->account->object_code : $account->account->object_code.'<br/>';
+                //$text .= ($transaction->debitcreditflag == 1) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
             }
         }
         $content .= $text;
@@ -888,9 +888,9 @@ $content .= '
         $content .= '</td>
 <td style="width: 16.67%; height: 50px; text-align: center;padding:5px;vertical-align:top; font-weight: bold;" colspan="2">';
         
-        // foreach($model->osdv->accounttransactions as $transaction){
-        //         $content .= ($transaction->debitcreditflag == 2) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
-        //     }
+        foreach($model->osdv->accounttransactions as $transaction){
+                $content .= ($transaction->debitcreditflag == 2) ? number_format($model->amount - $model->tax,2).'<br/>' : '-'.'<br/>';
+            }
         
         $content .= '</td>
 </tr>
@@ -917,24 +917,24 @@ $content .= '
     </tr>
     <tr style="height: 25px;">
     <td style="width: 1%; height: 25px; text-align: center;padding:10px;">Printed<br />Name</td>
-    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['name'].'</td>
+    <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;">ROBERTO B. ABELLA</td>
                                                                                                                          >
     <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name</td>
-    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['name'].'</td>
+    <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;">MARTIN A. WEE</td>
     </tr>
     <tr style="height: 16px;">
     <td style="width: 1%; height: 32px; text-align: center;padding:10px;">Position</td>
-    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['position'].'</td>
+    <td style="width: 49%; height: 25px;font-size:13px;text-align:center;">Accountant III</td>
     <td style="width: 10%; text-align: center; height: 32px;padding:10px;"><br/>Position<br /><br /></td>
-    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['position'].'</td>
+    <td style="width: 40%; height: 16px;font-size:13px;text-align:center;">Regional Director</td>
     </tr>
 
-    <tr style="height: 12.4546px;">
-    <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
-    <td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
-    <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-    <td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
-    </tr>
+<tr style="height: 12.4546px;">
+<td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
+<td style="width: 40%; height: 25px;">&nbsp;</td>
+<td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
+<td style="width: 40%; height: 12.4546px;">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table style="width: 100%; border-collapse: collapse;" border="1">
