@@ -4,7 +4,8 @@ namespace frontend\modules\finance\controllers;
 
 use Yii;
 use common\models\apiservice\Notificationrecipient;
-use frontend\modules\finance\components\Report;
+// use frontend\modules\finance\components\Report;
+use frontend\modules\finance\components\ReportNoSig as Report;
 
 use common\models\cashier\Creditortmp;
 use common\models\cashier\CreditorSearch;
