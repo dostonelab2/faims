@@ -877,7 +877,7 @@ class OsdvController extends Controller
                     
                     $index = $modelOsdv->osdv_id;
                     $scope = 'Osdv';
-                    $data = $modelOsdv->osdv_id.':'.$modelOsdv->request_id.': OS number - '.$old_OS.' to '.$os->os_number;
+                    $data = $modelOsdv->osdv_id.':'.$modelOsdv->request_id.': OS number - '.$old_OS.' to '.$os->os_number.'.';
                     Blockchain::createBlock($index, $scope, $data);
                     
                     Yii::$app->session->setFlash('success', 'Obligation Successfully Reassigned!');
