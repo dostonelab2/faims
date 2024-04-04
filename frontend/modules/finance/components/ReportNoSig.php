@@ -623,7 +623,10 @@ $content .= '
     <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
     <td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
     <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-    <td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
+    <td style="width: 40%; height: 12.4546px;text-align:center;">'
+        // same date with box C
+        .$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 65)['date']
+        .'</td>
     </tr>
 </tbody>
 </table>
@@ -1023,6 +1026,7 @@ $content .= '
 
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
+            // 'position' => $signatory->activeUser->profile->designation,
             'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'
