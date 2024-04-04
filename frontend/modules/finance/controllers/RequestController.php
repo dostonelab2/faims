@@ -4,8 +4,8 @@ namespace frontend\modules\finance\controllers;
 
 use Yii;
 use common\models\apiservice\Notificationrecipient;
-// use frontend\modules\finance\components\Report;
-use frontend\modules\finance\components\ReportNoSig as Report;
+use frontend\modules\finance\components\Report;
+use frontend\modules\finance\components\ReportNoSig;
 
 use common\models\cashier\Creditortmp;
 use common\models\cashier\CreditorSearch;
@@ -1017,13 +1017,31 @@ class RequestController extends Controller
     
     function actionPrintos($id)
     {
-        $report = new Report();
+        $request = Request::findOne($id);
+
+        $thresholdDate = strtotime('2024-01-01');
+
+        if (strtotime($request->os->os_date) >= $thresholdDate) {
+            $report = new ReportNoSig();
+        } else {
+            $report = new Report();
+        }
+
         $report->obligationrequest($id);
     }
     
     function actionPrintdv($id, $boxA = null, $boxCD = null)
     {
-        $report = new Report();
+        $request = Request::findOne($id);
+
+        $thresholdDate = strtotime('2024-01-01'); 
+
+        if (strtotime($request->dv->dv_date) >= $thresholdDate) {
+            $report = new ReportNoSig();
+        } else {
+            $report = new Report();
+        }
+        
         $report->disbursementvoucher($id, $boxA, $boxCD);
     }
     

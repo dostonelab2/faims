@@ -1017,7 +1017,7 @@ $content .= '
 
         $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
-            'position' => $signatory->activeUser->profile->designation,
+            'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
             'details' => '<div class="'.$form.'-box-'.$box.'">'
                             .Html::img($url.$signatory->activeUser->profile->esig, 
