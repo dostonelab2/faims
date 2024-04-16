@@ -328,13 +328,15 @@ class ReportNoSig {
                                     </span><td>
                             </tr>
                             <tr>
-                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['position'].'</span></td>
+                                <td style="border-right:1px solid black;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;text-align:center;">'
+                                    .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['position'].'</span></td>
                                 <td style="width:50%;padding:5px;">Position   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
                                     .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['position']
                                     .'</span></td>
                             </tr>
                             <tr>
-                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'.$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date'].'</span></td>
+                               <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
+                                    .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date'].'</span></td>
                                <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
                                     // .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['date']
                                     .$model->osdv->os->os_date
@@ -747,13 +749,13 @@ $content .= '
         
         //PAYROLL_DV
         //work for TF
-        $content .= $this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['details'];
+        // $content .= $this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['details'];
         
         //Box C
-        $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
+        // $content .= $this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['details'];
         
         //Box D
-        $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
+        // $content .= $this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['details'];
         
         $content .= '<table style="width: 100%; border-collapse: collapse;" border="1">
 <tbody>
@@ -828,9 +830,9 @@ $content .= '
 <tr style="height: 14px;">
 
 <td style="width: 100%; height: 0px; text-align: center;border-top:none;height:40px;" colspan="7"><span style="vertical-align:bottom;"> 
-<span style="text-decoration:underline;font-weight:bold;text-transform: uppercase;">'
-            .'<p style="margin-top: 100px;"></p>'
-            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['name'].'<br></span>'
+<span style="font-weight:bold;text-transform: uppercase;">'
+            .'<p style="margin-top: 100px;"></p><u>'
+            .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['name'].'</u><br></span>'
             .$this->getSignatory($model->osdv->request_id, $model->osdv->request->division_id, 'Request', 'DV','A', $statusValidate)['position']
             .'</td>';
 
@@ -929,7 +931,7 @@ $content .= '
     <tr style="height: 25px;">
         <td style="width: 1%; height: 25px; text-align: center;padding:10px;">Printed<br />Name</td>
         <td style="width: 49%; height: 25px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['name'].'</td>
-        <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name----</td>
+        <td style="width: 10%; text-align: center; height: 25px;">Printed<br/>Name</td>
         <td style="width: 40%; height: 12px;text-align:center;font-size:14px;font-weight:bold;text-transform: uppercase;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['name'].'</td>
     </tr>
     <tr style="height: 16px;">
@@ -1024,21 +1026,21 @@ $content .= '
                 );
         // $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, '2023-02-23');
 
-        $signatureDetails = [
+        $signatureDetailsss = [
             'name' => $signatory->activeUser->profile->fullname,
             // 'position' => $signatory->activeUser->profile->designation,
             'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
-            'details' => '<div class="'.$form.'-box-'.$box.'">'
-                            .Html::img($url.$signatory->activeUser->profile->esig, 
-                            ["class"=>$form."-box-".$box."-sig"])
-                            .'<div class="'.$form.'-box-'.$box.'-sig-details">
-                                Digitally Signed by'
-                                .$signatory->activeUser->profile->getFullname()
-                                .'<br/>'.date("d-M-Y", $details->timestamp)
-                                .'<br/>'.substr($details->hash,0,64)
-                            .'</div>
-                        </div>'
+            // 'details' => '<div class="'.$form.'-box-'.$box.'">'
+            //                 //.Html::img($url.$signatory->activeUser->profile->esig, 
+            //                 //    ["class"=>$form."-box-".$box."-sig"])
+            //                 .'<div class="'.$form.'-box-'.$box.'-sig-details">
+            //                     Digitally Signed by'
+            //                     .$signatory->activeUser->profile->getFullname()
+            //                     .'<br/>'.date("d-M-Y", $details->timestamp)
+            //                     .'<br/>'.substr($details->hash,0,64)
+            //                 .'</div>
+            //             </div>'
         ];
 
         $signatureDetails2 = [
@@ -1049,16 +1051,16 @@ $content .= '
             // finance/request/printdv?id=7834&boxA=245&boxCD=-595
             // 245px for Box A
             // -595px for Box CD
-            'details' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: '.$margin.'px;">'
-                            .Html::img($url.$details->profile->esig, 
-                            ["class"=>$form."-box-".$box."-sig"])
-                            .'<div class="'.$form.'-box-'.$box.'-sig-details">
-                                Digitally Signed by '
-                                .$details->profile->getFullname()
-                                .'<br/>'.date("d-M-Y", $details->timestamp)
-                                .'<br/>'.substr($details->hash,0,64)
-                            .'</div>
-                        </div>',
+            // 'details' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: '.$margin.'px;">'
+            //                 //.Html::img($url.$details->profile->esig, 
+            //                 //    ["class"=>$form."-box-".$box."-sig"])
+            //                 .'<div class="'.$form.'-box-'.$box.'-sig-details">
+            //                     Digitally Signed by '
+            //                     .$details->profile->getFullname()
+            //                     .'<br/>'.date("d-M-Y", $details->timestamp)
+            //                     .'<br/>'.substr($details->hash,0,64)
+            //                 .'</div>
+            //             </div>',
         ];
         
         return $signatureDetails2;

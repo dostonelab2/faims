@@ -1047,7 +1047,16 @@ class RequestController extends Controller
     
     function actionPrintdvpayroll($id)
     {
-        $report = new Report();
+        $request = Request::findOne($id);
+
+        $thresholdDate = strtotime('2024-01-01'); 
+
+        if (strtotime($request->dv->dv_date) >= $thresholdDate) {
+            $report = new Report();
+        } else {
+            $report = new ReportNoSig();
+        }
+        
         $report->disbursementvoucherpayroll($id);
     }
     
