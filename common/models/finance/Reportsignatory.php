@@ -119,6 +119,13 @@ class Reportsignatory extends \yii\db\ActiveRecord
         $oic = Officerincharge::find()->where(['division_id'=>$division_id, 'scope'=>$scope, 'box'=>$box])
                 ->andWhere(':date BETWEEN `start_date` AND `end_date`', [':date'=>$date])
                 ->one();
-        return $oic ? true : false;
+        // return $oic ? true : false;
+        return $oic ? [
+                'status' => true,
+                'name' => $oic->user->profile->fullname ?? null,
+                'position' => $oic->user->profile->designation ?? null,
+            ] : [
+                'status' => false,
+            ];
     }
 }

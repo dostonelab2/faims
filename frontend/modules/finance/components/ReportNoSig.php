@@ -1018,7 +1018,7 @@ $content .= '
         // get Signature Blockchain
         $details = $this->getBlockchain($index_id, $scope, $status);
         //$details = $this->getBlockchain($index_id, 'Request', 40);
-        //var_dump($details);
+        // var_dump($details);
         $box = strtolower($box);
         $form = strtolower($form);
         
@@ -1030,18 +1030,17 @@ $content .= '
                     date("Y-m-d", $details->timestamp)
                 );
         // $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, '2023-02-23');
-
-        $signatureDetails = [
-            'name' => $signatory->activeUser->profile->fullname,
-            // 'position' => $signatory->activeUser->profile->designation,
-            'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
-            'date' => date("d-M-Y", $details->timestamp),
-        ];
+        // $signatureDetails = [
+        //     'name' => $signatory->activeUser->profile->fullname,
+        //     // 'position' => $signatory->activeUser->profile->designation,
+        //     'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
+        //     'date' => date("d-M-Y", $details->timestamp),
+        // ];
 
         $signatureDetails2 = [
-            'name' => $details->profile->fullname,
+            'name' => $hasOIC['status'] ? $hasOIC['name'] : $details->profile->fullname,
             // 'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation
-            'position' => $hasOIC ? $signatory->oic_position : $details->profile->designation
+            'position' => $hasOIC['status'] ? $signatory->oic_position : $details->profile->designation
                         // for checking values
                         // .'<br/>-'. $division_id.'-'. $box.'-'.$index_id. $scope.'-'. $status. ($hasOIC ? 'HAS OIC' : 'NO OIC')
                         ,

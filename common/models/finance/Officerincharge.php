@@ -3,6 +3,7 @@
 namespace common\models\finance;
 
 use Yii;
+use common\models\system\User;
 
 /**
  * This is the model class for table "tbl_officer_in_charge".
@@ -61,5 +62,10 @@ class Officerincharge extends \yii\db\ActiveRecord
             'start_date' => 'Start Date',
             'end_date' => 'End Date',
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['user_id' => 'user_id']);
     }
 }
