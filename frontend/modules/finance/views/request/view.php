@@ -140,7 +140,7 @@ Modal::end();
                     'value' => $model->division->name,
                     'type'=>DetailView::INPUT_SELECT2, 
                     'widgetOptions'=>[
-                        'data'=>ArrayHelper::map(Division::find()->all(),'division_id','name'),
+                        'data'=>ArrayHelper::map(Division::findActive()->all(),'division_id','name'),
                         'options' => ['placeholder' => 'Select Type'],
                         'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
                     ],
