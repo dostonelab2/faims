@@ -80,7 +80,7 @@ class RequestController extends Controller
     public function actionIndex()
     {
         $searchModel = new RequestSearch();
-        if( (Yii::$app->user->identity->username == 'Admin') || (Yii::$app->user->can('access-finance-verification')) )
+        if( (Yii::$app->user->identity->username == 'Admin') || (Yii::$app->user->can('access-finance-verification')) || (Yii::$app->user->can('access-document-collation')) )
             $searchModel->allowed_view_all =  true;
             // $searchModel->created_by =  Yii::$app->user->identity->user_id;
         //$searchModel->status_id = Request::STATUS_APPROVED_FOR_DISBURSEMENT;
