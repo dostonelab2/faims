@@ -75,7 +75,7 @@ use common\models\procurement\Division;
         <div class="col-md-6">
             <h5 data-step="4" data-intro="Select Division.">
                 <?= $form->field($model, 'division_id')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(Division::find()->all(),'division_id','name'),
+                    'data' => ArrayHelper::map(Division::findActive()->all(),'division_id','name'),
                     'language' => 'en',
                     'options' => ['placeholder' => 'Select Division'],
                     'pluginOptions' => [

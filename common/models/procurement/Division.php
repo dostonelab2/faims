@@ -52,4 +52,10 @@ class Division extends \yii\db\ActiveRecord
             'name' => 'Name',
         ];
     }
+
+    // Scope for active divisions
+    public static function findActive()
+    {
+        return static::find()->where(['active' => 1]);
+    }
 }
