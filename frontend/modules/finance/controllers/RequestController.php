@@ -223,9 +223,9 @@ class RequestController extends Controller
                 (!Yii::$app->user->can('access-finance-validation')) && 
                 (!Yii::$app->user->can('access-finance-approval')) &&
                 (!Yii::$app->user->can('access-finance-documentcollation'))
-                ) {
-                    if(Yii::$app->user->identity->user_id != $model->created_by)
-                        return $this->redirect(['index']);
+                    ) {
+                        if(Yii::$app->user->identity->user_id != $model->created_by)
+                            return $this->redirect(['index']);
         }
         
         $_obligationType = $model->obligation_type_id;

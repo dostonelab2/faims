@@ -1031,41 +1031,22 @@ $content .= '
                 );
         // $hasOIC = Reportsignatory::hasOIC($division_id, $form, $box, '2023-02-23');
 
-        $signatureDetailsss = [
+        $signatureDetails = [
             'name' => $signatory->activeUser->profile->fullname,
             // 'position' => $signatory->activeUser->profile->designation,
             'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
             'date' => date("d-M-Y", $details->timestamp),
-            // 'details' => '<div class="'.$form.'-box-'.$box.'">'
-            //                 //.Html::img($url.$signatory->activeUser->profile->esig, 
-            //                 //    ["class"=>$form."-box-".$box."-sig"])
-            //                 .'<div class="'.$form.'-box-'.$box.'-sig-details">
-            //                     Digitally Signed by'
-            //                     .$signatory->activeUser->profile->getFullname()
-            //                     .'<br/>'.date("d-M-Y", $details->timestamp)
-            //                     .'<br/>'.substr($details->hash,0,64)
-            //                 .'</div>
-            //             </div>'
         ];
 
         $signatureDetails2 = [
             'name' => $details->profile->fullname,
-            'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation,
+            // 'position' => $hasOIC ? $signatory->oic_position : $signatory->activeUser->profile->designation
+            'position' => $hasOIC ? $signatory->oic_position : $details->profile->designation
+                        // for checking values
+                        // .'<br/>-'. $division_id.'-'. $box.'-'.$index_id. $scope.'-'. $status. ($hasOIC ? 'HAS OIC' : 'NO OIC')
+                        ,
             'date' => date("d-M-Y", $details->timestamp),
-            // adjust margin-top and margin bottom to move esig box @ DV box A
-            // finance/request/printdv?id=7834&boxA=245&boxCD=-595
-            // 245px for Box A
-            // -595px for Box CD
-            // 'details' => '<div class="'.$form.'-box-'.$box.'" style="margin-top: '.$margin.'px;">'
-            //                 //.Html::img($url.$details->profile->esig, 
-            //                 //    ["class"=>$form."-box-".$box."-sig"])
-            //                 .'<div class="'.$form.'-box-'.$box.'-sig-details">
-            //                     Digitally Signed by '
-            //                     .$details->profile->getFullname()
-            //                     .'<br/>'.date("d-M-Y", $details->timestamp)
-            //                     .'<br/>'.substr($details->hash,0,64)
-            //                 .'</div>
-            //             </div>',
+
         ];
         
         return $signatureDetails2;
