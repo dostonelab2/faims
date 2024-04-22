@@ -936,7 +936,8 @@ class RequestController extends Controller
                 }else{
                     Yii::$app->session->setFlash('success', $model->getErrors());                 
                 }
-                return $this->redirect(['view', 'id' => $model->request_id]);
+                // return $this->redirect(['view', 'id' => $model->request_id]);
+                return $this->redirect(['validateindex']);
                     
             }
 
