@@ -536,7 +536,12 @@ Modal::end();
                 'contentOptions' => ['style' => 'text-align: center; vertical-align: middle;'],
                 'format' => 'raw',
                 'width'=>'80px',
-                'visible' => ( $model->owner() || Yii::$app->user->can('access-finance-verification') || Yii::$app->user->can('access-finance-validation') || Yii::$app->user->can('access-finance-processing')),
+                'visible' => ( 
+                    $model->owner() || Yii::$app->user->can('access-finance-verification') || 
+                    Yii::$app->user->can('access-finance-validation') || 
+                    Yii::$app->user->can('access-finance-processing') ||
+                    Yii::$app->user->can('access-finance-documentcollation')
+                ),
                 /*'value'=> function ($model, $key, $index, $widget) { 
                     return Requestattachment::hasSignedattachment($model->request_attachment_id) ? $model->signedattachment->request_attachment_signed_id : '';
                 },*/
