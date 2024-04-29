@@ -343,6 +343,11 @@ class Osdv extends \yii\db\ActiveRecord
     {
         return ($this->status_id >= Request::STATUS_ALLOTTED) ? true : false;
     }
+
+    public function isFundsavailable()
+    {
+        return ($this->status_id >= Request::STATUS_CERTIFIED_FUNDS_AVAILABLE) ? true : false;
+    }
     
     public function isCharged()
     {

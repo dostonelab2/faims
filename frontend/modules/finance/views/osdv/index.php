@@ -330,7 +330,7 @@ Modal::end();
                                     },
                                     'printdv' => function ($url, $model){
                                         return $model->osdv ? 
-                                            (   $model->osdv->isCharged() ? 
+                                            ( ( $model->osdv->isFundsavailable() || $model->osdv->isCharged() ) ? 
                                                 Html::button(
                                                     '<span class="glyphicon glyphicon-print"></span>', 
                                                     ['value' => '/finance/request/printdv?id=' . $model->request_id,  
