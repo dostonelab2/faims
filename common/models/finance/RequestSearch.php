@@ -78,7 +78,7 @@ class RequestSearch extends Request
             // 'created_by' => Yii::$app->user->identity->user_id,
             'cancelled' => 0,
         ]);
-        /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 ADM=32 **/
+        /** UserIDs : ** MAW=2 , RSS=4 , MLK=3 , GFP=62 , NMA=70 , JAP=54 , RJA=55 ADM=32 RBG=11 **/
         
         /** PayeeIDs :  MAW=132 , RSS=129 , MLK=120 , GFP=126 , NMA=108 , JAP=127 , RJA=110 **/
         
@@ -87,6 +87,9 @@ class RequestSearch extends Request
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                   ->andFilterWhere(['>=', 'status_id', $this->status_id]);
         }elseif((Yii::$app->user->identity->user_id == 4)){
+            $query->andFilterWhere(['in', 'division_id', $this->division_id])
+                ->andFilterWhere(['>=', 'status_id', $this->status_id]);
+        }elseif((Yii::$app->user->identity->user_id == 11)){
             $query->andFilterWhere(['in', 'division_id', $this->division_id])
                 ->andFilterWhere(['>=', 'status_id', $this->status_id]);
                 //->andFilterWhere(['', 'payee_id', 129]);
