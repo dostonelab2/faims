@@ -336,10 +336,11 @@ class ReportNoSig {
                             </tr>
                             <tr>
                                <td style="border-right:1px solid black;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
-                                    .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date'].'</span></td>
+                                    // .$this->getSignatory($model->request_id, $model->division_id, 'Request', 'OS','A', 40)['date']
+                                    .'</span></td>
                                <td style="width:50%;padding:5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span style="text-decoration:underline;">'
                                     // .$this->getSignatory($model->osdv->osdv_id,2, 'Osdv','OS','B', 55)['date']
-                                    .$model->osdv->os->os_date
+                                    //.$model->osdv->os->os_date
                                     .'</span></td>
                             </tr>
                             <tr>
