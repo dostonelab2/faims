@@ -634,13 +634,13 @@ $content .= '
     <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
     <td style="width: 40%; height: 25px;text-align:center;">'
         //.date("Y-m-d", strtotime($model->osdv->create_date))
-        .$model->osdv->dv->dv_date
+        //.$model->osdv->dv->dv_date
         // .$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 65)['date']
         .'</td>
     <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
     <td style="width: 40%; height: 12.4546px;text-align:center;">'
         // same date with box C
-        .$model->osdv->dv->dv_date
+        //.$model->osdv->dv->dv_date
         // .$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 65)['date']
         .'</td>
     </tr>
@@ -960,9 +960,13 @@ $content .= '
 
     <tr style="height: 12.4546px;">
         <td style="width: 10%; height: 25px; text-align: center; padding:10px;">Date</td>  
-        <td style="width: 40%; height: 25px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date'].'</td>
+        <td style="width: 40%; height: 25px;text-align:center;">'
+            //.$this->getSignatory($model->osdv->osdv_id, 2, 'Osdv', 'DV','C', 65)['date']
+            .'</td>
         <td style="width: 10%; text-align: center; height: 25px;padding:10px;">Date</td>
-        <td style="width: 40%; height: 12.4546px;text-align:center;">'.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date'].'</td>
+        <td style="width: 40%; height: 12.4546px;text-align:center;">'
+            //.$this->getSignatory($model->osdv->osdv_id, 1, 'Osdv', 'DV','D', 70)['date']
+            .'</td>
     </tr>
 </tbody>
 </table>
